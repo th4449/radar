@@ -9,7 +9,7 @@
 ## What was verified
 
 - **Robots rules.** `https://comptroller.texas.gov/robots.txt` closes every folder with `Disallow: /*/` and then opens a list of folders again. `Allow: /taxes/` and `Allow: /economy/` are on that list. The data center list is under `/taxes/`, so it is allowed. The file sets no crawl delay.
-- **Reuse.** The Comptroller's Privacy and Security Policy says: "Information on CPA's sites is public domain and may be copied and used as permitted by law, with the exception of pictures, official symbols, and registered service marked names and logos."
+- **Reuse.** The Comptroller's Privacy and Security Policy at https://comptroller.texas.gov/about/policies/privacy.php says information on its sites "is public domain and may be copied and used as permitted by law". It excepts pictures, official symbols and registered marks and logos.
 - **Automated access.** The policy page has no sentence about automated access, robots or scraping.
 
 ## What was not verified

@@ -7,9 +7,7 @@
 
 ## What the terms say
 
-The policies page for Michigan.gov includes this, quoted in part:
-
-> You specifically agree not to access, or attempt to access [...] any of the website through any automated means (including, but not limited to, use of scripts, web crawlers or screen scrapers)
+The policies page for Michigan.gov has users agree not to access the website "through any automated means". It names scripts, web crawlers and screen scrapers as examples, and it tells users to follow any robots.txt file on the site.
 
 The same paragraph allows an exception only under "a separate, written agreement with the State of Michigan". The page also says each department or agency may have additional policies of its own.
 

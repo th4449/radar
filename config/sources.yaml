@@ -17,23 +17,35 @@ sources:
     url: https://www.texaspublicnotices.com
     layer: signal
     method: manual
-    intended_method: http
+    intended_method: manual
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: Terms not yet read. The alert feature is untested.
+    robots_status: restricted
+    verified_at: 2026-11-19
+    notes: The site's terms forbid automated collection and forbid putting its content in any database or archive, with liquidated damages. No collector. Needs the owner's decision. See docs/sources/tx_public_notices.md.
 
   - id: tx_tceq_air_pending
     state: TX
-    name: TCEQ pending air permit applications
-    url: https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices
+    name: TCEQ pending air permit applications in the Permit Search Portal
+    url: https://permit-search.tceq.texas.gov/
     layer: signal
     method: manual
     intended_method: browser
     cadence: daily
     robots_status: not_checked
     verified_at: null
-    notes: The Permit Search Portal at permit-search.tceq.texas.gov needs a browser. Untested. The governor's September 21, 2026 permit pause may change what the lists show.
+    notes: The live feed since August 31, 2026. A JavaScript application with no robots file. Its terms and data calls have not been read in a browser yet. See docs/sources/tx_tceq_air_pending_legacy.md.
+
+  - id: tx_tceq_air_pending_legacy
+    state: TX
+    name: TCEQ pending air permit applications, static lists through August 2026
+    url: https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: monthly
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Covers applications complete before August 31, 2026, so it serves the backtest more than the live feed. Robots rules allow it and TCEQ calls its content public domain. Manual until fixtures are saved. See docs/sources/tx_tceq_air_pending_legacy.md.
 
   - id: tx_tceq_stormwater_noi
     state: TX
@@ -44,20 +56,20 @@ sources:
     intended_method: manual
     cadence: weekly
     robots_status: blocked
-    verified_at: null
-    notes: The water quality general permit search blocked an automated reader during research. Treat as manual until the terms are checked. The URL is the TCEQ training deck that describes the search.
+    verified_at: 2026-11-19
+    notes: robots.txt on www2.tceq.texas.gov closes every path to every crawler. Manual only. The URL is the TCEQ training deck that describes the search. See docs/sources/tx_tceq_stormwater_noi.md.
 
   - id: tx_ercot_rpg
     state: TX
     name: ERCOT Regional Planning Group project files
-    url: https://www.ercot.com/files/docs/2026/07/17/6.-StatusUpdate_Combined_CPS-Energy-Large-Load-Additions-Project-and-STEC-Medina-County-Large-Load-Project_July2026_RPG.pdf
+    url: https://www.ercot.com/committees/other/rpg
     layer: signal
     method: manual
     intended_method: http
     cadence: weekly
-    robots_status: not_checked
-    verified_at: null
-    notes: The URL is one example file. The index page still has to be found.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Robots rules allow the index, meeting pages and /files/docs/. Terms allow reuse and prohibit harming site performance. Stay out of /meetings, /widgets and /ical. Manual until fixtures are saved. See docs/sources/tx_ercot_rpg.md.
 
   - id: tx_ercot_large_load
     state: TX
@@ -67,9 +79,9 @@ sources:
     method: manual
     intended_method: http
     cadence: monthly
-    robots_status: not_checked
-    verified_at: null
-    notes: Aggregate by zone only. Context layer, not site level. Survey update at https://www.ercot.com/files/docs/2026/11/05/Community-Impact-RFI-PUC-Update.pdf.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Aggregate by zone only. Context layer, not site level. Same host and terms as tx_ercot_rpg. No index page found yet. Survey update at https://www.ercot.com/files/docs/2026/11/05/Community-Impact-RFI-PUC-Update.pdf.
 
   - id: tx_puc_interchange
     state: TX
