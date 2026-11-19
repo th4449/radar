@@ -2,6 +2,53 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — Texas source checks ahead of M2
+
+Done while M1 waits on the contact address. Terms of use and robots rules were read for every Texas statewide feed in BUILD_PLAN.md section 6. Each has a note in `docs/sources`. No collector was written and no record page was fetched.
+
+| Feed | Result |
+|---|---|
+| Newspaper public notices | **Restricted.** Terms forbid automated collection and any database or archive of the content, with liquidated damages. |
+| TCEQ pending air permits, portal | Not verified. A JavaScript application with no robots file. Needs a person in a browser. |
+| TCEQ pending air permits, static lists to August 2026 | Allowed. Useful for the backtest. |
+| TCEQ stormwater notices of intent | **Blocked.** robots.txt closes the whole host. |
+| ERCOT planning group files | Allowed. Index page found. |
+| ERCOT large load reports | Allowed. No index page found yet. |
+| PUC Interchange filings | **Held.** Access is open, but the link policy asks for a permission request before copying content. |
+| TWDB well reports | Allowed. One nightly bulk file. The start page moved. |
+| Comptroller registered data centers | Allowed. |
+| Comptroller local development agreements | Allowed. |
+| Comptroller entity lookup | Allowed through the bulk file and the official API. The API needs a key the owner registers for. |
+
+**What this changes**
+
+- The plan's strongest Texas signal, the 30 day abatement notice from the statewide notice site, cannot be collected as planned. The same event appears on commissioners court and city agendas (M8) with a shorter lead time.
+- Of the plan's four high-weight Texas signal types, one is open today (ERCOT transmission planning), one is held on a permission question (PUC), one needs a browser check (TCEQ portal) and one is closed (notices).
+- The well reports feed is simpler than planned: one file a day, no crawling.
+
+**Also built**
+
+- `collectors/capture.py`, a by-hand tool that saves one real page as a test fixture through the same fetcher and rules as the collectors. 12 tests.
+
+**How the checks were done**
+
+- Two research passes read robots files and policy pages with a user agent that named this project, at most five requests per host. They submitted no forms and stopped at any refusal.
+- Every restrictive finding was read a second time, directly: the public notice terms, the TCEQ robots file and the PUC link policy.
+- Counts: 184 tests pass locally.
+
+**Still unverified**
+
+- Every item listed under "not verified" in each source note. The main ones: no record page, search result or file has been fetched from any of these sources, and the TCEQ portal's terms are unread.
+- Texas parcels and local agendas have not been checked. Agendas are M8.
+
+**Waiting on the owner**
+
+- The contact address for `RADAR_CONTACT`.
+- Public notices: ask the Texas Press Association for permission, use its email alerts by hand, or rely on agendas.
+- PUC Interchange: ask the commission, or decide docket filings fall outside its link policy.
+- The three Michigan feeds closed by the state's site terms.
+- An API key for the Comptroller, when entity lookup is built in M4.
+
 ## November 19, 2026 — Owner decision on the Texas county list
 
 The owner decided to keep the plan's five added counties: Dallas, Taylor, Bexar, Travis and Harris. The FracTracker recount stays on file in `docs/sources/us_fractracker.md` as a second measure. `config/counties_tx.yaml` is unchanged.

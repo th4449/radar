@@ -91,21 +91,21 @@ sources:
     method: manual
     intended_method: http
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: Search method still to be worked out. Example filing at https://interchange.puc.texas.gov/Documents/55999_42_1397539.PDF.
+    robots_status: restricted
+    verified_at: 2026-11-19
+    notes: Access is not barred, but the commission's link policy asks for a permission request before content is copied. Held until the owner decides. See docs/sources/tx_puc_interchange.md.
 
   - id: tx_twdb_well_reports
     state: TX
     name: TWDB submitted drillers reports
-    url: https://www.twdb.texas.gov/groundwater/data/drillersdb.asp
+    url: https://www.twdb.texas.gov/groundwater/data/data-well-reports.asp
     layer: signal
     method: manual
     intended_method: http
-    cadence: weekly
-    robots_status: not_checked
-    verified_at: null
-    notes: Described as downloadable. See also https://www.twdb.texas.gov/groundwater/data/locwwrep.asp.
+    cadence: daily
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: A nightly bulk file of the whole database. The board grants permission to copy and distribute. Owner names are often private individuals. Manual until a fixture is saved. See docs/sources/tx_twdb_well_reports.md.
 
   - id: tx_comptroller_data_centers
     state: TX
@@ -127,21 +127,21 @@ sources:
     method: manual
     intended_method: http
     cadence: monthly
-    robots_status: not_checked
-    verified_at: null
-    notes: Lagging. Chapter 312 reports are due July 1 of the following year.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Lagging. Chapter 312 reports are due July 1 of the following year. A plain search form under /economy/, which robots rules allow. Manual until a fixture is saved. See docs/sources/tx_comptroller_local_agreements.md.
 
   - id: tx_comptroller_entity_lookup
     state: TX
     name: Comptroller franchise tax account search
-    url: https://mycpa.cpa.state.tx.us/coa/detailpagehelp.jsp
+    url: https://comptroller.texas.gov/taxes/franchise/account-status/search
     layer: lookup
     method: manual
     intended_method: http
     cadence: on_demand
-    robots_status: not_checked
-    verified_at: null
-    notes: Read the terms before automating.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Use the bulk file on data.texas.gov first, then the official API, which needs a key the owner registers for. Never call the /data-search/ address, which robots rules close. See docs/sources/tx_comptroller_entity_lookup.md.
 
   - id: tx_local_agendas
     state: TX
