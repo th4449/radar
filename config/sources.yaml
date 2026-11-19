@@ -159,14 +159,14 @@ sources:
   - id: mi_mpsc_dockets
     state: MI
     name: Michigan Public Service Commission dockets and orders
-    url: https://www.michigan.gov/mpsc/commission/news-releases
+    url: https://mi-psc.my.site.com/s/
     layer: signal
     method: manual
     intended_method: manual
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: Michigan.gov terms bar automated access without a written agreement. The separate e-dockets site was not checked. See docs/sources/mi_state_of_michigan_terms.md.
+    notes: E-Dockets robots file allows everything, but the site has no terms of its own and links to the Michigan.gov policies, which bar automated access without a written agreement. News releases are at https://www.michigan.gov/mpsc/commission/news-releases under the same terms. Read by hand. See docs/sources/mi_mpsc_dockets.md.
 
   - id: mi_egle_air_pending
     state: MI

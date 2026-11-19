@@ -20,13 +20,13 @@ The same paragraph allows an exception only under "a separate, written agreement
 
 | Feed | Host | Status |
 |---|---|---|
-| `mi_mpsc_dockets` | michigan.gov/mpsc | Restricted. News releases sit on Michigan.gov. |
+| `mi_mpsc_dockets` | mi-psc.my.site.com and michigan.gov/mpsc | Restricted. The docket site adopts these policies and the news releases sit on Michigan.gov. |
 | `mi_egle_notices` | michigan.gov/egle and the MiEnviro Portal | Restricted. |
 | `mi_egle_air_pending` | deq.state.mi.us | Treated as restricted. It is a State of Michigan host on another domain. Whether the Michigan.gov terms cover it was not confirmed, so we assume they do. |
 
 ## What was not checked
 
-- The Public Service Commission's e-dockets system, which is a separate site. Its own terms and any email alert or feed it offers were not read.
+- The Public Service Commission's E-Dockets system was checked later the same day. It has no terms of its own and links to this policies page. See [mi_mpsc_dockets.md](mi_mpsc_dockets.md).
 - Whether EGLE or the commission publishes an official feed, API, email list or bulk download for these records.
 - `michiganbusiness.org` (Strategic Fund board packets). It is a different site with its own terms.
 

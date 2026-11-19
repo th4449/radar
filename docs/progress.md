@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — Michigan docket site check
+
+The owner asked for a check of the Public Service Commission's E-Dockets site, which is on a separate host from Michigan.gov.
+
+- **Result: restricted. `mi_mpsc_dockets` stays manual.** The robots file allows everything. The site has no terms of its own. Its footer links to the State of Michigan policies page, which bars automated access without a written agreement.
+- The feed's address in `config/sources.yaml` now points at the docket site. The note is `docs/sources/mi_mpsc_dockets.md`.
+- A person can read the case list by hand. New cases appear sorted by open date, with no account needed.
+- The case list shows complaint cases under the names of private households. Those names stay out of fixtures and out of anything we publish.
+
+**Verified live:** the robots file, the home page and the help page of the docket site, and the policies page its footer links to. One request each.
+
+**Still unverified:** whether the State grants written agreements for this use, the sign-up step for filing notices and the archived orders search on a third host.
+
 ## November 19, 2026 — Texas source checks ahead of M2
 
 Done while M1 waits on the contact address. Terms of use and robots rules were read for every Texas statewide feed in BUILD_PLAN.md section 6. Each has a note in `docs/sources`. No collector was written and no record page was fetched.
