@@ -2,6 +2,41 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — M1 Core library
+
+**Built**
+
+- `collectors/base.py`: the fetcher, the archive and the collector run loop.
+  - The fetcher refuses a source with no source note, a restricted source and, unless a person runs it by hand, a manual source.
+  - robots.txt is read before every request and again on every host a redirect leads to. An unreadable robots file counts as no. There is no switch to skip the check.
+  - One request per host every 5 seconds, longer if robots.txt sets a crawl delay. Retry with backoff on server errors. A 401, 403, 451 or repeated 429 stops the run and is never retried.
+  - Conditional requests with ETag and Last-Modified, a 50 MB size cap and a user agent that names the collector and the contact address in `RADAR_CONTACT`.
+  - The archive stores each original under its SHA-256 hash with URL and retrieval time. Local disk only for now.
+- `pipeline/extract.py`: text from HTML and PDF. The kind is read from the bytes, not the header. A PDF with no text layer is flagged for character recognition, which is M8 work.
+- `pipeline/store.py` and the `collector_runs` table: every run is logged with its status, counts and error. Documents are stored once per source and hash.
+- A sample collector runs end to end on synthetic fixtures: fetch, archive, extract, store, log.
+- 67 new tests. 172 in all. None touches the network.
+
+**Changed from the first draft**
+
+- Python's built-in robots parser ignores wildcards and rule length. It would have allowed paths that the Texas Comptroller's `Disallow: /*/` rule forbids. Replaced with Protego, which follows RFC 9309. Tests cover the Comptroller's pattern.
+
+**Verified live**
+
+- State of Michigan website terms bar automated access without a written agreement. Three Michigan feeds are now marked restricted. See `docs/sources/mi_state_of_michigan_terms.md`. **This needs the owner's decision before M3.**
+- Texas Comptroller robots rules allow `/taxes/` and `/economy/`, and the site says its information is public domain. See `docs/sources/tx_comptroller_data_centers.md`.
+
+**Not done: waiting on the owner**
+
+- The sample collector has not run against a saved copy of a real page. That takes one live request to the Comptroller's data center list, and the fetcher will not make it until `RADAR_CONTACT` holds the project's public contact address.
+
+**Still unverified**
+
+- CI on GitHub. The repository has not been pushed.
+- The fetcher against a real server. Every test uses a fake transport.
+- The hosted archive backend. It comes with the Supabase project.
+- A real PDF from a source. The PDF tests use small files written by the test helper.
+
 ## November 19, 2026 — M0 Scaffold
 
 **Built**

@@ -103,9 +103,9 @@ sources:
     method: manual
     intended_method: http
     cadence: monthly
-    robots_status: not_checked
-    verified_at: null
-    notes: No county field.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: No county field. Robots rules allow /taxes/ and the site says its information is public domain. Stays manual until the first fixture is saved. See docs/sources/tx_comptroller_data_centers.md.
 
   - id: tx_comptroller_local_agreements
     state: TX
@@ -150,11 +150,11 @@ sources:
     url: https://www.michigan.gov/mpsc/commission/news-releases
     layer: signal
     method: manual
-    intended_method: http
+    intended_method: manual
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: Locate the e-dockets search and verify. A docket can open and close quickly, so check daily.
+    robots_status: restricted
+    verified_at: 2026-11-19
+    notes: Michigan.gov terms bar automated access without a written agreement. The separate e-dockets site was not checked. See docs/sources/mi_state_of_michigan_terms.md.
 
   - id: mi_egle_air_pending
     state: MI
@@ -162,11 +162,11 @@ sources:
     url: https://www.deq.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf
     layer: signal
     method: manual
-    intended_method: http
+    intended_method: manual
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: A PDF to parse.
+    robots_status: restricted
+    verified_at: 2026-11-19
+    notes: A PDF on a State of Michigan host. Treated as covered by the Michigan.gov terms, which bar automated access. See docs/sources/mi_state_of_michigan_terms.md.
 
   - id: mi_egle_notices
     state: MI
@@ -174,11 +174,11 @@ sources:
     url: https://www.michigan.gov/egle/maps-data/mienviroportal
     layer: signal
     method: manual
-    intended_method: browser
+    intended_method: manual
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: Search untested. Public notice calendar named at https://www.michigan.gov/egle/faqs/environmental-assistance/data-centers. Waivers belong on the watch list.
+    robots_status: restricted
+    verified_at: 2026-11-19
+    notes: Michigan.gov terms bar automated access without a written agreement. See docs/sources/mi_state_of_michigan_terms.md.
 
   - id: mi_msf_board
     state: MI

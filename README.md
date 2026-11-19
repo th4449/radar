@@ -24,6 +24,16 @@ uv run pytest
 
 `supabase db start` runs a local Postgres with the same roles the hosted database uses. The policy tests in `tests/db` need it. They are skipped with a clear message when it is not running, and CI fails if they are skipped.
 
+## Live requests
+
+Tests never touch a live site. A live request needs the project's public contact address, which goes in the user agent so a site owner can reach us:
+
+```bash
+export RADAR_CONTACT="<the project's public contact address>"
+```
+
+Without it the fetcher refuses to start. It also refuses any source whose terms and robots rules are not yet written up in `docs/sources`.
+
 ## Rules for contributors
 
 - Public records only. Every stored document keeps its URL, retrieval time and SHA-256 hash.

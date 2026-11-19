@@ -33,6 +33,7 @@ TABLES = [
     "subscribers",
     "audit_log",
     "app_settings",
+    "collector_runs",
 ]
 
 
