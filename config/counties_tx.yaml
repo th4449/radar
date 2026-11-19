@@ -3,6 +3,8 @@
 # FIPS codes come from the Census file national_county2020.txt, read 2026-11-19.
 # group ranked_25 is the organization's ranking of documented data center conflict.
 # group activity_5 is the five counties with the most facilities outside that set.
+# A FracTracker recount on 2026-11-19 ranked a different five. The owner kept this list.
+# See docs/sources/us_fractracker.md.
 state: TX
 counties:
   - name: Hood

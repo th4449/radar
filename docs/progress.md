@@ -2,6 +2,10 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — Owner decision on the Texas county list
+
+The owner decided to keep the plan's five added counties: Dallas, Taylor, Bexar, Travis and Harris. The FracTracker recount stays on file in `docs/sources/us_fractracker.md` as a second measure. `config/counties_tx.yaml` is unchanged.
+
 ## November 19, 2026 — Published, first CI run
 
 - The repository is public at https://github.com/th4449/radar with the owner's approval.
@@ -80,7 +84,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 - Supabase lists the free plan at 500 MB with a pause after one week idle, and Pro at $25 with extra projects from $10.
 - FracTracker's terms and robots rules. See `docs/sources/us_fractracker.md`.
 
-**Texas county recount: differs from the plan, waiting on the owner**
+**Texas county recount: differs from the plan. Decided later the same day: keep the plan's five.**
 
 FracTracker's top five counties outside the organization's 25 are Dallas (27), Bexar (26), Williamson (13), Collin (11) and Tarrant (9). The plan's five are Dallas, Taylor, Bexar, Travis and Harris. In FracTracker, Travis has 6, Harris 3 and Taylor 1. `config/counties_tx.yaml` was not changed. Details and caveats are in the source note.
 

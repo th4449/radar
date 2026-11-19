@@ -57,6 +57,6 @@ Why the two trackers disagree, as far as the data shows:
 - FracTracker counts one record in Taylor County. A count of records does not measure size. A single campus counts the same as a single small facility.
 - FracTracker shows 2 records in Hood County, where the research document reports at least eight pending projects. FracTracker undercounts in at least one county we know well.
 
-`config/counties_tx.yaml` was not changed. Changing it needs the owner's approval (BUILD_PLAN.md section 11).
+**Decision, November 19, 2026.** The owner kept the plan's five: Dallas, Taylor, Bexar, Travis and Harris. `config/counties_tx.yaml` was not changed.
 
 Data credit: FracTracker Alliance, U.S. Data Centers Tracker (2026), https://www.fractracker.org/data-centers.
