@@ -1,0 +1,97 @@
+# The 30 Texas test counties. See BUILD_PLAN.md section 10.
+# Do not change this list without the owner's approval (section 11).
+# FIPS codes come from the Census file national_county2020.txt, read 2026-11-19.
+# group ranked_25 is the organization's ranking of documented data center conflict.
+# group activity_5 is the five counties with the most facilities outside that set.
+state: TX
+counties:
+  - name: Hood
+    fips: "48221"
+    group: ranked_25
+  - name: Hill
+    fips: "48217"
+    group: ranked_25
+  - name: Potter
+    fips: "48375"
+    group: ranked_25
+  - name: Archer
+    fips: "48009"
+    group: ranked_25
+  - name: Somervell
+    fips: "48425"
+    group: ranked_25
+  - name: Henderson
+    fips: "48213"
+    group: ranked_25
+  - name: Austin
+    fips: "48015"
+    group: ranked_25
+  - name: Tom Green
+    fips: "48451"
+    group: ranked_25
+  - name: Lubbock
+    fips: "48303"
+    group: ranked_25
+  - name: Parker
+    fips: "48367"
+    group: ranked_25
+  - name: Wise
+    fips: "48497"
+    group: ranked_25
+  - name: Erath
+    fips: "48143"
+    group: ranked_25
+  - name: Bosque
+    fips: "48035"
+    group: ranked_25
+  - name: Johnson
+    fips: "48251"
+    group: ranked_25
+  - name: Ellis
+    fips: "48139"
+    group: ranked_25
+  - name: Carson
+    fips: "48065"
+    group: ranked_25
+  - name: Callahan
+    fips: "48059"
+    group: ranked_25
+  - name: San Saba
+    fips: "48411"
+    group: ranked_25
+  - name: Burnet
+    fips: "48053"
+    group: ranked_25
+  - name: Milam
+    fips: "48331"
+    group: ranked_25
+  - name: Freestone
+    fips: "48161"
+    group: ranked_25
+  - name: Falls
+    fips: "48145"
+    group: ranked_25
+  - name: Matagorda
+    fips: "48321"
+    group: ranked_25
+  - name: Hopkins
+    fips: "48223"
+    group: ranked_25
+  - name: Bowie
+    fips: "48037"
+    group: ranked_25
+  - name: Dallas
+    fips: "48113"
+    group: activity_5
+  - name: Taylor
+    fips: "48441"
+    group: activity_5
+  - name: Bexar
+    fips: "48029"
+    group: activity_5
+  - name: Travis
+    fips: "48453"
+    group: activity_5
+  - name: Harris
+    fips: "48201"
+    group: activity_5

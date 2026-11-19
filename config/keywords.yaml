@@ -1,0 +1,41 @@
+# Terms the classifier looks for. See BUILD_PLAN.md section 6.
+# The starting list is the one in the build plan, taken from
+# https://www.tomsguide.com/ai/7-code-words-that-could-mean-an-ai-data-center-is-coming-to-your-town
+#
+# A keyword hit is a weak signal. Most light industrial rezonings are warehouses.
+# Matching is case-insensitive on whole words.
+
+# Terms that name the thing directly.
+direct_terms:
+  - data center
+  - data centre
+  - datacenter
+
+# Terms that often stand in for it. A hit on these alone scores low.
+code_words:
+  - light industrial
+  - data processing
+  - technology campus
+  - development agreement
+  - large load
+  - reinvestment zone
+  - special land use
+
+# "Project" followed by a capitalized code name, such as Project Falcon.
+# Words in project_stoplist are ordinary phrases, not code names.
+project_code_name:
+  pattern: '\bProject\s+([A-Z][A-Za-z0-9-]{2,})\b'
+  project_stoplist:
+    - Manager
+    - Management
+    - Description
+    - Location
+    - Number
+    - Name
+    - Area
+    - Site
+    - Cost
+    - Summary
+    - Schedule
+    - Status
+    - Update

@@ -1,0 +1,37 @@
+# This repository is public. Nothing below may ever be committed.
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Reviewer and subscriber data, database dumps
+*.dump
+*.sql.gz
+exports/
+dumps/
+
+# Raw archive and bulk data. Only small fixtures under tests/fixtures are committed.
+archive/
+data/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# Supabase local state
+supabase/.temp/
+supabase/.branches/
+
+# OS
+.DS_Store

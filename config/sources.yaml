@@ -1,0 +1,278 @@
+# One entry per feed. See BUILD_PLAN.md section 6.
+#
+# method           http, browser or manual. It stays manual until the source's terms of use and
+#                  robots rules have been read and written up in docs/sources/<id>.md.
+# intended_method  what we expect to use once the source is verified. A plan, not a permission.
+# robots_status    not_checked, allowed, restricted or blocked.
+# verified_at      date the source note was written. A scheduled job must not fetch a source
+#                  while this is null.
+# layer            signal (feeds site scores), context (regional only), baseline (known sites)
+#                  or lookup (queried per entity).
+
+sources:
+  # Texas. All statewide and filtered to the 30 counties after collection.
+  - id: tx_public_notices
+    state: TX
+    name: Texas newspaper public notices, including 30 day tax abatement notices
+    url: https://www.texaspublicnotices.com
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: Terms not yet read. The alert feature is untested.
+
+  - id: tx_tceq_air_pending
+    state: TX
+    name: TCEQ pending air permit applications
+    url: https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices
+    layer: signal
+    method: manual
+    intended_method: browser
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: The Permit Search Portal at permit-search.tceq.texas.gov needs a browser. Untested. The governor's September 21, 2026 permit pause may change what the lists show.
+
+  - id: tx_tceq_stormwater_noi
+    state: TX
+    name: TCEQ construction stormwater notices of intent
+    url: https://cdn.fs.pathlms.com/1dL9jIAmRK2KniXfbkzs?dl=true
+    layer: signal
+    method: manual
+    intended_method: manual
+    cadence: weekly
+    robots_status: blocked
+    verified_at: null
+    notes: The water quality general permit search blocked an automated reader during research. Treat as manual until the terms are checked. The URL is the TCEQ training deck that describes the search.
+
+  - id: tx_ercot_rpg
+    state: TX
+    name: ERCOT Regional Planning Group project files
+    url: https://www.ercot.com/files/docs/2026/07/17/6.-StatusUpdate_Combined_CPS-Energy-Large-Load-Additions-Project-and-STEC-Medina-County-Large-Load-Project_July2026_RPG.pdf
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: weekly
+    robots_status: not_checked
+    verified_at: null
+    notes: The URL is one example file. The index page still has to be found.
+
+  - id: tx_ercot_large_load
+    state: TX
+    name: ERCOT large load reports
+    url: https://www.ercot.com/files/docs/2026/03/12/March-TAC-Report.pdf
+    layer: context
+    method: manual
+    intended_method: http
+    cadence: monthly
+    robots_status: not_checked
+    verified_at: null
+    notes: Aggregate by zone only. Context layer, not site level. Survey update at https://www.ercot.com/files/docs/2026/11/05/Community-Impact-RFI-PUC-Update.pdf.
+
+  - id: tx_puc_interchange
+    state: TX
+    name: PUC Interchange filings for transmission certificates
+    url: https://interchange.puc.texas.gov
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: Search method still to be worked out. Example filing at https://interchange.puc.texas.gov/Documents/55999_42_1397539.PDF.
+
+  - id: tx_twdb_well_reports
+    state: TX
+    name: TWDB submitted drillers reports
+    url: https://www.twdb.texas.gov/groundwater/data/drillersdb.asp
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: weekly
+    robots_status: not_checked
+    verified_at: null
+    notes: Described as downloadable. See also https://www.twdb.texas.gov/groundwater/data/locwwrep.asp.
+
+  - id: tx_comptroller_data_centers
+    state: TX
+    name: Comptroller registered data centers
+    url: https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php
+    layer: baseline
+    method: manual
+    intended_method: http
+    cadence: monthly
+    robots_status: not_checked
+    verified_at: null
+    notes: No county field.
+
+  - id: tx_comptroller_local_agreements
+    state: TX
+    name: Comptroller local development agreements
+    url: https://comptroller.texas.gov/economy/development/search-tools/sb1340/
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: monthly
+    robots_status: not_checked
+    verified_at: null
+    notes: Lagging. Chapter 312 reports are due July 1 of the following year.
+
+  - id: tx_comptroller_entity_lookup
+    state: TX
+    name: Comptroller franchise tax account search
+    url: https://mycpa.cpa.state.tx.us/coa/detailpagehelp.jsp
+    layer: lookup
+    method: manual
+    intended_method: http
+    cadence: on_demand
+    robots_status: not_checked
+    verified_at: null
+    notes: Read the terms before automating.
+
+  - id: tx_local_agendas
+    state: TX
+    name: City and county agendas in the 30 counties
+    url: https://rjionline.org/news/welcome-to-agenda-watch/
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: Milestone M8. Needs an inventory of every public body and its platform first. Each platform gets its own source entry then.
+
+  # Michigan statewide feeds.
+  - id: mi_mpsc_dockets
+    state: MI
+    name: Michigan Public Service Commission dockets and orders
+    url: https://www.michigan.gov/mpsc/commission/news-releases
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: Locate the e-dockets search and verify. A docket can open and close quickly, so check daily.
+
+  - id: mi_egle_air_pending
+    state: MI
+    name: EGLE air permits pending decision
+    url: https://www.deq.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: A PDF to parse.
+
+  - id: mi_egle_notices
+    state: MI
+    name: EGLE notices and permit records in the MiEnviro Portal
+    url: https://www.michigan.gov/egle/maps-data/mienviroportal
+    layer: signal
+    method: manual
+    intended_method: browser
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: Search untested. Public notice calendar named at https://www.michigan.gov/egle/faqs/environmental-assistance/data-centers. Waivers belong on the watch list.
+
+  - id: mi_msf_board
+    state: MI
+    name: Michigan Strategic Fund board packets and data center certificates
+    url: https://www.michiganbusiness.org/services/data-center/
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: weekly
+    robots_status: not_checked
+    verified_at: null
+    notes: The board meeting archive still has to be found.
+
+  - id: mi_zoning_notices
+    state: MI
+    name: Michigan newspaper zoning hearing notices
+    url: https://zeus-milenia.legislature.mi.gov/documents/mcl/pdf/mcl-125-3103.pdf
+    layer: signal
+    method: manual
+    intended_method: unknown
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    notes: No statewide notice site confirmed yet. Verify first. The URL is the 15 day notice statute.
+
+  # Baselines of known sites and infrastructure.
+  - id: us_fractracker
+    state: US
+    name: FracTracker data centers tracker
+    url: https://www.fractracker.org/data-centers
+    layer: baseline
+    method: manual
+    intended_method: manual
+    cadence: monthly
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: Free for non-commercial use with credit to FracTracker. Stays manual because Esri's terms for the ArcGIS host were not read. Counts only, no raw data in this repository. See docs/sources/us_fractracker.md.
+
+  - id: us_more_than_just_parks
+    state: US
+    name: More Than Just Parks data center tracker
+    url: https://morethanjustparks.com/data-center-tracker/press
+    layer: baseline
+    method: manual
+    intended_method: unknown
+    cadence: monthly
+    robots_status: not_checked
+    verified_at: null
+    notes: Terms not yet read.
+
+  - id: mi_wkar_moratoria
+    state: MI
+    name: WKAR Michigan data center moratorium tracker
+    url: https://www.wkar.org/wkar-news/2026-02-27/michigan-data-center-tracker-moratoria-legislation-and-grid-impact
+    layer: baseline
+    method: manual
+    intended_method: manual
+    cadence: monthly
+    robots_status: not_checked
+    verified_at: null
+    notes: Journalism. Read by a person and cited, not scraped.
+
+  - id: mi_michigan_advance_roundup
+    state: MI
+    name: Michigan Advance weekly data center roundup
+    url: https://michiganadvance.com/?p=108625
+    layer: baseline
+    method: manual
+    intended_method: manual
+    cadence: weekly
+    robots_status: not_checked
+    verified_at: null
+    notes: Journalism. Read by a person and cited, not scraped.
+
+  - id: us_transmission_lines_archive
+    state: US
+    name: Archived HIFLD transmission lines
+    url: https://www.datalumos.org/datalumos/project/240591/version/V1/view
+    layer: baseline
+    method: manual
+    intended_method: manual
+    cadence: once
+    robots_status: not_checked
+    verified_at: null
+    notes: A frozen snapshot. Downloaded once by hand if the terms allow.
+
+  - id: tx_parcels
+    state: TX
+    name: Texas land parcels for the 30 counties
+    url: https://www.geographic.texas.gov/stratmap/land-parcels.html
+    layer: baseline
+    method: manual
+    intended_method: manual
+    cadence: yearly
+    robots_status: not_checked
+    verified_at: null
+    notes: Updated annually, so ownership lags. Load only the counties in scope.

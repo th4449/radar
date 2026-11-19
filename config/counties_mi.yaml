@@ -1,0 +1,254 @@
+# All 83 Michigan counties. See BUILD_PLAN.md milestone M11.
+# FIPS codes come from the Census file national_county2020.txt, read 2026-11-19.
+# agenda_priority 1 marks the six counties whose local agendas are collected first.
+state: MI
+counties:
+  - name: Alcona
+    fips: "26001"
+    agenda_priority: null
+  - name: Alger
+    fips: "26003"
+    agenda_priority: null
+  - name: Allegan
+    fips: "26005"
+    agenda_priority: 1
+  - name: Alpena
+    fips: "26007"
+    agenda_priority: null
+  - name: Antrim
+    fips: "26009"
+    agenda_priority: null
+  - name: Arenac
+    fips: "26011"
+    agenda_priority: null
+  - name: Baraga
+    fips: "26013"
+    agenda_priority: null
+  - name: Barry
+    fips: "26015"
+    agenda_priority: null
+  - name: Bay
+    fips: "26017"
+    agenda_priority: null
+  - name: Benzie
+    fips: "26019"
+    agenda_priority: null
+  - name: Berrien
+    fips: "26021"
+    agenda_priority: null
+  - name: Branch
+    fips: "26023"
+    agenda_priority: null
+  - name: Calhoun
+    fips: "26025"
+    agenda_priority: null
+  - name: Cass
+    fips: "26027"
+    agenda_priority: null
+  - name: Charlevoix
+    fips: "26029"
+    agenda_priority: null
+  - name: Cheboygan
+    fips: "26031"
+    agenda_priority: null
+  - name: Chippewa
+    fips: "26033"
+    agenda_priority: null
+  - name: Clare
+    fips: "26035"
+    agenda_priority: null
+  - name: Clinton
+    fips: "26037"
+    agenda_priority: null
+  - name: Crawford
+    fips: "26039"
+    agenda_priority: null
+  - name: Delta
+    fips: "26041"
+    agenda_priority: null
+  - name: Dickinson
+    fips: "26043"
+    agenda_priority: null
+  - name: Eaton
+    fips: "26045"
+    agenda_priority: null
+  - name: Emmet
+    fips: "26047"
+    agenda_priority: null
+  - name: Genesee
+    fips: "26049"
+    agenda_priority: null
+  - name: Gladwin
+    fips: "26051"
+    agenda_priority: null
+  - name: Gogebic
+    fips: "26053"
+    agenda_priority: null
+  - name: Grand Traverse
+    fips: "26055"
+    agenda_priority: null
+  - name: Gratiot
+    fips: "26057"
+    agenda_priority: null
+  - name: Hillsdale
+    fips: "26059"
+    agenda_priority: null
+  - name: Houghton
+    fips: "26061"
+    agenda_priority: null
+  - name: Huron
+    fips: "26063"
+    agenda_priority: null
+  - name: Ingham
+    fips: "26065"
+    agenda_priority: null
+  - name: Ionia
+    fips: "26067"
+    agenda_priority: null
+  - name: Iosco
+    fips: "26069"
+    agenda_priority: null
+  - name: Iron
+    fips: "26071"
+    agenda_priority: null
+  - name: Isabella
+    fips: "26073"
+    agenda_priority: null
+  - name: Jackson
+    fips: "26075"
+    agenda_priority: null
+  - name: Kalamazoo
+    fips: "26077"
+    agenda_priority: 1
+  - name: Kalkaska
+    fips: "26079"
+    agenda_priority: null
+  - name: Kent
+    fips: "26081"
+    agenda_priority: null
+  - name: Keweenaw
+    fips: "26083"
+    agenda_priority: null
+  - name: Lake
+    fips: "26085"
+    agenda_priority: null
+  - name: Lapeer
+    fips: "26087"
+    agenda_priority: null
+  - name: Leelanau
+    fips: "26089"
+    agenda_priority: null
+  - name: Lenawee
+    fips: "26091"
+    agenda_priority: null
+  - name: Livingston
+    fips: "26093"
+    agenda_priority: null
+  - name: Luce
+    fips: "26095"
+    agenda_priority: null
+  - name: Mackinac
+    fips: "26097"
+    agenda_priority: null
+  - name: Macomb
+    fips: "26099"
+    agenda_priority: null
+  - name: Manistee
+    fips: "26101"
+    agenda_priority: null
+  - name: Marquette
+    fips: "26103"
+    agenda_priority: null
+  - name: Mason
+    fips: "26105"
+    agenda_priority: null
+  - name: Mecosta
+    fips: "26107"
+    agenda_priority: null
+  - name: Menominee
+    fips: "26109"
+    agenda_priority: null
+  - name: Midland
+    fips: "26111"
+    agenda_priority: null
+  - name: Missaukee
+    fips: "26113"
+    agenda_priority: null
+  - name: Monroe
+    fips: "26115"
+    agenda_priority: 1
+  - name: Montcalm
+    fips: "26117"
+    agenda_priority: null
+  - name: Montmorency
+    fips: "26119"
+    agenda_priority: null
+  - name: Muskegon
+    fips: "26121"
+    agenda_priority: null
+  - name: Newaygo
+    fips: "26123"
+    agenda_priority: null
+  - name: Oakland
+    fips: "26125"
+    agenda_priority: 1
+  - name: Oceana
+    fips: "26127"
+    agenda_priority: null
+  - name: Ogemaw
+    fips: "26129"
+    agenda_priority: null
+  - name: Ontonagon
+    fips: "26131"
+    agenda_priority: null
+  - name: Osceola
+    fips: "26133"
+    agenda_priority: null
+  - name: Oscoda
+    fips: "26135"
+    agenda_priority: null
+  - name: Otsego
+    fips: "26137"
+    agenda_priority: null
+  - name: Ottawa
+    fips: "26139"
+    agenda_priority: null
+  - name: Presque Isle
+    fips: "26141"
+    agenda_priority: null
+  - name: Roscommon
+    fips: "26143"
+    agenda_priority: null
+  - name: Saginaw
+    fips: "26145"
+    agenda_priority: null
+  - name: Sanilac
+    fips: "26151"
+    agenda_priority: null
+  - name: Schoolcraft
+    fips: "26153"
+    agenda_priority: null
+  - name: Shiawassee
+    fips: "26155"
+    agenda_priority: null
+  - name: St. Clair
+    fips: "26147"
+    agenda_priority: null
+  - name: St. Joseph
+    fips: "26149"
+    agenda_priority: null
+  - name: Tuscola
+    fips: "26157"
+    agenda_priority: null
+  - name: Van Buren
+    fips: "26159"
+    agenda_priority: null
+  - name: Washtenaw
+    fips: "26161"
+    agenda_priority: 1
+  - name: Wayne
+    fips: "26163"
+    agenda_priority: 1
+  - name: Wexford
+    fips: "26165"
+    agenda_priority: null

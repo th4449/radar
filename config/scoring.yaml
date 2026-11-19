@@ -1,0 +1,55 @@
+# Points, decay and thresholds. See BUILD_PLAN.md section 8.
+#
+# Every number here is a placeholder until the backtest in milestone M9 sets the real ones.
+# Changing thresholds after the backtest needs the owner's approval (section 11).
+#
+# Settings that database policies depend on, such as confirmations_required and the admin
+# approval gate, are not here. They live in the app_settings table.
+
+placeholder: true
+
+# A signal's points halve every half_life_days.
+signal_types:
+  abatement_notice:
+    weight: high
+    points: 30
+    half_life_days: 365
+  air_permit:
+    weight: high
+    points: 30
+    half_life_days: 365
+  transmission_filing:
+    weight: high
+    points: 30
+    half_life_days: 365
+  commission_docket:
+    weight: high
+    points: 30
+    half_life_days: 365
+  well_report:
+    weight: medium
+    points: 15
+    half_life_days: 365
+  stormwater_notice:
+    weight: medium
+    points: 15
+    half_life_days: 365
+  entity_land_purchase:
+    weight: low
+    points: 5
+    half_life_days: 365
+  agenda_keyword:
+    weight: low
+    points: 5
+    half_life_days: 365
+
+# A site gets the bonus when at least min_signal_types independent signal types
+# land on it within window_days.
+multi_signal_bonus:
+  min_signal_types: 2
+  window_days: 365
+  points: 20
+
+# A site at or above review_threshold goes to the reviewer queue.
+thresholds:
+  review_threshold: 40
