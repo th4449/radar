@@ -8,6 +8,8 @@ No single record proves a data center is coming. The product is the cluster, the
 
 Built by Anti-Corruption Action and Dekleptocracy Alliance. The specification is [BUILD_PLAN.md](BUILD_PLAN.md). Progress is in [docs/progress.md](docs/progress.md).
 
+[![CI](https://github.com/th4449/radar/actions/workflows/ci.yml/badge.svg)](https://github.com/th4449/radar/actions/workflows/ci.yml)
+
 ## Status
 
 Under construction. No collector runs on a schedule yet and no alert has been published.

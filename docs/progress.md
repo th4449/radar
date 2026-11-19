@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — Published, first CI run
+
+- The repository is public at https://github.com/th4449/radar with the owner's approval.
+- Commits use the account's GitHub no-reply address. The first two local commits carried a personal address and were rewritten before anything was pushed.
+- CI passed on the first run: secret scan clean over the full history, lint clean, all five migrations applied from scratch and 172 tests passed with none skipped.
+- The workflow's actions were then moved to their current major versions, because GitHub warned that the older ones target a retired Node.js.
+
+**This closes M0.** M1 still lacks the fixture from a real page, which waits on `RADAR_CONTACT`.
+
+**Reminder.** GitHub disables scheduled workflows in a public repository after 60 days without activity. No scheduled workflow exists yet. M10 monitoring has to watch for this.
+
 ## November 19, 2026 — M1 Core library
 
 **Built**
@@ -32,7 +43,6 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Still unverified**
 
-- CI on GitHub. The repository has not been pushed.
 - The fetcher against a real server. Every test uses a fake transport.
 - The hosted archive backend. It comes with the Supabase project.
 - A real PDF from a source. The PDF tests use small files written by the test helper.
@@ -76,7 +86,6 @@ FracTracker's top five counties outside the organization's 25 are Dallas (27), B
 
 **Still unverified**
 
-- CI has not run on GitHub. The repository has not been pushed.
 - The terms of every source in section 6 except FracTracker.
 - Esri's terms for the ArcGIS host that serves the FracTracker layer.
 - Whether the hosted Supabase project behaves like the local one for default privileges. The migrations revoke and grant explicitly so it should not matter.
