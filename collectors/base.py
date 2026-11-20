@@ -13,6 +13,7 @@ The rules this module enforces, from BUILD_PLAN.md sections 6 and 12:
 
 from __future__ import annotations
 
+import dataclasses
 import datetime as dt
 import hashlib
 import os
@@ -213,6 +214,10 @@ class Fetcher:
     ) -> None:
         check_source_permitted(source, by_hand=by_hand)
         self.source = source
+        # The limit is the same for every source unless config/sources.yaml raises it for one.
+        self.max_body_bytes = (
+            source.max_body_mb * 1024 * 1024 if source.max_body_mb else MAX_BODY_BYTES
+        )
         self._sleep = sleep
         self._client = httpx.Client(
             headers={"User-Agent": user_agent(contact), "Accept-Encoding": "gzip"},
@@ -293,8 +298,8 @@ class Fetcher:
                     body = bytearray()
                     for chunk in resp.iter_bytes():
                         body += chunk
-                        if len(body) > MAX_BODY_BYTES:
-                            raise TooLarge(f"{url} is larger than {MAX_BODY_BYTES} bytes")
+                        if len(body) > self.max_body_bytes:
+                            raise TooLarge(f"{url} is larger than {self.max_body_bytes} bytes")
                     return status, resp.headers, bytes(body)
             except httpx.TransportError as exc:
                 if attempt == MAX_ATTEMPTS:
@@ -386,6 +391,15 @@ def archive(
 # --- collector ----------------------------------------------------------------------------------
 
 
+@dataclass(frozen=True)
+class Reduced:
+    """What a collector stores in place of a file it does not keep."""
+
+    body: bytes
+    content_type: str
+    meta: dict = field(default_factory=dict)  # recorded with the document
+
+
 class Sink(Protocol):
     """Where runs and documents are recorded. See pipeline/store.py."""
 
@@ -398,6 +412,11 @@ class Sink(Protocol):
 
     def known(self, source: Source) -> dict[str, dict]:
         """The stored metadata of the newest document for each URL of this source."""
+
+
+def _original(result: FetchResult) -> dict:
+    """What is recorded about a fetched file that is not itself stored."""
+    return {"original_sha256": sha256_hex(result.body), "original_bytes": len(result.body)}
 
 
 @dataclass
@@ -417,6 +436,10 @@ class Collector:
     A source that is one page or a fixed list needs only urls(). A source that is an index
     leading to other pages also defines follow(). A page that carries tracking codes which
     change on every request defines content_key(), so an unchanged page is not stored again.
+
+    A source whose file holds far more than the radar should keep defines reduce(). The run then
+    stores what reduce() returns and records the address, retrieval time, size and hash of the
+    file itself. The file is never stored, not even when the run fails on it.
     """
 
     source_id: ClassVar[str]
@@ -431,6 +454,10 @@ class Collector:
 
     def content_key(self, result: FetchResult) -> str | None:
         """A key that changes only when what the page says changes, or None to use the bytes."""
+        return None
+
+    def reduce(self, result: FetchResult) -> Reduced | None:
+        """What to store in place of the fetched file, or None to store the file itself."""
         return None
 
     def run(
@@ -482,12 +509,17 @@ class Collector:
                 summary.documents_seen += 1
                 if result.not_modified:
                     continue
+                reduces = type(self).reduce is not Collector.reduce
                 try:
+                    reduced = self.reduce(result)
                     key = self.content_key(result)
                     more = list(self.follow(result))
                 except LayoutChanged as exc:
-                    # Keep the page that surprised us, then stop. A person looks at it.
-                    if sink.save_document(archive(result, source, store)):
+                    # Keep the page that surprised us, then stop. A person looks at it. A file
+                    # this collector does not keep is not kept here either: only its hash is.
+                    if reduces:
+                        summary.detail["unread_file"] = _original(result)
+                    elif sink.save_document(archive(result, source, store)):
                         summary.documents_new += 1
                     summary.status = "failed"
                     summary.error = f"{url}: {exc}"
@@ -495,8 +527,13 @@ class Collector:
                 queue.extend(more)
                 if key is not None and known.get(url, {}).get("content_key") == key:
                     continue  # the page says what it said last time
-                extra = {"content_key": key} if key is not None else None
-                if sink.save_document(archive(result, source, store, extra)):
+                extra = {"content_key": key} if key is not None else {}
+                if reduced is not None:
+                    extra |= {**reduced.meta, **_original(result), "original_kept": False}
+                    result = dataclasses.replace(
+                        result, body=reduced.body, content_type=reduced.content_type
+                    )
+                if sink.save_document(archive(result, source, store, extra or None)):
                     summary.documents_new += 1
             if summary.status == "running":
                 if summary.errors == 0:

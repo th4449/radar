@@ -38,6 +38,8 @@ class Source(_Strict):
     cadence: Literal["daily", "weekly", "monthly", "yearly", "once", "on_demand"]
     robots_status: Literal["not_checked", "allowed", "restricted", "blocked"]
     verified_at: dt.date | None
+    # Raises the fetcher's 50 MB limit for this source. Set it only for a known large file.
+    max_body_mb: int | None = Field(default=None, ge=51, le=500)
     notes: str = ""
 
     @model_validator(mode="after")

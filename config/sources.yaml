@@ -100,12 +100,13 @@ sources:
     name: TWDB submitted drillers reports
     url: https://www.twdb.texas.gov/groundwater/data/data-well-reports.asp
     layer: signal
-    method: manual
+    method: http
     intended_method: http
-    cadence: daily
+    cadence: weekly
     robots_status: allowed
     verified_at: 2026-11-20
-    notes: A nightly bulk file of the whole database, 145 MB, over the fetcher's 50 MB limit. The board grants permission to copy and distribute. About 41 percent of the reports are household wells with a name and address. Held until the owner decides what is kept. See docs/sources/tx_twdb_well_reports.md.
+    max_body_mb: 300
+    notes: One 145 MB file of every well report, rebuilt nightly. The file is not kept. Each run stores an extract of rows in the test counties that are not domestic or stock wells and were submitted in the last two years, without the owner's mailing address or the driller. Approved by the owner on November 20, 2026. See docs/sources/tx_twdb_well_reports.md.
 
   - id: tx_comptroller_data_centers
     state: TX

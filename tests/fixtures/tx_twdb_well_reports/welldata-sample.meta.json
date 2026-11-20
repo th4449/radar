@@ -1,0 +1,11 @@
+{
+  "source_id": "tx_twdb_well_reports",
+  "url": "https://www.twdb.texas.gov/groundwater/data/SDRDownload.zip",
+  "table": "SDRDownload/WellData.txt",
+  "retrieved_at": "2026-11-20T07:16:32+00:00",
+  "original_sha256": "5ade64a6da29f45409ab324ba2faf89ef89fead321048f76737d9836a56d7de8",
+  "original_bytes": 152513192,
+  "fixture_sha256": "c6612cd9f22f6badd6e11e76531577db602e44a8cbb658c589cf5f9c4145b2f6",
+  "encoding": "cp1252, lines end in CRLF, as in the board's table",
+  "fixture_note": "A hand-built sample, not the board's file. The header line is the board's. Six rows are real reports owned by companies or a city, tracking numbers 731020, 731019, 728122, 728611, 724473 and 737420. In those rows the owner's mailing address is replaced with a placeholder and every field about the driller is blanked or replaced. Nine rows, tracking numbers 9000001 to 9000009, are invented for the tests. No real household row is in this file."
+}

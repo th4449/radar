@@ -3,7 +3,10 @@
 - Source id: `tx_twdb_well_reports`
 - Page: https://www.twdb.texas.gov/groundwater/data/data-well-reports.asp
 - Checked: November 20, 2026
-- Result: **allowed, and held.** Nothing restricts automated access. No collector is written. The owner has to decide what the radar keeps from this file first. See "The decision" below.
+- Result: **allowed.** Fetched over plain HTTP, weekly. The file is not kept. Each run stores an extract.
+- Collector: `collectors/tx/twdb_well_reports.py`
+- Fixture: `tests/fixtures/tx_twdb_well_reports/`, a hand-built sample
+- Workflow: `.github/workflows/collect-tx-twdb-well-reports.yml`, started by hand only
 
 ## What was verified
 
@@ -39,20 +42,35 @@ The page links `/groundwater/data/SDRDownload.zip`. It was downloaded once by ha
 
 ## The decision
 
-The build plan lists this feed as "downloadable" and the config has it as daily. Building it as the other collectors are built would mean:
+The build plan lists this feed as "downloadable" and the config had it as daily. Built like the other collectors, it would have downloaded 145 MB a day and archived every copy of a file that names about 293,000 households, 53 GB a year. Four options were put to the owner: a weekly extract, the whole file weekly, manual only, or daily as planned.
 
-- raising the size limit for one source,
-- downloading 145 MB a day from the board, and
-- keeping every day's copy of a file that holds the names and addresses of about 293,000 households. That is 53 GB a year in the archive.
+**The owner chose the weekly extract on November 20, 2026.** This departs from the rule that the original file is archived.
 
-That is more than a medium-weight, late signal needs. Options:
+## How the collector works
 
-1. **Weekly, and keep an extract only. Recommended.** Download the file once a week, read `WellData.txt` and keep only rows that are in the 30 counties, are not domestic or stock wells and were submitted in the last two years. Drop the owner's mailing address from what is kept. Record the file's URL, retrieval time and hash, and do not keep the file. A reviewer traces a row by its tracking number. This departs from the rule that the original is archived, so it needs the owner's approval.
-2. **Weekly, and keep the whole file.** Simplest to trace. 7.5 GB a year, and the archive holds every household.
-3. **Leave it manual.** A reviewer checks the board's map viewer for a site already flagged by another signal. No download.
-4. **Daily, as the plan says.** Option 1 or 2 at seven times the traffic. The 36-day lag means a daily run finds little a weekly run would miss.
+1. It asks for the zip file with the ETag of the last copy. An unchanged file costs one short answer.
+2. It reads `WellData.txt` inside the zip and checks that the 73 column names are the ones read on November 20, 2026. If they are not, the run fails and stores nothing.
+3. It keeps a row only if it is in one of the 30 test counties, is not a domestic or stock well and was submitted in the last 730 days.
+4. From each kept row it keeps 23 columns: tracking number, date submitted, owner name, owner's well number, county, well address, city and zip, location description, number of wells, coordinates, type of work, proposed use, public water system number, drilling dates, comments and the numbers of linked reports.
+5. It leaves out the owner's mailing address and every column about the driller: company, name, signature, license and address.
+6. It stores the extract as text and records the board file's address, retrieval time, size and SHA-256 hash. The board's file is not written to disk, not even when a run fails on it.
 
-Under option 1, rows owned by a person still get through under uses such as irrigation or monitor. The M4 check that holds back rows naming a person, already needed for the TCEQ list, would cover these too.
+The size limit for this one source is raised to 300 MB in `config/sources.yaml`. Every other source keeps the 50 MB limit.
+
+A row with a stray pipe character cannot be split into its columns. It is not used. Its tracking number is recorded so a person can look it up.
+
+## Verified live
+
+- The download page, fetched once on November 20, 2026.
+- The file, downloaded once by hand the same day to read its layout. That copy was deleted.
+- One full run of the collector the same day, keeping nothing afterward. It read 715,155 rows and kept 8,325, from 29 of the 30 counties. It left out 74,333 household rows in the test counties, 111,710 older rows and 520,783 rows from other counties. Four rows were malformed. The extract is 1.5 MB. The run took 9 seconds and about 400 MB of memory.
+- The kept rows by use: environmental soil boring 3,661, monitor 2,918, test well 554, irrigation 440, other 395, public supply 168, industrial 66 and seven smaller groups.
+
+## What is still open
+
+- **Kept rows can name a person.** An irrigation or monitor well can belong to an individual, and the comments field is free text. The M4 check that holds back rows naming a person, already needed for the TCEQ list, has to cover this extract before a reviewer or the public sees it.
+- **Soil borings and monitor wells are most of the extract.** Many belong to gas stations and cleanup sites. Whether they help or only add noise is a question for the backtest.
+- **Each weekly extract is a full snapshot.** Finding what is new means comparing it with the one before. That is M4 work.
 
 ## What was not verified
 
@@ -63,10 +81,13 @@ Under option 1, rows owned by a person still get through under uses such as irri
 - `locwwrep.asp`, the guide to locating a well report.
 - The lookup and map applications on `www3.twdb.texas.gov`. That host has no robots file.
 - How often a report is corrected after it is submitted.
+- A run from GitHub's servers.
 
-## Notes for the collector, once the owner decides
 
-- One request for the zip, with the ETag of the last copy. An unchanged file costs one short answer.
-- Read the table as Windows-1252 and stop with a clear error if the 73 column names change.
-- Test fixtures must be a small table built from rows owned by companies and public bodies, with the driller's name blanked. No real household row goes in the repository.
-- Credit the Texas Water Development Board.
+## About the fixture
+
+- No copy of the board's file is in the repository.
+- The fixture is a 15-row sample built by hand. Its header line is the board's. Six rows are real reports owned by companies or a city, with the owner's mailing address replaced and every driller field removed. Nine rows are invented.
+- Its `.meta.json` lists which rows are which.
+
+Credit the Texas Water Development Board in anything published from this feed.

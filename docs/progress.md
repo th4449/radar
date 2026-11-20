@@ -2,6 +2,34 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M2: slide decks are read, and the TWDB collector
+
+**Built**
+
+- **Text from slide decks, Word files and zip files**, in `pipeline/extract.py`. A deck gives each slide's text in presentation order, then its speaker notes. A zip gives the text of each readable file inside and lists every file with whether it was read.
+- **`collectors/tx/twdb_well_reports.py`.** The owner chose the weekly extract. The collector downloads the board's file, keeps rows in the 30 counties that are not domestic or stock wells and were submitted in the last two years, and stores that extract. It leaves out the owner's mailing address and every driller column. The board's file is never written to disk.
+- **Two changes to the shared collector code.** Config can raise the size limit for one source. A collector can store an extract in place of the file, with the file's address, time, size and hash recorded.
+- A workflow file for the TWDB feed, started by hand only, dry run, no schedule.
+- `tx_twdb_well_reports` is now `method: http`, weekly, with a 300 MB limit.
+- One new dependency, `defusedxml`, for reading the XML inside Office files safely.
+- 34 new tests. 290 pass locally, database tests included.
+
+**Verified live**
+
+- The slide deck reader on two real ERCOT files: a deck of 8 slides, and the committee's zip file, which holds one deck of 15 slides. Text came out of every slide.
+- One full run of the TWDB collector against the real file: 715,155 rows read, 8,325 kept, 1.5 MB stored, 9 seconds. Only the extract was on disk afterward.
+
+**Still unverified**
+
+- Text inside pictures and embedded charts in a slide deck is not read. Both real decks hold their charts that way.
+- Spreadsheets and the older binary Office formats are not read.
+- TWDB rows that are kept can still name a person. The M4 check has to cover them.
+- Neither new workflow file has run.
+
+**Next in M2**
+
+- Comptroller local agreements. Then M2 is done except for the feeds that are held or closed.
+
 ## November 20, 2026 — M2: TWDB well reports read and held
 
 No code changed. No collector is written for this feed.
