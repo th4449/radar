@@ -2,6 +2,52 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M5: scoring and site clustering
+
+**Built**
+
+- **Scoring**, `pipeline/score.py`, with its tests written first. Each signal type counts once, by its strongest signal. A signal is worth its type's points, times how sure it is, times its decay. The bonus is paid once, when enough types from different sources are dated within the window of each other. The breakdown says where every point came from, and is stored with the site.
+- **Clustering**, `pipeline/cluster.py`. Signals join a site only inside one county, for a reason stored with the signal: the same company, coordinates within 1,000 m, or the same project name or number. The same company more than 5,000 m apart is two sites.
+- **Sites in the database**, `pipeline/sites.py`. It runs at the end of every processing run. A new signal joins the site it fits or starts one. Every site is scored again. A candidate at or above the review threshold enters the queue.
+- **A database guard on site status.** A job can score a site and move a candidate into the queue. It cannot confirm or reject a site, or take either back. Before this, nothing stopped a job that held the service key. Tests written first.
+- ERCOT planning signals now carry ERCOT's own project number, such as 25RPG020, so next month's update of a project joins this month's.
+- One migration: `sites.score_detail`, `sites.scored_at` and the guard.
+- 69 new tests. 555 pass locally, database tests included.
+
+**Rules that keep a reviewer's work stable**
+
+- A signal already on a site never moves. A site is never merged, split or deleted by a job.
+- A signal that fits two sites joins the older one, and both are flagged in the run log for a person to look at.
+- A rejected or confirmed site keeps receiving its signals and its score. Its status does not change.
+- A site is never taken out of the queue when its score decays.
+
+**Verified live, on the local database**
+
+- Three collectors ran for real, and the well extract collected an hour earlier was reused. The laptop restarted mid-run and cleared the scratch folder, so the extract was rebuilt from the stored text and the other three feeds were collected again.
+- Processing made 62 signals. **50 of them became 6 sites**: 13, 16, 13, 6, 1 and 1 signals each. The two NTT companies in Travis County became one site, joined by coordinates.
+- **The 12 air permit signals are on no site.** The TCEQ lists give no county.
+- **No site reaches the review threshold.** The highest score is 11.4 against a threshold of 40. A site needs two signal types to get there, and the only feed that could supply a second type has no county. With today's feeds the reviewers' queue would be empty.
+- The data was deleted afterward.
+
+**Choices for the owner to accept or reverse**
+
+- **Confidence scales the points.** The plan gives points and a half life. It does not say what a signal's confidence does. Here a weak reason is worth less than a strong one.
+- **One contribution per signal type.** Sixteen soil borings on one day are one fact.
+- **Two types read from one source are not independent** and earn no bonus.
+- **The bonus does not decay.** It is paid when the signals are within the window of each other, however old they are. It is 20 against a threshold of 40, so an old pair alone does not enter the queue.
+- **A signal with no company, coordinates or project name makes no site.** It names a county and nothing to hold it to a place.
+- The two distances, 1,000 m and 5,000 m, are placeholders in `config/scoring.yaml`, like every number there.
+
+**Still unverified or not built**
+
+- **Every threshold is a placeholder.** The backtest in M9 sets the real ones.
+- **TCEQ air permits cannot join a site.** The fix is a county for each row. The 12 rows that are signals each link an application file, which should state the county. Fetching those 12 files, and not all 623, would be a small change to the collector. Not done: it changes what the TCEQ collector fetches, so the owner decides.
+- **Two sites that are the same place are only flagged.** Merging them is a person's job and there is no screen for it yet. That is M6.
+- A site's place is the middle of its signals' coordinates, and those come from drillers and are not verified by the state.
+- A site is labeled once, from its first signal. A site that starts from a planning file is labeled with a project number.
+- Nothing ran on a hosted database or from GitHub's servers. There is no workflow file for processing or scoring.
+- Michigan: no signal to score.
+
 ## November 20, 2026 — M4: processing
 
 M3 has no feed cleared to build, so M4 went first with the owner's go-ahead.

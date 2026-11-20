@@ -34,6 +34,7 @@ A public tool that names companies and tells communities a data center may be co
 - Never send a record that may name a person to an outside service, the geocoder and the model included.
 - Bump `RULES_VERSION` in `pipeline/signals.py` when a rule changes. Reading documents again only adds signals.
 - The model's answer is stored beside a signal. It never creates, removes or rewrites one.
+- `sites.py` groups signals into sites and scores them at the end of every run. A signal already on a site never moves, and a job never merges, splits, confirms or rejects a site. The database refuses a status change from a job other than candidate to in_review.
 
 ## Database
 
