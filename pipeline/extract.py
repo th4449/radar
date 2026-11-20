@@ -113,6 +113,8 @@ def sniff(body: bytes, content_type: str | None = None) -> Kind:
 
 
 def _tidy(text: str) -> str:
+    # A PDF's text layer can hold NUL characters. The database refuses them.
+    text = text.replace("\x00", "")
     lines = (_SPACES.sub(" ", line).strip() for line in text.splitlines())
     return "\n".join(line for line in lines if line)
 
@@ -146,8 +148,8 @@ def _pdf_attachments(body: bytes) -> list[tuple[str, bytes]]:
         found = []
         for index in range(min(document.count_attachments(), MAX_MEMBERS_READ + 1)):
             attachment = document.get_attachment(index)
-            found.append((attachment.get_name() or f"attachment {index + 1}",
-                          bytes(attachment.get_data())))  # fmt: skip
+            name = (attachment.get_name() or "").replace("\x00", "").strip()
+            found.append((name or f"attachment {index + 1}", bytes(attachment.get_data())))
         return found
     except (pdfium.PdfiumError, ValueError):
         return []

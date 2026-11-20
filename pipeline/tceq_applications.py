@@ -29,6 +29,7 @@ from typing import Literal
 import psycopg
 
 from collectors.base import (
+    MAX_BODY_BYTES,
     Blocked,
     FetchError,
     NotPermitted,
@@ -41,6 +42,7 @@ from pipeline.counties import CountyIndex
 
 SOURCE_ID = "tx_tceq_air_pending_legacy"
 MAX_FILES_PER_RUN = 25
+DEFAULT_LIMIT_MB = MAX_BODY_BYTES // (1024 * 1024)
 _TX_BOX = (-107.0, 25.5, -93.0, 37.0)
 
 Status = Literal["read", "no_county", "ambiguous"]
@@ -166,6 +168,8 @@ def enrich_air_permits(
     lookup fetches a URL once, archives the answer and answers from the archive after that.
     """
     counties = counties or CountyIndex.for_state("TX")
+    # A file over the size limit is asked for again only after the limit is raised in config.
+    limit_mb = source.max_body_mb or DEFAULT_LIMIT_MB
     waiting = conn.execute(
         """select id, extracted->'row'->>'application_url'
            from public.signals
@@ -173,11 +177,13 @@ def enrich_air_permits(
              and extracted->'row'->>'application_url' is not null
              and (extracted->'application' is null
                   or extracted->'application'->>'status' = 'fetch_failed'
+                  or (extracted->'application'->>'status' = 'too_large'
+                      and coalesce((extracted->'application'->>'limit_mb')::int, 0) < %s)
                   or extracted->'application'->>'url'
                      is distinct from extracted->'row'->>'application_url')
            order by id
            limit %s""",
-        [limit],
+        [limit_mb, limit],
     ).fetchall()
     summary: dict = {
         "asked": 0, "read": 0, "in_scope": 0, "out_of_scope": 0, "no_county": 0,
@@ -195,7 +201,7 @@ def enrich_air_permits(
             summary["stopped"] = str(exc)
             break
         except TooLarge:
-            record["status"] = "too_large"
+            record |= {"status": "too_large", "limit_mb": limit_mb}
         except FetchError as exc:
             record |= {"status": "fetch_failed", "error": str(exc)[:200]}
         else:

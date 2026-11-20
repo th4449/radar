@@ -206,9 +206,31 @@ def test_a_file_over_the_size_limit_is_recorded_and_not_asked_for_again(radar, m
     web = web_for(radar, {ALIGNED: pdf(FORM + "\n" + "x" * 2000)})
     radar.run(web)
     assert radar.application(ALIGNED)["status"] == "too_large"
+    assert radar.application(ALIGNED)["limit_mb"] == 50
     again = radar.run(web)
     assert again.detail["tceq_applications"]["too_large"] == 0
     assert again.detail["tceq_applications"]["asked"] == 5
+
+
+def test_a_file_that_was_too_large_is_asked_for_again_once_the_limit_is_raised(radar, monkeypatch):
+    from collectors import base
+
+    monkeypatch.setattr(base, "MAX_BODY_BYTES", 500)
+    web = web_for(radar, {ALIGNED: pdf(FORM + "\n" + "x" * 2000)})
+    radar.run(web)
+    assert radar.application(ALIGNED)["status"] == "too_large"
+
+    raised = SOURCE.model_copy(update={"max_body_mb": 60})
+    with as_service(radar.conn):
+        clock = FakeClock()
+        with Fetcher(
+            raised, contact=CONTACT, transport=web.transport, clock=clock, sleep=clock.sleep
+        ) as fetcher:
+            lookup = ArchivedLookup(raised, fetcher, radar.store, radar.sink)
+            done = tceq_applications.enrich_air_permits(
+                radar.conn, source=raised, lookup=lookup, sink=radar.sink
+            )
+    assert done["in_scope"] == 1 and radar.rows()[ALIGNED][2] == "48139"
 
 
 def test_a_limit_bounds_how_many_files_one_run_fetches(radar):

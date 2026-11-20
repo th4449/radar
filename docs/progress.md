@@ -2,6 +2,39 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — TCEQ air permits get a county
+
+The owner approved fetching the application file of each air permit row that is a signal.
+
+**Built**
+
+- **`pipeline/tceq_applications.py`.** For an air permit signal with no county, processing fetches the application file its row links, once, and reads the county from the form's address block, the head of a TCEQ letter or a review sheet. Every line found must name the same county. Running text is never used.
+- **The text reader opens files embedded in a PDF.** TCEQ sends New Source Review applications as a portfolio: a cover page with the application inside. It also now releases each page after reading it. A 528-page file went from 2.7 GB of memory to under 500 MB.
+- The file is stored restricted. Only the address lines, the NAICS code and the stated line of business are copied to the signal.
+- Off unless processing is run with `--fetch-applications`. At most 25 files a run.
+- 27 new tests. 582 pass locally, database tests included.
+
+**Verified live, on the local database**
+
+- Two files fetched by hand first, one of each kind, to read their layout.
+- Then one full run. **Of 12 rows, 9 files gave a county.** Six are in the test counties: Bexar, Bosque, Carson, Ellis, Hill and Travis. Three are outside: Armstrong, Childress and Collin. One file states its county only in a sentence and gave none, as designed. Two files are over the 50 MB limit and were refused.
+- Ten files, 208 MB in all, 2 MB to 50 MB each.
+- **Six air permit signals now sit on sites. There are 11 sites, up from 6.**
+- **Still no site reaches the review threshold.** The highest is 35.7 against 40: one company's air permit and its well reports in Travis County, with the bonus. Both signals rest only on the company being on the Comptroller's list, and its own application calls the site an automobile manufacturing facility. The placeholder threshold kept it out of the queue.
+- A fault found and fixed: one file's text held a NUL character, which the database refuses. The first run failed on it.
+- The data and the files were deleted afterward.
+
+**What the run showed that is not fixed**
+
+- **Two sites that look like one.** An air permit names "CyrusOne LLC" in Bosque County and a well report names "CyrusOne Bosque LLC" in Bosque County. They are two company names, and the permit's file gave no coordinates, so they are two sites. Nothing flags them as related yet.
+- **Two files are over the size limit.** The limit for this source can be raised in `config/sources.yaml`. Their size is not known.
+- **This was the fifth download of the 145 MB TWDB file in one day,** all for local checks. A scheduled job would fetch it once a week.
+
+**Still unverified**
+
+- An application that is a scan, or one for a site with no street address.
+- A run from GitHub's servers. There is no workflow file for processing.
+
 ## November 20, 2026 — M5: scoring and site clustering
 
 **Built**

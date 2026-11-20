@@ -164,6 +164,15 @@ def test_a_portfolio_inside_a_portfolio_is_not_opened():
     assert "Inner cover" in out.text and "Ellis County" not in out.text
 
 
+def test_text_never_carries_a_nul_character():
+    # A real application file had one in its text layer, and the database refuses them.
+    from pipeline.extract import _tidy
+
+    assert _tidy("County\x00 ELLIS\n\x00\nNext") == "County ELLIS\nNext"
+    out = extract(b"<html><body><p>County\x00 ELLIS</p></body></html>", "text/html")
+    assert "\x00" not in out.text
+
+
 def test_a_pdf_with_nothing_embedded_reads_as_before():
     out = extract(make_pdf(["One", "Two"]), "application/pdf")
     assert (out.text, out.pages, out.members) == ("One\n\nTwo", 2, ())
