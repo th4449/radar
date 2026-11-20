@@ -289,3 +289,16 @@ sources:
     robots_status: not_checked
     verified_at: null
     notes: Updated annually, so ownership lags. Load only the counties in scope.
+
+  # Services the pipeline queries, one record at a time.
+  - id: us_census_geocoder
+    state: US
+    name: Census Bureau geocoder
+    url: https://geocoding.geo.census.gov/geocoder/
+    layer: lookup
+    method: http
+    intended_method: http
+    cadence: on_demand
+    robots_status: allowed
+    verified_at: 2026-11-20
+    notes: Public service with a documented REST interface. No key, no robots file, no stated request limit. Queried for one address or point at a time, never for a record that names a person. Every answer is archived and reused. See docs/sources/us_census_geocoder.md.

@@ -1,0 +1,12 @@
+{
+  "source_id": "us_census_geocoder",
+  "url": "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=99999+Nonexistent+Example+Rd%2C+Granbury%2C+TX+76048&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "final_url": "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=99999+Nonexistent+Example+Rd%2C+Granbury%2C+TX+76048&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "retrieved_at": "2026-11-20T12:41:22+00:00",
+  "sha256": "4a601e49b555eaad283f4ab3b797164689e88a354396f31058f73430926b149c",
+  "bytes": 387,
+  "content_type": "application/json",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text"
+}

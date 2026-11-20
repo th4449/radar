@@ -1,0 +1,12 @@
+{
+  "source_id": "us_census_geocoder",
+  "url": "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=4600+Silver+Hill+Rd%2C+Washington%2C+DC+20233&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "final_url": "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress?address=4600+Silver+Hill+Rd%2C+Washington%2C+DC+20233&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "retrieved_at": "2026-11-20T12:40:51+00:00",
+  "sha256": "b5694e63b2efe01d288ba3d9f3d7bb8bf14af28f45cd4ce91e966544e3d51e7c",
+  "bytes": 1194,
+  "content_type": "application/json",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text"
+}

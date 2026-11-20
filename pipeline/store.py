@@ -41,6 +41,10 @@ class MemorySink:
                 newest[doc.url] = doc
         return {url: dict(doc.raw_meta) for url, doc in newest.items()}
 
+    def find(self, source: Source, url: str) -> ArchivedDocument | None:
+        held = [d for d in self.documents.values() if d.source_id == source.id and d.url == url]
+        return max(held, key=lambda d: d.retrieved_at) if held else None
+
     def finish_run(self, run_id: int, summary: RunSummary) -> None:
         self.runs[run_id].update(
             status=summary.status,
@@ -110,6 +114,19 @@ class PostgresSink:
             [self._source_db_id(source)],
         ).fetchall()
         return {url: meta for url, meta in rows}
+
+    def find(self, source: Source, url: str) -> ArchivedDocument | None:
+        row = self._conn.execute(
+            """select url, retrieved_at, sha256, storage_path, text, raw_meta
+               from public.documents
+               where source_id = %s and url = %s
+               order by retrieved_at desc, id desc
+               limit 1""",
+            [self._source_db_id(source), url],
+        ).fetchone()
+        if row is None:
+            return None
+        return ArchivedDocument(source.id, row[0], row[1], row[2], row[3], row[4] or "", row[5])
 
     def finish_run(self, run_id: int, summary: RunSummary) -> None:
         self._conn.execute(

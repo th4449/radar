@@ -1,0 +1,12 @@
+{
+  "source_id": "us_census_geocoder",
+  "url": "https://geocoding.geo.census.gov/geocoder/geographies/coordinates?x=-97.7861&y=32.4421&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "final_url": "https://geocoding.geo.census.gov/geocoder/geographies/coordinates?x=-97.7861&y=32.4421&benchmark=Public_AR_Current&vintage=Current_Current&layers=Counties&format=json",
+  "retrieved_at": "2026-11-20T12:40:56+00:00",
+  "sha256": "d0863f3715b2cf69ea302822b97c83cb55a02310deb31436b01d94104036ebfd",
+  "bytes": 709,
+  "content_type": "application/json",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text"
+}

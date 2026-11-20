@@ -15,7 +15,10 @@ from .test_tx_comptroller_data_centers import BODY, ROBOTS, URL
 
 
 def test_every_source_cleared_for_fetching_has_a_collector_and_no_other_does():
-    cleared = {s.id for s in load_sources().sources if s.may_fetch_automatically}
+    # A lookup service is queried by the pipeline, one record at a time. It has no collector.
+    cleared = {
+        s.id for s in load_sources().sources if s.may_fetch_automatically and s.layer != "lookup"
+    }
     assert cleared == set(runner.REGISTRY)
     for source_id, collector in runner.REGISTRY.items():
         assert collector.source_id == source_id

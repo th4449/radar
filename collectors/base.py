@@ -413,6 +413,9 @@ class Sink(Protocol):
     def known(self, source: Source) -> dict[str, dict]:
         """The stored metadata of the newest document for each URL of this source."""
 
+    def find(self, source: Source, url: str) -> ArchivedDocument | None:
+        """The newest stored document for one URL of this source."""
+
 
 def _original(result: FetchResult) -> dict:
     """What is recorded about a fetched file that is not itself stored."""
