@@ -68,9 +68,10 @@ A row with a stray pipe character cannot be split into its columns. It is not us
 
 ## What is still open
 
-- **Kept rows can name a person.** An irrigation or monitor well can belong to an individual, and the comments field is free text. The M4 check that holds back rows naming a person, already needed for the TCEQ list, has to cover this extract before a reviewer or the public sees it.
+- **Kept rows can name a person. Handled in processing since November 20, 2026.** The stored extract is restricted: an administrator reads it, a reviewer does not. A row becomes a signal only when its owner's name shows a company or a public body. The comments and the location description are searched for terms and never copied whole. See `pipeline/signals.py`.
 - **Soil borings and monitor wells are most of the extract.** Many belong to gas stations and cleanup sites. Whether they help or only add noise is a question for the backtest.
-- **Each weekly extract is a full snapshot.** Finding what is new means comparing it with the one before. That is M4 work.
+- **Each weekly extract is a full snapshot. Handled in processing.** A report already seen in an earlier extract makes no second signal.
+- **Most kept rows make no signal.** A row needs a reason: its owner's name says "data center", uses a code word or matches a company on the Comptroller's registered data center list. A well drilled by a company with a new name and no such word is not caught from this feed alone.
 
 ## What was not verified
 

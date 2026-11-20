@@ -272,3 +272,109 @@ def test_every_stored_signal_says_which_rules_made_it(stored):
         " where fingerprint is not null"
     ).fetchall()
     assert versions == [(summary.rules_version,)]
+
+
+# --- optional model triage ----------------------------------------------------------------------
+
+
+class _Model:
+    """A stand-in client. No test calls the model."""
+
+    def __init__(self) -> None:
+        import json
+        from types import SimpleNamespace
+
+        self.requests: list[dict] = []
+        answer = json.dumps({"verdict": "relevant", "quote": "Large Load Project"})
+
+        def create(**kwargs):
+            self.requests.append(kwargs)
+            return SimpleNamespace(
+                stop_reason="end_turn",
+                content=[SimpleNamespace(type="text", text=answer)],
+                usage=SimpleNamespace(input_tokens=700, output_tokens=40),
+            )
+
+        self.messages = SimpleNamespace(create=create)
+
+
+def test_with_triage_off_no_signal_carries_an_answer_and_nothing_is_spent(stored):
+    stored.add_everything()
+    stored.run()
+    assert stored.conn.execute(
+        "select count(*) from public.signals where extracted ? 'triage'"
+    ).fetchone() == (0,)
+    assert stored.conn.execute("select count(*) from public.model_usage").fetchone() == (0,)
+
+
+def test_with_triage_on_only_the_weak_signal_from_an_open_record_is_asked_about(stored):
+    from decimal import Decimal
+
+    from pipeline.triage import PostgresLedger, Triager
+
+    ids = stored.add_everything()
+    model = _Model()
+    with as_service(stored.conn):
+        triager = Triager(model, PostgresLedger(stored.conn), Decimal("5"))
+        summary = process.run(stored.conn, stored.store, triager=triager)
+
+    assert summary.signals_new == 10  # the same signals as with triage off
+    assert len(model.requests) == 1
+    sent = model.requests[0]["messages"][0]["content"]
+    assert "Hood County Large Load Project" in sent
+    # Nothing from the two lists that name people was sent.
+    assert "ALIGNED" not in sent and "CyrusOne" not in sent
+
+    answered = stored.conn.execute(
+        """select document_id, extracted->'triage'->>'verdict', extracted->'triage'->>'quote'
+           from public.signals where extracted ? 'triage'"""
+    ).fetchall()
+    assert answered == [(ids["rpg"], "relevant", "Large Load Project")]
+    usage = stored.conn.execute(
+        "select model, purpose, document_id, input_tokens, output_tokens, cost_usd, outcome"
+        " from public.model_usage"
+    ).fetchall()
+    assert usage == [
+        ("claude-haiku-5-5", "triage", ids["rpg"], 700, 40, Decimal("0.000090"), "relevant")
+    ]
+    assert summary.detail["triage"] == {"calls": 1, "skipped_for_cap": 0, "cap_usd": "5"}
+
+
+def test_spend_already_logged_this_month_counts_toward_the_cap(stored):
+    from decimal import Decimal
+
+    from pipeline.triage import PostgresLedger, Triager
+
+    stored.add_everything()
+    stored.conn.execute(
+        """insert into public.model_usage (model, purpose, input_tokens, output_tokens, cost_usd,
+                                           outcome)
+           values ('claude-haiku-5-5', 'triage', 1, 1, 4.9999, 'relevant'),
+                  ('claude-haiku-5-5', 'triage', 1, 1, 3.00, 'relevant')"""
+    )
+    # Last month's spend does not count.
+    stored.conn.execute(
+        "update public.model_usage set at = now() - interval '40 days' where cost_usd = 3.00"
+    )
+    model = _Model()
+    with as_service(stored.conn):
+        ledger = PostgresLedger(stored.conn)
+        assert ledger.spent_this_month() == Decimal("4.999900")
+        triager = Triager(model, ledger, Decimal("5"))
+        summary = process.run(stored.conn, stored.store, triager=triager)
+    assert model.requests == []
+    assert summary.detail["triage"]["skipped_for_cap"] == 1
+    assert summary.signals_new == 10
+
+
+def test_model_usage_is_for_administrators(stored):
+    stored.conn.execute(
+        """insert into public.model_usage (model, purpose, input_tokens, output_tokens, cost_usd,
+                                           outcome)
+           values ('claude-haiku-5-5', 'triage', 1, 1, 0.01, 'relevant')"""
+    )
+    admin, reviewer = make_reviewer(stored.conn, role="admin"), make_reviewer(stored.conn)
+    with as_user(stored.conn, admin):
+        assert stored.conn.execute("select count(*) from public.model_usage").fetchone() == (1,)
+    with as_user(stored.conn, reviewer):
+        assert stored.conn.execute("select count(*) from public.model_usage").fetchone() == (0,)

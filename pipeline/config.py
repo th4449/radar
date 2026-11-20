@@ -157,6 +157,31 @@ class EntitiesFile(_Strict):
         return v
 
 
+# --- triage.yaml ------------------------------------------------------------------------------
+
+
+class TriageFile(_Strict):
+    model: str = Field(pattern=r"^claude-[a-z0-9-]+$")
+    prices_checked: dt.date
+    input_per_mtok: float = Field(gt=0)
+    output_per_mtok: float = Field(gt=0)
+    long_prompt_tokens: int = Field(gt=0)
+    long_input_per_mtok: float = Field(gt=0)
+    long_output_per_mtok: float = Field(gt=0)
+    max_excerpt_chars: int = Field(ge=200, le=50_000)
+    max_output_tokens: int = Field(ge=256, le=16_000)
+    effort: Literal["low", "medium", "high"]
+    prompt_version: int = Field(ge=1)
+
+    @model_validator(mode="after")
+    def _long_rates_are_not_cheaper(self) -> TriageFile:
+        if self.long_input_per_mtok < self.input_per_mtok:
+            raise ValueError("the long prompt input rate is below the base rate")
+        if self.long_output_per_mtok < self.output_per_mtok:
+            raise ValueError("the long prompt output rate is below the base rate")
+        return self
+
+
 # --- scoring.yaml -----------------------------------------------------------------------------
 
 
@@ -245,6 +270,10 @@ def load_keywords(config_dir: Path | None = None) -> KeywordsFile:
 
 def load_entities(config_dir: Path | None = None) -> EntitiesFile:
     return EntitiesFile.model_validate(_read("entities.yaml", config_dir))
+
+
+def load_triage(config_dir: Path | None = None) -> TriageFile:
+    return TriageFile.model_validate(_read("triage.yaml", config_dir))
 
 
 def load_scoring(config_dir: Path | None = None) -> ScoringFile:

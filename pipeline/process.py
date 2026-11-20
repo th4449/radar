@@ -42,6 +42,7 @@ from pipeline.signals import (
     process,
     read_listings,
 )
+from pipeline.triage import NotConfigured, PostgresLedger, Triager, annotate
 
 MAX_HELD_REFS = 200
 MAX_ERRORS_KEPT = 50
@@ -122,6 +123,7 @@ def run(
     runner: str | None = None,
     limit: int | None = None,
     rules: Rules | None = None,
+    triager: Triager | None = None,
 ) -> ProcessSummary:
     rules = rules or load_rules(conn, store)
     version = rules_version(rules)
@@ -147,8 +149,9 @@ def run(
             try:
                 doc = Doc(slug, url, retrieved_at, sha256, text, meta, store.get(storage_path))
                 outcome = process(doc, rules)
+                drafts = annotate(slug, outcome.drafts, triager, document_id)
                 with conn.transaction():
-                    new = sum(_save(conn, document_id, doc, d, version) for d in outcome.drafts)
+                    new = sum(_save(conn, document_id, doc, d, version) for d in drafts)
                     conn.execute(
                         """update public.documents
                            set processed_at = now(), processed_version = %s,
@@ -175,6 +178,12 @@ def run(
             summary.detail["held_refs"].extend(
                 ref for ref in outcome.held_refs[:room] if ref not in summary.detail["held_refs"]
             )
+        if triager is not None:
+            summary.detail["triage"] = {
+                "calls": triager.calls,
+                "skipped_for_cap": triager.skipped_for_cap,
+                "cap_usd": str(triager.cap_usd),
+            }
         if summary.errors == 0:
             summary.status = "ok"
         else:
@@ -207,7 +216,18 @@ def main(argv: list[str] | None = None) -> int:
         print("not started: set DATABASE_URL and RADAR_ARCHIVE_DIR", file=sys.stderr)
         return 2
     with psycopg.connect(database_url, autocommit=True) as conn:
-        summary = run(conn, LocalArchive(Path(archive_dir)), runner=args.runner, limit=args.limit)
+        try:
+            triager = Triager.from_env(PostgresLedger(conn))
+        except NotConfigured as exc:
+            print(f"not started: {exc}", file=sys.stderr)
+            return 2
+        summary = run(
+            conn,
+            LocalArchive(Path(archive_dir)),
+            runner=args.runner,
+            limit=args.limit,
+            triager=triager,
+        )
     print(json.dumps(dataclasses.asdict(summary), indent=2))
     return 0 if summary.status == "ok" else 1
 

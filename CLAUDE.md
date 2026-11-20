@@ -21,10 +21,19 @@ A public tool that names companies and tells communities a data center may be co
 
 - `config/` YAML that drives everything. `pipeline/config.py` validates it and `tests/test_config.py` checks the files.
 - `collectors/` one module per source under `tx/` and `mi/`. Shared fetch and archive code is in `collectors/base.py`.
-- `pipeline/` extract, classify, entities, geocode, score.
+- `pipeline/` extract, classify, entities, geocode, score. `signals.py` turns one stored document into draft signals and touches no database. `process.py` runs it over the database. `triage.py` is the optional model step, off by default.
 - `db/migrations/` SQL migrations named `<UTC timestamp>_<name>.sql`. `supabase/migrations` is a symlink to this folder so the Supabase CLI finds them.
 - `tests/db/` policy tests. They run against `supabase db start`.
 - `docs/sources/` one note per source. `docs/progress.md` gets a few lines at the end of every session.
+
+## Processing
+
+- A record becomes a signal only with a stated reason, and the reason is stored with it. A summary restates the record.
+- A record whose named party does not show a company or a public body makes no signal. Count it by its number. Never write its name anywhere: not in a signal, a log or a test.
+- A source that is a list naming people has `personal_rows: true` in `config/sources.yaml`. Its documents are stored restricted and a reviewer cannot read them.
+- Never send a record that may name a person to an outside service, the geocoder and the model included.
+- Bump `RULES_VERSION` in `pipeline/signals.py` when a rule changes. Reading documents again only adds signals.
+- The model's answer is stored beside a signal. It never creates, removes or rewrites one.
 
 ## Database
 

@@ -51,7 +51,7 @@ It keeps to one request every 5 seconds. If a page stops looking like the saved 
 - **Two rows on the New Source Review list name a person as the applicant**, not a company. The Title V list had none.
 - **The fixture does not carry those names.** The saved copy replaces the two applicant names and one facility name that repeats a surname. Its `.meta.json` records the hash of the page as retrieved and the hash of the saved copy.
 - **A real run stores the page as TCEQ publishes it**, in the private archive.
-- **Nothing here checks for a person's name yet.** The processing step in M4 has to hold back any row whose applicant is not an organization, before a reviewer or the public sees it. This is open.
+- **Rows that may name a person. Handled in processing since November 20, 2026.** Both lists are stored restricted: an administrator reads them, a reviewer does not. A row becomes a signal only when it gives a reason and its applicant's name shows a company or a public body. See `pipeline/signals.py`.
 
 ## Verified live
 

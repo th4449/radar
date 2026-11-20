@@ -35,6 +35,7 @@ TABLES = [
     "app_settings",
     "collector_runs",
     "processing_runs",
+    "model_usage",
 ]
 
 

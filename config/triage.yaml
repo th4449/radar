@@ -1,0 +1,27 @@
+# Optional model triage. See BUILD_PLAN.md section 3 and pipeline/triage.py.
+#
+# Off unless the environment sets RADAR_TRIAGE=on, a monthly cap in
+# RADAR_TRIAGE_MONTHLY_CAP_USD and an API key. The radar works with this switched off.
+#
+# The model reads short excerpts from an open public record and answers one question. Its
+# answer is stored next to the signal for a reviewer. It never creates a signal, never removes
+# one and never writes a word of a summary.
+model: claude-haiku-5-5
+
+# US dollars per million tokens, from https://platform.claude.com/docs/en/about-claude/pricing
+# on the date below. Check them again before raising the cap.
+prices_checked: 2026-11-20
+input_per_mtok: 0.10
+output_per_mtok: 0.50
+# A prompt longer than this many tokens is billed at the long rates.
+long_prompt_tokens: 100000
+long_input_per_mtok: 0.50
+long_output_per_mtok: 2.50
+
+# The most text sent in one question, and the most the model may write back.
+max_excerpt_chars: 6000
+max_output_tokens: 2048
+effort: low
+
+# Change this when the question changes, so old answers can be told from new ones.
+prompt_version: 1
