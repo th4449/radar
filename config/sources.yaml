@@ -74,14 +74,14 @@ sources:
   - id: tx_ercot_large_load
     state: TX
     name: ERCOT large load reports
-    url: https://www.ercot.com/files/docs/2026/03/12/March-TAC-Report.pdf
+    url: https://www.ercot.com/committees/tac/llwg
     layer: context
-    method: manual
+    method: http
     intended_method: http
     cadence: monthly
     robots_status: allowed
-    verified_at: 2026-11-19
-    notes: Aggregate by zone only. Context layer, not site level. Same host and terms as tx_ercot_rpg. No index page found yet. Survey update at https://www.ercot.com/files/docs/2026/11/05/Community-Impact-RFI-PUC-Update.pdf.
+    verified_at: 2026-11-20
+    notes: Totals by year and zone, no sites. Context layer. Posted for Large Load Working Group meetings and, as one file among many, for Technical Advisory Committee meetings. Same host and terms as tx_ercot_rpg. See docs/sources/tx_ercot_large_load.md.
 
   - id: tx_puc_interchange
     state: TX

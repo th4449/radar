@@ -29,13 +29,14 @@ import psycopg
 
 from collectors.base import Collector, Fetcher, LocalArchive, NotPermitted, RunSummary
 from collectors.tx.comptroller_data_centers import ComptrollerDataCenters
+from collectors.tx.ercot_large_load import ErcotLargeLoad
 from collectors.tx.ercot_rpg import ErcotRpg
 from collectors.tx.tceq_air_pending_legacy import TceqAirPendingLegacy
 from pipeline.config import Source, load_sources
 from pipeline.store import MemorySink, PostgresSink
 
 REGISTRY: dict[str, type[Collector]] = {
-    c.source_id: c for c in (ComptrollerDataCenters, ErcotRpg, TceqAirPendingLegacy)
+    c.source_id: c for c in (ComptrollerDataCenters, ErcotRpg, ErcotLargeLoad, TceqAirPendingLegacy)
 }
 
 

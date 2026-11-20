@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_large_load",
+  "url": "https://www.ercot.com/committees/tac",
+  "final_url": "https://www.ercot.com/committees/tac",
+  "retrieved_at": "2026-11-20T07:02:46+00:00",
+  "sha256": "fabf1c7d582567b8590f7bef143e850861559f3e6a888e0a6280ef35f4153663",
+  "bytes": 74025,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

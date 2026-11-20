@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_large_load",
+  "url": "https://www.ercot.com/calendar/11182026-TAC-Meeting",
+  "final_url": "https://www.ercot.com/calendar/11182026-TAC-Meeting",
+  "retrieved_at": "2026-11-20T07:03:14+00:00",
+  "sha256": "7c996bd48c00e3186e926dd09eca80d4d4457e0cfa86cdbbce18d69cf93869f3",
+  "bytes": 76971,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

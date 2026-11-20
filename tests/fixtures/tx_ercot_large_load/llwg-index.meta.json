@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_large_load",
+  "url": "https://www.ercot.com/committees/tac/llwg",
+  "final_url": "https://www.ercot.com/committees/tac/llwg",
+  "retrieved_at": "2026-11-20T07:01:50+00:00",
+  "sha256": "21f850f54065aabca63f81fdbc824f9e25ebdbd120d88cb6b9b753334262d018",
+  "bytes": 77583,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

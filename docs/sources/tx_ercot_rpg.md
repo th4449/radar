@@ -3,8 +3,8 @@
 - Source ids: `tx_ercot_rpg` and `tx_ercot_large_load`
 - Index page: https://www.ercot.com/committees/other/rpg
 - Checked: November 19, 2026
-- Result: **allowed.** `tx_ercot_rpg` is fetched over plain HTTP, weekly. `tx_ercot_large_load` has no collector yet.
-- Collector: `collectors/tx/ercot_rpg.py`
+- Result: **allowed.** `tx_ercot_rpg` is fetched over plain HTTP, weekly. `tx_ercot_large_load` has its own note, [tx_ercot_large_load.md](tx_ercot_large_load.md).
+- Collector: `collectors/tx/ercot_rpg.py`, built on `collectors/tx/ercot_meetings.py`, which the large load collector shares
 - Fixtures: `tests/fixtures/tx_ercot_rpg/`
 - Workflow: `.github/workflows/collect-tx-ercot-rpg.yml`, started by hand only
 
@@ -45,12 +45,11 @@ It follows no other link. It keeps to one request every 5 seconds. If a page sto
 
 ## What was not verified
 
-- Meetings before 2026. The index shows the current and the next year. Where older years are listed is not known, and the backtest will need them.
+- Meetings before 2026, beyond one page. The index shows the current and the next year. Older years have their own pages: `/committees/other/rpg/2025` was read on November 20, 2026 and links 14 meetings in the same layout, and it links year pages back to 2003. No collector reads them yet. The backtest will need a one-time run over the years it covers.
 - Whether ERCOT ever replaces a file under the same address. The conditional request would catch it.
 - Files that are not PDFs. They are stored as they come, with no text extracted.
 - A run from GitHub's servers. ERCOT's site sits behind a screening service. It answered our requests from a desktop connection. If it refuses a request, the run stops and a person decides.
 - ERCOT's "Legal Policies and Notices" page at `/about/legal` was not read.
-- No index page for large load reports was found. Those reports sit under `/files/docs/` like the others. The large load pages seen in the site navigation were not read.
 - The ERCOT public API and data product pages. Whether they cover these files is unknown.
 
 ## Other notes

@@ -1,0 +1,21 @@
+name: Collect tx_ercot_large_load
+
+# ERCOT's large load reports, posted for two of its committees.
+# Planned cadence: monthly. Started by hand only. The schedule is added at launch, with the
+# owner's go-ahead. See docs/sources/tx_ercot_large_load.md.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collect-tx_ercot_large_load
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    uses: ./.github/workflows/collect.yml
+    with:
+      source_id: tx_ercot_large_load

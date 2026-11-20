@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_large_load",
+  "url": "https://www.ercot.com/calendar/11192026-LLWG-Meeting",
+  "final_url": "https://www.ercot.com/calendar/11192026-LLWG-Meeting",
+  "retrieved_at": "2026-11-20T07:02:25+00:00",
+  "sha256": "52ac039842e3e5320f7c001ecfe59c7ae2dc1ae205c54e09e0260b160afa6564",
+  "bytes": 61805,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

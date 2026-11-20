@@ -2,6 +2,34 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M2: ERCOT large load reports
+
+**Built**
+
+- `collectors/tx/ercot_large_load.py`: reads the Large Load Working Group and Technical Advisory Committee indexes, the meetings near today and their files. For the committee it fetches only files with "large load" in the title.
+- `collectors/tx/ercot_meetings.py`: the ERCOT index and meeting parsers, moved out of the planning group collector so both collectors share them. The planning group collector behaves as before.
+- A workflow file, started by hand only, dry run, no schedule.
+- `tx_ercot_large_load` is now `method: http`, monthly. Its address is now the working group index.
+- 12 new tests. 256 pass locally, database tests included.
+
+**Verified live**
+
+- Six ERCOT pages fetched once each. Four are saved as fixtures.
+- One dry run of the collector: 18 documents, no errors.
+- **Where the reports are.** The plan had example files and no index. The working group and the committee each have an index page in the planning group's layout.
+- **Older planning group meetings.** `/committees/other/rpg/2025` exists, links 14 meetings and links year pages back to 2003. This answers where the backtest finds them.
+
+**Still unverified**
+
+- The committee's November update is a 4.4 MB zip file. It is stored as it comes. Nothing reads inside a zip yet.
+- Slide decks and spreadsheets are stored with no text extracted.
+- A committee file about large loads whose title lacks those words would be missed.
+- The workflow file has never run.
+
+**Next in M2, in the plan's table order**
+
+- TWDB well reports, then Comptroller local agreements.
+
 ## November 20, 2026 — M2: TCEQ pending air permit lists
 
 **Built**
