@@ -205,3 +205,16 @@ def make_docx(paragraphs: list[str]) -> bytes:
     body = "".join(f"<w:p><w:r><w:t>{escape(p)}</w:t></w:r></w:p>" for p in paragraphs)
     document = f'<w:document xmlns:w="{_W}"><w:body>{body}</w:body></w:document>'
     return make_zip({"[Content_Types].xml": b"<Types/>", "word/document.xml": document.encode()})
+
+
+def make_portfolio(cover: str, files: dict[str, bytes]) -> bytes:
+    """A PDF with other files embedded in it, the way TCEQ sends some applications."""
+    import pypdfium2 as pdfium
+
+    document = pdfium.PdfDocument(make_pdf([cover]))
+    for name, body in files.items():
+        document.new_attachment(name).set_data(body)
+    out = io.BytesIO()
+    document.save(out)
+    document.close()
+    return out.getvalue()

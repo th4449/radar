@@ -10,6 +10,11 @@ A slide deck (.pptx) gives the text of each slide in order, then that slide's sp
 Text inside a picture or an embedded chart object is not read. A deck with slides and no text
 at all comes back with needs_ocr set.
 
+A PDF can carry other files inside it. TCEQ sends some applications as a "portfolio": a cover
+page with the application and its spreadsheets embedded. The text of each embedded PDF, slide
+deck or Word file is read and added under a line that names it. Embedded files are not opened
+more than one level deep.
+
 A zip file gives the text of each file inside it that can be read, under a line that names the
 file. A zip inside a zip is not opened. Spreadsheets and the older binary Office formats are
 recognized where possible and not read.
@@ -26,6 +31,7 @@ from typing import Literal
 from xml.etree.ElementTree import Element, ParseError
 
 import pdfplumber
+import pypdfium2 as pdfium
 from defusedxml import DefusedXmlException
 from defusedxml.ElementTree import fromstring as parse_xml
 from selectolax.lexbor import LexborHTMLParser
@@ -121,11 +127,74 @@ def _html(body: bytes) -> Extracted:
     return Extracted("html", text, title=title or None)
 
 
-def _pdf(body: bytes) -> Extracted:
+def _pdf_pages(body: bytes) -> list[str]:
+    pages: list[str] = []
     with pdfplumber.open(io.BytesIO(body)) as pdf:
-        pages = [_tidy(page.extract_text() or "") for page in pdf.pages]
+        for page in pdf.pages:
+            pages.append(_tidy(page.extract_text() or ""))
+            page.close()  # a long file would otherwise hold every page's layout in memory
+    return pages
+
+
+def _pdf_attachments(body: bytes) -> list[tuple[str, bytes]]:
+    """Files embedded in a PDF. A "PDF portfolio" is a cover page with the real files inside."""
+    try:
+        document = pdfium.PdfDocument(body)
+    except pdfium.PdfiumError:
+        return []
+    try:
+        found = []
+        for index in range(min(document.count_attachments(), MAX_MEMBERS_READ + 1)):
+            attachment = document.get_attachment(index)
+            found.append((attachment.get_name() or f"attachment {index + 1}",
+                          bytes(attachment.get_data())))  # fmt: skip
+        return found
+    except (pdfium.PdfiumError, ValueError):
+        return []
+    finally:
+        document.close()
+
+
+def _pdf(body: bytes, inside: bool = False) -> Extracted:
+    pages = _pdf_pages(body)
     text = "\n\n".join(p for p in pages if p)
-    return Extracted("pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text)
+    if inside:  # an embedded file's own embedded files are not opened
+        return Extracted("pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text)
+
+    members: list[dict] = []
+    parts = [text] if text else []
+    total = 0
+    for name, data in _pdf_attachments(body):
+        entry = {"name": name, "bytes": len(data), "read": False}
+        members.append(entry)
+        total += len(data)
+        if len(members) > MAX_MEMBERS_READ or total > MAX_TOTAL_BYTES:
+            entry["why"] = "too many files or too much data in this file"
+            continue
+        if len(data) > MAX_MEMBER_BYTES:
+            entry["why"] = "too large to read"
+            continue
+        kind = sniff(data)
+        entry["kind"] = kind
+        try:
+            if kind == "pdf":
+                inner = _pdf(data, inside=True)
+            elif kind in ("pptx", "docx"):
+                inner = _pptx(data) if kind == "pptx" else _docx(data)
+            else:
+                entry["why"] = "this kind of file is not read"
+                continue
+        except Exception as exc:  # noqa: BLE001 - a damaged embedded file must not stop the rest
+            entry["why"] = f"could not be read: {type(exc).__name__}"
+            continue
+        entry |= {"read": True, "pages": inner.pages, "needs_ocr": inner.needs_ocr}
+        if inner.text:
+            parts.append(f"File: {name}\n{inner.text}")
+    text = "\n\n".join(parts)
+    return Extracted(
+        "pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text,
+        members=tuple(members),
+    )  # fmt: skip
 
 
 # --- Office files and zip files -----------------------------------------------------------------

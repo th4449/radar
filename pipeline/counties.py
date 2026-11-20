@@ -58,6 +58,11 @@ class CountyIndex:
         county = self._county(name)
         return county.fips if county and county.fips in self._scope else None
 
+    def lookup(self, name: str) -> tuple[str, str, bool] | None:
+        """A county by name, in scope or not: its name, its code and whether it is in scope."""
+        county = self._county(name)
+        return (county.name, county.fips, county.fips in self._scope) if county else None
+
     def name(self, fips: str) -> str | None:
         for county in self._by_name.values():
             if county.fips == fips:

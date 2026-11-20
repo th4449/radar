@@ -13,6 +13,7 @@ dependencies = [
     "protego>=0.7.0",
     "psycopg[binary]>=3.2",
     "pydantic>=2.8",
+    "pypdfium2>=4.30",
     "pyyaml>=6.0",
     "selectolax>=0.3.21",
 ]

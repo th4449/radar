@@ -240,9 +240,16 @@ _TCEQ_KINDS = {
 }
 
 
+_TCEQ_FOLDER = tceq_air_pending_legacy.NSR.rsplit("/", 1)[0] + "/"
+
+
 def tceq_air_pending(doc: Doc, rules: Rules) -> Outcome:
     """One signal for each listed application that gives a reason and names a company."""
     if doc.url not in _TCEQ_KINDS:
+        if doc.url.startswith(_TCEQ_FOLDER) and doc.url.lower().endswith(".pdf"):
+            # An application file a row links. It makes no signal of its own. It is read for
+            # the county of the row's signal. See pipeline/tceq_applications.py.
+            return Outcome()
         raise LayoutChanged(f"not one of the two TCEQ lists: {doc.url}")
     slug, kind = _TCEQ_KINDS[doc.url]
     parsed = tceq_air_pending_legacy.parse_list(doc.body, doc.url)

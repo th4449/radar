@@ -26,14 +26,17 @@ import hashlib
 import json
 import os
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import psycopg
 
-from collectors.base import ArchiveStore, LayoutChanged, LocalArchive
-from pipeline.config import CONFIG_DIR
+from collectors.base import ArchiveStore, Fetcher, LayoutChanged, LocalArchive, NotPermitted
+from pipeline import tceq_applications
+from pipeline.config import CONFIG_DIR, load_sources
 from pipeline.entities import canonical_name, match_key
+from pipeline.geocode import ArchivedLookup
 from pipeline.signals import (
     LISTING_SOURCE,
     PROCESSORS,
@@ -45,6 +48,7 @@ from pipeline.signals import (
     read_listings,
 )
 from pipeline.sites import update_sites
+from pipeline.store import PostgresSink
 from pipeline.triage import NotConfigured, PostgresLedger, Triager, annotate
 
 MAX_HELD_REFS = 200
@@ -128,6 +132,7 @@ def run(
     rules: Rules | None = None,
     triager: Triager | None = None,
     as_of: dt.date | None = None,
+    enrich: Callable[[], dict] | None = None,
 ) -> ProcessSummary:
     rules = rules or load_rules(conn, store)
     version = rules_version(rules)
@@ -182,6 +187,10 @@ def run(
             summary.detail["held_refs"].extend(
                 ref for ref in outcome.held_refs[:room] if ref not in summary.detail["held_refs"]
             )
+        # Air permit signals get their county from the application file each row links.
+        if enrich is not None:
+            with conn.transaction():
+                summary.detail["tceq_applications"] = enrich()
         # Sites are grouped and scored on every run, new documents or not: scores decay.
         with conn.transaction():
             summary.detail["sites"] = update_sites(conn, as_of=as_of)
@@ -214,6 +223,12 @@ def run(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Read stored documents and write their signals.")
     parser.add_argument("--limit", type=int, help="read at most this many documents")
+    parser.add_argument(
+        "--fetch-applications",
+        action="store_true",
+        help="fetch the TCEQ application file of each air permit signal that has no county. "
+        "Needs RADAR_CONTACT.",
+    )
     parser.add_argument("--runner", default=os.environ.get("RADAR_RUNNER", "manual"))
     args = parser.parse_args(argv)
 
@@ -228,13 +243,29 @@ def main(argv: list[str] | None = None) -> int:
         except NotConfigured as exc:
             print(f"not started: {exc}", file=sys.stderr)
             return 2
-        summary = run(
-            conn,
-            LocalArchive(Path(archive_dir)),
-            runner=args.runner,
-            limit=args.limit,
-            triager=triager,
-        )
+        store = LocalArchive(Path(archive_dir))
+        if not args.fetch_applications:
+            summary = run(conn, store, runner=args.runner, limit=args.limit, triager=triager)
+        else:
+            source = load_sources().by_id(tceq_applications.SOURCE_ID)
+            sink = PostgresSink(conn)
+            try:
+                fetcher = Fetcher(source)
+            except NotPermitted as exc:
+                print(f"not started: {exc}", file=sys.stderr)
+                return 2
+            with fetcher:
+                lookup = ArchivedLookup(source, fetcher, store, sink)
+                summary = run(
+                    conn,
+                    store,
+                    runner=args.runner,
+                    limit=args.limit,
+                    triager=triager,
+                    enrich=lambda: tceq_applications.enrich_air_permits(
+                        conn, source=source, lookup=lookup, sink=sink
+                    ),
+                )
     print(json.dumps(dataclasses.asdict(summary), indent=2))
     return 0 if summary.status == "ok" else 1
 
