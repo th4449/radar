@@ -35,6 +35,8 @@ The robots file and the terms point in different directions. The terms are the s
 2. Have a reviewer read the case list by hand each week and subscribe to notices on known dockets. No permission is needed.
 3. Both: start the hand check now and send the request.
 
+**Status:** the owner sent the request for a written agreement to the contact above on November 19, 2026. No answer yet. The feed stays manual until the State answers in writing.
+
 ## Not verified
 
 - Whether the commission or the State grants written agreements for this kind of use, and who signs one.

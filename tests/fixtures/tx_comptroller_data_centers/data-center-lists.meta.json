@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_comptroller_data_centers",
+  "url": "https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php",
+  "final_url": "https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php",
+  "retrieved_at": "2026-11-20T00:42:44+00:00",
+  "sha256": "6355a4c0e215c316ac4a00fa47965b665d5e3f5dae5ca93d8d18f64b492d953d",
+  "bytes": 146559,
+  "content_type": "text/html; charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

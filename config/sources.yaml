@@ -112,12 +112,12 @@ sources:
     name: Comptroller registered data centers
     url: https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php
     layer: baseline
-    method: manual
+    method: http
     intended_method: http
     cadence: monthly
     robots_status: allowed
     verified_at: 2026-11-19
-    notes: No county field. Robots rules allow /taxes/ and the site says its information is public domain. Stays manual until the first fixture is saved. See docs/sources/tx_comptroller_data_centers.md.
+    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. See docs/sources/tx_comptroller_data_centers.md.
 
   - id: tx_comptroller_local_agreements
     state: TX

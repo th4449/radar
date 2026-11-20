@@ -2,6 +2,34 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — M1 closed: first real collector
+
+The owner chose the public contact address for the user agent. That unblocked the last M1 step.
+
+**Built**
+
+- `tests/fixtures/tx_comptroller_data_centers/`: a saved copy of the Comptroller's registered data center page with its URL, retrieval time and hash.
+- `collectors/tx/comptroller_data_centers.py`: the collector for that page and a parser for its two tables. 70 qualifying data centers and 113 qualifying large data center projects.
+- 11 tests. The collector fetches through the real robots pattern, archives the page under its hash, logs the run and finds nothing new on a second run. A changed layout stops the parser.
+- `tx_comptroller_data_centers` is now `method: http` in `config/sources.yaml`. It is the first feed cleared for automatic fetching. Nothing is scheduled yet.
+
+**Verified live**
+
+- One request to the Comptroller's page through `collectors.capture`, with the contact address in the user agent. The robots check passed and the page answered 200.
+- The page has no county or address column, as the build plan said.
+- Every party named on the page is a company.
+
+**Still unverified**
+
+- How often the state updates the page.
+- How to place these 183 registrations in a county. The page gives no location, so the baseline layer needs FracTracker or another source for that.
+- The run against the hosted database and a hosted archive. Both wait on the Supabase project, which needs the owner's go-ahead.
+
+**Also today**
+
+- The owner sent the request for a written agreement to the Michigan commission. The requests to the Texas Press Association and the Texas PUC are drafted and not sent.
+- Counts: 195 tests pass locally.
+
 ## November 19, 2026 — Michigan docket site check
 
 The owner asked for a check of the Public Service Commission's E-Dockets site, which is on a separate host from Michigan.gov.
