@@ -128,9 +128,9 @@ sources:
     method: manual
     intended_method: http
     cadence: monthly
-    robots_status: allowed
-    verified_at: 2026-11-19
-    notes: Lagging. Chapter 312 reports are due July 1 of the following year. A plain search form under /economy/, which robots rules allow. Manual until a fixture is saved. See docs/sources/tx_comptroller_local_agreements.md.
+    robots_status: restricted
+    verified_at: 2026-11-20
+    notes: The search pages are open, but the data is seven CSV files on assets.comptroller.texas.gov, and that host answers 403 for robots.txt. The fetcher refuses it. Held until the Comptroller answers or the owner decides. Chapter 380 and 381 agreements are reported within 14 days, so part of this feed is not lagging. See docs/sources/tx_comptroller_local_agreements.md.
 
   - id: tx_comptroller_entity_lookup
     state: TX

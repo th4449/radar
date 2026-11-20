@@ -2,6 +2,41 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M2: Comptroller local agreements read and held. M2 status
+
+No code changed.
+
+**Verified live**
+
+- The overview, search form and results page were fetched once each, and one search was read in a browser.
+- The results page holds no data. A script fills it from `api.comptroller.texas.gov`, and its download buttons point to seven CSV files on `assets.comptroller.texas.gov`.
+- **Both of those hosts answer 403 for their robots file.** Our fetcher stops there, as built. No CSV was downloaded.
+- The database holds 4,397 Chapter 380 and 381 agreements, 1,490 abatements, 1,255 zones and 991 post-abatement valuations.
+- **Chapter 380 and 381 agreements are due within 14 days.** The earlier note called the whole feed lagging. Only the Chapter 312 part is.
+
+**Held**
+
+- The feed stays manual, now marked restricted. The source note gives three options. The recommended one is to ask the Comptroller first. A sixth request is drafted in `drafts/permission-requests.md` and not sent.
+
+**Where M2 stands, in the plan's table order**
+
+| Feed | State |
+|---|---|
+| Newspaper public notices | Closed by its terms. Request drafted, not sent. |
+| TCEQ pending air, older lists | Collector built. |
+| TCEQ pending air, portal | Open. Waits on the owner's choice of method. |
+| TCEQ stormwater | Closed by robots rules. Manual. |
+| ERCOT planning group | Collector built. |
+| ERCOT large load | Collector built. |
+| PUC Interchange | Held. Request drafted, not sent. |
+| TWDB well reports | Collector built. Keeps an extract. |
+| Comptroller registered data centers | Collector built in M1. |
+| Comptroller local agreements | Held. Request drafted, not sent. |
+| Entity lookup | M4. Needs an API key. |
+| Agendas | M8. |
+
+Five collectors exist. Every feed in the table has a source note. Each collector has fixtures, tests and a workflow file. No workflow has run, and none has a schedule.
+
 ## November 20, 2026 — M2: slide decks are read, and the TWDB collector
 
 **Built**
