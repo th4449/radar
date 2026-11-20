@@ -31,6 +31,7 @@ __pycache__/
 # Node
 node_modules/
 dist/
+.astro/
 
 # Supabase local state
 supabase/.temp/

@@ -2,6 +2,58 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M6: reviewer app
+
+The owner chose Astro for the front end and sign-in by emailed link.
+
+**Built**
+
+- **`web/`, an Astro site.** Five pages under `/review/`: sign in and apply, the reviewer terms, the queue, one site, and the administrator desk. See `web/README.md`.
+- **The site page** shows why a site scores what it does, every signal with its reason, the record's own row, the address and hash of the source, the decisions so far and the review form. Confirm and reject stay disabled until the reviewer ticks that they opened each source.
+- **The administrator desk** lists applications with the applicant's email and note, approves and suspends reviewers, and shows sites flagged as the same place, records held back by number, recent runs and the audit log.
+- **Administrators draft, publish and take down an alert, and fold one site into another,** from the site page.
+- **Database rules, tests written first.** Three migrations' worth in two files:
+  - A site is rejected when a rejection stands and no confirmation does. Reversing it, or suspending the reviewer who made it, returns the site to review. Before this a rejection blocked publication and nothing recorded it on the site.
+  - `reviewer_directory()`: applicants and reviewers with their email, for administrators only.
+  - `merge_sites()`: an administrator folds one site into another in the same county. A site that was reviewed is never folded away.
+  - `document_refs`: the address, retrieval time and hash of any document, for approved reviewers. No text. A reviewer could not otherwise get from a signal on a restricted list to the public record.
+  - An applicant can say who they are, once.
+- `scripts/dev_seed.py` fills a local database from the test fixtures. It refuses any other database.
+- CI now type-checks, tests and builds the front end.
+- 31 new tests. 613 pass locally, database tests included, plus 4 front-end tests.
+
+**Verified in a browser, on the local stack**
+
+- Sign-in by emailed link, with the email caught by the local test inbox.
+- An application, and the applicant's pending screen. **A pending applicant, signed in, got zero rows from every table and a refusal for a review, a merge and the reviewer directory,** asked directly of the database with their own session.
+- The owner's by-hand step that makes the first administrator.
+- The queue and a site page.
+- A confirm. The button is disabled without the tick, and when the form was forced past it the database refused.
+- Publishing an alert. It then appeared in the public view with its two sources, read with the anonymous key. The anonymous key got 401 for every table.
+- Reversing the confirmation, which took the alert down and returned the site to review.
+- Approving the applicant from the administrator desk. The approval was logged with the administrator's account.
+- Folding an invented second site into the first. Its signal moved and the merge was logged.
+- The local data was reset afterward.
+
+**A fault found and fixed**
+
+- The page hung after an application was sent. The account hook re-subscribed to sign-in events on every event and reloaded in a loop. It now subscribes once.
+
+**Not verified**
+
+- **How the pages look.** The browser pane was hidden for the whole session, so no screenshot was taken. Structure, text and behavior were read from the page. Layout, spacing and the phone-width view were not seen by anyone.
+- Keyboard-only use and a screen reader.
+- Anything hosted. No hosted database, no real email, no deployed site. Each is a section 11 decision.
+
+**For the owner**
+
+- **The reviewer terms are a placeholder I wrote.** The page says so in red. They must be adopted or replaced before any reviewer is approved.
+- **The first administrator is made by hand in SQL.** `web/README.md` has the statement.
+- **"Open the source record" for a well report opens the board's 145 MB download,** because that is the address the record came from. Whether each report has its own public page is still unverified. A reviewer needs a better link.
+- **After a merge the kept site's score is stale** until the next processing run.
+- Settings such as the number of confirmations are shown on the administrator desk and not changed there.
+- A reviewer sees other reviewers' decisions and notes, and not their names.
+
 ## November 20, 2026 — TCEQ air permits get a county
 
 The owner approved fetching the application file of each air permit row that is a signal.

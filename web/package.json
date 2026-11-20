@@ -1,0 +1,24 @@
+{
+  "name": "dc-radar-web",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Data Center Early Warning Radar: reviewer app and, later, the public site",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@astrojs/preact": "6.1.6",
+    "@supabase/supabase-js": "2.119.2",
+    "astro": "7.4.13",
+    "preact": "11.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "typescript": "6.0.3"
+  }
+}

@@ -1,0 +1,8 @@
+---
+import Base from "../../layouts/Base.astro";
+import SitePage from "../../components/SitePage";
+---
+
+<Base title="Site">
+  <SitePage client:only="preact" />
+</Base>

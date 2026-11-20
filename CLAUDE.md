@@ -22,6 +22,8 @@ A public tool that names companies and tells communities a data center may be co
 - `config/` YAML that drives everything. `pipeline/config.py` validates it and `tests/test_config.py` checks the files.
 - `collectors/` one module per source under `tx/` and `mi/`. Shared fetch and archive code is in `collectors/base.py`.
 - `pipeline/` extract, classify, entities, geocode, score. `signals.py` turns one stored document into draft signals and touches no database. `process.py` runs it over the database. `triage.py` is the optional model step, off by default.
+- `web/` the reviewer app and, from M7, the public site. Astro, with Preact for the screens that read data. A static build: every page reads the database in the browser with the visitor's own session, so the policies decide what anyone sees. Never put a rule only in the front end. See `web/README.md`.
+- `scripts/dev_seed.py` fills a local database from the test fixtures. It refuses any other database.
 - `db/migrations/` SQL migrations named `<UTC timestamp>_<name>.sql`. `supabase/migrations` is a symlink to this folder so the Supabase CLI finds them.
 - `tests/db/` policy tests. They run against `supabase db start`.
 - `docs/sources/` one note per source. `docs/progress.md` gets a few lines at the end of every session.

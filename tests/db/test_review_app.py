@@ -290,3 +290,65 @@ def test_a_site_is_not_merged_into_itself_or_into_nothing(db):
             db.transaction(),
         ):
             db.execute("select public.merge_sites(%s, %s)", pair)
+
+
+# --- what a reviewer may know about a restricted document ---------------------------------------
+
+
+def restricted_document(conn: psycopg.Connection) -> int:
+    source_id = conn.execute(
+        """insert into public.sources (slug, state, name, url, method, cadence)
+           values (%s, 'TX', 'Test list of applicants', 'https://example.gov/list', 'manual',
+                   'weekly') returning id""",
+        [f"tx_test_{uuid.uuid4().hex[:8]}"],
+    ).fetchone()[0]
+    return conn.execute(
+        """insert into public.documents (source_id, url, retrieved_at, sha256, text, restricted,
+                                         raw_meta)
+           values (%s, 'https://example.gov/list', now(), %s, 'INVENTED PERSON|Hood', true,
+                   '{"note": "INVENTED PERSON"}'::jsonb)
+           returning id""",
+        [source_id, uuid.uuid4().hex + uuid.uuid4().hex],
+    ).fetchone()[0]
+
+
+def test_a_reviewer_gets_the_address_and_hash_of_a_restricted_document_and_not_its_text(db):
+    doc_id = restricted_document(db)
+    reviewer = make_reviewer(db)
+    with as_user(db, reviewer):
+        row = db.execute(
+            """select url, source_name, restricted, sha256 is not null, retrieved_at is not null
+               from public.document_refs where id = %s""",
+            [doc_id],
+        ).fetchone()
+        assert row == ("https://example.gov/list", "Test list of applicants", True, True, True)
+        assert db.execute(
+            "select count(*) from public.documents where id = %s", [doc_id]
+        ).fetchone() == (0,)
+    columns = {
+        r[0]
+        for r in db.execute(
+            "select column_name from information_schema.columns"
+            " where table_schema = 'public' and table_name = 'document_refs'"
+        ).fetchall()
+    }
+    assert columns == {
+        "id", "source_id", "source_name", "source_slug", "url", "retrieved_at", "sha256",
+        "restricted",
+    }  # fmt: skip
+
+
+@pytest.mark.parametrize("who", ["pending", "suspended", "subscriber"])
+def test_someone_who_is_not_an_approved_reviewer_gets_no_document_reference(db, who):
+    doc_id = restricted_document(db)
+    actor = make_user(db) if who == "subscriber" else make_reviewer(db, status=who)
+    with as_user(db, actor):
+        assert db.execute(
+            "select count(*) from public.document_refs where id = %s", [doc_id]
+        ).fetchone() == (0,)
+
+
+def test_the_anonymous_key_cannot_read_document_references(db):
+    restricted_document(db)
+    with as_anon(db), pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+        db.execute("select * from public.document_refs")

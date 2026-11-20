@@ -53,3 +53,31 @@ jobs:
           # Policy tests must run in CI. A skipped database test is a failure here.
           RADAR_REQUIRE_DB: "1"
         run: uv run pytest -ra
+
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Test
+        run: npm test
+
+      # Built with no database address. The pages then say so, and nothing is embedded.
+      - name: Build
+        run: npm run build

@@ -1,0 +1,24 @@
+---
+import "../styles/site.css";
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title} · Data Center Early Warning Radar</title>
+  </head>
+  <body>
+    <slot />
+    <footer>
+      Data Center Early Warning Radar. A signal is a public record, not a finding. Nothing here
+      is public until a reviewer has checked it against its source.
+    </footer>
+  </body>
+</html>
