@@ -28,7 +28,7 @@ import httpx
 from protego import Protego
 
 from pipeline.config import Source
-from pipeline.extract import Extracted, extract
+from pipeline.extract import SUFFIX, Extracted, extract
 
 VERSION = "0.1"
 AGENT_TOKEN = "DataCenterRadar"  # noqa: S105 - the robots.txt product token, not a secret
@@ -347,9 +347,6 @@ class LocalArchive:
         return (self.root / storage_path).read_bytes()
 
 
-_SUFFIX = {"pdf": "pdf", "html": "html", "text": "txt", "unknown": "bin"}
-
-
 @dataclass(frozen=True)
 class ArchivedDocument:
     source_id: str  # the id in config/sources.yaml
@@ -367,7 +364,7 @@ def archive(
     """Hash the body, store the original and extract its text."""
     digest = sha256_hex(result.body)
     extracted: Extracted = extract(result.body, result.content_type)
-    storage_path = store.put(digest, result.body, _SUFFIX[extracted.kind])
+    storage_path = store.put(digest, result.body, SUFFIX[extracted.kind])
     meta = {
         "final_url": result.final_url,
         "content_type": result.content_type,
@@ -378,6 +375,7 @@ def archive(
         "pages": extracted.pages,
         "title": extracted.title,
         "needs_ocr": extracted.needs_ocr,
+        **({"members": list(extracted.members)} if extracted.members else {}),
         **(extra_meta or {}),
     }
     return ArchivedDocument(

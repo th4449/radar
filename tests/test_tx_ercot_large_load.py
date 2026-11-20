@@ -20,7 +20,7 @@ from collectors.tx.ercot_meetings import parse_index, parse_meeting
 from pipeline.config import load_sources
 from pipeline.store import MemorySink
 
-from .helpers import CONTACT, FakeClock, Site, make_pdf
+from .helpers import CONTACT, FakeClock, Site, make_pdf, make_pptx, make_zip
 
 FIXTURES = Path(__file__).parent / "fixtures" / "tx_ercot_large_load"
 
@@ -135,11 +135,16 @@ def test_the_title_filter_reads_the_ways_ercot_writes_the_words():
 
 def file_route(n: int, url: str):
     """A small stand-in for an ERCOT file, with the validators ERCOT's file server sends."""
+    words = f"Stand-in for ERCOT large load file {n}"
     if url.endswith(".pdf"):
-        body, ctype = make_pdf([f"Stand-in for ERCOT large load file {n}"]), "application/pdf"
+        body, ctype = make_pdf([words]), "application/pdf"
+    elif url.endswith(".pptx"):
+        body, ctype = make_pptx([words]), "application/octet-stream"
+    elif url.endswith(".zip"):
+        # In November 2026 the committee's update was one slide deck inside a zip file.
+        body, ctype = make_zip({"10. TAC update.pptx": make_pptx([words])}), "application/zip"
     else:
-        # A zip, a spreadsheet and a slide deck all start like a zip file.
-        body, ctype = b"PK\x03\x04" + bytes([0, n]) * 40, "application/octet-stream"
+        body, ctype = make_zip({"xl/workbook.xml": b"<workbook/>"}), "application/octet-stream"
     etag = f'"stand-in-{n}"'
 
     def route(request: httpx.Request) -> httpx.Response:
@@ -204,10 +209,12 @@ def test_both_indexes_then_meetings_then_the_wanted_files(tmp_path):
     docs = {doc.url: doc for doc in sink.documents.values()}
     assert docs[TAC_NOV].sha256 == TAC_NOV_META["sha256"]
     assert "Stand-in for ERCOT large load file 1" in docs[LLWG_FILES[1]].text
-    # A zip is kept as it came. Nothing reads inside it yet.
-    assert docs[TAC_FILE].raw_meta["kind"] == "unknown"
-    assert not docs[TAC_FILE].text
-    assert LocalArchive(tmp_path).get(docs[TAC_FILE].storage_path).startswith(b"PK\x03\x04")
+    # The slide deck is read, and so is the deck inside the committee's zip file.
+    assert docs[LLWG_FILES[4]].raw_meta["kind"] == "pptx"
+    assert docs[LLWG_FILES[4]].text == "Stand-in for ERCOT large load file 4"
+    assert docs[TAC_FILE].raw_meta["kind"] == "zip"
+    assert docs[TAC_FILE].text == "File: 10. TAC update.pptx\nStand-in for ERCOT large load file 5"
+    assert docs[TAC_FILE].storage_path.endswith(".zip")
 
 
 def test_the_other_thirteen_committee_files_are_never_asked_for(tmp_path):

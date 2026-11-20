@@ -25,10 +25,9 @@ import httpx
 
 from collectors.base import Fetcher, FetchError, sha256_hex
 from pipeline.config import Source, load_sources
-from pipeline.extract import sniff
+from pipeline.extract import SUFFIX, sniff
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
-_SUFFIX = {"pdf": "pdf", "html": "html", "text": "txt", "unknown": "bin"}
 
 
 def _default_name(url: str) -> str:
@@ -66,7 +65,7 @@ def capture(
     out_dir.mkdir(parents=True, exist_ok=True)
     for old in existing:
         old.unlink()
-    target = out_dir / f"{name}.{_SUFFIX[kind]}"
+    target = out_dir / f"{name}.{SUFFIX[kind]}"
     target.write_bytes(result.body)
     meta = {
         "source_id": source.id,
