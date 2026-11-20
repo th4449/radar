@@ -51,6 +51,21 @@ def test_a_project_code_name_is_found_and_ordinary_phrases_are_not():
     assert [(h.kind, h.term) for h in hits] == [("project_code_name", "Project Falcon")]
 
 
+def test_phrases_seen_in_real_records_are_not_code_names():
+    # A city's well address, a company's legal form and a planning file's column headings.
+    for text in (
+        "Street Reconstruction Project Between Example Rd and Example Ave",
+        "Drainage Project Intersection of Example St",
+        "I 40 Example Interchange Project LLC",
+        "TPIT Project Name Tier Project ISD County(s)",
+        "Project COD Capacity (~MW)",
+    ):
+        assert kinds_and_terms(text) == [], text
+    assert kinds_and_terms("soil borings for Project Toaster") == [
+        ("project_code_name", "Project Toaster")
+    ]
+
+
 def test_a_code_name_keeps_its_place_in_the_text():
     text = "Item 7: Project\nBlue-Jay incentives"
     (hit,) = RULES.find(text)

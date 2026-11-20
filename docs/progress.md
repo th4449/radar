@@ -2,6 +2,63 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M4: processing
+
+M3 has no feed cleared to build, so M4 went first with the owner's go-ahead.
+
+**Built**
+
+- **Keyword rules**, `pipeline/classify.py`. Direct terms, code words and "Project" code names from `config/keywords.yaml`. Each hit keeps the words as written and their place.
+- **Acres, megawatts and dollars**, `pipeline/quantities.py`. A number counts only with its unit next to it. Acre-feet and megawatt-hours are not read as acres and megawatts.
+- **Company names**, `pipeline/entities.py`. One spelling per name. "Example LLC" and "Example Inc" stay two companies.
+- **The hold-back for names of people.** A record's named party is used only when the name shows a company or a public body. Anything else makes no signal and is counted by its record number, never by its name.
+- **County assignment**, `pipeline/counties.py`. From a county column, from "Hood County" in a text, or from a list such as "Bexar and Medina counties". All 254 Texas counties are recognized, from the Census county file, so a file about a county outside the 30 is set aside. The 30 are unchanged.
+- **Census geocoder client**, `pipeline/geocode.py`, with a source note. The county comes from the point, never from the city in the address. Every answer is archived and reused.
+- **Signals**, `pipeline/signals.py` and `pipeline/process.py`. A stored document becomes dated signals for three feeds: TCEQ pending air lists, TWDB well reports and ERCOT planning group files. A record becomes a signal only when it gives a reason: it says "data center", uses a code word, or names a company on the Comptroller's registered data center list. The reason and the matched words are stored with the signal.
+- **Optional model triage**, `pipeline/triage.py`. Off by default. Every call is logged with its cost, and no call is made that could pass the monthly cap.
+- **Two migrations.** Lists that name people are stored restricted. The same fact is stored once. An entity is a company or a public body and nothing else. A log of processing runs. A log of model spend.
+- 196 new tests. 486 pass locally, database tests included.
+
+**Database rules, tests written first**
+
+- A reviewer cannot read a restricted document. An administrator can. Nobody can open one through the app.
+- A reviewer reads the signal made from one row of a restricted list, which holds only that row.
+- The TCEQ lists and the TWDB extract are marked `personal_rows: true` and are stored restricted from the moment they are collected.
+
+**Verified live**
+
+- The Census geocoder: three requests, saved as fixtures. No key, no robots file, no stated limit on single requests.
+- The price of the triage model, read from the published price page on November 20, 2026: $0.10 per million tokens in and $0.50 out, for prompts up to 100,000 tokens.
+- One real ERCOT planning file, fetched once. It showed two flaws, both fixed: it writes "Bexar and Medina counties", and its table headings were read as county names.
+- **The whole chain once, into the local database.** Four collectors ran for real and stored 17 documents. Processing read 16 of them and made 62 signals: 12 air permit rows of 624, 49 well reports of 8,340 and 1 planning file of 10. Four well reports were held back. A second run added nothing. The data was deleted afterward.
+- That run also showed a noisy rule. A city's well addresses that say "Project Between" two streets were read as code names, 19 false signals of 81. The stoplist in `config/keywords.yaml` now covers them.
+
+**Departures from the plan, each for the owner to accept or reverse**
+
+- **Additions to the data model**: `documents.restricted`, `signals.fingerprint` and `county_fips`, `entities.kind` and `match_key`, and the tables `processing_runs` and `model_usage`.
+- **ERCOT planning group files are stored as `transmission_filing`.** The plan's list of signal types has none for them. It is the closest.
+- **Most records make no signal.** The plan does not say which rows of a statewide list count. The rule here is a stated reason, so a well drilled by a company with a new name and no telling word is not caught from that feed alone.
+- **One new dependency**, the `anthropic` package, installed even while triage is off.
+
+**Still unverified or not built**
+
+- **The model has never been called.** That needs an API key, which is a secret for the owner to add. One test sends a request through the real SDK to a fake server.
+- **Parent companies are not resolved.** `entities.parent_entity_id` stays empty. That needs the Comptroller's API key or its bulk file, neither of which is in hand.
+- **No feed uses the geocoder yet.** The well reports carry a county and the TCEQ lists carry no address.
+- **TCEQ signals have no county.** The lists give none. They can join a site only through the company's name.
+- **A planning file that names a city or a utility and no county is not placed.**
+- **Index and meeting pages are not read for signals**, only the files. Text inside pictures in a slide deck is still not read.
+- **A match on the Comptroller's list is weak.** The list holds every company with a registered data center, so a carmaker's soil borings at its factory make signals too. The reason is stored and the confidence is 0.5.
+- **One site can make many signals.** Sixteen soil borings on one day are sixteen signals. Grouping them is M5 work.
+- **Reading documents again only adds signals.** A signal made by a rule that was later tightened stays until a person removes it.
+- **Nothing ran on a hosted database or from GitHub's servers.** There is no workflow file for processing.
+- Michigan: no document to process.
+
+**Triage cost, for the owner's decision**
+
+- One question costs at most $0.0018. A cap of $5 a month allows at least 2,700 questions.
+- To switch it on: add `ANTHROPIC_API_KEY` as a secret, and set `RADAR_TRIAGE=on` and `RADAR_TRIAGE_MONTHLY_CAP_USD`.
+
 ## November 20, 2026 — M2: Comptroller local agreements read and held. M2 status
 
 No code changed.

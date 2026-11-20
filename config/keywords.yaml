@@ -69,3 +69,21 @@ project_code_name:
     - Recommendation
     - Information
     - Map
+    # Seen in real well reports: a public works description, and a company's legal form.
+    - Between
+    - Intersection
+    - Phase
+    - Near
+    - Along
+    - From
+    - With
+    - And
+    - For
+    - The
+    - LLC
+    - Inc
+    - LP
+    - Ltd
+    - Corp
+    - Corporation
+    - Company
