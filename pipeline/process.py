@@ -6,7 +6,8 @@ needs DATABASE_URL and RADAR_ARCHIVE_DIR, the same two settings a real collector
 
 Each run reads every document its rules have not read yet, oldest first, so a fact belongs to
 the first document that showed it. A list is collected again every week, and the same row in a
-later copy makes no second signal.
+later copy makes no second signal. The run then groups signals into sites and scores every
+site.
 
 When a rule, a keyword, a listed name or the Comptroller's list changes, the rules get a new
 version and every document is read again. Reading again only adds signals. It never removes
@@ -20,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import datetime as dt
 import hashlib
 import json
 import os
@@ -42,6 +44,7 @@ from pipeline.signals import (
     process,
     read_listings,
 )
+from pipeline.sites import update_sites
 from pipeline.triage import NotConfigured, PostgresLedger, Triager, annotate
 
 MAX_HELD_REFS = 200
@@ -124,6 +127,7 @@ def run(
     limit: int | None = None,
     rules: Rules | None = None,
     triager: Triager | None = None,
+    as_of: dt.date | None = None,
 ) -> ProcessSummary:
     rules = rules or load_rules(conn, store)
     version = rules_version(rules)
@@ -178,6 +182,9 @@ def run(
             summary.detail["held_refs"].extend(
                 ref for ref in outcome.held_refs[:room] if ref not in summary.detail["held_refs"]
             )
+        # Sites are grouped and scored on every run, new documents or not: scores decay.
+        with conn.transaction():
+            summary.detail["sites"] = update_sites(conn, as_of=as_of)
         if triager is not None:
             summary.detail["triage"] = {
                 "calls": triager.calls,

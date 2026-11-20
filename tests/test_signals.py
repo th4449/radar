@@ -401,6 +401,8 @@ def test_the_wording_of_a_real_planning_file():
     assert [r["term"] for r in draft.extracted["reasons"]] == ["large load"]
     found = {(q["kind"], q["value"]) for q in draft.extracted["quantities"]}
     assert found == {("dollars", 333.7e6), ("megawatts", 2000.0)}
+    # ERCOT's own number for the project ties next month's update to this one.
+    assert draft.extracted["project_numbers"] == ["25RPG020"]
 
 
 def test_a_project_name_is_not_a_reason_in_a_planning_file():

@@ -35,7 +35,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-20.1"
+RULES_VERSION = "2026-11-20.2"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -393,6 +393,8 @@ def twdb_well_reports_extract(doc: Doc, rules: Rules) -> Outcome:
 _FILES_PREFIX = "/files/docs/"
 _POSTED = re.compile(r"^/files/docs/(\d{4})/(\d{2})/(\d{2})/")
 _BLANK_LINE = re.compile(r"\n\s*\n")
+# ERCOT numbers each project submitted to the planning group: 25RPG020.
+_RPG_NUMBER = re.compile(r"(?<![A-Za-z0-9])\d{2}RPG\d{3}(?![A-Za-z0-9])")
 
 
 def _passages(text: str) -> list[tuple[int, str]]:
@@ -486,7 +488,11 @@ def ercot_rpg_file(doc: Doc, rules: Rules) -> Outcome:
         snippets: list[str] = []
         quantities: list[dict] = []
         companies: list[str] = []
+        numbers: list[str] = []
         for passage, passage_hits in found:
+            for number in _RPG_NUMBER.findall(passage):
+                if number not in numbers:
+                    numbers.append(number)
             for hit in passage_hits:
                 piece = snippet(passage, hit.start, hit.end)
                 if piece not in snippets:
@@ -525,6 +531,7 @@ def ercot_rpg_file(doc: Doc, rules: Rules) -> Outcome:
                     "snippets": snippets[:MAX_EVIDENCE],
                     "quantities": quantities[:MAX_EVIDENCE],
                     "companies_named": companies[:MAX_EVIDENCE],
+                    "project_numbers": numbers[:MAX_EVIDENCE],
                     "other_counties_named": other,
                     "needs_ocr": bool(doc.meta.get("needs_ocr")),
                 },
