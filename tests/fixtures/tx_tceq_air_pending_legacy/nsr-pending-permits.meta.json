@@ -1,0 +1,15 @@
+{
+  "source_id": "tx_tceq_air_pending_legacy",
+  "url": "https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/nsr-pending-permits.html",
+  "final_url": "https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/nsr-pending-permits.html",
+  "retrieved_at": "2026-11-20T06:11:26+00:00",
+  "sha256": "d6e4a2c50b0af7ee7b61df952a182ca8ec0d8578a66d5fd95d2d10072b636f75",
+  "bytes": 139279,
+  "content_type": "text/html; charset=UTF-8",
+  "etag": "\"2200f-660a125ef8873\"",
+  "last_modified": "Thu, 19 Nov 2026 13:31:42 GMT",
+  "kind": "html",
+  "fixture_sha256": "56dd6c334cfabc6b2a58e11a3339efa08a6437e6d65887497343c003411fe9c4",
+  "fixture_bytes": 139297,
+  "fixture_note": "Two rows name a person as the applicant. The saved copy replaces those two applicant names and one site name that repeats a surname. Nothing else differs. sha256 and bytes describe the page as retrieved."
+}

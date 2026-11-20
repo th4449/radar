@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_tceq_air_pending_legacy",
+  "url": "https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/titlev-pending-permits.html",
+  "final_url": "https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/titlev-pending-permits.html",
+  "retrieved_at": "2026-11-20T06:11:31+00:00",
+  "sha256": "9829128a2e9c1b2b0c7b54fb8f0680bb73a16df7530265e3f0966d35021d0eb4",
+  "bytes": 96976,
+  "content_type": "text/html; charset=UTF-8",
+  "etag": "\"17ad0-660ac77519e0b\"",
+  "last_modified": "Fri, 20 Nov 2026 03:01:52 GMT",
+  "kind": "html"
+}

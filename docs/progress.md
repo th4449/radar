@@ -2,6 +2,42 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M2: TCEQ pending air permit lists
+
+**Built**
+
+- `collectors/tx/tceq_air_pending_legacy.py`: reads TCEQ's two lists of pending air permit applications on its older site. One parser for both.
+- It asks for each page with the ETag of the copy it holds and compares rows, so the daily rebuild of one page is not stored again.
+- It does not fetch the application files the rows link, 624 of them. It keeps their addresses.
+- A workflow file, started by hand only, dry run, no schedule.
+- `tx_tceq_air_pending_legacy` is now `method: http`, weekly. It was monthly.
+- 19 new tests. 244 pass locally, database tests included.
+
+**Verified live**
+
+- Both lists and the start page fetched once each. The two lists are saved as fixtures.
+- One dry run of the collector: 2 documents, no errors.
+- **The Title V list is still updated.** Its newest application was received November 16, 2026. The earlier note said both lists stop at August 2026. The start page says that only of New Source Review.
+- The New Source Review list shows "Data Updated: 8/28/2026" and 296 rows. The Title V list shows 328.
+- Eight rows name a data center, four on each list.
+- **Two rows name a person as the applicant.** The fixture replaces those names. Its `.meta.json` says so.
+
+**Still unverified**
+
+- The lists give no county. Matching a row to a place needs the application file or another record.
+- No application file was fetched. Their size and form are unknown.
+- Why two New Source Review rows carry September 2026 dates, after the "Data Updated" date.
+- How long TCEQ keeps the New Source Review page online.
+- The workflow file has never run.
+
+**Open for M4**
+
+- A row whose applicant is a person must be held back before a reviewer or the public sees it. Nothing checks for that yet.
+
+**Next in M2, in the plan's table order**
+
+- ERCOT large load reports, then TWDB well reports and Comptroller local agreements.
+
 ## November 19, 2026 — M2 started: ERCOT planning group collector
 
 **Built**

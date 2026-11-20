@@ -37,15 +37,15 @@ sources:
 
   - id: tx_tceq_air_pending_legacy
     state: TX
-    name: TCEQ pending air permit applications, static lists through August 2026
+    name: TCEQ pending air permit lists on the older site
     url: https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices
     layer: signal
-    method: manual
+    method: http
     intended_method: http
-    cadence: monthly
+    cadence: weekly
     robots_status: allowed
-    verified_at: 2026-11-19
-    notes: Covers applications complete before August 31, 2026, so it serves the backtest more than the live feed. Robots rules allow it and TCEQ calls its content public domain. Manual until fixtures are saved. See docs/sources/tx_tceq_air_pending_legacy.md.
+    verified_at: 2026-11-20
+    notes: Two pages. The New Source Review list holds applications complete before August 31, 2026 and serves the backtest. The Title V list is still updated. The application files they link are not fetched. Some applicants are people, so rows need a check before anything is published. See docs/sources/tx_tceq_air_pending_legacy.md.
 
   - id: tx_tceq_stormwater_noi
     state: TX
