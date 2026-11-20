@@ -104,8 +104,8 @@ sources:
     intended_method: http
     cadence: daily
     robots_status: allowed
-    verified_at: 2026-11-19
-    notes: A nightly bulk file of the whole database. The board grants permission to copy and distribute. Owner names are often private individuals. Manual until a fixture is saved. See docs/sources/tx_twdb_well_reports.md.
+    verified_at: 2026-11-20
+    notes: A nightly bulk file of the whole database, 145 MB, over the fetcher's 50 MB limit. The board grants permission to copy and distribute. About 41 percent of the reports are household wells with a name and address. Held until the owner decides what is kept. See docs/sources/tx_twdb_well_reports.md.
 
   - id: tx_comptroller_data_centers
     state: TX

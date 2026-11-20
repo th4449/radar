@@ -2,6 +2,33 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M2: TWDB well reports read and held
+
+No code changed. No collector is written for this feed.
+
+**Verified live**
+
+- The download page was fetched once. The bulk file was downloaded once by hand, read and deleted. Its hash is in the source note.
+- The file is 145 MB zipped and 823 MB unpacked. The fetcher refuses anything over 50 MB.
+- The main table holds 715,155 reports. About 41 percent are household wells with a person's name and address.
+- The 30 test counties hold 194,368 reports, 804 of them submitted in the last 30 days.
+- Data center operators appear as well owners in 2026 reports, under several kinds of use.
+- Reports arrive a median of 36 days after drilling ends.
+
+**Why it is held**
+
+- Built like the other collectors, this feed would download 145 MB a day and archive every copy of a file that names about 293,000 households.
+- The source note lists four options. The recommended one is weekly, keeping an extract of non-household rows in the 30 counties and not the file. That departs from the rule that the original is archived, so the owner decides.
+
+**Still unverified**
+
+- The other 21 tables and the 45 MB shapefile.
+- Whether a report has a public address a reviewer can open from its tracking number.
+
+**Next in M2**
+
+- Comptroller local agreements. Then M2 is done except for the feeds that are held or closed.
+
 ## November 20, 2026 — M2: ERCOT large load reports
 
 **Built**
