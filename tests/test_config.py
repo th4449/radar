@@ -131,3 +131,30 @@ def test_scoring_rejects_a_medium_signal_that_outscores_a_high_one():
     data["signal_types"]["well_report"]["points"] = 99
     with pytest.raises(ValidationError):
         config.ScoringFile.model_validate(data)
+
+
+def test_confidence_names_every_rule_and_a_direct_term_is_the_surest():
+    sc = config.load_scoring()
+    assert set(sc.confidence) == set(config.RULES)
+    assert sc.confidence["direct_term"] == max(sc.confidence.values())
+    assert sc.confidence["listed_company_loose"] < sc.confidence["listed_company"]
+
+    data = sc.model_dump()
+    data["confidence"]["code_word"] = 0.95
+    with pytest.raises(ValidationError):
+        config.ScoringFile.model_validate(data)
+    data = sc.model_dump()
+    del data["confidence"]["code_word"]
+    with pytest.raises(ValidationError):
+        config.ScoringFile.model_validate(data)
+
+
+def test_the_lists_that_name_people_are_marked():
+    marked = {s.id for s in config.load_sources().sources if s.personal_rows}
+    assert marked == {"tx_tceq_air_pending_legacy", "tx_twdb_well_reports"}
+
+
+def test_the_reference_list_of_texas_counties_does_not_change_the_scope():
+    assert len(config.load_counties("TX").counties) == 30
+    assert len(config.load_all_counties("TX").counties) == 254
+    assert len(config.load_all_counties("MI").counties) == 83

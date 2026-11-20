@@ -45,6 +45,7 @@ sources:
     cadence: weekly
     robots_status: allowed
     verified_at: 2026-11-20
+    personal_rows: true
     notes: Two pages. The New Source Review list holds applications complete before August 31, 2026 and serves the backtest. The Title V list is still updated. The application files they link are not fetched. Some applicants are people, so rows need a check before anything is published. See docs/sources/tx_tceq_air_pending_legacy.md.
 
   - id: tx_tceq_stormwater_noi
@@ -105,6 +106,7 @@ sources:
     cadence: weekly
     robots_status: allowed
     verified_at: 2026-11-20
+    personal_rows: true
     max_body_mb: 300
     notes: One 145 MB file of every well report, rebuilt nightly. The file is not kept. Each run stores an extract of rows in the test counties that are not domestic or stock wells and were submitted in the last two years, without the owner's mailing address or the driller. Approved by the owner on November 20, 2026. See docs/sources/tx_twdb_well_reports.md.
 

@@ -34,6 +34,7 @@ TABLES = [
     "audit_log",
     "app_settings",
     "collector_runs",
+    "processing_runs",
 ]
 
 
@@ -546,7 +547,10 @@ def test_suspended_reviewer_cannot_review(db):
 def test_reviewers_cannot_edit_documents_signals_or_scores(db, statement, who):
     actor = make_reviewer(db, role="admin" if who == "admin" else "reviewer")
     make_site(db)
-    db.execute("insert into public.entities (name, normalized_name) values ('Acme LLC', 'acme')")
+    db.execute(
+        "insert into public.entities (name, normalized_name, kind)"
+        " values ('Acme LLC', 'ACME LLC', 'company')"
+    )
     with as_user(db, actor):
         assert refused(db, statement)
 

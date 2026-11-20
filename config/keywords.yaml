@@ -39,3 +39,33 @@ project_code_name:
     - Schedule
     - Status
     - Update
+    # Column headings and section titles, seen in a real ERCOT planning file.
+    - ISD
+    - COD
+    - ID
+    - Need
+    - Needs
+    - Generation
+    - Capacity
+    - Scope
+    - Overview
+    - Background
+    - Costs
+    - Details
+    - Team
+    - Title
+    - Type
+    - Owner
+    - Sponsor
+    - Benefits
+    - Timeline
+    - Purpose
+    - Review
+    - Evaluation
+    - Analysis
+    - Study
+    - Options
+    - Alternatives
+    - Recommendation
+    - Information
+    - Map

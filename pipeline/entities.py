@@ -145,3 +145,25 @@ def classify_party(name: str, known: frozenset[str] = frozenset()) -> Party:
     if business:
         return Party("company", f"business word {business[0]}")
     return Party("unclear", "no word that shows a company or public body")
+
+
+# One to six capitalized words and then a legal form that alone shows a company.
+_COMPANY_IN_TEXT = re.compile(
+    r"(?<![A-Za-z])((?:[A-Z][A-Za-z0-9&.'’-]*,?[ \t]+){1,6}?"
+    r"(?:LLC|L\.L\.C\.|Inc\.?|Incorporated|Corp\.?|Corporation|LP|L\.P\.|LLP|Ltd\.?))"
+    r"(?![A-Za-z])"
+)
+
+
+def find_companies(text: str) -> list[str]:
+    """Company names written out with a legal form, as the text writes them, once each.
+
+    Only a help for the reader. A name at the start of a sentence can pick up the word before
+    it, and a company written without its legal form is not found.
+    """
+    found: list[str] = []
+    for m in _COMPANY_IN_TEXT.finditer(text):
+        name = " ".join(m.group(1).split()).rstrip(".")
+        if classify_party(name).usable and name not in found:
+            found.append(name)
+    return found

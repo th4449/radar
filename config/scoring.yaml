@@ -43,6 +43,21 @@ signal_types:
     points: 5
     half_life_days: 365
 
+# How sure a signal is, by the rule that produced it. A signal made by several rules takes
+# the highest. Placeholders, like every number in this file.
+#   direct_term            the record says "data center"
+#   listed_company         the named company is on the Comptroller's registered data center
+#                          list, under exactly this name
+#   listed_company_loose   the same, but with a different legal form: LLC against Inc
+#   project_code_name      "Project" and a code name
+#   code_word              one of the code words in config/keywords.yaml
+confidence:
+  direct_term: 0.9
+  listed_company: 0.5
+  listed_company_loose: 0.3
+  project_code_name: 0.3
+  code_word: 0.3
+
 # A site gets the bonus when at least min_signal_types independent signal types
 # land on it within window_days.
 multi_signal_bonus:

@@ -23,3 +23,14 @@ known_organizations:
   - Chevron
   - Valero
   - Oncor
+
+# Company names on the Comptroller's registered data center list that are also ordinary
+# words. A longer name that merely starts with one of these is not treated as related to the
+# listed company: "Design Homes LLC" has nothing to do with a listed company named "Design".
+# Look at this list again when the Comptroller's list gains a one-word name.
+ordinary_words_on_the_list:
+  - constant
+  - design
+  - switch
+  - lambda
+  - oboe

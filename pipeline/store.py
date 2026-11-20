@@ -80,8 +80,10 @@ class PostgresSink:
     def __init__(self, conn: psycopg.Connection) -> None:
         self._conn = conn
         self._source_ids: dict[str, int] = {}
+        self._sources: dict[str, Source] = {}
 
     def _source_db_id(self, source: Source) -> int:
+        self._sources[source.id] = source
         if source.id not in self._source_ids:
             self._source_ids.update(sync_sources(self._conn, [source]))
         return self._source_ids[source.id]
@@ -94,14 +96,16 @@ class PostgresSink:
 
     def save_document(self, doc: ArchivedDocument) -> bool:
         source_db_id = self._source_ids[doc.source_id]
+        # A list that names people is restricted from the moment it is stored.
+        restricted = self._sources[doc.source_id].personal_rows
         row = self._conn.execute(
             """insert into public.documents
-                 (source_id, url, retrieved_at, sha256, storage_path, text, raw_meta)
-               values (%s, %s, %s, %s, %s, %s, %s::jsonb)
+                 (source_id, url, retrieved_at, sha256, storage_path, text, raw_meta, restricted)
+               values (%s, %s, %s, %s, %s, %s, %s::jsonb, %s)
                on conflict (source_id, sha256) do nothing
                returning id""",
             [source_db_id, doc.url, doc.retrieved_at, doc.sha256, doc.storage_path, doc.text,
-             json.dumps(doc.raw_meta)],
+             json.dumps(doc.raw_meta), restricted],
         ).fetchone()  # fmt: skip
         return row is not None
 

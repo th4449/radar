@@ -40,6 +40,9 @@ class Source(_Strict):
     verified_at: dt.date | None
     # Raises the fetcher's 50 MB limit for this source. Set it only for a known large file.
     max_body_mb: int | None = Field(default=None, ge=51, le=500)
+    # The source is a list that names people, such as permit applicants or well owners. Its
+    # documents are stored restricted: an administrator reads them, a reviewer does not.
+    personal_rows: bool = False
     notes: str = ""
 
     @model_validator(mode="after")
@@ -142,8 +145,9 @@ class KeywordsFile(_Strict):
 
 class EntitiesFile(_Strict):
     known_organizations: list[str]
+    ordinary_words_on_the_list: list[str]
 
-    @field_validator("known_organizations")
+    @field_validator("known_organizations", "ordinary_words_on_the_list")
     @classmethod
     def _distinct(cls, v: list[str]) -> list[str]:
         if any(not name.strip() for name in v):
@@ -172,15 +176,25 @@ class Thresholds(_Strict):
     review_threshold: float = Field(gt=0)
 
 
+RULES = ("direct_term", "listed_company", "listed_company_loose", "project_code_name", "code_word")
+
+
 class ScoringFile(_Strict):
     placeholder: bool
     signal_types: dict[str, SignalType]
+    confidence: dict[str, float]
     multi_signal_bonus: MultiSignalBonus
     thresholds: Thresholds
 
     @model_validator(mode="after")
     def _weights_are_ordered(self) -> ScoringFile:
         """High must outscore medium, and medium must outscore low."""
+        if set(self.confidence) != set(RULES):
+            raise ValueError(f"confidence must name exactly these rules: {RULES}")
+        if any(not 0 < value <= 1 for value in self.confidence.values()):
+            raise ValueError("a confidence is a number above 0 and at most 1")
+        if self.confidence["direct_term"] < max(self.confidence.values()):
+            raise ValueError("no rule may be surer than a direct term")
         by_weight: dict[str, list[float]] = {"high": [], "medium": [], "low": []}
         for st in self.signal_types.values():
             by_weight[st.weight].append(st.points)
@@ -217,6 +231,12 @@ def load_sources(config_dir: Path | None = None) -> SourcesFile:
 
 def load_counties(state: Literal["TX", "MI"], config_dir: Path | None = None) -> CountiesFile:
     return CountiesFile.model_validate(_read(f"counties_{state.lower()}.yaml", config_dir))
+
+
+def load_all_counties(state: Literal["TX", "MI"], config_dir: Path | None = None) -> CountiesFile:
+    """Every county in the state. Michigan's scope file already holds all of them."""
+    name = "counties_tx_all.yaml" if state == "TX" else "counties_mi.yaml"
+    return CountiesFile.model_validate(_read(name, config_dir))
 
 
 def load_keywords(config_dir: Path | None = None) -> KeywordsFile:
