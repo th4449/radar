@@ -137,6 +137,22 @@ class KeywordsFile(_Strict):
         return self
 
 
+# --- entities.yaml ----------------------------------------------------------------------------
+
+
+class EntitiesFile(_Strict):
+    known_organizations: list[str]
+
+    @field_validator("known_organizations")
+    @classmethod
+    def _distinct(cls, v: list[str]) -> list[str]:
+        if any(not name.strip() for name in v):
+            raise ValueError("an empty name")
+        if len(set(v)) != len(v):
+            raise ValueError("a name appears twice")
+        return v
+
+
 # --- scoring.yaml -----------------------------------------------------------------------------
 
 
@@ -205,6 +221,10 @@ def load_counties(state: Literal["TX", "MI"], config_dir: Path | None = None) ->
 
 def load_keywords(config_dir: Path | None = None) -> KeywordsFile:
     return KeywordsFile.model_validate(_read("keywords.yaml", config_dir))
+
+
+def load_entities(config_dir: Path | None = None) -> EntitiesFile:
+    return EntitiesFile.model_validate(_read("entities.yaml", config_dir))
 
 
 def load_scoring(config_dir: Path | None = None) -> ScoringFile:

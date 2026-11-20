@@ -1,0 +1,25 @@
+# Names the hold-back rule would otherwise treat as unclear. See pipeline/entities.py.
+#
+# The radar uses a record's named party only when the name itself shows a company or a public
+# body, such as "LLC" or "City of". A well-known company whose name carries no such word is
+# held back until it is listed here. Add a name only when it is plainly a company.
+# Never add a person's name.
+#
+# Matching is on the whole name after normalizing: capitals, no punctuation. A listed name
+# never matches a longer name that merely contains it. A hyphen becomes a space, so list both
+# spellings where both are used.
+known_organizations:
+  - Google
+  - Microsoft
+  - Meta
+  - Amazon
+  - Oracle
+  - Walmart
+  - H-E-B
+  - HEB
+  - Buc-ee's
+  - 7-Eleven
+  - ExxonMobil
+  - Chevron
+  - Valero
+  - Oncor
