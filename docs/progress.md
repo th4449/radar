@@ -2,6 +2,36 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — M2 started: ERCOT planning group collector
+
+**Built**
+
+- `collectors/tx/ercot_rpg.py`: reads the planning group index, the meetings near today and the files those meetings list. Parsers for the index and for a meeting page.
+- The collector base class can now follow links from a page, ask for a file it already holds with its ETag, and skip a page whose content did not change. It stops after 500 URLs.
+- `collectors/run.py`: one command to run a collector. A dry run keeps nothing. A real run needs a database and an archive folder.
+- Workflow files for the two collectors that exist, ERCOT and the Comptroller list. Both start by hand only and run dry. No schedule.
+- `tx_ercot_rpg` is now `method: http`.
+- 30 new tests. 225 pass locally, database tests included.
+
+**Verified live**
+
+- Three ERCOT pages saved as fixtures: the index and two meeting pages.
+- One ERCOT file fetched by hand to check its headers and text. It is 1.6 MB, so it is not committed. Its hash is in the source note.
+- One dry run of the whole collector against ERCOT: 13 documents, no errors.
+- ERCOT's pages change a few bytes on every request. The collector compares content, not bytes.
+
+**Still unverified**
+
+- The workflow files have never run. The repository variable `RADAR_CONTACT` is not set, so a run started now would refuse to fetch.
+- A run from GitHub's servers. ERCOT's site sits behind a screening service.
+- Where ERCOT lists meetings before 2026. The backtest needs them.
+- Extraction of company, megawatts and county from the files. That is M4.
+
+**Next in M2, in the plan's table order**
+
+- TCEQ legacy pending air lists, then ERCOT large load reports, TWDB well reports and Comptroller local agreements.
+- Held or closed: newspaper public notices, PUC Interchange, TCEQ stormwater. The TCEQ portal waits on the owner's choice of method.
+
 ## November 19, 2026 — TCEQ portal read, EGLE contacts found
 
 No code changed. This entry covers source checks and letters.

@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
-from collectors.base import Collector
+from collectors.base import Collector, LayoutChanged
 
 URL = "https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php"
 
@@ -39,10 +39,6 @@ _HEADERS = (
     "Exemption End Date",
 )
 _DATE = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})")
-
-
-class LayoutChanged(ValueError):
-    """The page no longer looks like the saved copy the parser was written against."""
 
 
 @dataclass(frozen=True)

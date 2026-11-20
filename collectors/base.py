@@ -17,6 +17,7 @@ import datetime as dt
 import hashlib
 import os
 import time
+from collections import deque
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -51,6 +52,10 @@ class FetchError(Exception):
 
 class NotPermitted(FetchError):
     """Our own rules forbid fetching this source right now."""
+
+
+class LayoutChanged(ValueError):
+    """A page no longer looks like the saved copy its parser was written against."""
 
 
 class RobotsDisallowed(FetchError):
@@ -356,7 +361,9 @@ class ArchivedDocument:
     raw_meta: dict
 
 
-def archive(result: FetchResult, source: Source, store: ArchiveStore) -> ArchivedDocument:
+def archive(
+    result: FetchResult, source: Source, store: ArchiveStore, extra_meta: dict | None = None
+) -> ArchivedDocument:
     """Hash the body, store the original and extract its text."""
     digest = sha256_hex(result.body)
     extracted: Extracted = extract(result.body, result.content_type)
@@ -371,6 +378,7 @@ def archive(result: FetchResult, source: Source, store: ArchiveStore) -> Archive
         "pages": extracted.pages,
         "title": extracted.title,
         "needs_ocr": extracted.needs_ocr,
+        **(extra_meta or {}),
     }
     return ArchivedDocument(
         source.id, result.url, result.retrieved_at, digest, storage_path, extracted.text, meta
@@ -390,6 +398,9 @@ class Sink(Protocol):
 
     def finish_run(self, run_id: int, summary: RunSummary) -> None: ...
 
+    def known(self, source: Source) -> dict[str, dict]:
+        """The stored metadata of the newest document for each URL of this source."""
+
 
 @dataclass
 class RunSummary:
@@ -403,12 +414,26 @@ class RunSummary:
 
 
 class Collector:
-    """One source. A subclass names the source and lists the URLs to fetch."""
+    """One source. A subclass names the source and lists the URLs to start from.
+
+    A source that is one page or a fixed list needs only urls(). A source that is an index
+    leading to other pages also defines follow(). A page that carries tracking codes which
+    change on every request defines content_key(), so an unchanged page is not stored again.
+    """
 
     source_id: ClassVar[str]
+    max_urls: ClassVar[int] = 500  # a run that wants more than this has gone wrong
 
     def urls(self) -> Iterable[str]:
         raise NotImplementedError
+
+    def follow(self, result: FetchResult) -> Iterable[str]:
+        """More URLs found in a page that was just fetched in full. Each URL is fetched once."""
+        return ()
+
+    def content_key(self, result: FetchResult) -> str | None:
+        """A key that changes only when what the page says changes, or None to use the bytes."""
+        return None
 
     def run(
         self,
@@ -425,7 +450,25 @@ class Collector:
         run_id = sink.start_run(source, runner)
         failed_urls: list[str] = []
         try:
-            for url in self.urls():
+            # What earlier runs stored: validators for conditional requests, and content keys.
+            known = sink.known(source)
+            for url, meta in known.items():
+                if meta.get("etag") or meta.get("last_modified"):
+                    fetcher.validators.setdefault(
+                        url, (meta.get("etag"), meta.get("last_modified"))
+                    )
+
+            queue: deque[str] = deque(self.urls())
+            asked: set[str] = set()
+            while queue:
+                url = queue.popleft()
+                if url in asked:
+                    continue
+                if len(asked) >= self.max_urls:
+                    summary.errors += 1
+                    summary.error = f"stopped after {self.max_urls} URLs"
+                    break
+                asked.add(url)
                 try:
                     result = fetcher.get(url)
                 except (Blocked, RobotsDisallowed, NotPermitted) as exc:
@@ -441,7 +484,21 @@ class Collector:
                 summary.documents_seen += 1
                 if result.not_modified:
                     continue
-                if sink.save_document(archive(result, source, store)):
+                try:
+                    key = self.content_key(result)
+                    more = list(self.follow(result))
+                except LayoutChanged as exc:
+                    # Keep the page that surprised us, then stop. A person looks at it.
+                    if sink.save_document(archive(result, source, store)):
+                        summary.documents_new += 1
+                    summary.status = "failed"
+                    summary.error = f"{url}: {exc}"
+                    break
+                queue.extend(more)
+                if key is not None and known.get(url, {}).get("content_key") == key:
+                    continue  # the page says what it said last time
+                extra = {"content_key": key} if key is not None else None
+                if sink.save_document(archive(result, source, store, extra)):
                     summary.documents_new += 1
             if summary.status == "running":
                 if summary.errors == 0:

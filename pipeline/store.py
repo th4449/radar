@@ -32,6 +32,15 @@ class MemorySink:
         self.documents[key] = doc
         return True
 
+    def known(self, source: Source) -> dict[str, dict]:
+        newest: dict[str, ArchivedDocument] = {}
+        for doc in self.documents.values():
+            if doc.source_id != source.id:
+                continue
+            if doc.url not in newest or doc.retrieved_at >= newest[doc.url].retrieved_at:
+                newest[doc.url] = doc
+        return {url: dict(doc.raw_meta) for url, doc in newest.items()}
+
     def finish_run(self, run_id: int, summary: RunSummary) -> None:
         self.runs[run_id].update(
             status=summary.status,
@@ -91,6 +100,16 @@ class PostgresSink:
              json.dumps(doc.raw_meta)],
         ).fetchone()  # fmt: skip
         return row is not None
+
+    def known(self, source: Source) -> dict[str, dict]:
+        rows = self._conn.execute(
+            """select distinct on (url) url, raw_meta
+               from public.documents
+               where source_id = %s
+               order by url, retrieved_at desc, id desc""",
+            [self._source_db_id(source)],
+        ).fetchall()
+        return {url: meta for url, meta in rows}
 
     def finish_run(self, run_id: int, summary: RunSummary) -> None:
         self._conn.execute(

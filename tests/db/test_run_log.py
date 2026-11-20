@@ -59,6 +59,29 @@ def test_a_run_is_logged_and_documents_are_stored_once(db):
     assert docs[0][5] == dt.datetime(2026, 11, 19, 12, 0, tzinfo=dt.UTC)
 
 
+def test_known_returns_the_newest_stored_metadata_for_each_url(db):
+    source = make_source()
+    older = a_document()
+    newer = ArchivedDocument(
+        source_id="tx_example",
+        url=older.url,
+        retrieved_at=dt.datetime(2026, 11, 26, 12, 0, tzinfo=dt.UTC),
+        sha256="c" * 64,
+        storage_path=f"cc/{'c' * 64}.html",
+        text="Notice text, revised",
+        raw_meta={"kind": "html", "etag": '"v2"', "content_key": "k2"},
+    )
+    with as_service(db):
+        sink = PostgresSink(db)
+        assert sink.known(source) == {}
+        sink.start_run(source)
+        sink.save_document(newer)
+        sink.save_document(older)
+        known = sink.known(source)
+    assert set(known) == {older.url}
+    assert (known[older.url]["etag"], known[older.url]["content_key"]) == ('"v2"', "k2")
+
+
 def test_a_failed_run_keeps_its_error(db):
     with as_service(db):
         sink = PostgresSink(db)

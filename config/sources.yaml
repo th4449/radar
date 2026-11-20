@@ -64,12 +64,12 @@ sources:
     name: ERCOT Regional Planning Group project files
     url: https://www.ercot.com/committees/other/rpg
     layer: signal
-    method: manual
+    method: http
     intended_method: http
     cadence: weekly
     robots_status: allowed
     verified_at: 2026-11-19
-    notes: Robots rules allow the index, meeting pages and /files/docs/. Terms allow reuse and prohibit harming site performance. Stay out of /meetings, /widgets and /ical. Manual until fixtures are saved. See docs/sources/tx_ercot_rpg.md.
+    notes: Robots rules allow the index, meeting pages and /files/docs/. Terms allow reuse and prohibit harming site performance. Stay out of /meetings, /widgets and /ical. The collector reads the index, the meetings near today and their files. Fixtures saved November 19, 2026. See docs/sources/tx_ercot_rpg.md.
 
   - id: tx_ercot_large_load
     state: TX

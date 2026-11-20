@@ -1,0 +1,41 @@
+name: Collect
+
+# The shared steps for every collector. Each feed has its own small workflow file that calls
+# this one with its source id.
+#
+# Until launch every run is a dry run: it fetches the source and reports what it found, and
+# keeps nothing. Real runs need the hosted database and archive, which the owner approves first.
+
+on:
+  workflow_call:
+    inputs:
+      source_id:
+        description: The id in config/sources.yaml
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Run the collector
+        env:
+          SOURCE_ID: ${{ inputs.source_id }}
+          # The public contact address sent in the user agent. A repository variable, not a
+          # secret. The fetcher refuses to run without it.
+          RADAR_CONTACT: ${{ vars.RADAR_CONTACT }}
+          RADAR_RUNNER: gha-${{ github.run_id }}
+        run: uv run python -m collectors.run "$SOURCE_ID" --dry-run

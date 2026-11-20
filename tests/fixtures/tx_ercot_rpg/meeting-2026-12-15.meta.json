@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_rpg",
+  "url": "https://www.ercot.com/calendar/12152026-RPG-Meeting",
+  "final_url": "https://www.ercot.com/calendar/12152026-RPG-Meeting",
+  "retrieved_at": "2026-11-20T02:49:53+00:00",
+  "sha256": "d6dfdf7ffe98a38ecf71403a2bb6ce96440cbff488e7800f7519a6d86647f7f2",
+  "bytes": 55973,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

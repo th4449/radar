@@ -114,3 +114,95 @@ def test_robots_disallow_stops_the_run(tmp_path):
     summary, sink = run(web, [NOTICE, PERMIT], tmp_path)
     assert summary.status == "blocked"
     assert web.page_urls() == []
+
+
+# --- sources that are an index leading to other pages -------------------------------------------
+
+LISTING = "https://records.example.gov/notices"
+
+
+class IndexCollector(Collector):
+    """Starts at a listing and follows the links it names. The listing carries a visit counter."""
+
+    source_id = "tx_example"
+
+    def urls(self) -> list[str]:
+        return [LISTING]
+
+    def follow(self, result):
+        if result.url == LISTING:
+            return [NOTICE, PERMIT, NOTICE, LISTING]  # repeats and a loop back to the start
+        return ()
+
+    def content_key(self, result):
+        if result.url == LISTING:
+            return result.body.split(b"<!--")[0].decode()
+        return None
+
+
+def listing_site(counter: int, etag: str | None = None) -> Site:
+    def permit(request: httpx.Request) -> httpx.Response:
+        if etag and request.headers.get("If-None-Match") == etag:
+            return httpx.Response(304)
+        headers = {"Content-Type": "application/pdf"}
+        if etag:
+            headers["ETag"] = etag
+        return httpx.Response(200, content=PERMIT_BODY, headers=headers)
+
+    web = site()
+    web.routes[LISTING] = httpx.Response(
+        200,
+        content=b"<html><body>Two notices</body></html><!-- visit %d -->" % counter,
+        headers={"Content-Type": "text/html"},
+    )
+    web.routes[PERMIT] = permit
+    return web
+
+
+def run_index(web: Site, tmp_path, sink: MemorySink, collector: Collector | None = None):
+    clock = FakeClock()
+    source = make_source()
+    with Fetcher(
+        source, contact=CONTACT, transport=web.transport, clock=clock, sleep=clock.sleep
+    ) as f:
+        return (collector or IndexCollector()).run(
+            source=source, fetcher=f, store=LocalArchive(tmp_path), sink=sink, runner="test"
+        )
+
+
+def test_followed_links_are_each_fetched_once(tmp_path):
+    web, sink = listing_site(1), MemorySink()
+    summary = run_index(web, tmp_path, sink)
+    assert (summary.status, summary.documents_seen, summary.documents_new) == ("ok", 3, 3)
+    assert web.page_urls() == [LISTING, NOTICE, PERMIT]
+
+
+def test_a_page_with_the_same_content_key_is_not_stored_again(tmp_path):
+    sink = MemorySink()
+    run_index(listing_site(1), tmp_path, sink)
+    web = listing_site(2)  # the listing's bytes differ, what it says does not
+    summary = run_index(web, tmp_path, sink)
+    assert (summary.status, summary.documents_seen, summary.documents_new) == ("ok", 3, 0)
+    assert web.page_urls() == [LISTING, NOTICE, PERMIT]  # its links are still followed
+    assert len(sink.documents) == 3
+
+
+def test_validators_from_earlier_runs_make_the_next_request_conditional(tmp_path):
+    sink = MemorySink()
+    run_index(listing_site(1, etag='"v1"'), tmp_path, sink)
+    web = listing_site(1, etag='"v1"')
+    summary = run_index(web, tmp_path, sink)
+    asked = [r for r in web.requests if str(r.url) == PERMIT]
+    assert [r.headers.get("If-None-Match") for r in asked] == ['"v1"']
+    assert (summary.documents_seen, summary.documents_new) == (3, 0)
+
+
+def test_a_run_that_wants_too_many_urls_stops(tmp_path):
+    class Runaway(IndexCollector):
+        max_urls = 2
+
+    web, sink = listing_site(1), MemorySink()
+    summary = run_index(web, tmp_path, sink, Runaway())
+    assert summary.status == "partial"
+    assert "stopped after 2 URLs" in summary.error
+    assert web.page_urls() == [LISTING, NOTICE]

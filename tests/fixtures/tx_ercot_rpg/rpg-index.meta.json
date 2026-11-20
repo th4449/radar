@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_ercot_rpg",
+  "url": "https://www.ercot.com/committees/other/rpg",
+  "final_url": "https://www.ercot.com/committees/other/rpg",
+  "retrieved_at": "2026-11-20T02:49:21+00:00",
+  "sha256": "5adb0dd987d64ed6c1ff84b4a7877c5fc0d1e05c906bd3f4d102b256d11effa8",
+  "bytes": 64437,
+  "content_type": "text/html;charset=UTF-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "html"
+}

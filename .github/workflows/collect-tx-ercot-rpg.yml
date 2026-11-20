@@ -1,0 +1,21 @@
+name: Collect tx_ercot_rpg
+
+# ERCOT Regional Planning Group meetings and the files posted for them.
+# Planned cadence: weekly. Started by hand only. The schedule is added at launch, with the
+# owner's go-ahead. See docs/sources/tx_ercot_rpg.md.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collect-tx_ercot_rpg
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    uses: ./.github/workflows/collect.yml
+    with:
+      source_id: tx_ercot_rpg
