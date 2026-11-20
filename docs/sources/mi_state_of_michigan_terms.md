@@ -21,8 +21,8 @@ The same paragraph allows an exception only under "a separate, written agreement
 | Feed | Host | Status |
 |---|---|---|
 | `mi_mpsc_dockets` | mi-psc.my.site.com and michigan.gov/mpsc | Restricted. The docket site adopts these policies and the news releases sit on Michigan.gov. |
-| `mi_egle_notices` | michigan.gov/egle and the MiEnviro Portal | Restricted. |
-| `mi_egle_air_pending` | deq.state.mi.us | Treated as restricted. It is a State of Michigan host on another domain. Whether the Michigan.gov terms cover it was not confirmed, so we assume they do. |
+| `mi_egle_notices` | michigan.gov/egle and the MiEnviro Portal | Restricted. See [mi_egle_notices.md](mi_egle_notices.md). |
+| `mi_egle_air_pending` | egle.state.mi.us, formerly deq.state.mi.us | Treated as restricted. It is a State of Michigan host on another domain. Whether the Michigan.gov terms cover it was not confirmed, so we assume they do. See [mi_egle_air_pending.md](mi_egle_air_pending.md). |
 
 ## What was not checked
 

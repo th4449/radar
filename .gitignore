@@ -14,6 +14,9 @@ secrets/
 exports/
 dumps/
 
+# Unsent letters and other working drafts
+drafts/
+
 # Raw archive and bulk data. Only small fixtures under tests/fixtures are committed.
 archive/
 data/

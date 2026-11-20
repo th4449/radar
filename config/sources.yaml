@@ -31,9 +31,9 @@ sources:
     method: manual
     intended_method: browser
     cadence: daily
-    robots_status: not_checked
-    verified_at: null
-    notes: The live feed since August 31, 2026. A JavaScript application with no robots file. Its terms and data calls have not been read in a browser yet. See docs/sources/tx_tceq_air_pending_legacy.md.
+    robots_status: allowed
+    verified_at: 2026-11-19
+    notes: The live feed since August 31, 2026. Read in a browser. No login, no terms of its own and no robots rules. The footer links to the TCEQ web policies, which call site content public domain. Data comes from POST calls on the same host. Manual until the owner picks a method and fixtures are saved. See docs/sources/tx_tceq_air_pending.md.
 
   - id: tx_tceq_air_pending_legacy
     state: TX
@@ -171,14 +171,14 @@ sources:
   - id: mi_egle_air_pending
     state: MI
     name: EGLE air permits pending decision
-    url: https://www.deq.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf
+    url: https://www.egle.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf
     layer: signal
     method: manual
     intended_method: manual
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: A PDF on a State of Michigan host. Treated as covered by the Michigan.gov terms, which bar automated access. See docs/sources/mi_state_of_michigan_terms.md.
+    notes: Two PDF lists on a State of Michigan host, one for permits to install and one for general permits. Treated as covered by the Michigan.gov terms, which bar automated access. Request for a written agreement drafted, not sent. See docs/sources/mi_egle_air_pending.md.
 
   - id: mi_egle_notices
     state: MI
@@ -190,7 +190,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: Michigan.gov terms bar automated access without a written agreement. See docs/sources/mi_state_of_michigan_terms.md.
+    notes: Michigan.gov terms bar automated access without a written agreement. The portal's public notice search needs no account. Its alerts do. Request for a written agreement drafted, not sent. See docs/sources/mi_egle_notices.md.
 
   - id: mi_msf_board
     state: MI

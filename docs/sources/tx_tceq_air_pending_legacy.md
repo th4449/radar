@@ -1,6 +1,6 @@
 # TCEQ pending air permit applications
 
-- Source ids: `tx_tceq_air_pending_legacy` (verified) and `tx_tceq_air_pending` (the new portal, not yet verified)
+- Source id: `tx_tceq_air_pending_legacy`. The new portal is `tx_tceq_air_pending`, with its own note.
 - Start page: https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices
 - Checked: November 19, 2026
 
@@ -17,13 +17,9 @@ The start page says that from August 31, 2026 the Air Permits Division publishes
 
 Use: mostly the backtest in milestone M9, since these lists stop at August 2026.
 
-## Permit Search Portal: not verified, no collector yet
+## Permit Search Portal
 
-- `https://permit-search.tceq.texas.gov/` is a JavaScript application. A plain request returns an empty shell.
-- The host serves that same shell at `/robots.txt`. It publishes no robots rules.
-- No login text appears in the shell. Whether the data calls behind it need a login, and whether the portal has terms of its own, cannot be seen without running it in a browser.
-
-Before a collector: a person opens the portal in a browser, reads any terms it shows and notes how search by county and date works. Then this note is updated and the owner is told if anything restricts access.
+Read in a browser on November 19, 2026. See [tx_tceq_air_pending.md](tx_tceq_air_pending.md).
 
 ## Other
 

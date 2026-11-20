@@ -2,6 +2,28 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 19, 2026 — TCEQ portal read, EGLE contacts found
+
+No code changed. This entry covers source checks and letters.
+
+**Verified live**
+
+- **TCEQ Permit Search Portal, read in a browser.** No login, no terms of its own and no robots rules. Its footer links to the TCEQ web policies, which call site content public domain. Nothing read restricts automated access. `tx_tceq_air_pending` now has its own note and is marked verified. It stays manual.
+- **How the portal search works.** A circle around a point, 1 to 60 miles, with filters for status and permit type and no date filter. One search was run, for Hood County. The data comes from three POST calls on the same host.
+- **EGLE contacts.** The MiEnviro Portal contact page gives one address for air, one for water and a general help desk. They are in the two EGLE notes.
+- **MiEnviro Portal.** Its public notice search needs no account. Alerts on new notices need one. Read from search results only. Nothing was requested from the portal.
+- The pending air permit lists moved to `egle.state.mi.us`. The config has the new address.
+
+**Still unverified**
+
+- The bodies of the portal's data calls, its page size and whether any record carries a received date.
+- Whether the Michigan.gov terms cover `egle.state.mi.us`, and which office can grant a written agreement.
+
+**Needs the owner**
+
+- A method for the TCEQ portal: the page's own search calls or a browser. The collector base class makes GET requests only, so either choice needs new code.
+- Four requests are drafted and not sent: Texas Press Association, Texas PUC and two to EGLE. They are in `drafts/permission-requests.md`, which is not committed.
+
 ## November 19, 2026 — M1 closed: first real collector
 
 The owner chose the public contact address for the user agent. That unblocked the last M1 step.
