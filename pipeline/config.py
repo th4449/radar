@@ -197,6 +197,17 @@ class MultiSignalBonus(_Strict):
     points: float = Field(ge=0)
 
 
+class Clustering(_Strict):
+    near_m: float = Field(gt=0, le=50_000)
+    same_company_m: float = Field(gt=0, le=100_000)
+
+    @model_validator(mode="after")
+    def _ordered(self) -> Clustering:
+        if self.same_company_m < self.near_m:
+            raise ValueError("same_company_m must not be below near_m")
+        return self
+
+
 class Thresholds(_Strict):
     review_threshold: float = Field(gt=0)
 
@@ -209,6 +220,7 @@ class ScoringFile(_Strict):
     signal_types: dict[str, SignalType]
     confidence: dict[str, float]
     multi_signal_bonus: MultiSignalBonus
+    clustering: Clustering
     thresholds: Thresholds
 
     @model_validator(mode="after")

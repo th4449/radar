@@ -65,6 +65,14 @@ multi_signal_bonus:
   window_days: 365
   points: 20
 
+# Which signals are one site. Signals join only inside one county.
+#   near_m           two signals with coordinates this close are one site, whoever they name
+#   same_company_m   two signals naming the same company are one site, unless both have
+#                    coordinates and those are further apart than this
+clustering:
+  near_m: 1000
+  same_company_m: 5000
+
 # A site at or above review_threshold goes to the reviewer queue.
 thresholds:
   review_threshold: 40
