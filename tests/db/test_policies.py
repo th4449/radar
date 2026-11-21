@@ -127,8 +127,9 @@ def test_anon_reads_only_published_alerts_with_their_sources(db):
     assert sources[0]["url"] == "https://example.gov/notices/1"
     assert sources[0]["signal_type"] == "abatement_notice"
     assert set(sources[0]) == {
-        "url", "source", "retrieved_at", "sha256", "signal_type", "event_date"
+        "url", "source", "retrieved_at", "sha256", "signal_type", "event_date", "reference"
     }  # fmt: skip
+    assert sources[0]["reference"] is None  # this signal was not made by the pipeline
 
 
 def test_public_view_exposes_no_reviewer_or_subscriber_columns(db):

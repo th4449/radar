@@ -35,7 +35,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-20.2"
+RULES_VERSION = "2026-11-20.3"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -284,6 +284,7 @@ def tceq_air_pending(doc: Doc, rules: Rules) -> Outcome:
                 party_kind=party.kind,
                 extracted={
                     "reasons": reasons,
+                    "reference": f"TCEQ {kind} permit {row.permit_number}",
                     "party_basis": party.basis,
                     "list": parsed.title,
                     "list_data_updated": parsed.data_updated_text,
@@ -385,6 +386,7 @@ def twdb_well_reports_extract(doc: Doc, rules: Rules) -> Outcome:
                 party_kind=party.kind,
                 extracted={
                     "reasons": reasons,
+                    "reference": f"Texas well report tracking number {number}",
                     "party_basis": party.basis,
                     "point": _point(row),
                     "free_text_matches": free_text,
@@ -534,6 +536,7 @@ def ercot_rpg_file(doc: Doc, rules: Rules) -> Outcome:
                 party_kind=None,
                 extracted={
                     "reasons": reasons,
+                    "reference": f'ERCOT Regional Planning Group file "{name}"',
                     "placement": placement,
                     "snippets": snippets[:MAX_EVIDENCE],
                     "quantities": quantities[:MAX_EVIDENCE],

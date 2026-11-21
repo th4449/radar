@@ -115,6 +115,8 @@ def test_a_tceq_signal_restates_the_row_and_says_why():
          "text": "DATA CENTERS"}
     ]  # fmt: skip
     assert draft.extracted["row"]["application_url"].startswith("https://www.tceq.texas.gov/")
+    # What a public alert calls this record. A number, never a name.
+    assert draft.extracted["reference"] == "TCEQ New Source Review permit 131651"
 
 
 def test_a_summary_never_says_a_data_center_is_planned():
@@ -217,6 +219,7 @@ def test_a_well_signal_restates_the_report():
         "from": "the well report. Not verified by state staff.",
     }  # fmt: skip
     assert draft.extracted["row"]["DrillingStartDate"] == "2026-04-20"
+    assert draft.extracted["reference"] == "Texas well report tracking number 728122"
 
 
 def test_a_project_company_named_for_a_listed_company_is_a_loose_match():
@@ -465,3 +468,17 @@ def test_every_draft_uses_a_signal_type_from_the_scoring_file():
     out = process(tceq_doc(tceq.NSR, NSR), RULES)
     assert {d.signal_type for d in out.drafts} == {"air_permit"}
     assert all(0 < d.confidence <= 1 for d in out.drafts)
+
+
+def test_a_records_public_reference_is_a_number_and_never_names_the_party():
+    """A public alert shows the reference. See db/migrations/20261120000007."""
+    drafts = (
+        tceq_air_pending(tceq_doc(tceq.NSR, NSR), RULES).drafts
+        + twdb_well_reports_extract(well_extract(), RULES).drafts
+    )
+    assert len(drafts) == 9
+    for draft in drafts:
+        reference = draft.extracted["reference"]
+        assert any(ch.isdigit() for ch in reference)
+        assert draft.party.lower() not in reference.lower()
+    assert len({d.extracted["reference"] for d in drafts}) == len(drafts)
