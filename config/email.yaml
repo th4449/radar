@@ -1,0 +1,24 @@
+# Alert emails. See BUILD_PLAN.md sections 3 and 7 and pipeline/alert_email.py.
+#
+# The email job only does dry runs. Sending real email is the owner's decision (section 11).
+# A dry run reports what would be sent. It names no subscriber and records nothing as sent.
+
+# Who the emails are from, as the footer of every email states it.
+organization: Dekleptocracy Alliance
+
+# Every email must carry the organization's postal address (section 7). Not set yet.
+# The job can never send while this is empty.
+postal_address: null
+
+# The public site's address, with no slash at the end. Links in emails are built from it.
+# Not set yet: the site is not hosted.
+site_url: null
+
+# Limits of the email provider's free tier, from https://resend.com/pricing on the date below:
+# 100 emails a day and 3,000 a month. The 20 dollar tier has no daily limit and allows 50,000
+# a month. Check them again before sending.
+limits_checked: 2026-11-20
+# The most messages one run may send. The rest wait for the next run.
+daily_limit: 100
+# Messages handed to the provider in one request.
+batch_size: 50

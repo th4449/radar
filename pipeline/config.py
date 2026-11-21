@@ -182,6 +182,26 @@ class TriageFile(_Strict):
         return self
 
 
+# --- email.yaml -------------------------------------------------------------------------------
+
+
+class EmailFile(_Strict):
+    organization: str = Field(min_length=1)
+    postal_address: str | None
+    site_url: str | None = Field(pattern=r"^https?://\S*[^\s/]$")
+    limits_checked: dt.date
+    daily_limit: int = Field(ge=1)
+    batch_size: int = Field(ge=1, le=100)
+
+    def missing(self) -> list[str]:
+        """What the owner still has to set before any email could be sent."""
+        return [
+            name
+            for name in ("postal_address", "site_url")
+            if not (getattr(self, name) or "").strip()
+        ]
+
+
 # --- scoring.yaml -----------------------------------------------------------------------------
 
 
@@ -286,6 +306,10 @@ def load_entities(config_dir: Path | None = None) -> EntitiesFile:
 
 def load_triage(config_dir: Path | None = None) -> TriageFile:
     return TriageFile.model_validate(_read("triage.yaml", config_dir))
+
+
+def load_email(config_dir: Path | None = None) -> EmailFile:
+    return EmailFile.model_validate(_read("email.yaml", config_dir))
 
 
 def load_scoring(config_dir: Path | None = None) -> ScoringFile:
