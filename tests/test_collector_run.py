@@ -206,3 +206,91 @@ def test_a_run_that_wants_too_many_urls_stops(tmp_path):
     assert summary.status == "partial"
     assert "stopped after 2 URLs" in summary.error
     assert web.page_urls() == [LISTING, NOTICE]
+
+
+# --- a source that is many sites ------------------------------------------------------------------
+
+OTHER = "https://www.othertown.example.gov/agendas/november.pdf"
+PERMIT_2 = "https://records.example.gov/permits/177302.pdf"
+
+
+class ManySites(SampleCollector):
+    """One source, several governments' sites. A refusal closes one site, not the run."""
+
+    refusal_closes_host_only = True
+
+    def facts(self, result):
+        return {"record": "agenda_file", "page": "https://example.gov/agendas"}
+
+
+def run_many(web: Site, urls: list[str], tmp_path):
+    clock = FakeClock()
+    source = make_source()
+    sink = MemorySink()
+    with Fetcher(
+        source, contact=CONTACT, transport=web.transport, clock=clock, sleep=clock.sleep
+    ) as f:
+        summary = ManySites(urls).run(
+            source=source, fetcher=f, store=LocalArchive(tmp_path), sink=sink, runner="test"
+        )
+    return summary, sink
+
+
+def many_sites() -> Site:
+    web = site()
+    pdf = httpx.Response(200, content=PERMIT_BODY, headers={"Content-Type": "application/pdf"})
+    web.routes[OTHER] = pdf
+    web.routes[PERMIT_2] = pdf
+    return web
+
+
+def test_a_refusal_from_one_site_of_many_closes_that_site_and_the_rest_go_on(tmp_path):
+    web = many_sites()
+    web.routes[NOTICE] = httpx.Response(403)
+    summary, sink = run_many(web, [NOTICE, PERMIT, OTHER, PERMIT_2], tmp_path)
+
+    assert summary.status == "partial"
+    # The site that refused was asked once and never again, by any address.
+    assert web.page_urls() == [NOTICE, OTHER]
+    assert [d.url for d in sink.documents.values()] == [OTHER]
+    refused = sink.runs[1]["detail"]["refused_hosts"]
+    assert list(refused) == ["records.example.gov"]
+    assert "Do not work around it" in refused["records.example.gov"]
+
+
+def test_a_robots_file_that_bars_one_site_of_many_closes_only_that_site(tmp_path):
+    web = many_sites()
+    web.routes["https://records.example.gov/robots.txt"] = httpx.Response(
+        200, text="User-agent: *\nDisallow: /"
+    )
+    summary, sink = run_many(web, [NOTICE, OTHER], tmp_path)
+
+    assert summary.status == "partial"
+    assert web.page_urls() == [OTHER]
+    assert list(sink.runs[1]["detail"]["refused_hosts"]) == ["records.example.gov"]
+
+
+def test_every_site_refusing_is_a_failed_run_with_nothing_stored(tmp_path):
+    web = many_sites()
+    web.robots = "User-agent: *\nDisallow: /"
+    summary, sink = run_many(web, [NOTICE, OTHER], tmp_path)
+    assert summary.status == "failed"
+    assert web.page_urls() == [] and sink.documents == {}
+
+
+def test_a_collector_of_one_site_still_stops_at_a_refusal(tmp_path):
+    assert SampleCollector.refusal_closes_host_only is False
+    web = many_sites()
+    web.routes[NOTICE] = httpx.Response(403)
+    summary, _ = run(web, [NOTICE, OTHER], tmp_path)
+    assert summary.status == "blocked"
+    assert web.page_urls() == [NOTICE]
+
+
+def test_a_file_stored_as_it_is_carries_what_the_collector_knows_about_it(tmp_path):
+    summary, sink = run_many(many_sites(), [OTHER], tmp_path)
+    assert summary.status == "ok"
+    (doc,) = sink.documents.values()
+    assert doc.raw_meta["record"] == "agenda_file"
+    assert doc.raw_meta["page"] == "https://example.gov/agendas"
+    assert LocalArchive(tmp_path).get(doc.storage_path) == PERMIT_BODY  # the file itself

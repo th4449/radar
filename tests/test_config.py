@@ -156,6 +156,7 @@ def test_the_lists_that_name_people_are_marked():
         "tx_tceq_air_pending_legacy",
         "tx_twdb_well_reports",
         "tx_agendas_legistar",
+        "tx_agendas_own_sites",
     }
 
 

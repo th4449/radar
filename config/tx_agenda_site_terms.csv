@@ -8,6 +8,10 @@
 #          reuse_needs_consent  the site's terms bar copying or reusing its content without the
 #                               government's written consent. Held out until the owner decides
 #          could_not_read       the site did not load for the reader
+#          bars_automated_access  the site's own terms bar robots or data gathering tools
+#          robots_bar           a robots file on the site or its file host bars the collector, or
+#                               could not be read. The site's terms were not read
+#          refused              the site refused the collector's own request. Not asked again
 host,government,platform,checked_on,result,pages_read,note
 www.athenstx.gov,Athens city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
 www.balchspringstx.gov,Balch Springs city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
@@ -61,3 +65,79 @@ fortworthgov.legistar.com,Fort Worth city,legistar,2026-11-21,reuse_needs_consen
 lubbockcounty.legistar.com,Lubbock County,legistar,2026-11-21,reuse_needs_consent,2,"The county's terms limit downloads to personal, noncommercial use and bar reuse and derivative works without written permission."
 pflugerville.legistar.com,Pflugerville city,legistar,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. One linked terms page did not load. Nothing on automated access.
 roundrock.legistar.com,Round Rock city,legistar,2026-11-21,no_terms_found,1,"No terms, copyright or privacy page is linked from the home page."
+www.archercity.org,Archer City city,own_site_files,2026-11-21,reuse_needs_consent,2,The home page says content may not be reproduced without the city secretary's written consent. A disclaimer bars commercial use. Nothing on automated access.
+www.ci.sealy.tx.us,Sealy city,own_site_files,2026-11-21,robots_bar,1,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from cms5.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+hcv.org,Hill Country Village city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+sainthedwigcity.com,St. Hedwig town,own_site_files,2026-11-21,robots_bar,0,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from webgen1files1.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+cityofredlicktx.com,Red Lick city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+cityofbardwelltx.com,Bardwell city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.houstontx.gov,Houston city,own_site_files,2026-11-21,own_pages_silent,2,A privacy policy only. Nothing on automated access or reuse.
+www.taylorlakevillage.us,Taylor Lake Village city,own_site_files,2026-11-21,refused,1,"The agenda page answered 403 to the radar's one identified request on 2026-11-21. Its robots file allows the page and its own pages say nothing on automated access. A refusal is final: the site is not asked again."
+frankstontx.gov,Frankston town,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.hillsborotx.org,Hillsboro city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.keenetx.com,Keene city,own_site_files,2026-11-21,reuse_needs_consent,3,"Terms allow viewing and downloading for personal, educational or non-commercial use. Any other use, reproduction and distribution included, needs the city's written permission. Nothing on automated access."
+www.buffalogaptx.gov,Buffalo Gap town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+vopv.org,Point Venture village,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.lakesidecitytx.org,Lakeside City town,own_site_files,2026-11-21,own_pages_silent,1,A website usage policy. Nothing on automated access or reuse.
+www.alamoheightstx.gov,Alamo Heights city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+hollywoodpark-tx.gov,Hollywood Park town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.terrell-hills.com,Terrell Hills city,own_site_files,2026-11-21,own_pages_silent,1,A privacy policy only. Nothing on automated access or reuse.
+www.cityofbertram.org,Bertram city,own_site_files,2026-11-21,robots_bar,1,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from webgen1files1.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+bruceville-eddy.us,Bruceville-Eddy city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+cityofhunterscreek.com,Hunters Creek Village city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+cityofberryville.org,Berryville town,own_site_files,2026-11-21,bars_automated_access,3,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.cityoflogcabin.com,Log Cabin city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+hubbardtx.gov,Hubbard city,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+riovista-tx.com,Rio Vista city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+merkeltexas.com,Merkel town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+sanleannatx.com,San Leanna village,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.austincounty.com,Austin County,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+bhtx.gov,Balcones Heights city,own_site_files,2026-11-21,robots_bar,0,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from cms3.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+www.kirbytx.org,Kirby city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+morgantx.gov,Morgan city,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.clyde-tx.gov,Clyde city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+www.edcteaguetx.com,Teague city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.jacintocity-tx.gov,Jacinto City city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+brownsborotx.gov,Brownsboro city,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.cityofmalakoff.net,Malakoff city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+cityofcomo.myruralwater.com,Como town,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+www.camerontexas.net,Cameron city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+www.cityoftuscolatx.com,Tuscola city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.newfairview.org,New Fairview city,own_site_files,2026-11-21,refused,0,"The agenda page answered 403 to the radar's one identified request on 2026-11-21. Its robots file allows the page and no terms page was found. A refusal is final: the site is not asked again."
+www.cityofbellville.com,Bellville city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.cityofchinagrovetx.gov,China Grove town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.liveoaktx.net,Live Oak city,own_site_files,2026-11-21,reuse_needs_consent,1,Terms say site content may not be reproduced without permission. Nothing on automated access.
+cityofhooks.org,Hooks city,own_site_files,2026-11-21,own_pages_silent,1,A website use policy. Nothing on automated access or reuse.
+whitedeer.us,White Deer town,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+worthamtx.com,Wortham town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.cityofpineypoint.com,Piney Point Village city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+cityofcaneycitytx.com,Caney City town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+paynespringstx.com,Payne Springs town,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
+cumbytx.com,Cumby city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page. A website notice of January 2026 says nothing in it limits rights under the Public Information Act. Nothing on automated access."
+www.annettasouth.org,Annetta South town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.austintexas.gov,Austin city,own_site_files,2026-11-21,reuse_needs_consent,2,"The legal notice grants personal use only, asks written permission to use copyrighted material and bars collecting files to replicate the site. Nothing on robots by name."
+www.cityofrhome.com,Rhome city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.townofsanfelipe.net,San Felipe town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+greyforest-tx.gov,Grey Forest city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.shavanoparktx.gov,Shavano Park city,own_site_files,2026-11-21,robots_bar,1,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from cms1files.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+cityofmaudtexas.com,Maud city,own_site_files,2026-11-21,no_terms_found,0,No terms page. A copyright line reserves all rights.
+www.combinetx.com,Combine city,own_site_files,2026-11-21,robots_bar,0,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from cms8.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
+ellago-tx.gov,El Lago city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+www.shoreacrestx.us,Shoreacres city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page. The home page says the city was consolidated into La Porte. Not verified."
+www.cityofcoffeecity.com,Coffee City town,own_site_files,2026-11-21,own_pages_silent,1,A privacy policy only. Nothing on automated access or reuse.
+cityofstarharbor.com,Star Harbor city,own_site_files,2026-11-21,no_terms_found,1,No terms page. A copyright line reserves all rights.
+crosstimbertx.com,Cross Timber town,own_site_files,2026-11-21,no_terms_found,0,No terms page. A copyright line reserves all rights.
+www.annettatx.org,Annetta town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.mustangridgetx.gov,Mustang Ridge city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+hollidaytx.gov,Holliday city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on hollidaytx.gov answers 403.
+helotes-tx.gov,Helotes city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on helotes-tx.gov bars this address.
+nashtx.org,Nash city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on nashtx.org answers 403.
+irvingtx.gov,Irving city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on irvingtx.gov bars this address.
+www.cor.net,Richardson city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on www.cor.net answers 403.
+www.cityofkaty.com,Katy city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on www.cityofkaty.com answers 403.
+www.tooltexas.org,Tool city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on irp.cdn-website.com answers 403.
+www.trinidadtexas.gov,Trinidad city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on irp.cdn-website.com answers 403.
+www.cressontx.org,Cresson city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots request failed.
+www.sulphurspringstx.org,Sulphur Springs city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on www.sulphurspringstx.org bars this address.
+www.johnsoncountytx.org,Johnson County,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on www.johnsoncountytx.org answers 403.
+www.briarclifftx.com,Briarcliff village,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on www.briarclifftx.com bars this address.

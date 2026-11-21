@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://merkeltexas.com/agendas/",
+  "final_url": "https://merkeltexas.com/agendas/",
+  "retrieved_at": "2026-11-21T21:09:15+00:00",
+  "sha256": "5258531804de97cce625024120de13e6f2484d0ae03e62475b400ba6f518fe16",
+  "bytes": 1945,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "76fe98cd0a375557e6e8fe96997841d42cb8d1283d955df5ddd8b89449e9a1ca",
+  "original_bytes": 47739,
+  "note": "The real page, cut down to the part that lists agendas: its first 12 rows, with scripts and styles removed. The site's menus, footer and the rest of the page are left out."
+}

@@ -391,7 +391,11 @@ def test_a_governments_own_terms_can_keep_a_confirmed_row_out():
     """Right about the page, on a cleared platform, and still not collected."""
     confirmed = ac.Checks([check()])
     assert ac.collectable(body(), confirmed, TODAY, platforms(), sites("no_terms_found"))
-    for result in ("reuse_needs_consent", "links_vendor_terms", "could_not_read"):
+    closed = (
+        "reuse_needs_consent", "links_vendor_terms", "could_not_read",
+        "bars_automated_access", "robots_bar", "refused",
+    )  # fmt: skip
+    for result in closed:
         assert not ac.collectable(body(), confirmed, TODAY, platforms(), sites(result)), result
     # A government whose terms nobody read is not collected either.
     assert not ac.collectable(body(), confirmed, TODAY, platforms(), [])
@@ -413,11 +417,23 @@ def test_no_collector_may_take_a_row_that_is_not_confirmed():
             assert b.agenda_url and b.platform in inv.FOUND
 
 
-def test_what_is_collectable_today_is_legistar_and_nothing_else():
-    """The state on file: one platform cleared, and nine of its governments."""
+def test_what_is_collectable_today_is_legistar_and_own_sites():
+    """The state on file: two platforms cleared, and the governments whose own rules allow it."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
     through = [b for b in bodies if ac.collectable(b, checks, TODAY)]
-    assert {b.platform for b in through} == {"legistar"}
-    assert len({b.government for b in through}) == 9
-    assert "League City city" not in {b.government for b in through}
+    assert {b.platform for b in through} == {"legistar", "own_site_files"}
+    by_platform = {
+        name: {b.government for b in through if b.platform == name}
+        for name in ("legistar", "own_site_files")
+    }
+    assert len(by_platform["legistar"]) == 9
+    assert len(by_platform["own_site_files"]) == 44
+    assert "League City city" not in by_platform["legistar"]
+    # Closed by a robots file, by the site's own terms, and held for the owner, in that order.
+    # The last two refused the collector's own request.
+    closed = ("Irving city", "Frankston town", "Austin city", "New Fairview city")
+    # Sealy's own site allows it. The host that serves its files does not.
+    for government in (*closed, "Taylor Lake Village city", "Sealy city"):
+        assert government not in by_platform["own_site_files"]
+    assert "Houston city" in by_platform["own_site_files"]

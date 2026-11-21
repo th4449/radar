@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://hollywoodpark-tx.gov/agendas/city-council/",
+  "final_url": "https://hollywoodpark-tx.gov/agendas/city-council/",
+  "retrieved_at": "2026-11-21T21:09:10+00:00",
+  "sha256": "18488cb8b0e275ca081abfe4f873bed3b977d79a323e11c823f499e4f8b5e251",
+  "bytes": 15371,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "143091f771fa95624fc6bee34742cbc07572fdb6fa0f7c26574f4e03794d2ea9",
+  "original_bytes": 256340,
+  "note": "The real page, cut down to the part that lists agendas: its first 16 rows, with scripts and styles removed. The site's menus, footer and the rest of the page are left out. Links that do not lead to a file, such as recordings, are replaced with a made-up address."
+}

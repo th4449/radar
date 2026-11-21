@@ -29,6 +29,7 @@ from urllib.parse import unquote, urlsplit
 
 from collectors.base import LayoutChanged
 from collectors.tx import comptroller_data_centers, tceq_air_pending_legacy, twdb_well_reports
+from collectors.tx.agenda_pages import find_date
 from pipeline.classify import Hit, KeywordRules, snippet
 from pipeline.config import load_entities, load_scoring
 from pipeline.counties import CountyIndex
@@ -36,7 +37,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-21.2"
+RULES_VERSION = "2026-11-21.3"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -89,10 +90,11 @@ class Outcome:
     held_refs: list[str] = field(default_factory=list)  # record numbers, never names
     out_of_scope: int = 0  # the record is in a county outside the test set
     undated: int = 0  # a reason, but no date that can be read
+    no_text: int = 0  # a file with no text in it, such as a scan. Nobody has read it
     county_fips: str | None = None  # set when the whole document is about one county
 
     def counts(self) -> dict[str, int]:
-        return {
+        counts = {
             "records": self.records,
             "signals": len(self.drafts),
             "no_reason": self.no_reason,
@@ -100,6 +102,9 @@ class Outcome:
             "out_of_scope": self.out_of_scope,
             "undated": self.undated,
         }
+        if self.no_text:
+            counts["no_text"] = self.no_text
+        return counts
 
 
 # --- the rules a processor works with -----------------------------------------------------------
@@ -635,11 +640,118 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
     return out
 
 
+# --- agenda files from governments' own sites ---------------------------------------------------
+
+_MINUTES_NOT_AGENDA = re.compile(r"\bminutes\b", re.IGNORECASE)
+_AGENDA_WORD = re.compile(r"agenda", re.IGNORECASE)
+_TOP = 3000  # an agenda names itself and its meeting's date near the top
+
+
+# A long file calls every road job "Project" something. A code name is a reason here only where
+# the agenda speaks of economic development negotiations, the closed session Texas law allows
+# for them under Government Code 551.087.
+_NEGOTIATIONS = re.compile(r"economic\s+development|551\.087", re.IGNORECASE)
+_BEFORE = 400
+
+
+def _counts_in_a_file(hit: Hit, passage: str) -> bool:
+    if hit.kind != "project_code_name":
+        return True
+    return "\n" not in hit.text and bool(
+        _NEGOTIATIONS.search(passage[max(0, hit.start - _BEFORE) : hit.end])
+    )
+
+
+def agenda_file(doc: Doc, rules: Rules) -> Outcome:
+    """One signal for an agenda file that uses a term the radar looks for.
+
+    The file is a PDF or a Word file with no items to tell apart, so a file gives one signal.
+    An agenda names people, and so can its file name. The summary names the government, the
+    meeting's date and the words that matched, and nothing else. The words around each match
+    and the pages they are on are kept beside the signal for the reviewer.
+    """
+    out = Outcome()
+    meta = doc.meta
+    if meta.get("record") != "agenda_file":
+        return out  # the list of links on an agenda page holds nothing to read
+    out.records = 1
+    text = doc.text or ""
+    if not text.strip():
+        out.no_text = 1
+        return out
+    top = text[:_TOP]
+    if _MINUTES_NOT_AGENDA.search(top) and not _AGENDA_WORD.search(top):
+        out.no_reason = 1  # the minutes of a meeting, posted where agendas are
+        return out
+    found: list[tuple[int, str, list[Hit]]] = []
+    for number, (_, passage) in enumerate(_passages(text), 1):
+        hits = [h for h in rules.keywords.find(passage) if _counts_in_a_file(h, passage)]
+        if hits:
+            found.append((number, passage, hits))
+    if not found:
+        out.no_reason = 1
+        return out
+    day, date_from = _iso_date(str(meta.get("meeting_date") or "")), meta.get("date_from")
+    if day is None:
+        # The page gave no date. An agenda states its meeting's date at its head.
+        day, date_from = find_date(top, doc.retrieved_at.date()), "file_text"
+    if day is None:
+        out.undated = 1
+        return out
+    counties = rules.counties["TX"]
+    named = [str(c) for c in meta.get("counties") or []]
+    in_scope = [f for f in (counties.fips(name) for name in named) if f]
+    if not in_scope:
+        out.out_of_scope = 1
+        return out
+    fips = out.county_fips = in_scope[0]
+
+    reasons: list[dict] = []
+    snippets: list[str] = []
+    for _, passage, hits in found:
+        for hit in hits:
+            reason = {"rule": hit.kind, "term": hit.term, "field": "text", "text": hit.text}
+            if reason not in reasons:
+                reasons.append(reason)
+        for piece in _narrow_snippets(passage, hits):
+            if piece not in snippets:
+                snippets.append(piece)
+    place = _PLACE_KIND.sub("", str(meta["government"]))
+    terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
+    out.drafts.append(
+        Draft(
+            signal_type="agenda_keyword",
+            key=f"agenda_file:{doc.url.split('?')[0]}",
+            event_date=day,
+            summary=(
+                f"An agenda that {place} posted for a meeting of {_long_date(day)} uses "
+                f"the words {terms}."
+            ),
+            confidence=rules.how_sure(reasons),
+            county_fips=fips,
+            party=None,
+            party_kind=None,
+            extracted={
+                "reasons": reasons,
+                "reference": f"{place}, agenda for the meeting of {_long_date(day)}",
+                "page": meta.get("page") or "",
+                "bodies_on_page": [str(b) for b in meta.get("bodies") or []],
+                "date_from": date_from,
+                "pages_with_terms": [number for number, _, _ in found][:MAX_EVIDENCE],
+                "snippets": snippets[:MAX_EVIDENCE],
+                "counties": named,
+            },
+        )
+    )
+    return out
+
+
 PROCESSORS: dict[str, Processor] = {
     "tx_tceq_air_pending_legacy": tceq_air_pending,
     "tx_twdb_well_reports": twdb_well_reports_extract,
     "tx_ercot_rpg": ercot_rpg_file,
     "tx_agendas_legistar": legistar_agenda,
+    "tx_agendas_own_sites": agenda_file,
 }
 
 

@@ -666,6 +666,13 @@
       "use": "signal"
     },
     {
+      "name": "Meeting agendas that Texas governments post as files on their own websites",
+      "state": "TX",
+      "url": "https://github.com/th4449/radar/blob/main/config/tx_agenda_inventory.csv",
+      "read": true,
+      "use": "signal"
+    },
+    {
       "name": "Michigan Public Service Commission dockets and orders",
       "state": "MI",
       "url": "https://mi-psc.my.site.com/s/",

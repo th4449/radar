@@ -1,0 +1,175 @@
+"""Agenda files from governments' own sites become signals.
+
+The files here are made up. A real agenda names people, and so can its file name, so a signal's
+summary names the government, the date and the words that matched, and nothing else.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import hashlib
+from pathlib import Path
+
+from pipeline.signals import PROCESSORS, Doc, Rules, agenda_file, process, read_listings
+
+FIXTURES = Path(__file__).parent / "fixtures"
+LIST = (FIXTURES / "tx_comptroller_data_centers" / "data-center-lists.html").read_bytes()
+RULES = Rules(listings=read_listings(LIST), listings_sha256=hashlib.sha256(LIST).hexdigest())
+WHEN = dt.datetime(2026, 11, 21, 20, 0, tzinfo=dt.UTC)
+URL = "https://www.example.gov/files/AGENDA%2011.17.26%20ATTY%20SMITH.pdf?t=202611101701550"
+PAGE = "https://www.example.gov/government/agendas"
+
+HEAD = "CITY OF EXAMPLE\nNOTICE OF MEETING AND AGENDA\nTuesday, November 17, 2026 at 6:00 p.m."
+ROUTINE = "1. Call to order.\n2. Approve the minutes of the last meeting.\n3. Pay the bills."
+ZONE = "4. Public hearing on designating a reinvestment zone on County Road 12."
+CENTER = "5. Presentation by staff on a proposed data center and its water use."
+
+
+def facts(**changes) -> dict:
+    base = {
+        "record": "agenda_file",
+        "government": "Sealy city",
+        "counties": ["Austin"],
+        "bodies": ["Sealy City Council", "Sealy Planning Commission"],
+        "page": PAGE,
+        "link_text": "November 17, 2026 Regular Meeting",
+        "meeting_date": "2026-11-17",
+        "date_from": "link_text",
+    }
+    return {**base, **changes}
+
+
+def doc(*pages: str, url: str = URL, **changes) -> Doc:
+    text = "\n\n".join(pages)
+    return Doc(
+        "tx_agendas_own_sites",
+        url,
+        WHEN,
+        hashlib.sha256(text.encode()).hexdigest(),
+        text,
+        facts(**changes),
+        b"%PDF",
+    )
+
+
+def test_an_agenda_that_uses_a_term_is_one_signal():
+    out = agenda_file(doc(HEAD, ROUTINE, ZONE + "\n" + CENTER), RULES)
+    assert out.counts() == {
+        "records": 1, "signals": 1, "no_reason": 0, "held_back": 0, "out_of_scope": 0,
+        "undated": 0,
+    }  # fmt: skip
+    (draft,) = out.drafts
+    assert draft.signal_type == "agenda_keyword"
+    assert draft.event_date == dt.date(2026, 11, 17)
+    assert draft.county_fips == "48015" == out.county_fips  # Austin County
+    assert draft.party is None and draft.party_kind is None
+    assert draft.summary == (
+        "An agenda that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"reinvestment zone", "data center".'
+    )
+    assert draft.extracted["reference"] == "Sealy, agenda for the meeting of November 17, 2026"
+    assert draft.extracted["page"] == PAGE
+    assert draft.extracted["pages_with_terms"] == [3]
+    assert draft.extracted["date_from"] == "link_text"
+    assert draft.extracted["bodies_on_page"] == ["Sealy City Council", "Sealy Planning Commission"]
+    assert {r["term"] for r in draft.extracted["reasons"]} == {"reinvestment zone", "data center"}
+    assert any("data center" in s for s in draft.extracted["snippets"])
+
+
+def test_the_summary_never_carries_the_file_name_the_link_text_or_the_items_words():
+    """The file here is named for a person. Nothing a reader of the alert sees repeats it."""
+    (draft,) = agenda_file(doc(HEAD, ZONE), RULES).drafts
+    public = draft.summary + " " + draft.extracted["reference"]
+    assert "SMITH" not in public.upper() and "County Road" not in public
+    assert "Regular Meeting" not in public and ".pdf" not in public
+
+
+def test_one_file_is_one_signal_however_many_pages_use_a_term():
+    out = agenda_file(doc(HEAD + "\n" + ZONE, ROUTINE, CENTER, ZONE), RULES)
+    (draft,) = out.drafts
+    assert draft.extracted["pages_with_terms"] == [1, 3, 4]
+    assert len(draft.extracted["reasons"]) == 2
+
+
+def test_the_same_file_under_a_new_address_stamp_is_the_same_signal():
+    first = agenda_file(doc(HEAD, ZONE), RULES).drafts[0]
+    again = agenda_file(doc(HEAD, ZONE, url=URL.split("?")[0] + "?t=202611181200000"), RULES)
+    other = agenda_file(doc(HEAD, ZONE, url="https://www.example.gov/files/b.pdf"), RULES)
+    source = "tx_agendas_own_sites"
+    assert first.fingerprint(source) == again.drafts[0].fingerprint(source)
+    assert first.fingerprint(source) != other.drafts[0].fingerprint(source)
+
+
+def test_an_agenda_with_no_term_is_no_signal():
+    out = agenda_file(doc(HEAD, ROUTINE), RULES)
+    assert out.drafts == [] and (out.records, out.no_reason) == (1, 1)
+
+
+def test_minutes_posted_among_the_agendas_are_not_called_an_agenda():
+    minutes = "CITY OF EXAMPLE\nMINUTES OF THE REGULAR MEETING\nNovember 3, 2026"
+    out = agenda_file(doc(minutes, ZONE), RULES)
+    assert out.drafts == [] and out.no_reason == 1
+    # An agenda that has an item about the minutes is still an agenda.
+    assert len(agenda_file(doc(HEAD, ROUTINE + "\n" + ZONE), RULES).drafts) == 1
+
+
+def test_a_scanned_file_with_no_text_is_counted_as_unread_not_as_clean():
+    out = agenda_file(doc(""), RULES)
+    assert out.drafts == [] and out.no_text == 1 and out.no_reason == 0
+    assert out.counts()["no_text"] == 1
+
+
+def test_a_file_the_page_did_not_date_takes_the_date_at_its_own_head():
+    out = agenda_file(doc(HEAD, ZONE, meeting_date=None, date_from=None), RULES)
+    (draft,) = out.drafts
+    assert draft.event_date == dt.date(2026, 11, 17)
+    assert draft.extracted["date_from"] == "file_text"
+
+
+def test_a_file_with_no_date_anywhere_is_held_as_undated():
+    head = "CITY OF EXAMPLE\nNOTICE OF MEETING AND AGENDA"
+    out = agenda_file(doc(head, ZONE, meeting_date=None, date_from=None), RULES)
+    assert out.drafts == [] and out.undated == 1
+
+
+def test_a_government_outside_the_test_counties_gives_no_signal():
+    out = agenda_file(doc(HEAD, ZONE, government="Mentone town", counties=["Loving"]), RULES)
+    assert out.drafts == [] and out.out_of_scope == 1
+
+
+def test_a_county_government_is_named_as_it_is():
+    (draft,) = agenda_file(doc(HEAD, ZONE, government="Austin County"), RULES).drafts
+    assert draft.summary.startswith("An agenda that Austin County posted for a meeting of ")
+
+
+def test_the_list_of_links_on_a_page_is_not_read_for_signals():
+    listing = Doc(
+        "tx_agendas_own_sites", PAGE, WHEN, "0" * 64, ZONE, {"record": "agenda_page"}, b""
+    )
+    out = agenda_file(listing, RULES)
+    assert out.drafts == [] and out.records == 0
+
+
+def test_the_processor_is_registered_for_the_source():
+    assert PROCESSORS["tx_agendas_own_sites"] is agenda_file
+    assert len(process(doc(HEAD, ZONE), RULES).drafts) == 1
+
+
+def test_a_code_name_counts_only_where_the_agenda_speaks_of_economic_development():
+    """A real packet gave "Project Documentation" and "Project Per the schedule". A real agenda
+    gave a code name under its closed session on economic development negotiations."""
+    works = "6. Memorial Drive Signal Rebuilds Project Per the schedule, work began in October."
+    out = agenda_file(doc(HEAD, works + "\nProject Documentation: exhibits were provided."), RULES)
+    assert out.drafts == [] and out.no_reason == 1
+
+    closed = (
+        "11. Closed session under Section 551.087 to deliberate economic development "
+        "negotiations.\n i. Project Falcon"
+    )
+    (draft,) = agenda_file(doc(HEAD, closed), RULES).drafts
+    assert [r["text"] for r in draft.extracted["reasons"]] == ["Project Falcon"]
+    # The name is not a reason when a line break splits it or the words are far off.
+    assert (
+        agenda_file(doc(HEAD, "Economic development.\nRoad Project\nFalcon Lane"), RULES).drafts
+        == []
+    )

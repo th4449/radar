@@ -447,6 +447,9 @@ class Collector:
 
     source_id: ClassVar[str]
     max_urls: ClassVar[int] = 500  # a run that wants more than this has gone wrong
+    # A source that is many sites sets this. A refusal then closes that one site for the rest
+    # of the run and the other sites go on. The refusal is still final: nothing is retried.
+    refusal_closes_host_only: ClassVar[bool] = False
 
     def urls(self) -> Iterable[str]:
         raise NotImplementedError
@@ -463,6 +466,10 @@ class Collector:
         """What to store in place of the fetched file, or None to store the file itself."""
         return None
 
+    def facts(self, result: FetchResult) -> dict | None:
+        """More to record with a file that is stored as it is, such as the page it came from."""
+        return None
+
     def run(
         self,
         *,
@@ -477,6 +484,7 @@ class Collector:
         summary = RunSummary(source.id)
         run_id = sink.start_run(source, runner)
         failed_urls: list[str] = []
+        refused: dict[str, str] = {}  # host -> why, for a collector of many sites
         try:
             # What earlier runs stored: validators for conditional requests, and content keys.
             known = sink.known(source)
@@ -490,7 +498,7 @@ class Collector:
             asked: set[str] = set()
             while queue:
                 url = queue.popleft()
-                if url in asked:
+                if url in asked or urlsplit(url).netloc.lower() in refused:
                     continue
                 if len(asked) >= self.max_urls:
                     summary.errors += 1
@@ -500,6 +508,12 @@ class Collector:
                 try:
                     result = fetcher.get(url)
                 except (Blocked, RobotsDisallowed, NotPermitted) as exc:
+                    if self.refusal_closes_host_only and not isinstance(exc, NotPermitted):
+                        # One site of many said no. Leave it alone and read the others.
+                        refused[urlsplit(url).netloc.lower()] = str(exc)
+                        summary.errors += 1
+                        summary.error = str(exc)
+                        continue
                     # A refusal ends the run. A person decides what happens next.
                     summary.status = "blocked"
                     summary.error = str(exc)
@@ -531,6 +545,8 @@ class Collector:
                 if key is not None and known.get(url, {}).get("content_key") == key:
                     continue  # the page says what it said last time
                 extra = {"content_key": key} if key is not None else {}
+                if reduced is None:
+                    extra |= self.facts(result) or {}
                 if reduced is not None:
                     extra |= {**reduced.meta, **_original(result), "original_kept": False}
                     result = dataclasses.replace(
@@ -552,5 +568,7 @@ class Collector:
         finally:
             if failed_urls:
                 summary.detail["failed_urls"] = failed_urls
+            if refused:
+                summary.detail["refused_hosts"] = refused
             sink.finish_run(run_id, summary)
         return summary

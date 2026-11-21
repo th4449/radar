@@ -28,6 +28,7 @@ import httpx
 import psycopg
 
 from collectors.base import Collector, Fetcher, LocalArchive, NotPermitted, RunSummary
+from collectors.tx.agenda_pages import AgendaPages
 from collectors.tx.comptroller_data_centers import ComptrollerDataCenters
 from collectors.tx.ercot_large_load import ErcotLargeLoad
 from collectors.tx.ercot_rpg import ErcotRpg
@@ -44,6 +45,7 @@ REGISTRY: dict[str, type[Collector]] = {
         ErcotRpg,
         ErcotLargeLoad,
         LegistarAgendas,
+        AgendaPages,
         TceqAirPendingLegacy,
         TwdbWellReports,
     )

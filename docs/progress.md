@@ -2,6 +2,62 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 21, 2026 — M8: the second agenda collector, for governments' own sites
+
+The owner said to build next for the governments that post agenda files on their own sites. There is no vendor. Each site has its own robots file and terms, so each was read first.
+
+**Read first**
+
+- **76 governments** have a confirmed inventory row on their own site. The other 38 wait for a hand read.
+- **Robots files of 81 hosts,** one identified request each. **12 governments are closed:** the file bars the page or the files, answers 403, or could not be read.
+- **Each of the other 64 sites' own terms,** by five research passes that copied the sentences on automated access and reuse.
+  - 52 say nothing against it. 45 of those have no terms page at all.
+  - **8 bar robots in their terms of service.** They share one site builder's terms page. Closed.
+  - **4 limit reuse of their content:** Austin, Archer City, Live Oak and Keene. Held for the owner.
+- I checked the readers against the pages the collector later fetched. One policy-like page had been missed, on Cumby's site. I read it. It restricts nothing.
+- **One identified request to each of the 55 agenda pages. Two answered 403:** New Fairview and Taylor Lake Village. Both are closed and not asked again.
+- **The first run then closed six more:** their agenda links lead to a site builder's file host whose robots file bars the files.
+- **44 governments and 45 pages are read.** 18 are closed by a robots file, 8 by their own terms, 2 refused and 4 are held.
+
+**Built**
+
+- **`collectors/tx/agenda_pages.py`.** One request for each agenda page, then one for each agenda file dated from 21 days back to 60 ahead that is not stored yet, four a page at most.
+- **A link finder for pages laid out every which way.** It takes a link that says it is an agenda in its words, its file name, its table column or its row. It leaves minutes, recordings, quorum notices and packets that have a plain agenda beside them.
+- **A date reader that gives no date when it is not sure.** The page's words come before the file's name. A scanner's file name is never read. `1122026` is no date.
+- **The shared collector learned two things.** A source that is many sites can have one site refuse without ending the run: that site is closed for the run and named in the run log. And a file stored as it is can carry facts, such as the page it came from.
+- **A file is fetched only from the government's own site** or its site builder's file host.
+- **`agenda_file` in `pipeline/signals.py`.** A file that uses a term becomes one `agenda_keyword` signal. **The summary carries no file name and no link text.** One real file is named for a person. A scan with no text is counted as unread, not as clean.
+- Three results added to the site terms file, `bars_automated_access`, `robots_bar` and `refused`, and 76 rows.
+- The source is marked `personal_rows`. A workflow file, started by hand only. `docs/sources/tx_agendas_own_sites.md`.
+- 67 new tests. 849 pass.
+
+**Verified live**
+
+- **The link finder against the independent second read:** 44 of 53 pages give agenda files. On 38 the newest date matches. On five the finder found a newer agenda. One page could not be dated.
+- **A run of the collector,** capped at two files a page, nothing written to a database. 52 of 53 pages answered. **43 agenda files of 29 governments, 365 pages.**
+- **28 of the 43 files are scans with no text.** The radar read none of them. Sixteen governments gave only scans, Austin County among them.
+- **3 signals from the 15 files with text.** Red Lick's council agenda uses the words "data center". A Cameron agenda has a reinvestment zone study and a code name under economic development negotiations. The third is a drainage table.
+
+**Faults found and fixed**
+
+- **Code names.** A 91-page file gave "Project Documentation" as a code name. In a file, a code name now counts only where the agenda speaks of economic development negotiations.
+- **The email job's clock.** Three email tests failed off and on. The local database's clock runs 30 ms ahead of this machine's, and the job compared an alert's database timestamp with this machine's time. The job now takes its time from the database. The tests passed six times of six after.
+
+**Not verified**
+
+- **Nine pages list no file links** and are not read yet: their agendas are in the page, behind a script or on one page per meeting.
+- **Scanned agendas give no text.** The pipeline has no OCR. This is most of what small governments post.
+- Whether a date read from a file's name is always the meeting's.
+- A full run with no cap, a second day's run and a run from GitHub's servers.
+- Whether a site with no terms page has terms elsewhere.
+
+**For the owner**
+
+- **Austin, Archer City, Live Oak and Keene wait on your word.** Their terms limit reuse and say nothing on automated access.
+- Eight cities' own terms bar robots. Reading them by program would take each city's written consent.
+- **Scans need OCR to be read at all.** It can be done with free tools on our own machine. It is not in the plan, so I have not built it.
+- A run is slow by design: 44 sites, each asked at the pace its robots file sets.
+
 ## November 21, 2026 — M8: the first agenda collector, for Legistar
 
 The owner sent CivicPlus the request for written consent and said to go on with the build. Legistar was next.
