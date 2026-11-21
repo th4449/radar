@@ -151,7 +151,12 @@ def test_confidence_names_every_rule_and_a_direct_term_is_the_surest():
 
 def test_the_lists_that_name_people_are_marked():
     marked = {s.id for s in config.load_sources().sources if s.personal_rows}
-    assert marked == {"tx_tceq_air_pending_legacy", "tx_twdb_well_reports"}
+    # Two lists of applicants and owners, and meeting agendas, which name staff and applicants.
+    assert marked == {
+        "tx_tceq_air_pending_legacy",
+        "tx_twdb_well_reports",
+        "tx_agendas_legistar",
+    }
 
 
 def test_the_reference_list_of_texas_counties_does_not_change_the_scope():

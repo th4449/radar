@@ -243,10 +243,11 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
         "granicus": "restricted",
         "civicweb": "restricted",
         "swagit": "restricted",
-        "legistar": "candidate",
+        "legistar": "cleared",
         "cira_county_site": "candidate",
     }
-    assert "cleared" not in {t.status for t in terms.values()}
+    # Legistar was cleared on the owner's word, after its rules and each government's were read.
+    assert [name for name, t in terms.items() if t.status == "cleared"] == ["legistar"]
 
 
 def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date():
@@ -270,9 +271,12 @@ def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date(
 def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
     rows = inv.load_site_terms()
     hosts = [r["host"] for r in rows]
-    assert len(set(hosts)) == len(hosts) == 38
+    assert len(set(hosts)) == len(hosts) == 52  # 38 Agenda Center sites and 14 on Legistar
     governments = {b.government for b in inv.load_inventory()}
-    results = {"own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read"}
+    results = {
+        "own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read",
+        "reuse_needs_consent",
+    }  # fmt: skip
     for r in rows:
         assert r["government"] in governments, r["host"]
         assert r["result"] in results, r["host"]

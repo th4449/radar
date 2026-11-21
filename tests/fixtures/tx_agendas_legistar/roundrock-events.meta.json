@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_agendas_legistar",
+  "url": "https://webapi.legistar.com/v1/roundrock/events?$filter=EventDate+ge+datetime%272026-11-07%27&$orderby=EventDate",
+  "final_url": "https://webapi.legistar.com/v1/roundrock/events?$filter=EventDate+ge+datetime%272026-11-07%27&$orderby=EventDate",
+  "retrieved_at": "2026-11-21T20:10:29+00:00",
+  "sha256": "17ec2ca777641fdf1786d1d6b8aa73054e744705a646fd2ad9701cd6f3e7ecc1",
+  "bytes": 3704,
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text"
+}

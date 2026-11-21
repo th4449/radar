@@ -31,6 +31,7 @@ from collectors.base import Collector, Fetcher, LocalArchive, NotPermitted, RunS
 from collectors.tx.comptroller_data_centers import ComptrollerDataCenters
 from collectors.tx.ercot_large_load import ErcotLargeLoad
 from collectors.tx.ercot_rpg import ErcotRpg
+from collectors.tx.legistar import LegistarAgendas
 from collectors.tx.tceq_air_pending_legacy import TceqAirPendingLegacy
 from collectors.tx.twdb_well_reports import TwdbWellReports
 from pipeline.config import Source, load_sources
@@ -42,6 +43,7 @@ REGISTRY: dict[str, type[Collector]] = {
         ComptrollerDataCenters,
         ErcotRpg,
         ErcotLargeLoad,
+        LegistarAgendas,
         TceqAirPendingLegacy,
         TwdbWellReports,
     )

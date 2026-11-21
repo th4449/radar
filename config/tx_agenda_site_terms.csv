@@ -5,6 +5,8 @@
 # result   own_pages_silent     terms-like pages were read and none speaks of automated access
 #          links_vendor_terms   the site itself links the vendor's terms, which do
 #          no_terms_found       no terms-like page could be found or read
+#          reuse_needs_consent  the site's terms bar copying or reusing its content without the
+#                               government's written consent. Held out until the owner decides
 #          could_not_read       the site did not load for the reader
 host,government,platform,checked_on,result,pages_read,note
 www.athenstx.gov,Athens city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
@@ -45,3 +47,17 @@ www.wallertexas.gov,Waller city,civicplus_agendacenter,2026-11-21,no_terms_found
 www.webstertx.gov,Webster city,civicplus_agendacenter,2026-11-21,no_terms_found,1,"No terms, copyright or privacy page was found, or the pages linked were empty."
 www.westutx.gov,West University Place city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
 www.co.wise.tx.us,Wise County,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+sanantonio.legistar.com,San Antonio city,legistar,2026-11-21,own_pages_silent,2,A privacy policy and disclaimer. Nothing on automated access or reuse.
+carrolltontx.legistar.com,Carrollton city,legistar,2026-11-21,own_pages_silent,2,A disclaimer bars commercial use without the city's written permission. Nothing on automated access.
+coppell.legistar.com,Coppell city,legistar,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+cityofdallas.legistar.com,Dallas city,legistar,2026-11-21,own_pages_silent,2,A disclaimer bars commercial use without the city's written permission. Nothing on automated access.
+farmersbranch.legistar.com,Farmers Branch city,legistar,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. The privacy page says its content is public information that may be copied. Nothing on automated access.
+cityoflewisville.legistar.com,Lewisville city,legistar,2026-11-21,own_pages_silent,2,"The privacy policy bars copying site content and says public documents such as agendas may be copied and distributed, not modified. Nothing on automated access."
+uptexas.legistar.com,University Park city,legistar,2026-11-21,could_not_read,0,The city's site did not load for the reader.
+harriscountytx.legistar.com,Harris County,legistar,2026-11-21,own_pages_silent,2,A privacy page says its servers watch for attempts to upload or change information. Nothing on reading the site by program.
+cityofdeerpark.legistar.com,Deer Park city,legistar,2026-11-21,no_terms_found,1,"No terms, copyright or privacy page is linked from the home page."
+leaguecity.legistar.com,League City city,legistar,2026-11-21,reuse_needs_consent,2,"The city's terms bar reproducing, publishing or distributing site material without its prior written consent."
+fortworthgov.legistar.com,Fort Worth city,legistar,2026-11-21,reuse_needs_consent,3,The website policies bar copying or reproducing without the city's prior written consent. A separate open data policy favors automated access to data.
+lubbockcounty.legistar.com,Lubbock County,legistar,2026-11-21,reuse_needs_consent,2,"The county's terms limit downloads to personal, noncommercial use and bar reuse and derivative works without written permission."
+pflugerville.legistar.com,Pflugerville city,legistar,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. One linked terms page did not load. Nothing on automated access.
+roundrock.legistar.com,Round Rock city,legistar,2026-11-21,no_terms_found,1,"No terms, copyright or privacy page is linked from the home page."

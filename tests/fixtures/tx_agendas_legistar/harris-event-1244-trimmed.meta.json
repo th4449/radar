@@ -1,0 +1,18 @@
+{
+  "source_id": "tx_agendas_legistar",
+  "url": "https://webapi.legistar.com/v1/harriscountytx/events/1244?EventItems=1&AgendaNote=1",
+  "final_url": "https://webapi.legistar.com/v1/harriscountytx/events/1244?EventItems=1&AgendaNote=1",
+  "retrieved_at": "2026-11-21T20:05:00+00:00",
+  "sha256": "42d766af562ad2abb1546ecea86ba2b0db51c7df714d50a52465dedf6fea274e",
+  "bytes": 12300,
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text",
+  "trimmed": true,
+  "original_sha256": "47dee7664bb1d7dd51b6dcd595aef86fd8b67318b1b137891e95070460afa35a",
+  "original_bytes": 1993936,
+  "original_items": 1740,
+  "items_kept": 7,
+  "note": "The real answer holds 1,740 agenda items and names many people. This fixture keeps the meeting's own fields and seven items that name none. Movers, seconders and attachments are emptied."
+}

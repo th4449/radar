@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import json
 import posixpath
 import re
 from collections.abc import Callable, Iterable
@@ -35,7 +36,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-20.3"
+RULES_VERSION = "2026-11-21.2"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -554,10 +555,91 @@ Processor = Callable[[Doc, Rules], Outcome]
 
 # A source with no entry here is not read for signals. tx_ercot_large_load is context only:
 # totals by zone, no sites. tx_comptroller_data_centers is the list the rules consult.
+# --- meeting agendas from Legistar ---------------------------------------------------------------
+
+_PLACE_KIND = re.compile(r"\s+(city|town|village)$")
+
+
+def _body_name(government: str, body: str) -> str:
+    """ "Round Rock City Council", "Harris County Commissioners Court"."""
+    place = _PLACE_KIND.sub("", government)
+    return body if body.lower().startswith(place.lower()) else f"{place} {body}"
+
+
+def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
+    """One signal for each agenda item that uses a term the radar looks for.
+
+    An agenda names people: staff, appointees, applicants. So the summary never quotes an item.
+    It says which body, which meeting, which item and which words. The words around the match
+    are kept beside the signal for the reviewer, who opens the meeting's own page to read it.
+    """
+    out = Outcome()
+    if doc.meta.get("record") != "legistar_agenda":
+        return out  # the list of meetings holds nothing to read
+    agenda = json.loads(doc.body)
+    day = _iso_date(str(agenda.get("date") or ""))
+    counties = rules.counties["TX"]
+    named = [str(c) for c in agenda.get("counties") or []]
+    in_scope = [f for f in (counties.fips(name) for name in named) if f]
+    fips = in_scope[0] if in_scope else None
+    out.county_fips = fips
+    who = _body_name(str(agenda["government"]), str(agenda["body"]))
+    for item in agenda["items"]:
+        fields = {"title": item.get("title") or "", "note": item.get("note") or ""}
+        text = " ".join(v for v in fields.values() if v)
+        if not text:
+            continue
+        out.records += 1
+        reasons = rules.reasons(fields, None)
+        if not reasons:
+            out.no_reason += 1
+            continue
+        if day is None:
+            out.undated += 1
+            continue
+        if fips is None:
+            out.out_of_scope += 1
+            continue
+        number = (item.get("number") or "").rstrip(".") or f"in position {item.get('sequence')}"
+        file = f", file {item['file']}" if item.get("file") else ""
+        terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
+        hits = rules.keywords.find(text)
+        out.drafts.append(
+            Draft(
+                signal_type="agenda_keyword",
+                key=f"legistar:{agenda['client']}:{agenda['event_id']}:{item.get('id')}",
+                event_date=day,
+                summary=(
+                    f"The agenda of the {who} for {_long_date(day)} has an item that uses "
+                    f"the words {terms}: item {number}{file}."
+                ),
+                confidence=rules.how_sure(reasons),
+                county_fips=fips,
+                party=None,
+                party_kind=None,
+                extracted={
+                    "reasons": reasons,
+                    "reference": f"{who}, meeting of {_long_date(day)}, item {number}{file}",
+                    "page": agenda.get("page") or "",
+                    "body": who,
+                    "item": {
+                        "number": item.get("number") or "",
+                        "file": item.get("file") or "",
+                        "type": item.get("type") or "",
+                    },
+                    "snippets": _narrow_snippets(text, hits),
+                    "counties": named,
+                },
+            )
+        )
+    return out
+
+
 PROCESSORS: dict[str, Processor] = {
     "tx_tceq_air_pending_legacy": tceq_air_pending,
     "tx_twdb_well_reports": twdb_well_reports_extract,
     "tx_ercot_rpg": ercot_rpg_file,
+    "tx_agendas_legistar": legistar_agenda,
 }
 
 

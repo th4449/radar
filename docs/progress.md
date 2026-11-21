@@ -2,6 +2,48 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 21, 2026 — M8: the first agenda collector, for Legistar
+
+The owner sent CivicPlus the request for written consent and said to go on with the build. Legistar was next.
+
+**Read first**
+
+- **The Legistar Web API is published for programs.** Granicus' own pages say it gives public records over HTTPS. No terms of use or rate limit is stated.
+- **No robots file** on the API or on any of the 14 governments' Legistar hosts. **The hosts that hold the agenda PDFs bar every agent,** so the collector never fetches an agenda file.
+- **Each government's own terms.** Nine have nothing against it. Three ask for written consent to reuse their content: League City, Lubbock County and Fort Worth. University Park's site did not load. San Antonio has left Legistar.
+
+**Built**
+
+- **`collectors/tx/legistar.py`.** One request for a government's list of meetings, then one for each meeting whose agenda is new or changed. It keeps each item's number, file, type, title and note, and drops who moved and voted.
+- **The inventory decides who is read.** `collectable()` now needs three things: a confirmed row, a cleared platform and the government's own terms read with nothing against them. Legistar is cleared. Nine governments come through.
+- **`legistar_agenda` in `pipeline/signals.py`.** An agenda item that uses a term the radar looks for becomes one `agenda_keyword` signal. **The summary never quotes the item,** because an item can name a private person.
+- The source is marked `personal_rows`: an agenda's stored text is closed to reviewers and never sent to the model.
+- A workflow file, started by hand only. `docs/sources/tx_agendas_legistar.md`.
+- 37 new tests. 782 pass.
+
+**Verified live**
+
+- All 14 governments answered the API without a token.
+- **A run of the collector on the nine governments,** capped at five meetings each: 41 requests at one every five seconds, no errors. 32 meetings, 1,207 agenda items.
+- **7 signals from those 1,207 items.** One is a city council designating a reinvestment zone for a named company. One "data center" item is a county buying a service for its own computers.
+- A search of four governments' records found Harris County's commissioners court taking up data center development on October 15, 2026.
+
+**A fault found and fixed**
+
+- The first pass gave 15 signals. Eight read "Project" plus an ordinary word, such as "Project Funding", as a code name. Those words are now excluded.
+
+**Not verified**
+
+- Any limit on requests to the API. None is published.
+- A full run with no cap, and a run from GitHub's servers.
+- Whether an agenda signal ever joins a site. It carries a county and no company or point.
+
+**For the owner**
+
+- **League City, Lubbock County and Fort Worth wait on your word.** Their terms limit reuse of their content. None mentions automated access.
+- **Most agenda matches will be noise.** A reviewer tells a real item from a county's own computer purchase. The backtest should decide whether code words on agendas earn their keep.
+- The reviewer's "open the source" link for an agenda signal goes to the API's answer. The meeting's own page is stored with the signal and the screen should use it.
+
 ## November 21, 2026 — M8: the platforms' own rules stop the first collector
 
 The owner approved batches by platform. Before writing the first collector I read the platforms' terms and robots files, as the plan requires. **No collector is written.**

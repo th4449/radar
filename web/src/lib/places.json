@@ -659,6 +659,13 @@
       "use": "signal"
     },
     {
+      "name": "Meeting agendas of Texas governments that use Legistar",
+      "state": "TX",
+      "url": "https://webapi.legistar.com/",
+      "read": true,
+      "use": "signal"
+    },
+    {
       "name": "Michigan Public Service Commission dockets and orders",
       "state": "MI",
       "url": "https://mi-psc.my.site.com/s/",

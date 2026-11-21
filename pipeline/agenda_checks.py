@@ -64,6 +64,7 @@ from pipeline.agenda_inventory import (
     is_county_site,
     load_inventory,
     load_platform_terms,
+    load_site_terms,
     platform_of,
 )
 from pipeline.config import CONFIG_DIR
@@ -309,21 +310,37 @@ def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, 
     return "confirmed", f"Checked {check.checked_on}. Newest agenda {check.newest_agenda_date}."
 
 
+# What a government's own pages may say and still be read by a collector.
+SITE_ALLOWS = ("own_pages_silent", "no_terms_found")
+
+
+def site_allows(body: AgendaBody, sites: list[dict[str, str]]) -> bool:
+    """True when the government's own terms were read and nothing in them stands against it."""
+    for row in sites:
+        if row["government"] == body.government and row["platform"] == body.platform:
+            return row["result"] in SITE_ALLOWS
+    return False  # not read is not allowed
+
+
 def collectable(
     body: AgendaBody,
     checks: Checks,
     today: dt.date,
     platforms: dict[str, PlatformTerms] | None = None,
+    sites: list[dict[str, str]] | None = None,
 ) -> bool:
-    """True only when a collector may take this row. Two things must both hold.
+    """True only when a collector may take this row. Three things must all hold.
 
-    The row is right: an independent check confirmed it. And the platform may be read: its own
+    The row is right: an independent check confirmed it. The platform may be read: its own
     terms and robots rules were read, nothing in them stands against a collector, and the owner
-    said to go ahead. See config/tx_agenda_platforms.csv.
+    said to go ahead. And the government's own terms were read and say nothing against it.
+    See config/tx_agenda_platforms.csv and config/tx_agenda_site_terms.csv.
     """
     platforms = load_platform_terms() if platforms is None else platforms
     terms = platforms.get(body.platform)
     if terms is None or terms.status != "cleared":
+        return False
+    if not site_allows(body, load_site_terms() if sites is None else sites):
         return False
     return verdict(body, checks, today)[0] == "confirmed"
 

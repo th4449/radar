@@ -3,7 +3,7 @@
 - Milestone: M8
 - Registry: `config/tx_agenda_platforms.csv`
 - Read: November 21, 2026
-- Result: **no agenda collector may be written yet.** Six platforms restrict a collector by their vendor's terms or their robots file. Two are candidates. No platform is cleared.
+- Result: **six platforms restrict a collector** by their vendor's terms or their robots file. **Legistar is cleared** and has a collector. The county association sites are a candidate.
 
 The owner approved building the agenda collectors by platform. The first step for each is to read its terms and robots rules. This note is that reading. It changes the plan, because the largest vendor's terms stand against the radar's use.
 
@@ -17,7 +17,7 @@ The owner approved building the agenda collectors by platform. The first step fo
 | Swagit | Granicus | 7 | pages allowed, file host refuses | **Restricted** |
 | CivicWeb | Diligent | 6 | bars every agent | **Restricted by robots** |
 | Granicus | Granicus | 4 | bars all but three search engines | **Restricted by robots** |
-| Legistar | Granicus | 14 | none | Candidate |
+| Legistar | Granicus | 14 | none | **Cleared.** 9 governments are read. See [tx_agendas_legistar.md](tx_agendas_legistar.md) |
 | County association sites | Texas Association of Counties | 5 | none | Candidate |
 | Files on the government's own site | each government | 114 | not read | Not read |
 | Other outside platforms | various | 23 | not read | Not read |
@@ -68,7 +68,7 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 
 **Read:** Granicus' Terms of Use, https://granicus.com/trust-center/terms-of-use/, dated July 20, 2026, in full. It speaks of "this website", meaning granicus.com. It reserves copyright in the site's material and says nothing about automated access. It does not name Legistar, Swagit or customer sites.
 
-- **Legistar: candidate.** A customer's Legistar host has no robots file. Granicus publishes the Legistar Web API at https://webapi.legistar.com/ with a page of examples for getting started. That page says replies are limited to public items, asks callers to page and filter to reduce load, and says some customers require a token, which is each customer's policy. An interface published for programs is the right way in. Neither page states terms of use or a rate limit.
+- **Legistar: cleared on November 21, 2026,** on the owner's word to go on with the build. A customer's Legistar host has no robots file. Granicus publishes the Legistar Web API at https://webapi.legistar.com/ with a page of examples for getting started. That page says replies are limited to public items, asks callers to page and filter to reduce load, and says some customers require a token, which is each customer's policy. An interface published for programs is the right way in. Neither page states terms of use or a rate limit.
 - **Granicus pages: restricted.** The robots file on a customer's Granicus host names three search engines and bars every other agent from every path.
 - **Swagit: restricted.** A customer's Swagit pages have a default robots file that bars nothing. The agenda files sit on another host, which answers 403 for its robots file. The fetcher treats a robots file it cannot read as a refusal.
 
@@ -93,14 +93,14 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 
 **For the 100 governments on CivicPlus products**
 
-1. **Ask CivicPlus for written consent.** The terms name this path. A short request can say what the radar is, that it reads public agendas at one request every 10 seconds and that it trains no model.
+1. **Ask CivicPlus for written consent.** The terms name this path. **The owner sent the request on November 21, 2026. No answer yet.** Until one comes, the three CivicPlus platforms stay restricted. A short request can say what the radar is, that it reads public agendas at one request every 10 seconds and that it trains no model.
 2. **Ask the governments.** The terms say the right to a public record comes from the government under law. A government could send its agendas, or agree in writing to their collection. I have not checked what Texas law requires a government to provide or how.
 3. **Leave them to hand reading,** after counsel has answered the question above.
 4. **Leave them out.**
 
 **For the rest**
 
-5. **Legistar next.** 14 governments, among them Harris County, Lubbock County and the cities of Dallas, San Antonio, Austin and Fort Worth. First each one's own terms are read. Then a collector uses the published API.
+5. **Legistar: done.** Each of its 14 governments' own terms was read and the collector uses the published API. Nine governments are read, Harris County and Dallas among them. Five are held out. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
 6. **Then the five county association sites and the 114 own-site governments,** each after its own terms and robots file are read.
 
 Nothing above is done. Each needs the owner's word.

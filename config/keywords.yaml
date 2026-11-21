@@ -87,3 +87,32 @@ project_code_name:
     - Corp
     - Corporation
     - Company
+    # Seen in real meeting agendas, where "Project" is followed by an ordinary word.
+    - Funding
+    - Fund
+    - Funds
+    - Related
+    - Group
+    - Updates
+    - Community
+    - Agreement
+    - Plan
+    - Plans
+    - Budget
+    - Report
+    - Reports
+    - List
+    - Limits
+    - Design
+    - Engineering
+    - Construction
+    - Completion
+    - Closeout
+    - Delivery
+    - Coordinator
+    - Director
+    - Engineer
+    - Committee
+    - Board
+    - Fees
+    - Total

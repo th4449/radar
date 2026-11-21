@@ -70,6 +70,13 @@ def platforms(**status: str) -> dict[str, inv.PlatformTerms]:
     }
 
 
+def sites(result: str = "own_pages_silent") -> list[dict[str, str]]:
+    """The made-up city's own terms, read, on every platform."""
+    return [
+        {"government": "Example city", "platform": name, "result": result} for name in inv.FOUND
+    ]
+
+
 def earned(row: inv.AgendaBody, *checks: ac.Check, today: dt.date = TODAY) -> str:
     return ac.verdict(row, ac.Checks(list(checks)), today)[0]
 
@@ -79,7 +86,7 @@ def earned(row: inv.AgendaBody, *checks: ac.Check, today: dt.date = TODAY) -> st
 
 def test_a_row_is_confirmed_when_a_check_saw_the_same_platform_body_and_a_recent_agenda():
     assert earned(body(), check()) == "confirmed"
-    assert ac.collectable(body(), ac.Checks([check()]), TODAY, platforms())
+    assert ac.collectable(body(), ac.Checks([check()]), TODAY, platforms(), sites())
 
 
 def test_a_confirmed_row_is_still_not_collected_from_a_platform_that_is_not_cleared():
@@ -87,13 +94,13 @@ def test_a_confirmed_row_is_still_not_collected_from_a_platform_that_is_not_clea
     confirmed = ac.Checks([check()])
     for status in ("restricted", "candidate", "not_read"):
         barred = platforms(civicplus_agendacenter=status)
-        assert not ac.collectable(body(), confirmed, TODAY, barred), status
-    assert not ac.collectable(body(), confirmed, TODAY, {})
+        assert not ac.collectable(body(), confirmed, TODAY, barred, sites()), status
+    assert not ac.collectable(body(), confirmed, TODAY, {}, sites())
 
 
 def test_a_row_nobody_checked_is_not_trusted():
     assert earned(body()) == "unchecked"
-    assert not ac.collectable(body(), ac.Checks([]), TODAY, platforms())
+    assert not ac.collectable(body(), ac.Checks([]), TODAY, platforms(), sites())
     # A check of another page of the same government does not count.
     other = check(page="https://www.example-tx.gov/meetings")
     assert earned(body(), other) == "unchecked"
@@ -380,20 +387,37 @@ def test_the_hand_read_list_has_every_unsettled_row_and_courts_first():
     assert all("commissioners_court" not in line for line in lines[1 + first_other :])
 
 
+def test_a_governments_own_terms_can_keep_a_confirmed_row_out():
+    """Right about the page, on a cleared platform, and still not collected."""
+    confirmed = ac.Checks([check()])
+    assert ac.collectable(body(), confirmed, TODAY, platforms(), sites("no_terms_found"))
+    for result in ("reuse_needs_consent", "links_vendor_terms", "could_not_read"):
+        assert not ac.collectable(body(), confirmed, TODAY, platforms(), sites(result)), result
+    # A government whose terms nobody read is not collected either.
+    assert not ac.collectable(body(), confirmed, TODAY, platforms(), [])
+
+
 def test_no_collector_may_take_a_row_that_is_not_confirmed():
-    """The gate every agenda collector goes through, with every platform cleared for the test."""
+    """The gate every agenda collector goes through, with platforms and sites cleared."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
     cleared = platforms()
+    allowed = [
+        {"government": b.government, "platform": b.platform, "result": "own_pages_silent"}
+        for b in bodies
+    ]
     for b in bodies:
         name, _ = ac.verdict(b, checks, TODAY)
-        assert ac.collectable(b, checks, TODAY, cleared) == (name == "confirmed")
+        assert ac.collectable(b, checks, TODAY, cleared, allowed) == (name == "confirmed")
         if name == "confirmed":
             assert b.agenda_url and b.platform in inv.FOUND
 
 
-def test_nothing_is_collectable_today():
-    """No platform is cleared, so the gate lets nothing through. This is the state on file."""
+def test_what_is_collectable_today_is_legistar_and_nothing_else():
+    """The state on file: one platform cleared, and nine of its governments."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
-    assert not [b.body for b in bodies if ac.collectable(b, checks, TODAY)]
+    through = [b for b in bodies if ac.collectable(b, checks, TODAY)]
+    assert {b.platform for b in through} == {"legistar"}
+    assert len({b.government for b in through}) == 9
+    assert "League City city" not in {b.government for b in through}

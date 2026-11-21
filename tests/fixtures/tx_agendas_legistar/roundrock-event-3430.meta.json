@@ -1,0 +1,12 @@
+{
+  "source_id": "tx_agendas_legistar",
+  "url": "https://webapi.legistar.com/v1/roundrock/events/3430?EventItems=1&AgendaNote=1",
+  "final_url": "https://webapi.legistar.com/v1/roundrock/events/3430?EventItems=1&AgendaNote=1",
+  "retrieved_at": "2026-11-21T20:10:35+00:00",
+  "sha256": "ad4e126511edf8a671b62b39c989c3621966d5f526db4de4c5706b618a4d4de9",
+  "bytes": 35592,
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text"
+}
