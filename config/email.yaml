@@ -6,9 +6,12 @@
 # Who the emails are from, as the footer of every email states it.
 organization: Dekleptocracy Alliance
 
-# Every email must carry the organization's postal address (section 7). Not set yet.
-# The job can never send while this is empty.
-postal_address: null
+# Every email must carry the organization's postal address (section 7). Given by the owner on
+# November 20, 2026. The job can never send while this is empty.
+postal_address: |-
+  2850 S Quincy St
+  PO Box 6580
+  Arlington VA 22206-9998
 
 # The public site's address, with no slash at the end. Links in emails are built from it.
 # Not set yet: the site is not hosted.

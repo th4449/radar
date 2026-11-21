@@ -22,6 +22,8 @@ SETTINGS = load_email().model_copy(
     }
 )
 HOOD, HILL, WASHTENAW = "48221", "48217", "26161"
+# The settings file with nothing filled in by the owner.
+BLANK = load_email().model_copy(update={"site_url": None, "postal_address": None})
 
 
 def scalar(conn: psycopg.Connection, sql: str, params: list | None = None):
@@ -229,7 +231,7 @@ def test_a_dry_run_never_shows_an_address_or_a_working_unsubscribe_link(db):
 
 def test_a_dry_run_says_what_the_owner_has_not_set(db):
     World(db)
-    report = alert_email.run(db, kind="each", settings=load_email())
+    report = alert_email.run(db, kind="each", settings=BLANK)
     assert report.not_set == ["postal_address", "site_url"]
     assert "postal_address" in alert_email.describe(report)
 
@@ -252,8 +254,15 @@ def test_the_run_is_logged_with_counts(db):
 def test_real_sending_is_refused_until_the_address_and_site_are_set(db):
     World(db)
     with pytest.raises(alert_email.NotReady, match="postal_address"):
-        alert_email.run(db, kind="weekly", sender=Outbox(), settings=load_email())
+        alert_email.run(db, kind="weekly", sender=Outbox(), settings=BLANK)
     assert scalar(db, "select count(*) from public.email_runs") == 0
+
+
+def test_real_sending_is_still_refused_with_the_settings_file_as_it_stands(db):
+    """The postal address is set. The site's address is not, so nothing can be sent."""
+    World(db)
+    with pytest.raises(alert_email.NotReady, match="site_url"):
+        alert_email.run(db, kind="weekly", sender=Outbox(), settings=load_email())
 
 
 def test_a_sent_alert_is_not_sent_again(db):

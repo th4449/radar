@@ -17,7 +17,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 - **Each signal now carries its record's own number,** such as a well report's tracking number, and the public view passes it on. `RULES_VERSION` is 2026-11-20.3.
 - The methodology page lists the sources the radar reads and the ones it does not, taken from `config/` at build time. A test fails if that copy is out of date.
 - `scripts/dev_seed.py --publish-sample` publishes two alerts marked as samples on a local database.
-- 62 new Python tests and 8 new front-end tests. 675 Python tests and 12 front-end tests pass locally.
+- 64 new Python tests and 8 new front-end tests. 677 Python tests and 12 front-end tests pass locally.
 
 **Verified in a browser, on the local stack**
 
@@ -45,7 +45,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **For the owner**
 
-- **The organization's postal address and the site's address are not set** in `config/email.yaml`. The job cannot send without both. Tell me the address and I will add it.
+- **The owner gave the postal address the same day and it is in `config/email.yaml`.** Every email closes with it. The site's address is still not set, so the job still cannot send.
 - **The methodology page is my wording.** It states what the system does today, including that the scoring numbers are placeholders and that no Michigan source is read. Read it before launch.
 - **Michigan is offered on the signup form, and no Michigan source is read yet.** The form says so next to the tick box.
 - **Double opt in rests on the sign-in service's emailed link.** One email both signs a person in and confirms them. On a hosted project its wording must fit both.

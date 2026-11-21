@@ -138,5 +138,5 @@ Each of these is the owner's decision under section 11 of the build plan.
 - Hosting for the built site, and taking `noindex` out of `src/layouts/Base.astro`. Until
   then every page asks search engines to stay away.
 - The reviewer terms, adopted or replaced. The methodology page, read and approved.
-- The organization's postal address and the site's address in `config/email.yaml`. The email
-  job only does dry runs and cannot send without both.
+- The site's address in `config/email.yaml`. The organization's postal address is there. The
+  email job only does dry runs and cannot send without both.

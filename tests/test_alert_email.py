@@ -30,10 +30,24 @@ SALINE = alert_email.AlertItem(
 )
 
 
+# The settings file with nothing filled in by the owner.
+BLANK = load_email().model_copy(update={"site_url": None, "postal_address": None})
+
+
 def test_the_settings_file_loads_and_sending_is_not_ready():
     settings = load_email()
-    assert settings.missing() == ["postal_address", "site_url"]
+    # The postal address is set. The site has no address until it is hosted.
+    assert settings.postal_address.splitlines()[-1] == "Arlington VA 22206-9998"
+    assert settings.missing() == ["site_url"]
+    assert BLANK.missing() == ["postal_address", "site_url"]
     assert settings.batch_size <= settings.daily_limit
+
+
+def test_the_postal_address_closes_every_email_as_the_owner_gave_it():
+    _, text = alert_email.render_each(GRANBURY, load_email(), PLACES, "t")
+    assert text.endswith(
+        "Dekleptocracy Alliance\n2850 S Quincy St\nPO Box 6580\nArlington VA 22206-9998"
+    )
 
 
 def test_a_site_address_must_be_a_web_address_with_no_slash_at_the_end():
@@ -101,7 +115,7 @@ def test_a_digest_of_one_alert_reads_as_one():
 
 
 def test_an_email_rendered_before_the_owner_sets_the_address_says_so():
-    _, text = alert_email.render_each(GRANBURY, load_email(), PLACES, "t")
+    _, text = alert_email.render_each(GRANBURY, BLANK, PLACES, "t")
     assert "Postal address [not set]" in text
     assert "[not set]/alert/?id=12" in text
 
