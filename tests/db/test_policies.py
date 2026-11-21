@@ -36,6 +36,9 @@ TABLES = [
     "collector_runs",
     "processing_runs",
     "model_usage",
+    "corrections",
+    "alert_sends",
+    "email_runs",
 ]
 
 

@@ -106,11 +106,14 @@ def refused(conn: psycopg.Connection, sql: str, params: list | None = None) -> b
 # --- seed data, inserted as the database owner --------------------------------------------------
 
 
-def make_user(conn: psycopg.Connection, label: str = "user") -> uuid.UUID:
+def make_user(conn: psycopg.Connection, label: str = "user", verified: bool = False) -> uuid.UUID:
+    """An account. `verified` is what the sign-in service records once the person has opened
+    the link it emailed to that address."""
     uid = uuid.uuid4()
     conn.execute(
-        "insert into auth.users (id, email) values (%s, %s)",
-        [uid, f"{label}-{uid.hex[:8]}@example.org"],
+        """insert into auth.users (id, email, email_confirmed_at)
+           values (%s, %s, case when %s then now() end)""",
+        [uid, f"{label}-{uid.hex[:8]}@example.org", verified],
     )
     return uid
 
