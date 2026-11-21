@@ -328,7 +328,9 @@ def run(
 ) -> Report:
     """One run of the email job. With no sender it is a dry run."""
     settings = settings or load_email()
-    as_of = as_of or dt.datetime.now(dt.UTC)
+    # The database stamps an alert when it is published, so "now" is the database's clock. This
+    # machine's clock can run a little behind it, and an alert just published would be missed.
+    as_of = as_of or conn.execute("select clock_timestamp()").fetchone()[0]
     dry_run = sender is None
     report = Report(kind=kind, dry_run=dry_run, as_of=as_of.isoformat())
     report.not_set = settings.missing()

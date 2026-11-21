@@ -94,9 +94,13 @@ class World:
             )
         return user
 
+    def now(self) -> dt.datetime:
+        """The database's clock, which stamps the alerts. This machine's can differ a little."""
+        return self.conn.execute("select clock_timestamp()").fetchone()[0]
+
     def due(self, kind: str, **more) -> list[alert_email.Message]:
         return alert_email.due_messages(
-            self.conn, kind=kind, as_of=dt.datetime.now(dt.UTC), settings=SETTINGS, **more
+            self.conn, kind=kind, as_of=self.now(), settings=SETTINGS, **more
         )
 
 
