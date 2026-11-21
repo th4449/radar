@@ -381,6 +381,8 @@ def archive(
         "title": extracted.title,
         "needs_ocr": extracted.needs_ocr,
         **({"members": list(extracted.members)} if extracted.members else {}),
+        # Text read from a scan by a machine is marked as such, with how sure the machine was.
+        **({"ocr": extracted.ocr} if extracted.ocr else {}),
         **(extra_meta or {}),
     }
     return ArchivedDocument(

@@ -218,3 +218,23 @@ def make_portfolio(cover: str, files: dict[str, bytes]) -> bytes:
     document.save(out)
     document.close()
     return out.getvalue()
+
+
+def make_scan(pages: list[str]) -> bytes:
+    """A PDF of pictures of typed pages, with no text in the file, as a scanner makes one.
+
+    Each string is one page. Lines are split on newlines. An empty string is a blank page.
+    """
+    from PIL import Image, ImageDraw, ImageFont
+
+    font = ImageFont.load_default(size=44)
+    images = []
+    for text in pages:
+        image = Image.new("L", (2550, 3300), 255)  # a letter page at 300 dots an inch
+        draw = ImageDraw.Draw(image)
+        for number, line in enumerate(text.splitlines()):
+            draw.text((240, 260 + 76 * number), line, fill=0, font=font)
+        images.append(image)
+    out = io.BytesIO()
+    images[0].save(out, format="PDF", resolution=300, save_all=True, append_images=images[1:])
+    return out.getvalue()

@@ -112,7 +112,8 @@ Left alone: minutes, recordings, handouts, presentations, action summaries, quor
 - The pages the terms are on and the words around each match are kept for the reviewer, who opens the government's agenda page.
 - A file whose head says "minutes" and not "agenda" is not called an agenda.
 - **A code name such as "Project Falcon" counts only where the agenda speaks of economic development negotiations.** A long file calls every road job "Project" something.
-- **A scan with no text is counted as unread,** not as clean. Nobody has read it.
+- **A scan is read by character recognition** with Tesseract, on our own machine. A signal made from a scan says so in its summary, and the engine and its score are kept with it. See [tesseract.md](../services/tesseract.md).
+- A scan that still gives no text is counted as unread, not as clean. Nobody has read it.
 - A file the page did not date takes the date written at its own head. With none there, it is held as undated.
 
 ## Verified live
@@ -129,7 +130,8 @@ On November 21, 2026:
   - 52 of 53 pages answered. Annetta South's page failed once. It had answered earlier the same day.
   - **Six sites' files were refused** by their file host's robots file. Those six are now closed.
   - **43 agenda files of 29 governments were stored:** 41 PDF and 2 Word, 365 pages in all.
-- **28 of the 43 files are scans with no text.** A second PDF reader found none either. Sixteen governments gave only scans, Austin County among them. The radar read none of those 28.
+- **28 of the 43 files are scans with no text.** A second PDF reader found none either. Sixteen governments gave only scans, Austin County among them. The first pass read none of those 28.
+- **OCR was then built and read all 28.** It added two signals: Merkel's council agenda for November 17, 2026 has two items on a tax increment reinvestment zone, and a 125-page packet uses the words "development agreement".
 - **The signal step on the 15 files with text: 3 signals.**
   - Red Lick's council agenda for November 3, 2026 uses the words "data center".
   - A Cameron agenda for November 17, 2026 has a "reinvestment zone" study and a code name under its closed session on economic development negotiations.
@@ -140,7 +142,7 @@ On November 21, 2026:
 
 - **Whether a government's site rules bind a visitor who never sees them,** and whether a site with no terms page has terms elsewhere. 45 sites show none.
 - **The nine pages that list no file links.** Their agendas are in the page itself, behind a script, or on one page per meeting: San Felipe, Caney City, Hooks, Cumby, China Grove, Teague, Jacinto City, Kirby and Lakeside City. The collector reads none of them yet.
-- **Scanned agendas: 28 of 43 files in the first run.** The pipeline has no OCR. A scan gives no text and no signal, and the run log counts it as unread.
+- **How well OCR reads real scans, as a number.** Two pages were checked by eye. Tables come out jumbled. See [tesseract.md](../services/tesseract.md).
 - Grey Forest's file host. Its site is built like the six the first run closed, and it had no recent agenda to ask for. A run will stop at its robots file if that bars the files.
 - Old-format .doc files, which Red Lick posts.
 - Whether the meeting date read from a file's name is always the meeting's. A name can carry the day the file was posted.
@@ -158,5 +160,5 @@ On November 21, 2026:
   - **Keene.** Its terms allow downloading for personal, educational or non-commercial use and ask written permission for any other use.
 - **Eight governments' own terms bar robots.** Reading their agendas by program would take each city's written consent.
 - **Two sites refused the request.** New Fairview and Taylor Lake Village stay closed unless they say otherwise.
-- **Most small governments post scans.** Reading them takes OCR, which the plan does not have. Free tools exist and run on our own machine. I have not built it. Austin County's commissioners court is among the scans.
+- **Most small governments post scans.** They are now read by OCR on our own machine. A signal from a scan is marked as a machine's reading. Austin County's commissioners court is among the scans.
 - Nothing runs on a schedule. The workflow is started by hand.

@@ -3,8 +3,11 @@
 The kind of a document is decided from its first bytes, not from the Content-Type header,
 because servers often label PDFs and HTML wrongly.
 
-Scanned PDFs have no text layer. They come back with needs_ocr set and empty text. Character
-recognition is milestone M8 work.
+A scanned PDF has no text layer. Where Tesseract is installed its pages are read by character
+recognition, on this machine, and the result says so: `ocr` holds the engine, how many pages
+it read and how sure it was. See pipeline/ocr.py. Where Tesseract is not installed, or it finds
+no words, the file comes back with needs_ocr set and empty text. A file embedded in a PDF or
+held in a zip is not read this way.
 
 A slide deck (.pptx) gives the text of each slide in order, then that slide's speaker notes.
 Text inside a picture or an embedded chart object is not read. A deck with slides and no text
@@ -35,6 +38,8 @@ import pypdfium2 as pdfium
 from defusedxml import DefusedXmlException
 from defusedxml.ElementTree import fromstring as parse_xml
 from selectolax.lexbor import LexborHTMLParser
+
+from pipeline import ocr
 
 Kind = Literal["html", "pdf", "text", "pptx", "docx", "xlsx", "zip", "unknown"]
 
@@ -70,6 +75,8 @@ class Extracted:
     needs_ocr: bool = False
     # For a zip file: one entry per file inside, read or not.
     members: tuple[dict, ...] = ()
+    # Set when the text was read from a scan by character recognition. See pipeline/ocr.py.
+    ocr: dict | None = None
 
 
 def _zip_kind(body: bytes) -> Kind:
@@ -193,10 +200,24 @@ def _pdf(body: bytes, inside: bool = False) -> Extracted:
         if inner.text:
             parts.append(f"File: {name}\n{inner.text}")
     text = "\n\n".join(parts)
+    read = _scan(body) if pages and not text else None
+    if read is not None:
+        text = "\n\n".join(_tidy(page) for page in read.pages if page.strip())
     return Extracted(
         "pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text,
-        members=tuple(members),
+        members=tuple(members), ocr=read.facts() if read is not None and text else None,
     )  # fmt: skip
+
+
+def _scan(body: bytes) -> ocr.OcrResult | None:
+    """A scan's pages as Tesseract reads them. None where it is not installed or cannot run:
+    the file is then stored unread and marked as needing it."""
+    if not ocr.available():
+        return None
+    try:
+        return ocr.read_pdf(body)
+    except ocr.OcrFailed:
+        return None
 
 
 # --- Office files and zip files -----------------------------------------------------------------

@@ -2,6 +2,39 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 21, 2026 — M8: scanned agendas are read by OCR
+
+The first own-sites run stored 43 agenda files. 28 were scans with no text, and the radar read none of them. The owner said to build OCR.
+
+**Checked first**
+
+- **Tesseract** is free, under the Apache 2.0 license, and so is its English language data. It runs on our own machine. Nothing is sent to any service.
+- **I measured it before building around it,** on the 28 real scans. All 28 gave text, at under a second a page.
+
+**Built**
+
+- **`pipeline/ocr.py`.** A PDF with no text at all is drawn page by page at 300 dots an inch and read by Tesseract. At most 150 pages of one file.
+- **Text a machine read is marked as such.** The stored document carries the engine, the pages read and Tesseract's score. A signal made from it says in its summary: "The file is a scan, read by character recognition."
+- A PDF with its own text never goes to Tesseract.
+- **Without Tesseract nothing fails.** A scan is stored unread and counted as unread, as before.
+- CI and the collect workflow install Tesseract. CI fails if the OCR tests are skipped. The collect workflow's time limit went from 30 to 90 minutes.
+- Pillow is now named as a dependency. It was already installed by another package.
+- `docs/services/tesseract.md`. 12 new tests. 861 pass.
+
+**Verified, on files kept on this machine**
+
+- **All 43 files of the first run now give text.** 28 by OCR.
+- **5 signals, up from 3.** The two new ones come from scans. Merkel's council agenda for November 17, 2026 has two items on a tax increment reinvestment zone. A 125-page packet uses the words "development agreement".
+- **I checked Merkel's page against its picture by eye.** The two items are there as read.
+- **OCR against the truth, on the 13 files that have their own text:** 9,762 of 9,771 words came out the same, and both keyword matches were found. This is the best case: a clean page, not scanned paper.
+
+**Not verified**
+
+- **How well it reads real scans, as a number.** There is no typed copy to check against. Two pages were checked by eye.
+- **Tables come out jumbled.** Sentences read correctly.
+- Sideways pages, handwriting, and a file that is part text and part scan. Only a file with no text at all is read by OCR.
+- The Tesseract version on GitHub's runners. CI will show it.
+
 ## November 21, 2026 — M8: the second agenda collector, for governments' own sites
 
 The owner said to build next for the governments that post agenda files on their own sites. There is no vendor. Each site has its own robots file and terms, so each was read first.

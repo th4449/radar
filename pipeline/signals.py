@@ -18,6 +18,7 @@ Nothing in this module touches the database or the network.
 
 from __future__ import annotations
 
+import dataclasses
 import datetime as dt
 import hashlib
 import json
@@ -37,7 +38,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-21.3"
+RULES_VERSION = "2026-11-21.4"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -755,8 +756,32 @@ PROCESSORS: dict[str, Processor] = {
 }
 
 
+SCAN_NOTE = "The file is a scan, read by character recognition."
+
+
+def _mark_scan(draft: Draft, read: dict) -> Draft:
+    """A signal whose words a machine read from a picture says so, to the public and to the
+    reviewer. The reviewer opens the scan itself."""
+    draft.extracted["text_from"] = "ocr"
+    draft.extracted["ocr"] = {
+        key: read.get(key)
+        for key in (
+            "engine",
+            "confidence",
+            "doubtful_words",
+            "words",
+            "pages_read",
+            "pages_in_file",
+        )
+    }
+    return dataclasses.replace(draft, summary=f"{draft.summary} {SCAN_NOTE}")
+
+
 def process(doc: Doc, rules: Rules) -> Outcome:
     outcome = PROCESSORS[doc.source_id](doc, rules)
+    read = doc.meta.get("ocr")
+    if isinstance(read, dict):
+        outcome.drafts = [_mark_scan(draft, read) for draft in outcome.drafts]
     for draft in outcome.drafts:
         if draft.signal_type not in rules.signal_types:
             raise ValueError(f"{draft.signal_type} is not a signal type in config/scoring.yaml")

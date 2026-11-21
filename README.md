@@ -24,6 +24,8 @@ supabase db start
 uv run pytest
 ```
 
+Scanned PDFs are read with [Tesseract](https://github.com/tesseract-ocr/tesseract): `brew install tesseract` on a Mac, `apt-get install tesseract-ocr` on Linux. The tests that need it are skipped when it is not installed, and CI fails if they are skipped.
+
 `supabase db start` runs a local Postgres with the same roles the hosted database uses. The policy tests in `tests/db` need it. They are skipped with a clear message when it is not running, and CI fails if they are skipped.
 
 ## Live requests

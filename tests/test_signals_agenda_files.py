@@ -173,3 +173,26 @@ def test_a_code_name_counts_only_where_the_agenda_speaks_of_economic_development
         agenda_file(doc(HEAD, "Economic development.\nRoad Project\nFalcon Lane"), RULES).drafts
         == []
     )
+
+
+def test_a_signal_from_a_scan_says_a_machine_read_it():
+    read = {
+        "engine": "tesseract 5.5.4", "dpi": 300, "pages_read": 2, "pages_in_file": 2,
+        "words": 310, "confidence": 94.2, "doubtful_words": 6,
+    }  # fmt: skip
+    (draft,) = process(doc(HEAD, ZONE, ocr=read), RULES).drafts
+    assert draft.summary == (
+        "An agenda that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"reinvestment zone". The file is a scan, read by character recognition.'
+    )
+    assert draft.extracted["text_from"] == "ocr"
+    assert draft.extracted["ocr"] == {
+        "engine": "tesseract 5.5.4", "confidence": 94.2, "doubtful_words": 6, "words": 310,
+        "pages_read": 2, "pages_in_file": 2,
+    }  # fmt: skip
+    # A file with its own text says nothing of the kind.
+    (plain,) = process(doc(HEAD, ZONE), RULES).drafts
+    assert "scan" not in plain.summary and "text_from" not in plain.extracted
+    # The same fact is the same signal, read by machine or not.
+    source = "tx_agendas_own_sites"
+    assert draft.fingerprint(source) == plain.fingerprint(source)

@@ -36,6 +36,13 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked
 
+      # Tesseract reads scanned PDFs. It is a program, not a Python package. Apache 2.0.
+      - name: Install Tesseract
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-eng
+          tesseract --version
+
       - name: Lint
         run: |
           uv run ruff check .
@@ -52,6 +59,8 @@ jobs:
         env:
           # Policy tests must run in CI. A skipped database test is a failure here.
           RADAR_REQUIRE_DB: "1"
+          # The same for the tests that read a scan with Tesseract.
+          RADAR_REQUIRE_OCR: "1"
         run: uv run pytest -ra
 
   web:
