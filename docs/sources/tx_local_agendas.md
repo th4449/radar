@@ -3,8 +3,9 @@
 - Source id: `tx_local_agendas`
 - Milestone: M8
 - Inventory: `config/tx_agenda_inventory.csv`, 607 bodies of 334 governments
+- Checks: `config/tx_agenda_checks.csv`, 410 independent reads. Rules: `pipeline/agenda_checks.py`
 - Rules and loader: `pipeline/agenda_inventory.py`
-- Researched: November 20, 2026
+- Researched: November 20, 2026. Checked a second time: November 21, 2026
 - Result: **inventory done. No collector is written and no platform's terms have been read yet.** Every agenda source stays manual until its terms and robots rules are read.
 
 ## What the inventory is
@@ -40,62 +41,114 @@ The results were then merged under one rule: **a row may claim only what its own
 
 | Platform | Bodies | Governments | Counties |
 |---|---:|---:|---:|
-| Not determined | 203 | 60 | 24 |
-| Files on the government's own site | 134 | 99 | 25 |
+| Not determined | 183 | 39 | 21 |
+| Files on the government's own site | 149 | 114 | 25 |
 | CivicPlus Agenda Center | 86 | 51 | 16 |
-| CivicClerk | 63 | 35 | 16 |
+| CivicClerk | 64 | 36 | 16 |
+| Other outside platform | 28 | 23 | 16 |
 | Legistar | 27 | 14 | 8 |
 | No website | 23 | 22 | 14 |
-| Other outside platform | 23 | 18 | 14 |
-| Municode Meetings | 22 | 13 | 11 |
+| Municode Meetings | 21 | 13 | 11 |
 | Swagit | 9 | 7 | 3 |
 | CivicWeb | 7 | 6 | 6 |
 | County association site | 5 | 5 | 5 |
 | Granicus | 5 | 4 | 4 |
 
-"Governments" counts the commissioners court or city council row. "Other" is HeyGov, TownCloud, Google Drive folders, Diligent Community, BoardBook, Laserfiche, Documents On Demand, Dropbox and ezTask.
+"Governments" counts the commissioners court or city council row. "Other" is HeyGov, TownCloud, Google Drive folders, Diligent Community, BoardBook, Laserfiche, Documents On Demand, Dropbox, Municipal Impact and ezTask.
 
-- **Four platforms hold 113 of the 334 governments** and 198 of the 607 bodies: CivicPlus Agenda Center, CivicClerk, Legistar and Municode Meetings.
+- **Four platforms hold 114 of the 334 governments:** CivicPlus Agenda Center, CivicClerk, Legistar and Municode Meetings.
 - **The 30 commissioners courts:** CivicPlus Agenda Center 10, county association site 5, CivicClerk 3, other platforms 3, Legistar 2, own site 2, CivicWeb 1, Granicus 1, not determined 3 (Callahan, Hopkins, San Saba).
-- **99 governments post files on their own sites.** Each site is laid out its own way.
+- **114 governments post files on their own sites.** Each site is laid out its own way.
 - **22 governments have no website.** These are small towns. Some have a Facebook page only.
 - **The five large counties are not the hard part.** Dallas has 22 of 32 governments on the four platforms and Harris 18 of 35. Nine rural counties have none: Hill, Austin, Archer, Hood, Falls, Callahan, Carson, Hopkins and San Saba.
 - **Several cities run two systems at once,** an older Agenda Center and a newer CivicClerk portal. The notes on those rows name both.
 
-## Checked by hand
+## How accuracy is kept
 
-I opened 13 rows myself on November 20, 2026, drawn at random by platform:
+One read of a website can be wrong. So a row is trusted only when a second, independent read of the same page agrees with it.
 
-- **Confirmed, with a current agenda on the page:** Pasadena and Eustace (Agenda Center), West Lake Hills (CivicClerk), Lubbock County (Legistar), Hutchins and Boyd (Municode Meetings), Caney City (own site), Carson County (county association site), Granbury (Granicus), Ennis (CivicWeb), Murchison (TownCloud).
-- **Could not be read:** Waxahachie's agenda page shows an embedded player and no links. Its row is "inferred" and says so.
-- **No website:** a search for Kirvin found a directory entry and no official site, as the row says.
-- **One row was wrong, and the fault was the merge's.** Southside Place has an Agenda Center page, and it is empty. Its files are in the city's Document Center. The row is now "not determined" with that note.
-- Hutchins' page showed the same agenda at `meetings.municode.com` and at `mccmeetings.blob.core.usgovcloudapi.net`. That second host is where Municode Meetings keeps the files, and the rules now recognize it.
+1. **The address rule.** A row may name only the platform its own addresses show. The loader refuses any other row.
+2. **A second read of every page.** `config/tx_agenda_checks.csv` records it. The second reader is not told what the inventory says and never names a platform. It copies what is on the page: the agenda addresses, the newest agenda's date and the bodies listed. `pipeline/agenda_checks.py` names the platform from those addresses and compares.
+3. **A verdict for every row.** Confirmed means the two reads agree on the platform, the body was listed and the newest agenda is under 400 days old. Anything less has its own verdict and its own reason.
+4. **A gate.** `collectable()` is true only for a confirmed row. A test holds it. No agenda collector takes any other row.
+5. **A check goes stale.** After 180 days a row is no longer confirmed and must be read again. Governments change platforms.
+6. **A list for a person.** `uv run python -m pipeline.agenda_checks --csv` writes every row that is not settled, with the reason, commissioners courts first. A person opens the page and adds a line to the checks file with `by` set to `hand`. A person's check outranks every other.
+
+```bash
+uv run python -m pipeline.agenda_checks
+```
+
+prints the counts by verdict.
+
+## The wider check, November 21, 2026
+
+Ten research passes read 320 agenda pages a second time. They also searched again for a site for each of the 22 towns recorded as having none, and looked again for each of the 60 governments whose agendas the first read could not place. That is 402 checks.
+
+**How the first read held up.** On 316 rows that named a platform, a check could be set beside the first read. **311 agreed on the platform. 5 did not.**
+
+- Grand Prairie's planning commission was wrong. The first read carried the council's platform to it. The page is an archive that stops in 2021. The row is corrected.
+- Palmer and Hilshire Village each run two systems, and the two reads saw different ones.
+- Taylor County's second read copied only an older address. It is not a real disagreement and needs a look.
+- Industry's agenda address now answers "page not found".
+
+**No website:** all 22 held. A second search found no official site for any of them.
+
+**Not determined:** the second read found the agendas for 21 of the 60 governments. Those rows are filled in. They rest on one read again, so they are not confirmed.
+
+**What each row has earned**
+
+| Verdict | Bodies | Governments |
+|---|---:|---:|
+| Confirmed | 267 | 182 |
+| Both reads found no website | 23 | 22 |
+| Undetermined: no agenda page known | 167 | 32 |
+| Unreadable: the page fills itself in by script | 47 | 33 |
+| Platform agrees, this body not seen listed | 29 | 10 |
+| Not shown: the page listed no agendas | 30 | 20 |
+| Unchecked: found by one read only | 20 | 20 |
+| Not current: newest agenda old or undated | 15 | 11 |
+| Contradicted | 9 | 4 |
+
+**290 bodies are settled. 317 need a person.** Of those, 126 are development corporations with no agenda page known. That is research, not checking.
+
+**By government, 204 of 334 are settled and 130 need one hand read:**
+
+| Group | Governments | Settled | Need a person |
+|---|---:|---:|---:|
+| CivicPlus Agenda Center | 51 | 34 | 17 |
+| CivicClerk, Legistar, Municode Meetings | 63 | 49 | 14 |
+| County association sites, Swagit, CivicWeb, Granicus | 22 | 13 | 9 |
+| Files on the government's own site | 114 | 75 | 39 |
+| Other outside platform | 23 | 11 | 12 |
+| Not determined | 39 | 0 | 39 |
+| No website | 22 | 22 | 0 |
+
+17 of the 30 commissioners courts are confirmed.
+
+**Why so many are unreadable.** The page-reading tool cannot run a page's scripts. A list that fills itself in comes back empty. I opened 14 of those pages in a real browser. 4 showed a current list and are confirmed. 4 showed a real problem: a missing page, an Agenda Center with no files in it, a list embedded from another host and a page that only points elsewhere. On 6 my reading script could not tell, and they stay on the list. A person with a browser settles each of these in about a minute.
 
 ## What is not verified
 
-- **594 of the 607 rows were not opened by me.** They rest on the research passes and on the address rule.
-- **171 rows are "inferred".** The platform was seen for the government, or the page was read through a search result. The body's own list was not opened.
-- **Planning bodies are incomplete.** 86 cities have a planning row. For 130 cities the research saw no sign of one. For 88 it did not look or did not say. A city with no row may still have a planning commission.
-- **129 of the 187 development corporations have no agenda location.** Most post nothing of their own, or post on a page that was not opened.
-- **60 governments are "not determined".** Most have a site whose agenda list loads by script, or a page with no readable links.
-- **"No website" rests on one or two searches each.**
-- Whether an agenda list is current. Some rows note a list that stops in an earlier year.
+- **317 rows are not settled.** The list is the output of the command above.
+- A confirmed row means two reads agreed. Both reads were research passes, not people. I opened 27 pages myself across both days.
+- The newest agenda's date is what the second reader saw on the page. On a page that lists several bodies it may belong to another body.
+- **Planning bodies are incomplete.** 86 cities have a planning row. For 88 cities the first read did not look or did not say. A city with no row may still have a planning commission.
 - A match between a state-listed corporation and a city is by city name.
-- **No platform's terms of use or robots rules have been read.** Nothing here says any of these may be collected.
+- **No platform's terms of use or robots rules have been read.** A confirmed row says where the agendas are. It does not say they may be collected.
 
 ## What comes next, and a change to the plan
 
 The plan calls for three batches of ten counties. The inventory says agendas are sorted by platform, not by county: one collector for one platform reaches every county that uses it. I propose batches by platform:
 
 1. **CivicPlus Agenda Center.** 51 governments in 16 counties, 10 commissioners courts among them.
-2. **CivicClerk, Legistar and Municode Meetings.** 62 governments, 5 commissioners courts among them.
+2. **CivicClerk, Legistar and Municode Meetings.** 63 governments, 5 commissioners courts among them.
 3. **County association sites, then Swagit, CivicWeb and Granicus.** 22 governments, 7 commissioners courts among them.
 
-That reaches 135 governments and 22 of the 30 commissioners courts. It leaves:
+That reaches 136 governments and 22 of the 30 commissioners courts. A collector takes only the confirmed rows among them: 96 today. The other 40 wait for a hand read. It leaves:
 
-- 99 governments with files on their own sites. One general collector could read a page of file links, with one configured entry per site.
-- 18 on small outside platforms, 60 not determined and 22 with no website. These are for a reviewer to read by hand, or for a second research pass.
+- 114 governments with files on their own sites, 75 of them confirmed. One general collector could read a page of file links, with one configured entry per site.
+- 23 on small outside platforms and 39 not determined. With no collector, a reviewer reads these 62 by hand for as long as the radar runs.
+- 22 with no website. There is nothing to read.
 
 **Before any collector:** each platform's terms and robots rules are read and recorded, and so are those of each government's site the collector would touch. An Agenda Center page sits on the city's own domain, so the city's terms apply as well as the platform's. A site that restricts automated access is marked manual.
 

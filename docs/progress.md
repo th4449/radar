@@ -2,6 +2,44 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 21, 2026 — M8: a second read of the agenda inventory, and a system to keep it accurate
+
+The owner asked for a wider accuracy check and a system that finds errors.
+
+**Built**
+
+- **`config/tx_agenda_checks.csv`: 410 independent checks.** Each is one read of one page. It records what was on the page and never names a platform.
+- **`pipeline/agenda_checks.py`** gives every row of the inventory a verdict and a reason. Confirmed means a second read agreed on the platform, saw the body listed and saw an agenda under 400 days old.
+- **A gate.** `collectable()` is true only for a confirmed row. No agenda collector takes any other row.
+- **Checks go stale after 180 days.**
+- **A list for a person:** `uv run python -m pipeline.agenda_checks --csv`. A person's check outranks every other.
+- 26 new tests. 739 pass.
+
+**The wider check**
+
+- Ten research passes read all 320 agenda pages a second time, without being told what the inventory says. They searched again for the 22 towns with no website and looked again for the 60 governments not determined.
+- **On 316 rows that could be compared, 311 agreed on the platform and 5 did not.** One was a plain error and is corrected. Two cities run two systems. One was a gap in the second read. One address has gone dead.
+- All 22 "no website" rows held.
+- The second read found agendas for 21 of the 60 governments not determined. Those rows are filled in and count as unchecked, since one read is one read.
+
+**Where it stands**
+
+- **290 of 607 bodies are settled. 204 of 334 governments are settled.** 17 of the 30 commissioners courts are confirmed.
+- **130 governments need one hand read.** 33 of them have a page that fills itself in by script, which the page-reading tool cannot run.
+- I opened 14 of those in a real browser. 4 are confirmed, 4 showed a real problem and 6 my reading script could not judge.
+
+**Not verified**
+
+- A confirmed row rests on two research passes agreeing, not on a person.
+- Planning bodies are still incomplete, and 126 development corporations have no agenda page known.
+- No platform's terms or robots rules are read.
+
+**For the owner**
+
+- **The hand-read list is `drafts/tx_agenda_hand_read_2026-11-21.csv`** on this machine, 317 rows, commissioners courts first. `drafts/` is not in the repository.
+- A reviewer with a browser settles a script-filled page in about a minute. The 130 governments are a few hours of work.
+- The proposal to batch collectors by platform still needs your answer.
+
 ## November 20, 2026 — M8, first step: the Texas agenda inventory
 
 The plan's first step for M8 is an inventory of every commissioners court, city council, planning body and development corporation in the 30 counties, with the platform each uses. No collector is written.
