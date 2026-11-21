@@ -1,0 +1,39 @@
+---
+import Base from "../../layouts/Base.astro";
+import Alerts from "../../components/Alerts";
+import { STATES, type County, type StateInfo } from "../../lib/places";
+
+export function getStaticPaths() {
+  return STATES.flatMap((state) =>
+    state.counties.map((county) => ({
+      params: { state: state.slug, county: county.slug },
+      props: { state, county },
+    })),
+  );
+}
+interface Props {
+  state: StateInfo;
+  county: County;
+}
+const { state, county } = Astro.props;
+---
+
+<Base title={`${county.name} County, ${state.name}`}>
+  <main>
+    <p class="kicker"><a href={`/${state.slug}/`}>{state.name}</a></p>
+    <h1>{county.name} County</h1>
+    <p class="lede">
+      Confirmed alerts for {county.name} County, {state.name}. Each one links to the public
+      records it rests on.
+    </p>
+
+    <h2>Confirmed alerts</h2>
+    <Alerts client:only="preact" state={state.code} county={county.fips} />
+
+    <h2>Get alerts for this county</h2>
+    <p>
+      <a href="/subscribe/">Sign up for {state.name} alerts.</a>{" "}
+      You can narrow them to {`${county.name} County`} on the form.
+    </p>
+  </main>
+</Base>

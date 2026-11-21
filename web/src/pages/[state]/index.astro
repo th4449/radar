@@ -1,0 +1,51 @@
+---
+import Base from "../../layouts/Base.astro";
+import Alerts from "../../components/Alerts";
+import { SOURCES, STATES, stateIsRead, type StateInfo } from "../../lib/places";
+
+export function getStaticPaths() {
+  return STATES.map((state) => ({ params: { state: state.slug }, props: { state } }));
+}
+interface Props {
+  state: StateInfo;
+}
+const { state } = Astro.props;
+const read = SOURCES.filter((s) => s.state === state.code && s.read);
+const whole = state.code === "MI";
+---
+
+<Base title={`${state.name} alerts`}>
+  <main>
+    <h1>{state.name}</h1>
+    <p class="lede">
+      {
+        whole
+          ? `The radar covers all ${state.counties.length} ${state.name} counties.`
+          : `The radar watches ${state.counties.length} ${state.name} counties. It does not watch the rest of the state.`
+      }
+      {
+        stateIsRead(state.code)
+          ? ` It reads ${read.length} record sources for them today.`
+          : ` No ${state.name} record source is read yet, so there is no ${state.name} alert.`
+      }
+    </p>
+    <p>
+      <a href="/subscribe/">Get {state.name} alerts by email.</a>{" "}
+      <a href="/methodology/#sources">Which records the radar reads.</a>
+    </p>
+
+    <h2>Confirmed alerts in {state.name}</h2>
+    <Alerts client:only="preact" state={state.code} />
+
+    <h2>{whole ? "Counties" : "The counties the radar watches"}</h2>
+    <ul class="columns plain-list">
+      {
+        state.counties.map((county) => (
+          <li>
+            <a href={`/${state.slug}/${county.slug}/`}>{county.name}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>

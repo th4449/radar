@@ -358,3 +358,26 @@ def test_the_audit_log_never_holds_a_readers_contact(db):
     assert (
         scalar(db, "select count(*) from public.audit_log where detail::text like '%reader@%'") == 0
     )
+
+
+# --- what a public alert shows of each record ---------------------------------------------------
+
+
+def test_a_public_alert_names_each_record_by_its_own_number(db):
+    """Two records from one archived file must not look like one record listed twice."""
+    alert = published_alert(db)
+    db.execute(
+        """update public.signals
+           set extracted = extracted || '{"reference": "Texas well report tracking number 728122"}'
+           where site_id = (select site_id from public.alerts where id = %s)""",
+        [alert],
+    )
+    with as_anon(db):
+        sources = scalar(
+            db, "select sources from public.public_alerts where alert_id = %s", [alert]
+        )
+    assert [s["reference"] for s in sources] == ["Texas well report tracking number 728122"]
+    # Still nothing written by the pipeline about what the record means, and no party.
+    assert set(sources[0]) == {
+        "url", "source", "retrieved_at", "sha256", "signal_type", "event_date", "reference"
+    }  # fmt: skip

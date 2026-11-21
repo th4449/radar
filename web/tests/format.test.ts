@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { fieldName, longDate, problem, signalName } from "../src/lib/format.ts";
+import { fieldName, localDay, longDate, problem, signalName } from "../src/lib/format.ts";
 
 test("a date is written out and never shifted by a time zone", () => {
   assert.equal(longDate("2026-11-20"), "November 20, 2026");
@@ -25,4 +25,12 @@ test("a signal type has a plain name, and an unknown one is shown as it is", () 
 test("an error from the database is shown in its own words", () => {
   assert.equal(problem({ message: "only an administrator merges sites" }), "only an administrator merges sites");
   assert.equal(problem("plain"), "plain");
+});
+
+test("a moment is shown as the day it was where the reader is", () => {
+  const evening = "2026-11-21T02:00:00+00:00";
+  assert.equal(localDay(evening, "America/Chicago"), "November 20, 2026");
+  assert.equal(localDay(evening, "UTC"), "November 21, 2026");
+  assert.equal(localDay("2026-08-21"), "August 21, 2026");
+  assert.equal(localDay(null), "");
 });

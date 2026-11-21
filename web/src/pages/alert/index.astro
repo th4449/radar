@@ -1,0 +1,10 @@
+---
+import Base from "../../layouts/Base.astro";
+import AlertPage from "../../components/AlertPage";
+---
+
+<Base title="Confirmed alert">
+  <main>
+    <AlertPage client:only="preact" />
+  </main>
+</Base>

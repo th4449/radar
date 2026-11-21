@@ -1,13 +1,56 @@
 ---
 import Base from "../layouts/Base.astro";
+import Alerts from "../components/Alerts";
+import { STATES, stateIsRead } from "../lib/places";
+
+const read = STATES.filter((s) => stateIsRead(s.code));
+const waiting = STATES.filter((s) => !stateIsRead(s.code));
 ---
 
-<Base title="Not yet public">
+<Base title="Confirmed alerts">
   <main>
     <h1>Data Center Early Warning Radar</h1>
     <p class="lede">
-      The public site is not built yet. Nothing has been published.
+      Public records can show that a data center may be coming before anyone announces it. The
+      radar reads those records and looks for several that point at the same site. It publishes
+      an alert only after a reviewer has checked each record against its source.
     </p>
-    <p><a href="/review/">Reviewer desk</a></p>
+    <p>
+      {
+        read.map((s) => (
+          <>
+            The radar reads records for {s.counties.length} {s.name} counties today.{" "}
+          </>
+        ))
+      }
+      {
+        waiting.map((s) => (
+          <>
+            No {s.name} record source is read yet.{" "}
+          </>
+        ))
+      }
+      <a href="/methodology/">How it works.</a>
+    </p>
+
+    <h2>Confirmed alerts</h2>
+    <Alerts client:only="preact" />
+
+    <h2>Get alerts by email</h2>
+    <p>
+      Pick your states and get each confirmed alert, or a weekly digest. It is free.{" "}
+      <a href="/subscribe/">Sign up for alerts.</a>
+    </p>
+
+    <h2>By state</h2>
+    <ul class="plain-list">
+      {
+        STATES.map((s) => (
+          <li>
+            <a href={`/${s.slug}/`}>{s.name}</a>
+          </li>
+        ))
+      }
+    </ul>
   </main>
 </Base>

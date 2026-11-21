@@ -34,6 +34,7 @@ import sys
 import uuid
 from collections.abc import Sequence
 from typing import Literal, Protocol
+from zoneinfo import ZoneInfo
 
 import psycopg
 
@@ -42,6 +43,8 @@ from pipeline.config import EmailFile, load_all_counties, load_email
 Kind = Literal["each", "weekly"]
 
 STATE_NAMES = {"TX": "Texas", "MI": "Michigan"}
+# An alert's date is the day it was published in its own state, not the day in UTC.
+STATE_ZONES = {"TX": ZoneInfo("America/Chicago"), "MI": ZoneInfo("America/Detroit")}
 PRODUCT = "Data Center Early Warning Radar"
 NOT_SET = "[not set]"
 
@@ -126,6 +129,11 @@ def _long_date(when: dt.datetime | dt.date) -> str:
     return f"{_MONTHS[when.month - 1]} {when.day}, {when.year}"
 
 
+def published_day(alert: AlertItem) -> str:
+    zone = STATE_ZONES.get(alert.state, dt.UTC)
+    return _long_date(alert.published_at.astimezone(zone))
+
+
 class Places:
     """County names by code, for the lines that say where an alert is."""
 
@@ -179,7 +187,7 @@ def render_each(
         [
             alert.headline,
             "",
-            f"Confirmed. Published {_long_date(alert.published_at)}.",
+            f"Confirmed. Published {published_day(alert)}.",
             f"{places.where(alert)}.",
             "",
             alert.body.strip(),
@@ -204,11 +212,11 @@ def render_weekly(
     """The subject and text of one state's digest."""
     state_name = STATE_NAMES.get(state, state)
     count = "1 confirmed alert" if len(alerts) == 1 else f"{len(alerts)} confirmed alerts"
-    lines = [f"{state_name}: {count} since your last digest.", ""]
+    lines = [f"{state_name}: {count} this week.", ""]
     for alert in alerts:
         lines += [
             alert.headline,
-            f"Confirmed. Published {_long_date(alert.published_at)}. "
+            f"Confirmed. Published {published_day(alert)}. "
             f"{places.county(alert.county_fips)}. {_sources_line(alert.sources).capitalize()}.",
             alert_url(settings, alert.alert_id),
             "",
@@ -395,21 +403,21 @@ def describe(report: Report) -> str:
     lines = [
         f"{'Dry run' if report.dry_run else 'Run'} of the {report.kind} emails as of "
         f"{report.as_of}: {report.status}.",
-        f"{report.messages} messages to {report.recipients} subscribers about "
-        f"{report.alerts} alerts, in {report.batches} batches.",
+        f"Messages: {report.messages}. Subscribers: {report.recipients}. "
+        f"Alerts: {report.alerts}. Batches: {report.batches}.",
     ]
     for name in sorted(report.by_state):
         counts = report.by_state[name]
         lines.append(
-            f"  {STATE_NAMES.get(name, name)}: {counts['messages']} messages, "
-            f"{counts['alerts']} alerts"
+            f"  {STATE_NAMES.get(name, name)}: messages {counts['messages']}, "
+            f"alerts {counts['alerts']}"
         )
     if report.held_over:
-        lines.append(f"{report.held_over} more messages wait for the next run: the daily limit.")
+        lines.append(f"Held for the next run by the daily limit: {report.held_over} messages.")
     if report.address_changed:
         lines.append(
-            f"{report.address_changed} confirmed subscribers changed their account address and "
-            "get nothing until they confirm again."
+            "Confirmed subscribers who changed their account address and get nothing until "
+            f"they confirm again: {report.address_changed}."
         )
     if report.not_set:
         lines.append(f"Not set in config/email.yaml: {', '.join(report.not_set)}.")

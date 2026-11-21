@@ -2,8 +2,10 @@
 import "../styles/site.css";
 interface Props {
   title: string;
+  /** A reviewer desk page. It draws its own masthead once it knows who is signed in. */
+  desk?: boolean;
 }
-const { title } = Astro.props;
+const { title, desk = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -11,14 +13,39 @@ const { title } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Stays until the owner decides to make the site public. See BUILD_PLAN.md section 11. -->
     <meta name="robots" content="noindex" />
     <title>{title} · Data Center Early Warning Radar</title>
   </head>
   <body>
+    {
+      !desk && (
+        <header class="masthead">
+          <a class="name" href="/">
+            Data Center Early Warning Radar
+          </a>
+          <nav aria-label="Site">
+            <a href="/tx/">Texas</a>
+            <a href="/mi/">Michigan</a>
+            <a href="/subscribe/">Get alerts</a>
+            <a href="/methodology/">Methodology</a>
+            <a href="/corrections/">Corrections</a>
+          </nav>
+        </header>
+      )
+    }
     <slot />
     <footer>
-      Data Center Early Warning Radar. A signal is a public record, not a finding. Nothing here
-      is public until a reviewer has checked it against its source.
+      <p>
+        Data Center Early Warning Radar, from Dekleptocracy Alliance. A signal is a public record,
+        not a finding. Nothing here is public until a reviewer has checked it against its source.
+      </p>
+      <p>
+        <a href="/methodology/">Methodology</a>
+        <a href="/corrections/">Send a correction</a>
+        <a href="/account/">Your alerts</a>
+        <a href="/review/">Reviewer desk</a>
+      </p>
     </footer>
   </body>
 </html>

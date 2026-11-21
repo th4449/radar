@@ -28,7 +28,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 .good { color: var(--ok); }
 table { border-collapse: collapse; width: 100%; margin: 0.6rem 0; font-size: 0.95rem; }
 th, td { text-align: left; vertical-align: top; padding: 0.4rem 0.8rem 0.4rem 0; border-bottom: 1px solid var(--rule); }
-th { font-weight: 600; font-size: 0.82rem; letter-spacing: 0.03em; text-transform: uppercase; color: var(--soft); }
+th { font-weight: 600; font-size: 0.9rem; color: var(--soft); }
 td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .scroll { overflow-x: auto; }
 dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1.2rem; margin: 0.6rem 0; }
@@ -51,4 +51,31 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--mark); outline-offset: 2px; }
 .row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin: 0.8rem 0; }
 code, .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.86em; overflow-wrap: anywhere; }
-footer { margin-top: 3rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); color: var(--soft); font-size: 0.88rem; }
+footer { margin-top: 3rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); color: var(--soft); font-size: 0.9rem; }
+footer p:last-child { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; }
+
+/* The public site. Rules and sentences, no boxes. */
+.kicker { margin: 1.6rem 0 -1.2rem; color: var(--mark); font-family: var(--serif); font-size: 1.05rem; }
+.kicker a { color: inherit; }
+.prose p, .prose li, p.body { max-width: 44rem; }
+p.body { font-size: 1.05rem; white-space: pre-line; }
+main ul, main ol { padding-left: 1.2rem; }
+main li { margin: 0.3rem 0; }
+ol.alerts, ol.records, ul.plain-list { list-style: none; padding: 0; margin: 0.6rem 0; }
+ol.alerts li.alert, ol.records li { border-top: 1px solid var(--rule); padding: 0.8rem 0; margin: 0; }
+ol.alerts li.alert:last-child, ol.records li:last-child { border-bottom: 1px solid var(--rule); }
+ol.alerts h3, ol.records h3 { margin: 0 0 0.2rem; font-size: 1.15rem; }
+ol.alerts p { margin: 0; color: var(--soft); }
+.columns { columns: 11rem; column-gap: 1.5rem; }
+.columns > * { break-inside: avoid; }
+figure.map { margin: 0.8rem 0; }
+.map-canvas { height: 26rem; max-height: 70vh; border: 1px solid var(--rule); }
+fieldset { border: 0; border-top: 1px solid var(--rule); margin: 1.2rem 0 0; padding: 0.6rem 0 0; }
+legend { font-weight: 600; padding: 0 0.6rem 0 0; }
+label.inline { margin: 0.35rem 0; }
+details { border-top: 1px solid var(--rule); margin-top: 1.2rem; padding-top: 0.6rem; }
+summary { cursor: pointer; font-weight: 600; }
+.step { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); margin: 1.2rem 0; padding: 0.2rem 0 0.8rem; }
+.step h2 { border: 0; margin-top: 0.6rem; padding-top: 0; }
+/* A field only a script fills in. Off the page, and out of the tab order in the markup. */
+.trap { position: absolute; left: -200vw; width: 1px; height: 1px; overflow: hidden; }

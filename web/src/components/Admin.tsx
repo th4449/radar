@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import { Frame } from "./Frame";
-import { longDate, problem } from "../lib/format";
+import { localDay, longDate, problem } from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import type { ReviewerStatus } from "../lib/types";
@@ -309,6 +309,198 @@ function Pipeline() {
   );
 }
 
+interface Correction {
+  id: number;
+  alert_id: number | null;
+  message: string;
+  contact: string | null;
+  created_at: string;
+  handled_at: string | null;
+  handled_note: string | null;
+}
+
+interface EmailRun {
+  id: number;
+  started_at: string;
+  kind: string;
+  dry_run: boolean;
+  status: string;
+  alerts: number;
+  recipients: number;
+  messages: number;
+  held_over: number;
+  error: string | null;
+}
+
+function CorrectionsDesk() {
+  const [rows, setRows] = useState<Correction[] | null>(null);
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState<number | null>(null);
+  const [note, setNote] = useState("");
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    supabase
+      .from("corrections")
+      .select("id, alert_id, message, contact, created_at, handled_at, handled_note")
+      .order("handled_at", { ascending: false, nullsFirst: true })
+      .order("id", { ascending: false })
+      .limit(60)
+      .then(({ data, error: failed }) => {
+        if (failed) setError(problem(failed));
+        else setRows((data ?? []) as Correction[]);
+      });
+  }, [tick]);
+
+  async function handle(row: Correction) {
+    setError("");
+    const { error: failed } = await supabase
+      .from("corrections")
+      .update({ handled_at: new Date().toISOString(), handled_note: note.trim() || null })
+      .eq("id", row.id);
+    if (failed) setError(problem(failed));
+    setOpen(null);
+    setNote("");
+    setTick((n) => n + 1);
+  }
+
+  const waiting = (rows ?? []).filter((r) => !r.handled_at).length;
+  return (
+    <>
+      <h2>Corrections from readers</h2>
+      {error && <p class="warn">{error}</p>}
+      {rows === null ? (
+        <p class="note">Loading.</p>
+      ) : rows.length === 0 ? (
+        <p>No reader has sent a correction.</p>
+      ) : (
+        <>
+          <p>
+            {waiting === 0 ? "None is waiting." : `${waiting} waiting.`} A reader's contact is
+            for replying to them and for nothing else.
+          </p>
+          {rows.map((row) => (
+            <div class="signal">
+              <h3>
+                {localDay(row.created_at)}
+                {row.alert_id !== null && (
+                  <>
+                    , about <a href={`/alert/?id=${row.alert_id}`}>alert {row.alert_id}</a>
+                  </>
+                )}
+              </h3>
+              <blockquote>{row.message}</blockquote>
+              {row.contact && <p class="note">Reach the reader at {row.contact}</p>}
+              {row.handled_at ? (
+                <p class="good">
+                  Handled {localDay(row.handled_at)}
+                  {row.handled_note ? `. ${row.handled_note}` : "."}
+                </p>
+              ) : open === row.id ? (
+                <div>
+                  <label for={`handled-${row.id}`}>What was done</label>
+                  <textarea
+                    id={`handled-${row.id}`}
+                    maxLength={2000}
+                    value={note}
+                    onInput={(e) => setNote((e.target as HTMLTextAreaElement).value)}
+                  />
+                  <div class="row">
+                    <button type="button" onClick={() => handle(row)}>
+                      Mark as handled
+                    </button>
+                    <button class="quiet" type="button" onClick={() => setOpen(null)}>
+                      Not yet
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p>
+                  <button
+                    class="quiet"
+                    type="button"
+                    onClick={() => {
+                      setOpen(row.id);
+                      setNote("");
+                    }}
+                  >
+                    Mark as handled
+                  </button>
+                </p>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+    </>
+  );
+}
+
+function EmailRuns() {
+  const [rows, setRows] = useState<EmailRun[]>([]);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    supabase
+      .from("email_runs")
+      .select(
+        "id, started_at, kind, dry_run, status, alerts, recipients, messages, held_over, error",
+      )
+      .order("id", { ascending: false })
+      .limit(10)
+      .then(({ data, error: failed }) => {
+        if (failed) setError(problem(failed));
+        else setRows((data ?? []) as EmailRun[]);
+      });
+  }, []);
+  return (
+    <>
+      <h2>Alert emails</h2>
+      <p class="note">
+        The email job only does dry runs. It works out what would be sent and sends nothing.
+        Subscriber addresses are not shown here or anywhere in the app.
+      </p>
+      {error && <p class="warn">{error}</p>}
+      {rows.length === 0 ? (
+        <p>No run of the email job is logged.</p>
+      ) : (
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Started</th>
+                <th>Kind</th>
+                <th>Result</th>
+                <th class="num">Alerts</th>
+                <th class="num">People</th>
+                <th class="num">Messages</th>
+                <th class="num">Held over</th>
+                <th>Problem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr>
+                  <td>{localDay(r.started_at)}</td>
+                  <td>
+                    {r.kind === "each" ? "Each alert" : "Weekly digest"}
+                    {r.dry_run ? ", dry run" : ""}
+                  </td>
+                  <td class={r.status === "ok" ? "" : "warn"}>{r.status}</td>
+                  <td class="num">{r.alerts}</td>
+                  <td class="num">{r.recipients}</td>
+                  <td class="num">{r.messages}</td>
+                  <td class="num">{r.held_over}</td>
+                  <td>{r.error}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
+  );
+}
+
 function AuditLog() {
   const [rows, setRows] = useState<AuditRow[]>([]);
   const [error, setError] = useState("");
@@ -365,7 +557,9 @@ export default function Admin() {
             an alert are always a person's decision. Nothing here is automated.
           </p>
           <People account={account} />
+          <CorrectionsDesk />
           <Pipeline />
+          <EmailRuns />
           <AuditLog />
         </>
       )}

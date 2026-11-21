@@ -2,6 +2,59 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M7: public site and alerts
+
+**Built**
+
+- **Nine public pages** in `web/`: the map and list of confirmed alerts, a page for each state, a page for each of the 30 Texas and 83 Michigan counties, the alert page, methodology, corrections, signup, the subscriber's own page and unsubscribe. 127 pages build.
+- **The alert page** carries the word confirmed, the date, and for each record its own number, a link to the agency, the time the radar read it and the fingerprint of its copy. It has a corrections link.
+- **The map** is MapLibre with OpenFreeMap tiles. Its terms are in `docs/services/openfreemap.md`. An alert with no point on record is in the list and not on the map.
+- **Signup with double opt in.** The person picks states, optional counties and each alert or a weekly digest, and gives an address. The emailed link is the second opt in. `confirm_subscription()` checks for itself that the sign-in service proved the address.
+- **Unsubscribe** by the link in every email, with no sign-in. The page asks for one press of a button, so a mail scanner that opens the link removes no one.
+- **Corrections.** Anyone may send one through `submit_correction()`. Only administrators read them, on the administrator desk, and mark them handled. The database records who handled each one.
+- **The alert email job,** `pipeline/alert_email.py`, by state, as one email per alert or one weekly digest per state. **It only does dry runs.** A dry run reports counts and one sample per state. It prints no address and no unsubscribe token, and it records nothing as sent. Every email carries the word confirmed, a link to the alert page, an unsubscribe link and the organization's postal address.
+- **Database rules, tests written first,** in two migrations: the confirm and unsubscribe functions, county lists that must be codes in a selected state, corrections, a send ledger so an alert reaches a person once, and an email run log that holds no address.
+- **Each signal now carries its record's own number,** such as a well report's tracking number, and the public view passes it on. `RULES_VERSION` is 2026-11-20.3.
+- The methodology page lists the sources the radar reads and the ones it does not, taken from `config/` at build time. A test fails if that copy is out of date.
+- `scripts/dev_seed.py --publish-sample` publishes two alerts marked as samples on a local database.
+- 62 new Python tests and 8 new front-end tests. 675 Python tests and 12 front-end tests pass locally.
+
+**Verified in a browser, on the local stack**
+
+- The home, Texas, county, alert and methodology pages, with two sample alerts. **This time screenshots worked, so the layout was seen,** at desktop width and at phone width. The four pages checked at 375 pixels did not scroll sideways.
+- Signup: states, a county, each alert. The link in the local test inbox landed on the account page, which saved the choices and confirmed. One insert, one confirm, no repeated requests.
+- Changing to a weekly digest and saving. Stopping all alerts. Signing up again while signed in, which showed the one step left, and confirming.
+- Unsubscribe by token: a malformed token, a good one, and the same one again.
+- **With only the anonymous key, asked directly of the database:** 401 for subscribers, corrections, the send ledger and the email run log. A refusal to confirm a subscription. `false` for a made-up unsubscribe token. A refusal for a correction that pointed at an alert that is not public.
+- A correction sent from an alert page, then read and marked handled by an administrator. The database recorded the administrator and logged it.
+- A dry run of the weekly digest against that subscriber: 1 message about 2 alerts and nothing recorded as sent. A later dry run showed on the administrator desk.
+- The local data was reset afterward.
+
+**Faults found and fixed**
+
+- **Two records from one archived file looked like one record listed twice** on the alert page: same source, same link, same fingerprint. Each record now shows its own number.
+- A date shown from a moment was the day in UTC. An alert published at 8 in the evening in Texas showed the next day. Pages now show the reader's own day, and emails the day in the alert's state.
+
+**Not verified**
+
+- **The map in a browser that is in view.** The test pane was hidden and ran no animation frames, so the map painted only when a frame was forced. It was seen drawn correctly twice, on the home page and the Texas page, with both points in place. It was not seen on a county page or an alert page.
+- Keyboard-only use and a screen reader.
+- **Real email of any kind.** No sender for a real provider is written. Deliverability, the provider's batch interface and one-click unsubscribe headers are all untested. Mail providers have their own rules for bulk senders. Check them before sending.
+- Whether the corrections brake holds against a real flood. It stops at 30 an hour for everyone together. It cannot tell one anonymous sender from another.
+- Anything hosted.
+
+**For the owner**
+
+- **The organization's postal address and the site's address are not set** in `config/email.yaml`. The job cannot send without both. Tell me the address and I will add it.
+- **The methodology page is my wording.** It states what the system does today, including that the scoring numbers are placeholders and that no Michigan source is read. Read it before launch.
+- **Michigan is offered on the signup form, and no Michigan source is read yet.** The form says so next to the tick box.
+- **Double opt in rests on the sign-in service's emailed link.** One email both signs a person in and confirms them. On a hosted project its wording must fit both.
+- **A subscriber who stops their alerts still has an account.** Their address stays with the sign-in service until someone deletes the account. No page does that yet.
+- **A reversed alert comes down at once. Email already sent cannot be recalled,** and nothing sends a correction notice.
+- **"Open the record at its source" for a well report still opens the 145 MB download.** The alert now gives the report's tracking number to find it by.
+- The daily limit of 100 messages is the provider's free tier, checked on its pricing page today. The 20 dollar tier has no daily limit. The limit is per run of the job.
+- Every page still asks search engines to stay away. Lifting that is part of making the site public.
+
 ## November 20, 2026 — M6: reviewer app
 
 The owner chose Astro for the front end and sign-in by emailed link.

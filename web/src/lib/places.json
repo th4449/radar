@@ -1,0 +1,697 @@
+{
+  "states": [
+    {
+      "code": "TX",
+      "name": "Texas",
+      "slug": "tx",
+      "counties": [
+        {
+          "fips": "48009",
+          "name": "Archer",
+          "slug": "archer"
+        },
+        {
+          "fips": "48015",
+          "name": "Austin",
+          "slug": "austin"
+        },
+        {
+          "fips": "48029",
+          "name": "Bexar",
+          "slug": "bexar"
+        },
+        {
+          "fips": "48035",
+          "name": "Bosque",
+          "slug": "bosque"
+        },
+        {
+          "fips": "48037",
+          "name": "Bowie",
+          "slug": "bowie"
+        },
+        {
+          "fips": "48053",
+          "name": "Burnet",
+          "slug": "burnet"
+        },
+        {
+          "fips": "48059",
+          "name": "Callahan",
+          "slug": "callahan"
+        },
+        {
+          "fips": "48065",
+          "name": "Carson",
+          "slug": "carson"
+        },
+        {
+          "fips": "48113",
+          "name": "Dallas",
+          "slug": "dallas"
+        },
+        {
+          "fips": "48139",
+          "name": "Ellis",
+          "slug": "ellis"
+        },
+        {
+          "fips": "48143",
+          "name": "Erath",
+          "slug": "erath"
+        },
+        {
+          "fips": "48145",
+          "name": "Falls",
+          "slug": "falls"
+        },
+        {
+          "fips": "48161",
+          "name": "Freestone",
+          "slug": "freestone"
+        },
+        {
+          "fips": "48201",
+          "name": "Harris",
+          "slug": "harris"
+        },
+        {
+          "fips": "48213",
+          "name": "Henderson",
+          "slug": "henderson"
+        },
+        {
+          "fips": "48217",
+          "name": "Hill",
+          "slug": "hill"
+        },
+        {
+          "fips": "48221",
+          "name": "Hood",
+          "slug": "hood"
+        },
+        {
+          "fips": "48223",
+          "name": "Hopkins",
+          "slug": "hopkins"
+        },
+        {
+          "fips": "48251",
+          "name": "Johnson",
+          "slug": "johnson"
+        },
+        {
+          "fips": "48303",
+          "name": "Lubbock",
+          "slug": "lubbock"
+        },
+        {
+          "fips": "48321",
+          "name": "Matagorda",
+          "slug": "matagorda"
+        },
+        {
+          "fips": "48331",
+          "name": "Milam",
+          "slug": "milam"
+        },
+        {
+          "fips": "48367",
+          "name": "Parker",
+          "slug": "parker"
+        },
+        {
+          "fips": "48375",
+          "name": "Potter",
+          "slug": "potter"
+        },
+        {
+          "fips": "48411",
+          "name": "San Saba",
+          "slug": "san-saba"
+        },
+        {
+          "fips": "48425",
+          "name": "Somervell",
+          "slug": "somervell"
+        },
+        {
+          "fips": "48441",
+          "name": "Taylor",
+          "slug": "taylor"
+        },
+        {
+          "fips": "48451",
+          "name": "Tom Green",
+          "slug": "tom-green"
+        },
+        {
+          "fips": "48453",
+          "name": "Travis",
+          "slug": "travis"
+        },
+        {
+          "fips": "48497",
+          "name": "Wise",
+          "slug": "wise"
+        }
+      ]
+    },
+    {
+      "code": "MI",
+      "name": "Michigan",
+      "slug": "mi",
+      "counties": [
+        {
+          "fips": "26001",
+          "name": "Alcona",
+          "slug": "alcona"
+        },
+        {
+          "fips": "26003",
+          "name": "Alger",
+          "slug": "alger"
+        },
+        {
+          "fips": "26005",
+          "name": "Allegan",
+          "slug": "allegan"
+        },
+        {
+          "fips": "26007",
+          "name": "Alpena",
+          "slug": "alpena"
+        },
+        {
+          "fips": "26009",
+          "name": "Antrim",
+          "slug": "antrim"
+        },
+        {
+          "fips": "26011",
+          "name": "Arenac",
+          "slug": "arenac"
+        },
+        {
+          "fips": "26013",
+          "name": "Baraga",
+          "slug": "baraga"
+        },
+        {
+          "fips": "26015",
+          "name": "Barry",
+          "slug": "barry"
+        },
+        {
+          "fips": "26017",
+          "name": "Bay",
+          "slug": "bay"
+        },
+        {
+          "fips": "26019",
+          "name": "Benzie",
+          "slug": "benzie"
+        },
+        {
+          "fips": "26021",
+          "name": "Berrien",
+          "slug": "berrien"
+        },
+        {
+          "fips": "26023",
+          "name": "Branch",
+          "slug": "branch"
+        },
+        {
+          "fips": "26025",
+          "name": "Calhoun",
+          "slug": "calhoun"
+        },
+        {
+          "fips": "26027",
+          "name": "Cass",
+          "slug": "cass"
+        },
+        {
+          "fips": "26029",
+          "name": "Charlevoix",
+          "slug": "charlevoix"
+        },
+        {
+          "fips": "26031",
+          "name": "Cheboygan",
+          "slug": "cheboygan"
+        },
+        {
+          "fips": "26033",
+          "name": "Chippewa",
+          "slug": "chippewa"
+        },
+        {
+          "fips": "26035",
+          "name": "Clare",
+          "slug": "clare"
+        },
+        {
+          "fips": "26037",
+          "name": "Clinton",
+          "slug": "clinton"
+        },
+        {
+          "fips": "26039",
+          "name": "Crawford",
+          "slug": "crawford"
+        },
+        {
+          "fips": "26041",
+          "name": "Delta",
+          "slug": "delta"
+        },
+        {
+          "fips": "26043",
+          "name": "Dickinson",
+          "slug": "dickinson"
+        },
+        {
+          "fips": "26045",
+          "name": "Eaton",
+          "slug": "eaton"
+        },
+        {
+          "fips": "26047",
+          "name": "Emmet",
+          "slug": "emmet"
+        },
+        {
+          "fips": "26049",
+          "name": "Genesee",
+          "slug": "genesee"
+        },
+        {
+          "fips": "26051",
+          "name": "Gladwin",
+          "slug": "gladwin"
+        },
+        {
+          "fips": "26053",
+          "name": "Gogebic",
+          "slug": "gogebic"
+        },
+        {
+          "fips": "26055",
+          "name": "Grand Traverse",
+          "slug": "grand-traverse"
+        },
+        {
+          "fips": "26057",
+          "name": "Gratiot",
+          "slug": "gratiot"
+        },
+        {
+          "fips": "26059",
+          "name": "Hillsdale",
+          "slug": "hillsdale"
+        },
+        {
+          "fips": "26061",
+          "name": "Houghton",
+          "slug": "houghton"
+        },
+        {
+          "fips": "26063",
+          "name": "Huron",
+          "slug": "huron"
+        },
+        {
+          "fips": "26065",
+          "name": "Ingham",
+          "slug": "ingham"
+        },
+        {
+          "fips": "26067",
+          "name": "Ionia",
+          "slug": "ionia"
+        },
+        {
+          "fips": "26069",
+          "name": "Iosco",
+          "slug": "iosco"
+        },
+        {
+          "fips": "26071",
+          "name": "Iron",
+          "slug": "iron"
+        },
+        {
+          "fips": "26073",
+          "name": "Isabella",
+          "slug": "isabella"
+        },
+        {
+          "fips": "26075",
+          "name": "Jackson",
+          "slug": "jackson"
+        },
+        {
+          "fips": "26077",
+          "name": "Kalamazoo",
+          "slug": "kalamazoo"
+        },
+        {
+          "fips": "26079",
+          "name": "Kalkaska",
+          "slug": "kalkaska"
+        },
+        {
+          "fips": "26081",
+          "name": "Kent",
+          "slug": "kent"
+        },
+        {
+          "fips": "26083",
+          "name": "Keweenaw",
+          "slug": "keweenaw"
+        },
+        {
+          "fips": "26085",
+          "name": "Lake",
+          "slug": "lake"
+        },
+        {
+          "fips": "26087",
+          "name": "Lapeer",
+          "slug": "lapeer"
+        },
+        {
+          "fips": "26089",
+          "name": "Leelanau",
+          "slug": "leelanau"
+        },
+        {
+          "fips": "26091",
+          "name": "Lenawee",
+          "slug": "lenawee"
+        },
+        {
+          "fips": "26093",
+          "name": "Livingston",
+          "slug": "livingston"
+        },
+        {
+          "fips": "26095",
+          "name": "Luce",
+          "slug": "luce"
+        },
+        {
+          "fips": "26097",
+          "name": "Mackinac",
+          "slug": "mackinac"
+        },
+        {
+          "fips": "26099",
+          "name": "Macomb",
+          "slug": "macomb"
+        },
+        {
+          "fips": "26101",
+          "name": "Manistee",
+          "slug": "manistee"
+        },
+        {
+          "fips": "26103",
+          "name": "Marquette",
+          "slug": "marquette"
+        },
+        {
+          "fips": "26105",
+          "name": "Mason",
+          "slug": "mason"
+        },
+        {
+          "fips": "26107",
+          "name": "Mecosta",
+          "slug": "mecosta"
+        },
+        {
+          "fips": "26109",
+          "name": "Menominee",
+          "slug": "menominee"
+        },
+        {
+          "fips": "26111",
+          "name": "Midland",
+          "slug": "midland"
+        },
+        {
+          "fips": "26113",
+          "name": "Missaukee",
+          "slug": "missaukee"
+        },
+        {
+          "fips": "26115",
+          "name": "Monroe",
+          "slug": "monroe"
+        },
+        {
+          "fips": "26117",
+          "name": "Montcalm",
+          "slug": "montcalm"
+        },
+        {
+          "fips": "26119",
+          "name": "Montmorency",
+          "slug": "montmorency"
+        },
+        {
+          "fips": "26121",
+          "name": "Muskegon",
+          "slug": "muskegon"
+        },
+        {
+          "fips": "26123",
+          "name": "Newaygo",
+          "slug": "newaygo"
+        },
+        {
+          "fips": "26125",
+          "name": "Oakland",
+          "slug": "oakland"
+        },
+        {
+          "fips": "26127",
+          "name": "Oceana",
+          "slug": "oceana"
+        },
+        {
+          "fips": "26129",
+          "name": "Ogemaw",
+          "slug": "ogemaw"
+        },
+        {
+          "fips": "26131",
+          "name": "Ontonagon",
+          "slug": "ontonagon"
+        },
+        {
+          "fips": "26133",
+          "name": "Osceola",
+          "slug": "osceola"
+        },
+        {
+          "fips": "26135",
+          "name": "Oscoda",
+          "slug": "oscoda"
+        },
+        {
+          "fips": "26137",
+          "name": "Otsego",
+          "slug": "otsego"
+        },
+        {
+          "fips": "26139",
+          "name": "Ottawa",
+          "slug": "ottawa"
+        },
+        {
+          "fips": "26141",
+          "name": "Presque Isle",
+          "slug": "presque-isle"
+        },
+        {
+          "fips": "26143",
+          "name": "Roscommon",
+          "slug": "roscommon"
+        },
+        {
+          "fips": "26145",
+          "name": "Saginaw",
+          "slug": "saginaw"
+        },
+        {
+          "fips": "26151",
+          "name": "Sanilac",
+          "slug": "sanilac"
+        },
+        {
+          "fips": "26153",
+          "name": "Schoolcraft",
+          "slug": "schoolcraft"
+        },
+        {
+          "fips": "26155",
+          "name": "Shiawassee",
+          "slug": "shiawassee"
+        },
+        {
+          "fips": "26147",
+          "name": "St. Clair",
+          "slug": "st-clair"
+        },
+        {
+          "fips": "26149",
+          "name": "St. Joseph",
+          "slug": "st-joseph"
+        },
+        {
+          "fips": "26157",
+          "name": "Tuscola",
+          "slug": "tuscola"
+        },
+        {
+          "fips": "26159",
+          "name": "Van Buren",
+          "slug": "van-buren"
+        },
+        {
+          "fips": "26161",
+          "name": "Washtenaw",
+          "slug": "washtenaw"
+        },
+        {
+          "fips": "26163",
+          "name": "Wayne",
+          "slug": "wayne"
+        },
+        {
+          "fips": "26165",
+          "name": "Wexford",
+          "slug": "wexford"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "Texas newspaper public notices, including 30 day tax abatement notices",
+      "state": "TX",
+      "url": "https://www.texaspublicnotices.com/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "TCEQ pending air permit applications in the Permit Search Portal",
+      "state": "TX",
+      "url": "https://permit-search.tceq.texas.gov/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "TCEQ pending air permit lists on the older site",
+      "state": "TX",
+      "url": "https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices",
+      "read": true,
+      "use": "signal"
+    },
+    {
+      "name": "TCEQ construction stormwater notices of intent",
+      "state": "TX",
+      "url": "https://cdn.fs.pathlms.com/1dL9jIAmRK2KniXfbkzs?dl=true",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "ERCOT Regional Planning Group project files",
+      "state": "TX",
+      "url": "https://www.ercot.com/committees/other/rpg",
+      "read": true,
+      "use": "signal"
+    },
+    {
+      "name": "ERCOT large load reports",
+      "state": "TX",
+      "url": "https://www.ercot.com/committees/tac/llwg",
+      "read": true,
+      "use": "context"
+    },
+    {
+      "name": "PUC Interchange filings for transmission certificates",
+      "state": "TX",
+      "url": "https://interchange.puc.texas.gov/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "TWDB submitted drillers reports",
+      "state": "TX",
+      "url": "https://www.twdb.texas.gov/groundwater/data/data-well-reports.asp",
+      "read": true,
+      "use": "signal"
+    },
+    {
+      "name": "Comptroller registered data centers",
+      "state": "TX",
+      "url": "https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php",
+      "read": true,
+      "use": "baseline"
+    },
+    {
+      "name": "Comptroller local development agreements",
+      "state": "TX",
+      "url": "https://comptroller.texas.gov/economy/development/search-tools/sb1340/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "City and county agendas in the 30 counties",
+      "state": "TX",
+      "url": "https://rjionline.org/news/welcome-to-agenda-watch/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "Michigan Public Service Commission dockets and orders",
+      "state": "MI",
+      "url": "https://mi-psc.my.site.com/s/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "EGLE air permits pending decision",
+      "state": "MI",
+      "url": "https://www.egle.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "EGLE notices and permit records in the MiEnviro Portal",
+      "state": "MI",
+      "url": "https://www.michigan.gov/egle/maps-data/mienviroportal",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "Michigan Strategic Fund board packets and data center certificates",
+      "state": "MI",
+      "url": "https://www.michiganbusiness.org/services/data-center/",
+      "read": false,
+      "use": "signal"
+    },
+    {
+      "name": "Michigan newspaper zoning hearing notices",
+      "state": "MI",
+      "url": "https://zeus-milenia.legislature.mi.gov/documents/mcl/pdf/mcl-125-3103.pdf",
+      "read": false,
+      "use": "signal"
+    }
+  ]
+}

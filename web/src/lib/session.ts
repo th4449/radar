@@ -71,7 +71,42 @@ export function useAccount(): Account {
   };
 }
 
-export async function signOut(): Promise<void> {
+export async function signOut(to = "/review/"): Promise<void> {
   await supabase.auth.signOut();
-  window.location.assign("/review/");
+  window.location.assign(to);
+}
+
+export interface User {
+  loading: boolean;
+  userId: string | null;
+  email: string | null;
+}
+
+/** Who is signed in, for pages that have nothing to do with reviewing. */
+export function useUser(): User {
+  const [user, setUser] = useState<User>({ loading: true, userId: null, email: null });
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+        setTimeout(() => setTick((n) => n + 1), 0);
+      }
+    });
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    let live = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!live) return;
+      const found = data.session?.user ?? null;
+      setUser({ loading: false, userId: found?.id ?? null, email: found?.email ?? null });
+    });
+    return () => {
+      live = false;
+    };
+  }, [tick]);
+
+  return user;
 }

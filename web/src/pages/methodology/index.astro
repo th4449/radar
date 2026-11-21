@@ -1,0 +1,159 @@
+---
+import Base from "../../layouts/Base.astro";
+import { SOURCES, STATES } from "../../lib/places";
+
+const texas = STATES.find((s) => s.code === "TX")!;
+const michigan = STATES.find((s) => s.code === "MI")!;
+const read = SOURCES.filter((s) => s.read);
+const waiting = SOURCES.filter((s) => !s.read);
+const stateOf = (code: string) => STATES.find((s) => s.code === code)?.name ?? code;
+---
+
+<Base title="Methodology">
+  <main class="prose">
+    <h1>How the radar works</h1>
+    <p class="lede">
+      The radar reads public records for early signs that a data center may be coming to a
+      county. It publishes an alert only after a person has checked the records against their
+      sources.
+    </p>
+
+    <h2>What an alert is</h2>
+    <p>
+      An alert says that several public records point at one site. It links every record. Read
+      them yourself.
+    </p>
+    <p>
+      An alert carries the word confirmed. Confirmed means a reviewer opened each record at its
+      source and checked that it says what the alert says. It does not mean a data center is
+      planned. The radar says a data center is planned only where a record says so.
+    </p>
+
+    <h2>Where it looks</h2>
+    <p>
+      The radar watches {texas.counties.length} Texas counties: {
+        texas.counties.map((c) => c.name).join(", ")
+      }. It does not watch the rest of Texas. Dekleptocracy Alliance chose 25 of them for
+      documented conflict over data centers and 5 for the number of facilities.
+    </p>
+    <p>
+      The radar is built to cover all {michigan.counties.length} Michigan counties. No Michigan
+      record source is read yet.
+    </p>
+
+    <h2 id="sources">Which records it reads</h2>
+    <p>The radar reads these sources today.</p>
+    <ul>
+      {
+        read.map((s) => (
+          <li>
+            <a href={s.url} rel="noopener noreferrer">
+              {s.name}
+            </a>
+            , {stateOf(s.state)}.
+            {s.use === "baseline" && " A list of companies, used to recognize a name in other records."}
+            {s.use === "context" && " Statewide totals, kept for context. It names no site."}
+          </li>
+        ))
+      }
+    </ul>
+    <p>
+      The radar does not read these sources yet. Some bar automated readers in their terms. The
+      radar does not work around a block, a captcha or a login.
+    </p>
+    <ul>
+      {
+        waiting.map((s) => (
+          <li>
+            {s.name}, {stateOf(s.state)}.
+          </li>
+        ))
+      }
+    </ul>
+    <p>
+      The radar keeps a copy of every record it reads, with the address, the time and a
+      fingerprint of the file. An alert page shows all three.
+    </p>
+
+    <h2>How a record becomes a signal</h2>
+    <p>
+      A signal is one dated public record. A record becomes a signal only for a stated reason,
+      and the reason is kept with it. The reasons are these.
+    </p>
+    <ul>
+      <li>The record uses the words data center.</li>
+      <li>
+        The record uses a term that often stands in for one, such as large load, technology
+        campus or reinvestment zone.
+      </li>
+      <li>The record names a project by a code name, such as Project and a capitalized word.</li>
+      <li>
+        The record names a company on the Texas Comptroller's list of registered data centers.
+      </li>
+    </ul>
+    <p>
+      Most records that use these words are not about data centers. A light industrial rezoning
+      is usually a warehouse. That is why one signal is never an alert.
+    </p>
+
+    <h2>People are left out</h2>
+    <p>
+      The radar does not publish the names of private individuals. Many records name a person: a
+      well owner, a permit applicant. The radar uses a record only when the named party is
+      plainly a company or a public body. Anything else is held back and counted. Companies and
+      public officials acting in office are in scope.
+    </p>
+
+    <h2>How signals become a site</h2>
+    <p>
+      Signals join into one site only inside one county. They join when they name the same
+      project, name the same company or sit within about a kilometer of each other. The radar
+      never merges two sites by itself. An administrator decides.
+    </p>
+
+    <h2>How a site is scored</h2>
+    <p>
+      Each kind of signal has points. A tax abatement notice, an air permit application and a
+      transmission filing weigh the most. A well report weighs less. A keyword in an agenda
+      weighs least. Points fade with age: they halve each year. A site gets a bonus when two or
+      more kinds of signal, from different sources, land within 12 months.
+    </p>
+    <p>
+      A site that scores high enough goes to the reviewers. The numbers are placeholders. A
+      backtest against known projects will set them, and this page will say when it has.
+    </p>
+
+    <h2>How a site is reviewed</h2>
+    <p>
+      Reviewers are approved by Dekleptocracy Alliance. A reviewer opens every record behind a
+      site at its source, then confirms or rejects the site. An administrator writes the alert
+      and approves it before it is public. Every decision is logged.
+    </p>
+    <p>
+      If a confirmation is reversed, the alert comes down the same moment. Email already sent
+      cannot be recalled.
+    </p>
+
+    <h2>What the radar cannot tell you</h2>
+    <p>
+      No alert for your county does not mean nothing is planned. The radar reads a few sources,
+      and many early steps leave no public record. Records also arrive late. A signal can be a
+      week or a year behind the event it records.
+    </p>
+
+    <h2>Corrections</h2>
+    <p>
+      If an alert is wrong, <a href="/corrections/">send a correction</a>. You do not need an
+      account.
+    </p>
+
+    <h2>The code</h2>
+    <p>
+      The collectors, the rules and the scoring are public at{" "}
+      <a href="https://github.com/th4449/radar" rel="noopener noreferrer">github.com/th4449/radar</a>.
+      The map uses{" "}
+      <a href="https://openfreemap.org/" rel="noopener noreferrer">OpenFreeMap</a>{" "}
+      tiles and OpenStreetMap data.
+    </p>
+  </main>
+</Base>

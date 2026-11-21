@@ -11,6 +11,18 @@ export function longDate(value: string | null | undefined): string {
   return `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}`;
 }
 
+/**
+ * The day a moment fell on where the reader is, as "November 20, 2026". For when something was
+ * published, read or confirmed. A plain date, such as a record's own date, is shown as written.
+ */
+export function localDay(value: string | null | undefined, timeZone?: string): string {
+  if (!value) return "";
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(value)) return longDate(value);
+  const when = new Date(value);
+  if (Number.isNaN(when.getTime())) return value;
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone }).format(when);
+}
+
 export const SIGNAL_NAMES: Record<string, string> = {
   abatement_notice: "Tax abatement notice",
   air_permit: "Air permit application",

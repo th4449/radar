@@ -1,0 +1,11 @@
+---
+import Base from "../../layouts/Base.astro";
+import AccountPage from "../../components/AccountPage";
+---
+
+<Base title="Your alerts">
+  <main>
+    <h1>Your alerts</h1>
+    <AccountPage client:only="preact" />
+  </main>
+</Base>

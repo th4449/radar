@@ -82,6 +82,18 @@ def test_a_digest_lists_each_alert_with_its_link():
     assert "Two records name this tract." not in text
 
 
+def test_an_alerts_date_is_the_day_in_its_own_state():
+    """Published at 8 in the evening in Texas is still that day, though UTC has moved on."""
+    late = dt.datetime(2026, 11, 21, 2, 0, tzinfo=dt.UTC)
+    texas = alert_email.AlertItem(1, "TX", "48221", "H", "B", late, 1)
+    michigan = alert_email.AlertItem(2, "MI", "26161", "H", "B", late, 1)
+    assert alert_email.published_day(texas) == "November 20, 2026"
+    assert alert_email.published_day(michigan) == "November 20, 2026"
+    assert (
+        "Published November 20, 2026." in alert_email.render_each(texas, SETTINGS, PLACES, "t")[1]
+    )
+
+
 def test_a_digest_of_one_alert_reads_as_one():
     subject, text = alert_email.render_weekly("MI", [SALINE], SETTINGS, PLACES, "tok")
     assert subject == "Michigan weekly digest: 1 confirmed alert"

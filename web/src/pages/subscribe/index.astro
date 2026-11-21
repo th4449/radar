@@ -1,0 +1,26 @@
+---
+import Base from "../../layouts/Base.astro";
+import Subscribe from "../../components/Subscribe";
+---
+
+<Base title="Get alerts">
+  <main>
+    <h1>Get alerts by email</h1>
+    <p class="lede">
+      Choose your states. You get an email when the radar publishes a confirmed alert there, or
+      one digest a week. It is free and you can stop at any time.
+    </p>
+    <Subscribe client:only="preact" />
+
+    <h2>What we keep</h2>
+    <p>
+      We keep your email address, the states and counties you chose and how often you want email.
+      We use them to send you alerts and for nothing else. We do not share or sell them. Every
+      email has a link that removes you.
+    </p>
+    <p>
+      Signing up gives you alerts. It does not make you a reviewer.{" "}
+      <a href="/review/">Reviewers apply separately.</a>
+    </p>
+  </main>
+</Base>

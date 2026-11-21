@@ -1,0 +1,20 @@
+---
+import Base from "../../layouts/Base.astro";
+import Corrections from "../../components/Corrections";
+---
+
+<Base title="Corrections">
+  <main>
+    <h1>Send a correction</h1>
+    <p class="lede">
+      If an alert misreads a record, names the wrong place or is out of date, tell us. You do not
+      need an account. An administrator reads every correction.
+    </p>
+    <Corrections client:only="preact" />
+    <h2>What happens next</h2>
+    <p>
+      An administrator checks your correction against the record. If the alert is wrong it is
+      fixed or taken down. An alert comes down whenever a reviewer's confirmation is reversed.
+    </p>
+  </main>
+</Base>
