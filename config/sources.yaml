@@ -156,7 +156,7 @@ sources:
     cadence: daily
     robots_status: not_checked
     verified_at: null
-    notes: Milestone M8. Needs an inventory of every public body and its platform first. Each platform gets its own source entry then.
+    notes: Milestone M8. The inventory of 607 public bodies and their platforms is in config/tx_agenda_inventory.csv. No platform's terms have been read and no collector is written. Each platform gets its own source entry once its terms are read. See docs/sources/tx_local_agendas.md.
 
   # Michigan statewide feeds.
   - id: mi_mpsc_dockets

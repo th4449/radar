@@ -2,6 +2,46 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — M8, first step: the Texas agenda inventory
+
+The plan's first step for M8 is an inventory of every commissioners court, city council, planning body and development corporation in the 30 counties, with the platform each uses. No collector is written.
+
+**Built**
+
+- **`config/tx_agenda_inventory.csv`: 607 bodies of 334 governments.** 30 commissioners courts, 304 city councils, 86 planning bodies and 187 development corporations, each with its agenda page and platform, or an honest "not determined".
+- **The list of bodies comes from records, not from search.** Cities are every incorporated place in the 30 counties in the Census place file, kept in `config/tx_places.csv`. Development corporations are from the Comptroller's open dataset of Type A and Type B reports.
+- **`pipeline/agenda_inventory.py`** loads the file and refuses a row that names a platform its own addresses do not show. `uv run python -m pipeline.agenda_inventory` prints the counts.
+- Tests: every county has its court, every incorporated place has its council, no row names a person. 36 new tests. 713 pass.
+- The note is `docs/sources/tx_local_agendas.md`.
+
+**How the research was done**
+
+- Eleven research passes, one per group of counties, read each government's own website. Their brief barred guessing an address, working around a block and recording a person's name.
+- The merge kept one rule: a row may claim only what its addresses show. It weakened 6 rows and marked 55 as inferred.
+
+**What it found**
+
+- **Four platforms hold 113 of the 334 governments:** CivicPlus Agenda Center 51, CivicClerk 35, Legistar 14, Municode Meetings 13.
+- 99 governments post files on their own sites. 22 have no website. 60 are not determined.
+- Of the 30 commissioners courts, 10 are on CivicPlus Agenda Center and 5 on the county association's sites.
+
+**Verified by hand**
+
+- I opened 13 rows drawn at random by platform. 11 showed a current agenda on the platform the row names. One page could not be read and its row says so. **One row was wrong, by a fault in my merge rule,** and is corrected.
+
+**Not verified**
+
+- **594 of the 607 rows were not opened by me.**
+- **Planning bodies are incomplete.** 86 cities have a row. For 88 cities the research did not look or did not say.
+- 129 of the 187 development corporations have no agenda location.
+- **No platform's terms or robots rules have been read.** Nothing in the inventory says a page may be collected.
+
+**For the owner**
+
+- **I propose batches by platform, not by ten counties.** One collector per platform reaches every county that uses it. Three batches would reach 135 governments and 22 of the 30 commissioners courts. The note has the detail. This changes the plan and needs your approval.
+- **Each government's own site terms apply too.** An Agenda Center page sits on the city's domain. Before a collector touches a site I read that site's terms and robots rules, and mark it manual if they restrict automated access.
+- A second research pass could fill the planning bodies, the 60 governments not determined and the development corporations. It is not run.
+
 ## November 20, 2026 — Michigan refused permission for the docket site
 
 The owner shared the Public Service Commission's reply to the request sent on November 19.

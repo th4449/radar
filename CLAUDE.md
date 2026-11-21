@@ -23,6 +23,7 @@ A public tool that names companies and tells communities a data center may be co
 - `collectors/` one module per source under `tx/` and `mi/`. Shared fetch and archive code is in `collectors/base.py`.
 - `pipeline/` extract, classify, entities, geocode, score. `signals.py` turns one stored document into draft signals and touches no database. `process.py` runs it over the database. `triage.py` is the optional model step, off by default. `alert_email.py` works out the alert emails that are due. It only does dry runs, and a dry run prints no address and no unsubscribe token.
 - `web/` the public site and the reviewer desk. Astro, with Preact for the screens that read data. A static build: every page reads the database in the browser with the visitor's own session, so the policies decide what anyone sees. Never put a rule only in the front end. See `web/README.md`.
+- `config/tx_agenda_inventory.csv` every commissioners court, city council, planning body and development corporation in the 30 counties, with its agenda page and platform. `pipeline/agenda_inventory.py` loads it and refuses a row that names a platform its own addresses do not show. Research, not a collector.
 - `scripts/dev_seed.py` fills a local database from the test fixtures. It refuses any other database.
 - `db/migrations/` SQL migrations named `<UTC timestamp>_<name>.sql`. `supabase/migrations` is a symlink to this folder so the Supabase CLI finds them.
 - `tests/db/` policy tests. They run against `supabase db start`.

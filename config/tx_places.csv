@@ -1,0 +1,309 @@
+# Every incorporated place in the 30 Texas test counties, with each of those counties it lies in.
+# From the Census file national_place_by_county2020.txt, read 2026-11-20,
+# sha256 9996494d33cf6ee4527491508aa1b8dae85dcff3a979886e19b0b375e5d06ec6.
+# Census designated places are left out: they have no government.
+place,place_fips,counties
+Abbott city,4800100,Hill
+Abernathy city,4800160,Lubbock
+Abilene city,4801000,Taylor
+Addison town,4801240,Dallas
+Alamo Heights city,4801600,Bexar
+Aledo city,4801744,Parker
+Alma town,4802044,Ellis
+Alvarado city,4802260,Johnson
+Alvord town,4802284,Wise
+Amarillo city,4803000,Potter
+Annetta North town,4803340,Parker
+Annetta South town,4803342,Parker
+Annetta town,4803336,Parker
+Aquilla city,4803588,Hill
+Archer City city,4803696,Archer
+Athens city,4804504,Henderson
+Aurora city,4804672,Wise
+Austin city,4805000,Travis
+Azle city,4805168,Parker
+Baird city,4805336,Callahan
+Balch Springs city,4805372,Dallas
+Balcones Heights city,4805384,Bexar
+Bardwell city,4805612,Ellis
+Bay City city,4805984,Matagorda
+Baytown city,4806128,Harris
+Bee Cave city,4807156,Travis
+Bellaire city,4807300,Harris
+Bellville city,4807432,Austin
+Berryville town,4807852,Henderson
+Bertram city,4807864,Burnet
+Bishop Hills town,4808398,Potter
+Blum town,4809004,Hill
+Boyd town,4809748,Wise
+Brazos Country city,4810090,Austin
+Briarcliff village,4810197,Travis
+Briaroaks city,4810216,Johnson
+Bridgeport city,4810264,Wise
+Brownsboro city,4810756,Henderson
+Bruceville-Eddy city,4810828,Falls
+Buckholts town,4811020,Milam
+Buffalo Gap town,4811128,Taylor
+Buffalo Springs village,4811155,Lubbock
+Bunker Hill Village city,4811300,Harris
+Burleson city,4811428,Johnson
+Burnet city,4811464,Burnet
+Bynum town,4811656,Hill
+Cameron city,4812040,Milam
+Caney City town,4812472,Henderson
+Carl's Corner town,4812895,Hill
+Carrollton city,4813024,Dallas
+Castle Hills city,4813276,Bexar
+Cedar Hill city,4813492,Dallas; Ellis
+Cedar Park city,4813552,Travis
+Chandler city,4814224,Henderson
+Chico city,4814620,Wise
+China Grove town,4814716,Bexar
+Cibolo city,4814920,Bexar
+Cleburne city,4815364,Johnson
+Clifton city,4815472,Bosque
+Clyde city,4815676,Callahan
+Cockrell Hill city,4815796,Dallas
+Coffee City town,4815820,Henderson
+Combine city,4816216,Dallas
+Como town,4816252,Hopkins
+Converse city,4816468,Bexar
+Cool city,4816540,Parker
+Coppell city,4816612,Dallas
+Cottonwood Shores city,4817208,Burnet
+Covington city,4817372,Hill
+Coyote Flats city,4817429,Johnson
+Cranfills Gap city,4817540,Bosque
+Creedmoor city,4817612,Travis
+Cresson city,4817648,Hood; Johnson; Parker
+Cross Plains town,4817816,Callahan
+Cross Timber town,4817917,Johnson
+Crowley city,4817960,Johnson
+Cumby city,4818128,Hopkins
+Dallas city,4819000,Dallas
+De Kalb city,4819648,Bowie
+DeCordova city,4819570,Hood
+DeSoto city,4820092,Dallas
+Decatur city,4819528,Wise
+Deer Park city,4819624,Harris
+Dublin city,4821484,Erath
+Duncanville city,4821628,Dallas
+El Lago city,4823164,Harris
+Elgin city,4823044,Travis
+Elmendorf city,4823272,Bexar
+Enchanted Oaks town,4824228,Henderson
+Ennis city,4824348,Ellis
+Eustace city,4824828,Henderson
+Fair Oaks Ranch city,4825168,Bexar
+Fairfield city,4825104,Freestone
+Farmers Branch city,4825452,Dallas
+Ferris city,4825752,Dallas; Ellis
+Fort Worth city,4827000,Johnson; Parker; Wise
+Frankston town,4827300,Henderson
+Friendswood city,4827648,Harris
+Galena Park city,4827996,Harris
+Garland city,4829000,Dallas
+Garrett town,4829036,Ellis
+Glen Rose city,4829876,Somervell
+Glenn Heights city,4829840,Dallas; Ellis
+Godley city,4829972,Johnson
+Golinda city,4830092,Falls
+Granbury city,4830416,Hood
+Grand Prairie city,4830464,Dallas; Ellis
+Grandview city,4830512,Johnson
+Granite Shoals city,4830584,Burnet
+Grapevine city,4830644,Dallas
+Grey Forest city,4831100,Bexar
+Groom town,4831292,Carson
+Gun Barrel City city,4831592,Henderson
+Hedwig Village city,4833068,Harris
+Helotes city,4833146,Bexar
+Hico city,4833548,Erath
+Highland Haven city,4833794,Burnet
+Highland Park town,4833824,Dallas
+Hill Country Village city,4833968,Bexar
+Hillsboro city,4834088,Hill
+Hilshire Village city,4834148,Harris
+Holliday city,4834532,Archer
+Hollywood Park town,4834628,Bexar
+Hooks city,4834736,Bowie
+Horseshoe Bay city,4834862,Burnet
+Houston city,4835000,Harris
+Hubbard city,4835180,Hill
+Hudson Oaks city,4835254,Parker
+Humble city,4835348,Harris
+Hunters Creek Village city,4835480,Harris
+Hutchins city,4835612,Dallas
+Idalou city,4835732,Lubbock
+Impact town,4835816,Taylor
+Industry city,4835984,Austin
+Iredell city,4836140,Bosque
+Irving city,4837000,Dallas
+Italy town,4837072,Ellis
+Itasca city,4837084,Hill
+Jacinto City city,4837156,Harris
+Jersey Village city,4837612,Harris
+Jonestown city,4838020,Travis
+Joshua city,4838080,Johnson
+Katy city,4838476,Harris
+Keene city,4838548,Johnson
+Kirby city,4839448,Bexar
+Kirvin town,4839520,Freestone
+La Porte city,4841440,Harris
+Lago Vista city,4840264,Travis
+Lake Bridgeport city,4840450,Wise
+Lakeside City town,4840756,Archer
+Lakeway city,4840984,Travis
+Lancaster city,4841212,Dallas
+Lawn town,4841872,Taylor
+League City city,4841980,Harris
+Leander city,4842016,Travis
+Leary city,4842028,Bowie
+Leon Valley city,4842388,Bexar
+Lewisville city,4842508,Dallas
+Lipan city,4842940,Hood
+Live Oak city,4843096,Bexar
+Log Cabin city,4843354,Henderson
+Lott city,4844176,Falls
+Lubbock city,4845000,Lubbock
+Lytle city,4845288,Bexar
+Mabank town,4845324,Henderson
+Malakoff city,4846224,Henderson
+Malone town,4846260,Hill
+Manor city,4846440,Travis
+Mansfield city,4846452,Ellis; Johnson
+Marble Falls city,4846584,Burnet
+Marlin city,4846740,Falls
+Maud city,4847088,Bowie
+Maypearl city,4847268,Ellis
+Meadowlakes city,4847330,Burnet
+Megargel town,4847460,Archer
+Meridian city,4847760,Bosque
+Merkel town,4847796,Taylor
+Mertens town,4847820,Hill
+Mesquite city,4847892,Dallas
+Midlothian city,4848096,Ellis
+Milano city,4848336,Milam
+Milford town,4848408,Ellis
+Millsap town,4848564,Parker
+Mineral Wells city,4848684,Parker
+Missouri City city,4848804,Harris
+Moore Station city,4849272,Henderson
+Morgan city,4849356,Bosque
+Morgan's Point city,4849380,Harris
+Mount Calm city,4849692,Hill
+Murchison city,4850076,Henderson
+Mustang Ridge city,4850200,Travis
+Nash city,4850352,Bowie
+Nassau Bay city,4850376,Harris
+New Boston city,4850808,Bowie
+New Deal town,4850916,Lubbock
+New Fairview city,4850920,Wise
+Newark city,4850772,Wise
+Oak Leaf city,4853115,Ellis
+Oakwood town,4853232,Freestone
+Olmos Park city,4853988,Bexar
+Ovilla city,4854444,Dallas; Ellis
+Palacios city,4854684,Matagorda
+Palmer town,4854744,Ellis
+Panhandle town,4854960,Carson
+Paradise city,4855056,Wise
+Pasadena city,4856000,Harris
+Payne Springs town,4856276,Henderson
+Pearland city,4856348,Harris
+Pecan Hill city,4856485,Ellis
+Penelope town,4856672,Hill
+Pflugerville city,4857176,Travis
+Piney Point Village city,4857800,Harris
+Point Venture village,4858586,Travis
+Poynor town,4859192,Henderson
+Putnam town,4859984,Callahan
+Ransom Canyon town,4860672,Lubbock
+Red Lick city,4861172,Bowie
+Red Oak city,4861196,Ellis
+Redwater city,4861340,Bowie
+Reno city,4861604,Parker
+Rhome city,4861700,Wise
+Richardson city,4861796,Dallas
+Richland Springs town,4861880,San Saba
+Rio Vista city,4862240,Johnson
+Rockdale city,4862672,Milam
+Rollingwood city,4863008,Travis
+Rosebud city,4863188,Falls
+Round Rock city,4863500,Travis
+Rowlett city,4863572,Dallas
+Runaway Bay city,4863782,Wise
+Sachse city,4864064,Dallas
+San Angelo city,4864472,Tom Green
+San Antonio city,4865000,Bexar
+San Felipe town,4865372,Austin
+San Leanna village,4865552,Travis
+San Saba city,4865648,San Saba
+Sanctuary town,4865066,Parker
+Sandy Oaks city,4865344,Bexar
+Schertz city,4866128,Bexar
+Scotland city,4866284,Archer
+Seabrook city,4866392,Harris
+Seagoville city,4866428,Dallas
+Sealy city,4866464,Austin
+Selma city,4866704,Bexar
+Seven Points city,4866908,Henderson
+Shallowater city,4867136,Lubbock
+Shavano Park city,4867268,Bexar
+Shoreacres city,4867688,Harris
+Skellytown town,4868120,Carson
+Slaton city,4868180,Lubbock
+Somerset city,4868708,Bexar
+South Frydek city,4868978,Austin
+South Houston city,4869020,Harris
+Southside Place city,4869272,Harris
+Spring Valley Village city,4869830,Harris
+Springtown city,4869800,Parker; Wise
+St. Hedwig town,4864172,Bexar
+Stafford city,4869908,Harris
+Star Harbor city,4870076,Henderson
+Stephenville city,4870208,Erath
+Stockton Bend city,4870406,Hood
+Streetman town,4870604,Freestone
+Sulphur Springs city,4870904,Hopkins
+Sunnyvale town,4871156,Dallas
+Sunset Valley city,4871324,Travis
+Taylor Lake Village city,4871960,Harris
+Teague city,4872020,Freestone
+Terrell Hills city,4872296,Bexar
+Texarkana city,4872368,Bowie
+The Hills village,4872578,Travis
+Thorndale city,4872776,Milam
+Tira town,4873124,Hopkins
+Tolar city,4873268,Hood
+Tomball city,4873316,Harris
+Tool city,4873352,Henderson
+Trent town,4873580,Taylor
+Trinidad city,4873652,Henderson
+Tuscola city,4874048,Taylor
+Tye city,4874132,Taylor
+Universal City city,4874408,Bexar
+University Park city,4874492,Dallas
+Valley Mills city,4874732,Bosque
+Venus town,4875236,Ellis; Johnson
+Volente village,4875752,Travis
+Von Ormy city,4875764,Bexar
+Wake Village city,4876096,Bowie
+Waller city,4876228,Harris
+Wallis city,4876240,Austin
+Walnut Springs city,4876348,Bosque
+Waxahachie city,4876816,Ellis
+Weatherford city,4876864,Parker
+Webberville village,4876924,Travis
+Webster city,4876948,Harris
+West Lake Hills city,4877632,Travis
+West University Place city,4877956,Harris
+White Deer town,4878316,Carson
+Whitney town,4878664,Hill
+Willow Park city,4879492,Parker
+Wilmer city,4879576,Dallas
+Windcrest city,4879672,Bexar
+Windthorst town,4879696,Archer
+Wolfforth city,4879972,Lubbock
+Wortham town,4880296,Freestone
+Wylie city,4880356,Dallas
