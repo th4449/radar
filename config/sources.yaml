@@ -169,7 +169,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: E-Dockets robots file allows everything, but the site has no terms of its own and links to the Michigan.gov policies, which bar automated access without a written agreement. News releases are at https://www.michigan.gov/mpsc/commission/news-releases under the same terms. Read by hand. See docs/sources/mi_mpsc_dockets.md.
+    notes: E-Dockets robots file allows everything, but the site has no terms of its own and links to the Michigan.gov policies, which bar automated access without a written agreement. News releases are at https://www.michigan.gov/mpsc/commission/news-releases under the same terms. The State refused a written agreement on 2026-11-20. Read by hand, never automated. See docs/sources/mi_mpsc_dockets.md.
 
   - id: mi_egle_air_pending
     state: MI

@@ -2,6 +2,22 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 20, 2026 — Michigan refused permission for the docket site
+
+The owner shared the Public Service Commission's reply to the request sent on November 19.
+
+- **The State refused a written agreement.** The reply says the State of Michigan has not historically granted permission for automated access and that its terms prohibit it. It also says no agreement is needed to use information from the website.
+- **`mi_mpsc_dockets` is manual for good.** No collector will be written. The radar does not work around a refusal.
+- The two EGLE feeds were already restricted. Their requests are drafted and not sent. The reply states the State's practice as a whole, so the same answer is likely.
+- **No Michigan statewide feed on a State site can be automated.** That is three of the five in the plan. The other two, Strategic Fund board packets and newspaper zoning notices, are not checked yet.
+- Recorded in `docs/sources/mi_mpsc_dockets.md` and `docs/sources/mi_state_of_michigan_terms.md`. The reply itself is not in the repository.
+
+**For the owner**
+
+- **Michigan now depends on people reading by hand, or on sources not yet checked.** The radar has no form for entering a hand-read record. Building one is the way a Michigan docket could ever become a signal.
+- Whether to send the two EGLE requests anyway.
+- Whether to ask the agencies for a periodic list of new cases and pending permits. Not asked.
+
 ## November 20, 2026 — M7: public site and alerts
 
 **Built**

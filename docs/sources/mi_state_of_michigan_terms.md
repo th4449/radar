@@ -30,11 +30,19 @@ The same paragraph allows an exception only under "a separate, written agreement
 - Whether EGLE or the commission publishes an official feed, API, email list or bulk download for these records.
 - `michiganbusiness.org` (Strategic Fund board packets). It is a different site with its own terms.
 
+## The State's answer on written agreements
+
+The owner asked the Public Service Commission for a written agreement on November 19, 2026. The commission's Executive Business Section refused on November 20, 2026. The reply says the State of Michigan has not historically granted this permission and that its terms expressly prohibit automated access. It also says no agreement is needed to use information from the website. The full account is in [mi_mpsc_dockets.md](mi_mpsc_dockets.md).
+
+- **`mi_mpsc_dockets` is closed to automation.** The refusal is in writing.
+- **The two EGLE feeds stay restricted.** The answer came from the commission, not from EGLE, and the requests drafted for EGLE were not sent. But the reply states the practice of the State as a whole. Expect the same answer. Sending the EGLE requests is the owner's call.
+
 ## Options for the owner
 
-1. Ask the State for written permission. The terms name that path.
-2. Have a person check these three pages by hand on a schedule. The pages are public and free to read.
+1. ~~Ask the State for written permission.~~ Asked for the docket site and refused.
+2. Have a person check these pages by hand on a schedule. The pages are public and free to read, and the State's reply says no agreement is needed to use the information. The radar has no form for entering a hand-read record yet.
 3. Look for official subscriptions or feeds, such as docket email notices, and use those.
-4. Rely on other Michigan signals first, such as Strategic Fund packets and zoning notices, if their terms allow.
+4. Rely on other Michigan signals first, such as Strategic Fund packets, zoning notices and local agendas, if their terms allow. None of these has been checked.
+5. Ask the agencies whether they publish, or would send on request, a periodic list of new cases or pending permits. Not asked.
 
-No collector will be written for these feeds until one of these is chosen.
+No collector will be written for these three feeds.
