@@ -222,3 +222,58 @@ def test_no_row_names_a_person(bodies):
     for b in bodies:
         assert not _TITLE_THEN_NAME.search(b.notes), (b.body, b.notes)
         assert "@" not in f"{b.notes} {b.evidence} {b.agenda_url}", b.body
+
+
+# --- what each platform's own rules say ---------------------------------------------------------
+
+
+def test_every_platform_has_its_standing_on_file():
+    terms = inv.load_platform_terms()
+    assert set(terms) == set(inv.FOUND)
+
+
+def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
+    """Read on November 21, 2026. Changing one of these takes a new reading and the owner's word."""
+    terms = inv.load_platform_terms()
+    standing = {name: t.status for name, t in terms.items() if t.status != "not_read"}
+    assert standing == {
+        "civicplus_agendacenter": "restricted",
+        "civicclerk": "restricted",
+        "municode_meetings": "restricted",
+        "granicus": "restricted",
+        "civicweb": "restricted",
+        "swagit": "restricted",
+        "legistar": "candidate",
+        "cira_county_site": "candidate",
+    }
+    assert "cleared" not in {t.status for t in terms.values()}
+
+
+def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date():
+    base = {
+        "platform": "legistar",
+        "vendor": "Example vendor",
+        "robots": "none",
+        "checked_on": "2026-11-21",
+        "terms_url": "",
+        "note": "Made up for a test.",
+    }
+    assert inv.PlatformTerms(**base, status="cleared")
+    with pytest.raises(ValidationError, match="robots file that does not allow it"):
+        inv.PlatformTerms(**{**base, "robots": "disallowed"}, status="cleared")
+    with pytest.raises(ValidationError, match="needs the date read"):
+        inv.PlatformTerms(**{**base, "checked_on": ""}, status="candidate")
+    with pytest.raises(ValidationError, match="not a platform"):
+        inv.PlatformTerms(**{**base, "platform": "no_website"}, status="not_read")
+
+
+def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
+    rows = inv.load_site_terms()
+    hosts = [r["host"] for r in rows]
+    assert len(set(hosts)) == len(hosts) == 38
+    governments = {b.government for b in inv.load_inventory()}
+    results = {"own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read"}
+    for r in rows:
+        assert r["government"] in governments, r["host"]
+        assert r["result"] in results, r["host"]
+        assert r["platform"] in inv.FOUND

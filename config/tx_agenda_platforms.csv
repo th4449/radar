@@ -1,0 +1,27 @@
+# What each agenda platform's own rules say about a program reading it. BUILD_PLAN.md section 6.
+# A platform is read by a collector only when its status is `cleared`. Nothing is cleared yet.
+#
+# status   restricted   the vendor's terms or the platform's robots file bar what a collector does
+#          candidate    nothing was found against it. Each government's own terms are still unread
+#          not_read     the platform's rules have not been read
+#          cleared      read, nothing against it, and the owner has said to go ahead
+#
+# robots   allowed, disallowed, none (no robots file), unreadable, mixed or not_read
+# The reasons, with what was read and when: docs/sources/tx_agenda_platform_terms.md.
+platform,vendor,status,robots,checked_on,terms_url,note
+civicplus_agendacenter,CivicPlus,restricted,allowed,2026-11-21,https://www.civicplus.help/legal-center/docs/civicplus-terms-of-use,"The vendor's terms bar automated collection of a government's content for use in any algorithmic or automated decision system without its written consent. Each site's robots file allows the pages, with a 10 second delay."
+civicclerk,CivicPlus,restricted,allowed,2026-11-21,https://www.civicplus.help/legal-center/docs/civicplus-terms-of-use,"A CivicPlus product under the same terms. Its robots file allows the pages and reserves rights against training AI models."
+municode_meetings,CivicPlus,restricted,allowed,2026-11-21,https://www.civicplus.help/legal-center/docs/civicplus-terms-of-use,"A CivicPlus product under the same terms. meetings.municode.com carries the same robots file as CivicClerk."
+granicus,Granicus,restricted,disallowed,2026-11-21,https://granicus.com/trust-center/terms-of-use/,"The robots file on a customer's Granicus host bars every agent but three named search engines."
+civicweb,Diligent,restricted,disallowed,2026-11-21,,"The robots file on a customer's CivicWeb host bars every agent. The vendor's terms were not read: the robots file settles it."
+swagit,Granicus,restricted,mixed,2026-11-21,https://granicus.com/trust-center/terms-of-use/,"A customer's Swagit pages are allowed. The host that holds the agenda files answers 403 for its robots file, which the fetcher treats as a refusal."
+legistar,Granicus,candidate,none,2026-11-21,https://granicus.com/trust-center/terms-of-use/,"No robots file on a customer's Legistar host or on the Legistar Web API. Granicus publishes that API for programs. Its website terms speak of its own website and say nothing on automated access. Each government's own terms are unread."
+cira_county_site,Texas Association of Counties,candidate,none,2026-11-21,,"No robots file on the one county site checked, and no terms page linked from its home page. The association's own terms for these sites were not found. Each county's site is unread."
+own_site_files,each government,not_read,not_read,,,"Each government's own site has its own robots file and terms. None is read."
+other,various,not_read,not_read,,,"Small outside platforms, each with its own rules. None is read."
+boarddocs,Diligent,not_read,not_read,,,"No government in the inventory uses it."
+destiny_hosted,Destiny Software,not_read,not_read,,,"No government in the inventory uses it."
+escribe,eScribe,not_read,not_read,,,"No government in the inventory uses it."
+iqm2,Granicus,not_read,not_read,,,"No government in the inventory uses it."
+novusagenda,Granicus,not_read,not_read,,,"No government in the inventory uses it."
+primegov,PrimeGov,not_read,not_read,,,"No government in the inventory uses it."

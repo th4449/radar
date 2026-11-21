@@ -136,20 +136,15 @@ Ten research passes read 320 agenda pages a second time. They also searched agai
 - A match between a state-listed corporation and a city is by city name.
 - **No platform's terms of use or robots rules have been read.** A confirmed row says where the agendas are. It does not say they may be collected.
 
-## What comes next, and a change to the plan
+## What comes next
 
-The plan calls for three batches of ten counties. The inventory says agendas are sorted by platform, not by county: one collector for one platform reaches every county that uses it. I propose batches by platform:
+**The owner approved building the collectors by platform. The first reading of the platforms' own rules then stopped the first batch.** The full account is in [tx_agenda_platform_terms.md](tx_agenda_platform_terms.md).
 
-1. **CivicPlus Agenda Center.** 51 governments in 16 counties, 10 commissioners courts among them.
-2. **CivicClerk, Legistar and Municode Meetings.** 63 governments, 5 commissioners courts among them.
-3. **County association sites, then Swagit, CivicWeb and Granicus.** 22 governments, 7 commissioners courts among them.
+- **CivicPlus' terms restrict the radar's use.** They cover the Agenda Center, CivicClerk and Municode Meetings: 100 governments.
+- **Granicus pages, Swagit and CivicWeb are closed by their robots files:** 17 governments.
+- **Legistar and the county association sites are candidates:** 19 governments, 7 commissioners courts among them.
+- The 114 governments with files on their own sites each need their own reading.
 
-That reaches 136 governments and 22 of the 30 commissioners courts. A collector takes only the confirmed rows among them: 96 today. The other 40 wait for a hand read. It leaves:
+`collectable()` now needs two things: a confirmed row, and a platform marked `cleared` in `config/tx_agenda_platforms.csv`. No platform is cleared, so no row is collectable. A test pins each platform's standing.
 
-- 114 governments with files on their own sites, 75 of them confirmed. One general collector could read a page of file links, with one configured entry per site.
-- 23 on small outside platforms and 39 not determined. With no collector, a reviewer reads these 62 by hand for as long as the radar runs.
-- 22 with no website. There is nothing to read.
-
-**Before any collector:** each platform's terms and robots rules are read and recorded, and so are those of each government's site the collector would touch. An Agenda Center page sits on the city's own domain, so the city's terms apply as well as the platform's. A site that restricts automated access is marked manual.
-
-This order is a proposal. It changes the plan's batches and needs the owner's approval.
+No collector is written.

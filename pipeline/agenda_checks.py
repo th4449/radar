@@ -30,7 +30,8 @@ Verdicts:
   unchecked          no check has opened this row's page
   undetermined       the inventory itself names no agenda page
 
-Only `confirmed` rows may be given to a collector. See `collectable`.
+A collector takes a row only when it is `confirmed` and its platform's own rules allow a
+collector at all. See `collectable` and config/tx_agenda_platforms.csv.
 
 Who made a check is recorded in `by`:
 
@@ -58,9 +59,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pipeline.agenda_inventory import (
     OUTSIDE,
     AgendaBody,
+    PlatformTerms,
     _data_lines,
     is_county_site,
     load_inventory,
+    load_platform_terms,
     platform_of,
 )
 from pipeline.config import CONFIG_DIR
@@ -306,8 +309,22 @@ def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, 
     return "confirmed", f"Checked {check.checked_on}. Newest agenda {check.newest_agenda_date}."
 
 
-def collectable(body: AgendaBody, checks: Checks, today: dt.date) -> bool:
-    """True only for a row an independent check has confirmed. A collector takes no other row."""
+def collectable(
+    body: AgendaBody,
+    checks: Checks,
+    today: dt.date,
+    platforms: dict[str, PlatformTerms] | None = None,
+) -> bool:
+    """True only when a collector may take this row. Two things must both hold.
+
+    The row is right: an independent check confirmed it. And the platform may be read: its own
+    terms and robots rules were read, nothing in them stands against a collector, and the owner
+    said to go ahead. See config/tx_agenda_platforms.csv.
+    """
+    platforms = load_platform_terms() if platforms is None else platforms
+    terms = platforms.get(body.platform)
+    if terms is None or terms.status != "cleared":
+        return False
     return verdict(body, checks, today)[0] == "confirmed"
 
 

@@ -189,6 +189,53 @@ def load_places(path: Path | None = None) -> list[tuple[str, tuple[str, ...]]]:
     return [(row["place"], tuple(c.strip() for c in row["counties"].split(";"))) for row in reader]
 
 
+PLATFORM_TERMS = CONFIG_DIR / "tx_agenda_platforms.csv"
+PlatformStatus = Literal["restricted", "candidate", "not_read", "cleared"]
+
+
+class PlatformTerms(BaseModel):
+    """What one platform's own rules say about a program reading it."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    platform: str
+    vendor: str = Field(min_length=2)
+    status: PlatformStatus
+    robots: Literal["allowed", "disallowed", "none", "unreadable", "mixed", "not_read"]
+    checked_on: str = Field(pattern=r"^(\d{4}-\d{2}-\d{2})?$")
+    terms_url: str = Field(pattern=_URL)
+    note: str = Field(min_length=10)
+
+    @model_validator(mode="after")
+    def _consistent(self) -> PlatformTerms:
+        if self.platform not in FOUND:
+            raise ValueError(f"{self.platform} is not a platform agendas can be found on")
+        read = self.status != "not_read"
+        if read != bool(self.checked_on):
+            raise ValueError(f"{self.platform}: a status other than not_read needs the date read")
+        if self.status == "cleared" and self.robots in ("disallowed", "unreadable", "not_read"):
+            raise ValueError(f"{self.platform}: cleared, with a robots file that does not allow it")
+        return self
+
+
+def load_platform_terms(path: Path | None = None) -> dict[str, PlatformTerms]:
+    """Every platform's standing, by name. Every platform agendas are found on must be listed."""
+    reader = csv.DictReader(_data_lines(path or PLATFORM_TERMS))
+    terms = {row["platform"]: PlatformTerms(**row) for row in reader}
+    missing = sorted(set(FOUND) - set(terms))
+    if missing:
+        raise ValueError(f"platforms with no entry in the terms file: {missing}")
+    return terms
+
+
+SITE_TERMS = CONFIG_DIR / "tx_agenda_site_terms.csv"
+
+
+def load_site_terms(path: Path | None = None) -> list[dict[str, str]]:
+    """What each government's own site says about a program reading it, one row per host."""
+    return list(csv.DictReader(_data_lines(path or SITE_TERMS)))
+
+
 def summary(bodies: list[AgendaBody]) -> str:
     """Counts a person can read: bodies and governments by platform, and counties reached."""
     import collections

@@ -54,6 +54,22 @@ def check(**changes) -> ac.Check:
     return ac.Check(**{**base, **changes})
 
 
+def platforms(**status: str) -> dict[str, inv.PlatformTerms]:
+    """Every platform cleared, except the ones given another status."""
+    return {
+        name: inv.PlatformTerms(
+            platform=name,
+            vendor="Example vendor",
+            status=status.get(name, "cleared"),
+            robots="allowed",
+            checked_on="" if status.get(name) == "not_read" else "2026-11-21",
+            terms_url="",
+            note="Made up for a test.",
+        )
+        for name in inv.FOUND
+    }
+
+
 def earned(row: inv.AgendaBody, *checks: ac.Check, today: dt.date = TODAY) -> str:
     return ac.verdict(row, ac.Checks(list(checks)), today)[0]
 
@@ -63,12 +79,21 @@ def earned(row: inv.AgendaBody, *checks: ac.Check, today: dt.date = TODAY) -> st
 
 def test_a_row_is_confirmed_when_a_check_saw_the_same_platform_body_and_a_recent_agenda():
     assert earned(body(), check()) == "confirmed"
-    assert ac.collectable(body(), ac.Checks([check()]), TODAY)
+    assert ac.collectable(body(), ac.Checks([check()]), TODAY, platforms())
+
+
+def test_a_confirmed_row_is_still_not_collected_from_a_platform_that_is_not_cleared():
+    """Being right about where the agendas are is not permission to collect them."""
+    confirmed = ac.Checks([check()])
+    for status in ("restricted", "candidate", "not_read"):
+        barred = platforms(civicplus_agendacenter=status)
+        assert not ac.collectable(body(), confirmed, TODAY, barred), status
+    assert not ac.collectable(body(), confirmed, TODAY, {})
 
 
 def test_a_row_nobody_checked_is_not_trusted():
     assert earned(body()) == "unchecked"
-    assert not ac.collectable(body(), ac.Checks([]), TODAY)
+    assert not ac.collectable(body(), ac.Checks([]), TODAY, platforms())
     # A check of another page of the same government does not count.
     other = check(page="https://www.example-tx.gov/meetings")
     assert earned(body(), other) == "unchecked"
@@ -356,11 +381,19 @@ def test_the_hand_read_list_has_every_unsettled_row_and_courts_first():
 
 
 def test_no_collector_may_take_a_row_that_is_not_confirmed():
-    """The gate every agenda collector goes through."""
+    """The gate every agenda collector goes through, with every platform cleared for the test."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
+    cleared = platforms()
     for b in bodies:
         name, _ = ac.verdict(b, checks, TODAY)
-        assert ac.collectable(b, checks, TODAY) == (name == "confirmed")
+        assert ac.collectable(b, checks, TODAY, cleared) == (name == "confirmed")
         if name == "confirmed":
             assert b.agenda_url and b.platform in inv.FOUND
+
+
+def test_nothing_is_collectable_today():
+    """No platform is cleared, so the gate lets nothing through. This is the state on file."""
+    bodies = inv.load_inventory()
+    checks = ac.Checks(ac.load_checks())
+    assert not [b.body for b in bodies if ac.collectable(b, checks, TODAY)]

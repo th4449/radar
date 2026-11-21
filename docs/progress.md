@@ -2,6 +2,43 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 21, 2026 — M8: the platforms' own rules stop the first collector
+
+The owner approved batches by platform. Before writing the first collector I read the platforms' terms and robots files, as the plan requires. **No collector is written.**
+
+**Found**
+
+- **CivicPlus' terms restrict the radar's use.** Section 8 bars automated collection of a government's content for use in any algorithmic or automated decision system without CivicPlus' written consent. The Agenda Center, CivicClerk and Municode Meetings are all CivicPlus products: 100 governments.
+- **Granicus pages and CivicWeb are closed by their robots files.** Swagit's file host refuses its robots file. 17 governments.
+- **Legistar and the county association sites are candidates:** 19 governments, 7 commissioners courts. Granicus publishes the Legistar Web API for programs.
+- The governments' own pages mostly say nothing. Of 38 Agenda Center sites, 27 carry no word on automated access and 3 link CivicPlus' terms.
+- All 38 sites' robots files allow the agenda pages, with a 10 second delay.
+
+**Built**
+
+- `config/tx_agenda_platforms.csv`: each platform's standing, with the reason.
+- `config/tx_agenda_site_terms.csv`: what each of the 38 sites' own pages say.
+- **`collectable()` now also needs a cleared platform.** None is cleared, so nothing is collectable. A test pins each platform's standing.
+- The note is `docs/sources/tx_agenda_platform_terms.md`.
+- 6 new tests. 745 pass.
+
+**Verified by me**
+
+- CivicPlus' terms, sections 1, 2, 3, 7 and 8, read in full. Granicus' website terms, read in full. The Legistar Web API's examples page.
+- Robots files asked for on 50 hosts, one request each, with the radar's user agent.
+
+**Not verified**
+
+- Whether CivicPlus' terms bind a visitor to a government's site, and whether they reach a person's hand reading. Both are questions for counsel.
+- Robots files on one host per platform, except the Agenda Center. Another customer's host may differ.
+- The terms of each Legistar government, each county and each own-site government. None is read.
+- The Legistar Web API was not called.
+
+**For the owner**
+
+- **The plan's largest source of Texas agendas cannot be automated as things stand.** The choices for the 100 CivicPlus governments are to ask CivicPlus for written consent, ask the governments, read by hand after counsel answers, or leave them out.
+- **Legistar is the next candidate.** It needs your word and a reading of each government's terms first.
+
 ## November 21, 2026 — M8: a second read of the agenda inventory, and a system to keep it accurate
 
 The owner asked for a wider accuracy check and a system that finds errors.

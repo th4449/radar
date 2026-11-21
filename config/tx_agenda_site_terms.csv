@@ -1,0 +1,47 @@
+# What each government's own website says about a program reading it. BUILD_PLAN.md section 6.
+# One row per site. Read by research passes on the date shown. The vendor's terms are a
+# separate matter: see config/tx_agenda_platforms.csv.
+#
+# result   own_pages_silent     terms-like pages were read and none speaks of automated access
+#          links_vendor_terms   the site itself links the vendor's terms, which do
+#          no_terms_found       no terms-like page could be found or read
+#          could_not_read       the site did not load for the reader
+host,government,platform,checked_on,result,pages_read,note
+www.athenstx.gov,Athens city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.balchspringstx.gov,Balch Springs city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.bexar.org,Bexar County,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A privacy policy only. Nothing on automated access or reuse.
+www.bosquecounty.gov,Bosque County,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.bowiecounty.org,Bowie County,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.cityofcastlehills.com,Castle Hills city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.cedarparktexas.gov,Cedar Park city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.chico.texas.gov,Chico city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.desototexas.gov,DeSoto city,civicplus_agendacenter,2026-11-21,links_vendor_terms,3,The home page links the vendor's terms of use. The government's own pages say nothing on automated access.
+www.decaturtx.org,Decatur city,civicplus_agendacenter,2026-11-21,could_not_read,0,The site's pages did not load for the reader.
+www.elliscountytx.gov,Ellis County,civicplus_agendacenter,2026-11-21,could_not_read,1,The site's pages did not load for the reader.
+www.elmendorf-tx.com,Elmendorf city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.co.erath.tx.us,Erath County,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.eustacetexas.org,Eustace city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.cityofgrandview.org,Grandview city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.henderson-county.com,Henderson County,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.horseshoe-bay-tx.gov,Horseshoe Bay city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.jerseyvillage.gov,Jersey Village city,civicplus_agendacenter,2026-11-21,links_vendor_terms,3,The home page links the vendor's terms of use. The government's own pages say nothing on automated access.
+www.jonestowntx.gov,Jonestown city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.mylubbock.us,Lubbock city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.lytletx.org,Lytle city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.cityofmabanktx.org,Mabank town,civicplus_agendacenter,2026-11-21,could_not_read,0,The site's pages did not load for the reader.
+marblefallstx.gov,Marble Falls city,civicplus_agendacenter,2026-11-21,could_not_read,0,The site's pages did not load for the reader.
+www.cityofmesquite.com,Mesquite city,civicplus_agendacenter,2026-11-21,no_terms_found,3,"No terms, copyright or privacy page was found, or the pages linked were empty."
+www.mineralwellstx.gov,Mineral Wells city,civicplus_agendacenter,2026-11-21,own_pages_silent,3,A copyright line reserves all rights. Nothing on automated access.
+www.nassaubay.com,Nassau Bay city,civicplus_agendacenter,2026-11-21,no_terms_found,0,"No terms, copyright or privacy page was found, or the pages linked were empty."
+www.oakleaftexas.org,Oak Leaf city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.olmospark.org,Olmos Park city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.cityofovilla.org,Ovilla city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.parkercountytx.gov,Parker County,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.pasadenatx.gov,Pasadena city,civicplus_agendacenter,2026-11-21,own_pages_silent,3,A social media policy mentions bots that post comments. Nothing on reading the website. The copyright page reserves all rights.
+www.rockdaletx.gov,Rockdale city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+ci.selma.tx.us,Selma city,civicplus_agendacenter,2026-11-21,links_vendor_terms,3,The home page links the vendor's terms of use. The government's own pages say nothing on automated access.
+www.southhoustontx.gov,South Houston city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
+www.wallertexas.gov,Waller city,civicplus_agendacenter,2026-11-21,no_terms_found,2,"No terms, copyright or privacy page was found, or the pages linked were empty."
+www.webstertx.gov,Webster city,civicplus_agendacenter,2026-11-21,no_terms_found,1,"No terms, copyright or privacy page was found, or the pages linked were empty."
+www.westutx.gov,West University Place city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
+www.co.wise.tx.us,Wise County,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
