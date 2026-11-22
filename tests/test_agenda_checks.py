@@ -393,7 +393,7 @@ def test_a_governments_own_terms_can_keep_a_confirmed_row_out():
     assert ac.collectable(body(), confirmed, TODAY, platforms(), sites("no_terms_found"))
     closed = (
         "reuse_needs_consent", "links_vendor_terms", "could_not_read",
-        "bars_automated_access", "robots_bar", "refused",
+        "bars_automated_access", "robots_bar", "refused", "vendor_site",
     )  # fmt: skip
     for result in closed:
         assert not ac.collectable(body(), confirmed, TODAY, platforms(), sites(result)), result
@@ -428,7 +428,7 @@ def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_associat
         for name in ("legistar", "own_site_files", "cira_county_site")
     }
     assert len(by_platform["legistar"]) == 9
-    assert len(by_platform["own_site_files"]) == 44
+    assert len(by_platform["own_site_files"]) == 51
     # Four of these five were confirmed in a real browser: their agendas are in a calendar or
     # a list that a research pass could not see.
     assert by_platform["cira_county_site"] == {
@@ -442,3 +442,9 @@ def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_associat
     for government in (*closed, "Taylor Lake Village city", "Sealy city"):
         assert government not in by_platform["own_site_files"]
     assert "Houston city" in by_platform["own_site_files"]
+    # Read in a browser on November 22, 2026. Webberville's own pages say nothing against it.
+    # Clyde's site is built and hosted by a vendor whose terms bar a collector. Alma's own terms
+    # bar robots. Idalou answered the collector with a firewall's challenge.
+    assert "Webberville village" in by_platform["own_site_files"]
+    for government in ("Clyde city", "Alma town", "Idalou city", "Grapevine city"):
+        assert government not in by_platform["own_site_files"]

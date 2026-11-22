@@ -3,16 +3,27 @@
 - Source id: `tx_agendas_own_sites`
 - What it is: the agenda page of each government that posts its agendas as files on its own website, and the agenda files that page links to
 - Checked: November 21 and 22, 2026
-- Result: **allowed for 44 of 76 governments, one site at a time.** 32 are closed or held. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
+- Result: **allowed for 51 of 110 governments, one site at a time.** 43 are closed or held and 16 are not read. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
 - Collector: `collectors/tx/agenda_pages.py`
-- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, six real pages cut down to their agenda lists and three real calendar feeds
+- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, nine real pages cut down to their agenda lists and three real calendar feeds
 - Workflow: `.github/workflows/collect-tx-agendas-own-sites.yml`, started by hand only
 
 The owner said on November 21, 2026 to build next for the governments that post agenda files on their own sites. There is no vendor here and no shared rule. Each site has its own robots file and its own terms, so each was read.
 
 ## Which governments were looked at
 
-The agenda inventory lists 114 governments with files on their own sites. **76 of them have a row that an independent check confirmed.** Only those were read. The other 38 wait for a hand read of their rows.
+The agenda inventory listed 114 governments with files on their own sites. **76 of them had a row that an independent check confirmed.** Those were read on November 21, 2026. The other 38 were checked on November 22, 2026. See "The other 38" below. Four of them turned out to post elsewhere, so the inventory now lists 110.
+
+| Of the 110 governments, on November 22, 2026 | |
+|---|---:|
+| Read | 51 |
+| Closed by a robots file, their own or their file host's | 19 |
+| Closed by their own terms | 10 |
+| Built and hosted by CivicPlus, held with its platforms | 7 |
+| Held for the owner | 4 |
+| Refused the request | 3 |
+| Confirmed, in a form the collector does not read. Terms not read | 8 |
+| Row not confirmed, and none of the above | 8 |
 
 ## What was verified
 
@@ -125,12 +136,80 @@ Two inventory rows were corrected. Hill County's row had recorded a court rules 
 - A feed entry that holds two meetings' agendas, or an agenda whose link does not say "agenda". Such a link is left.
 - A second day's run, and a run from GitHub's servers.
 
+## The other 38, checked on November 22, 2026
+
+The owner said on November 22, 2026 to check them. For each: the robots file, then the agenda page opened in a real browser, then the site's terms for the ones a collector could read.
+
+**All 38 robots files allow the collector.** 28 allow the page, eight sites have no robots file and two answer the robots address with a web page, which bars nothing.
+
+**What the browser showed**
+
+| Standing | Governments | Which |
+|---|---:|---|
+| Agenda files linked on the government's own page | 15 | below |
+| Agendas listed, in a form the collector does not read | 9 | Alvord, Marlin, Tye, Enchanted Oaks, Itasca, Maypearl, Pecan Hill, Seven Points, Whitney |
+| The site is built and hosted by CivicPlus | 3 | Creedmoor, Grapevine, The Hills |
+| The agendas are on another service | 5 | Cibolo, New Deal, Slaton, Reno, Runaway Bay |
+| Nothing current, or nothing shown | 6 | Aquilla, Lake Bridgeport, Lawn, Penelope, Valley Mills, Hedwig Village |
+
+- **The nine the collector does not read.** Five list meetings by script, with a View Agenda button and no file address. Alvord and Marlin keep each agenda on a page of its own and the file on their site builder's storage at another host. Tye's one file is on such storage too. Enchanted Oaks links its agenda from its home page to its site builder's file host. Their terms were not read, so they stay closed.
+- **The five on another service.** Cibolo embeds a meeting platform. New Deal and Slaton post on a code publisher's document service. Reno and Runaway Bay link a folder on a file-sharing service. Their inventory rows now say `other`.
+- **The six.** Aquilla's newest agenda is from 2020, Lake Bridgeport's from 2022 and Penelope's from 2023. Lawn shows one file with no year. Valley Mills' pages are empty. Hedwig Village keeps agendas in nested folders drawn by script, which I did not open to the end.
+
+**The 15 with files on their own page.** One identified request to each home page and agenda page, then to each terms page.
+
+| Government | Finding | Standing |
+|---|---|---|
+| Alma | The same site builder's terms as the eight closed before: no data mining or robots | **Closed** |
+| Abernathy | Its own terms of service bar any robot or spider, for any purpose | **Closed** |
+| Idalou | The site answered the collector with a firewall's script challenge in place of the page | **Closed.** Not worked around |
+| Richland Springs | The first run found its files are served from its site builder's host, whose robots file bars them | **Closed** |
+| DeCordova, Industry, San Saba, Millsap | Terms or privacy pages that say nothing on automated access or reuse. DeCordova's and Millsap's are empty | Read |
+| Annetta North, Meadowlakes, Milano, Rosebud, Tolar, Wallis, Webberville | No terms, disclaimer or privacy page | Read |
+
+**11 more governments are read.**
+
+**Four that were read are closed again.** Buffalo Gap, Clyde, Malakoff and Mustang Ridge carry the credit "Government Websites by CivicPlus". CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. The readers of November 21 looked for terms pages and did not see the credit. I found it on November 22 in the pages the first run saved. The collector read those four sites on November 21 and 22. Nothing from them is in a database. All seven CivicPlus-built sites are marked `vendor_site` and wait with the CivicPlus platforms.
+
+**Other site builders.** Revize builds Meadowlakes' and Richland Springs' sites and three read before. Its terms of use speak of its own website only. Read November 22, 2026.
+
+**Four inventory rows named the wrong page.** Annetta North, Industry, San Saba and Enchanted Oaks now name the page that lists the agendas. Industry's old address answers 404. New Deal's row now names the document service. Slaton's body is its City Commission.
+
+**Five agenda files were read for what their page does not say.** Annetta North, DeCordova, Tolar and Millsap list agendas by month with no day. Wallis' page does not name the body. Each file's heading gave the meeting day and the council.
+
+**The link finder was run on the 12 saved pages. It had four faults.**
+
+- **A wrong date.** `june2026agenda.pdf` was read as June 20, 2026. Four digits that make a year are now a year. Houston's page had 16 such files, named like `Oct2026.pdf`. None was in the date window, so none was fetched under a wrong date.
+- **A treasurer's report and a financial statement were taken as agendas** on a page that lists them beside the agendas. Both are now left.
+- **Two ways of writing a date were not read:** `Nov16_2026`, and a list typed as one paragraph with each meeting's date before its link.
+- **A page with one dated link read none of its month-only links.** A link that names a month and no day is now kept with its month. A run takes last month's, this month's and the coming months', two at most.
+- The finder was run before and after on all 63 pages saved by the earlier runs. Nothing else changed.
+
+**A run of the collector on the 12 then cleared,** November 22, 2026, two files a page, nothing written to a database:
+
+- 12 pages answered. **Ten agenda files of seven governments stored.**
+- Richland Springs' file was refused by its file host's robots file. It is closed.
+- Industry, Meadowlakes and Tolar had no agenda inside the date window. Their newest are from September.
+- **Millsap's page gives the finder nothing.** Its files sit under a heading "Agenda" and their own words name only a month.
+- One file is a scan and was read by OCR.
+- **One signal. Webberville's agenda for November 11, 2026 uses the words "data center" twice.** One item is to discuss the possibility of a proposed data center in Webberville. Another is on an ordinance to bar data centers from locating there. Both are on page 1. I read both.
+
+**Not verified**
+
+- **Whether CivicPlus' terms bind a visitor to a site CivicPlus builds.** The four were closed on the reading already used for its platforms.
+- The terms of the nine governments whose agendas the collector does not read.
+- Whether Meadowlakes' files are sent on to its site builder's host. It had no agenda inside the date window.
+- The counts in the check rows of script-drawn lists. They are the rows I read, not the whole list.
+- Grapevine's and Hedwig Village's planning bodies. Their lists were not opened.
+- Wallis' corporation page. Its last file's year was not read.
+
 ## What the collector does
 
 For each page, one run makes:
 
 1. **One request for the page.**
 2. **One request for each agenda file** dated from 21 days back to 60 days ahead that is not stored yet. Four files a page at most.
+3. **One request for each agenda that names a month and no day,** for last month, this month and the months ahead. Two a page at most.
 
 - Requests go through the shared fetcher: the robots file of every host is read first, one request every 5 seconds to a host, longer if the robots file asks, with the radar's user agent and contact address.
 - **A refusal closes that site for the rest of the run and the other sites go on.** The run log names the site. Nothing is retried. A person then marks the site `refused`.
@@ -147,7 +226,7 @@ For each page, one run makes:
 
 A link is taken when it leads to a file and says it is an agenda: in its own words, in its file's name, in the heading of its table column, or in its row when the link itself says nothing. On a page whose title or address speaks of agendas or meetings, a file with a date is taken too.
 
-Left alone: minutes, recordings, handouts, presentations, action summaries, quorum notices and cancellations. A packet is left when the page has the plain agenda for the same day.
+Left alone: minutes, recordings, handouts, presentations, action summaries, quorum notices, cancellations, treasurer's reports and financial statements. A packet is left when the page has the plain agenda for the same day.
 
 **How a date is read.** In this order:
 
@@ -155,10 +234,12 @@ Left alone: minutes, recordings, handouts, presentations, action summaries, quor
 2. The file's name, when a date is written out in it.
 3. The row, only when the row holds one date and no more than four files.
 4. A row that gives a month and a day, with the year of the folder the file was uploaded to.
-5. Digits run together in the file's name, such as `11172026`, only when they can be read one way.
+5. The words on the link's own line before it, when a list is typed as one paragraph: "September 9, 2026 - Agenda".
+6. Digits run together in the file's name, such as `11172026`, only when they can be read one way.
 
 - A scanner's file name is never read. It gives the minute the page was scanned.
 - **A date that is not sure is no date.** `1122026` could be January 12 or November 2.
+- **A month and a year are not a day.** `june2026agenda.pdf` and "November 2026 Agenda" give a month. The file is kept with its month and no date. A month alone never makes a file an agenda: a report for October is named for its month too.
 - Where the date came from is kept with the file.
 
 ## What becomes a signal
@@ -207,7 +288,7 @@ On November 21, 2026:
 - The site builder's terms for the file host `img1.wsimg.com`. Its robots file is read on every run.
 - A statement on Shoreacres' home page that the city was consolidated into La Porte. I did not check it. Its newest agenda is from May 2026.
 - A full run with no cap, a second day's run, and a run from GitHub's servers.
-- The 38 own-site governments whose inventory rows are not confirmed.
+- The 12 own-site governments whose rows are still not confirmed. Four of them are closed for another reason. See "The other 38".
 
 ## For the owner
 

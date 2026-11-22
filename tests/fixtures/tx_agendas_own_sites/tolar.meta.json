@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://www.cityoftolar.com/city-council.html",
+  "final_url": "https://www.cityoftolar.com/city-council.html",
+  "retrieved_at": "2026-11-22T16:10:28+00:00",
+  "sha256": "5b94a93cd35332335e439ff1173dcbf122df90646164cc67444bdb38aaae453f",
+  "bytes": 2393,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "057255a19da849ddb05f2973bf9468d5a9d3de216e93bc561f717ace3e4dd5f8",
+  "original_bytes": 148142,
+  "note": "The real page, cut down to the block that holds its 2026 agendas: the first 16 links, with scripts, styles and attributes removed. The site's menus, footer, minutes, notices and the rest of the page are left out."
+}

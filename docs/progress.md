@@ -2,6 +2,47 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M8: the 38 own-site governments that were not confirmed
+
+The owner said to check them. Each agenda page was opened in a real browser. Robots files came first and terms before any collecting.
+
+**Read first**
+
+- **All 38 robots files allow the collector.**
+- **Each page opened in a browser,** with the pages it led to. 39 reads are recorded in `config/tx_agenda_checks.csv`.
+- **The terms of the 15 sites a collector could read.** Two bar robots in their own terms: Alma and Abernathy. Idalou answered the collector with a firewall's challenge and is closed. Nothing was worked around.
+
+**What changed**
+
+- **11 more governments are read:** Annetta North, DeCordova, Industry, Meadowlakes, Milano, Millsap, Rosebud, San Saba, Tolar, Wallis and Webberville.
+- **Four that were read are closed again:** Buffalo Gap, Clyde, Malakoff and Mustang Ridge. Their sites are built and hosted by CivicPlus, whose terms bar automated systems on any CivicPlus site. Yesterday's readers looked for terms pages and missed the vendor's credit in the footer. Three of the 38 are the same and are closed with them. The new mark is `vendor_site`.
+- **56 governments and 57 pages are now read,** up from 49 and 50.
+- **Nine governments list agendas in a form the collector does not read:** script buttons, a page for each meeting, or a file host that is not theirs. Five post on another service. Six show nothing current.
+- 14 inventory rows corrected. Four named the wrong page.
+
+**Four faults in the link finder, found on the new pages and fixed**
+
+- **A wrong date.** `june2026agenda.pdf` was read as June 20, 2026. Houston's page had 16 files named this way. None was fetched under a wrong date, and nothing is in a database.
+- A treasurer's report and a financial statement were taken as agendas.
+- Two ways of writing a date were not read.
+- A page with one dated link read none of its month-only links. Such a link is now kept with its month.
+- Three new fixtures cut from real pages. 18 new tests. 891 pass.
+
+**Verified live**
+
+- One identified request for each robots file, each page read for terms and five agenda files.
+- **The finder before and after, on all 63 pages saved by earlier runs.** Only the wrong dates changed.
+- **A run of the collector on the 12 then cleared,** two files a page, nothing written to a database. Ten agenda files of seven governments. Richland Springs' file host refused by its robots file, so it is closed.
+- **One signal. Webberville's agenda for November 11, 2026 has an item to discuss the possibility of a proposed data center in Webberville,** and one on an ordinance to bar data centers there. I read both lines.
+
+**Not verified**
+
+- **Whether CivicPlus' terms bind a visitor to a site it builds.** I closed the four on the reading already used for its platforms.
+- The terms of the nine governments the collector does not read.
+- Millsap's page gives the finder no links. Its files sit under a heading and name only a month.
+- The counts in the check rows of script-drawn lists. They are the rows I read.
+- A second day's run, and a run from GitHub's servers.
+
 ## November 22, 2026 — M8: the five county association sites
 
 The owner said to start on the five commissioners courts whose sites the Texas Association of Counties provides: Archer, Carson, Falls, Freestone and Hill. Terms and robots rules came first.

@@ -42,10 +42,10 @@ The results were then merged under one rule: **a row may claim only what its own
 | Platform | Bodies | Governments | Counties |
 |---|---:|---:|---:|
 | Not determined | 183 | 39 | 21 |
-| Files on the government's own site | 149 | 114 | 25 |
+| Files on the government's own site | 143 | 110 | 25 |
 | CivicPlus Agenda Center | 86 | 51 | 16 |
 | CivicClerk | 64 | 36 | 16 |
-| Other outside platform | 28 | 23 | 16 |
+| Other outside platform | 34 | 28 | 16 |
 | Legistar | 27 | 14 | 8 |
 | No website | 23 | 22 | 14 |
 | Municode Meetings | 21 | 13 | 11 |
@@ -58,7 +58,7 @@ The results were then merged under one rule: **a row may claim only what its own
 
 - **Four platforms hold 114 of the 334 governments:** CivicPlus Agenda Center, CivicClerk, Legistar and Municode Meetings.
 - **The 30 commissioners courts:** CivicPlus Agenda Center 10, county association site 5, CivicClerk 3, other platforms 3, Legistar 2, own site 2, CivicWeb 1, Granicus 1, not determined 3 (Callahan, Hopkins, San Saba).
-- **114 governments post files on their own sites.** Each site is laid out its own way.
+- **110 governments post files on their own sites.** Each site is laid out its own way. The first count was 114. A browser read on November 22, 2026 found four of them post elsewhere: Cibolo, Slaton, Reno and Runaway Bay.
 - **22 governments have no website.** These are small towns. Some have a Facebook page only.
 - **The five large counties are not the hard part.** Dallas has 22 of 32 governments on the four platforms and Harris 18 of 35. Nine rural counties have none: Hill, Austin, Archer, Hood, Falls, Callahan, Carson, Hopkins and San Saba.
 - **Several cities run two systems at once,** an older Agenda Center and a newer CivicClerk portal. The notes on those rows name both.
@@ -144,6 +144,6 @@ Ten research passes read 320 agenda pages a second time. They also searched agai
 - **Granicus pages, Swagit and CivicWeb are closed by their robots files:** 17 governments.
 - **Legistar is cleared and has a collector.** It reads 9 of the 14 governments on it. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
 - **The county association sites are cleared and read by the own-sites collector:** 5 commissioners courts. Three keep their agendas in a calendar, which is read through its feed.
-- **Own sites are cleared one site at a time and have a collector.** Of 114 governments, 76 have a confirmed row. Each one's robots file and terms were read. 44 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
+- **Own sites are cleared one site at a time and have a collector.** Of 110 governments, 98 have a confirmed row. 51 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
 `collectable()` needs three things: a row an independent check confirmed, a platform marked `cleared` in `config/tx_agenda_platforms.csv`, and the government's own terms read with nothing against it in `config/tx_agenda_site_terms.csv`. A test pins each platform's standing.

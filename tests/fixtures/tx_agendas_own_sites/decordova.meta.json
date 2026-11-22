@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://citydecordovatx.org/minutes-agendas/",
+  "final_url": "https://citydecordovatx.org/minutes-agendas/",
+  "retrieved_at": "2026-11-22T16:08:49+00:00",
+  "sha256": "1d59c731089ec18389eb24418c71d99d2754d70afd45286eabe369fb2ca21ef2",
+  "bytes": 6804,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "b64c94c8602f83febce3dcc09bd27683ced1ab18249503e9f8e750cae142f6b0",
+  "original_bytes": 258850,
+  "note": "The real page, cut down to its three lists for 2026: minutes, agendas and treasurer's reports. Scripts, styles and attributes are removed. The site's menus, footer, the headings of the three columns and the lists for earlier years are left out."
+}

@@ -53,7 +53,9 @@ _AGENDA = re.compile(r"agenda", re.IGNORECASE)
 _MEETINGS = re.compile(r"agenda|meeting", re.IGNORECASE)
 # What a link says it is when it is not the agenda.
 _NOT_AGENDA = re.compile(
-    r"minutes|video|audio|recording|handout|action taken|presentation|quorum|cancel", re.IGNORECASE
+    r"minutes|video|audio|recording|handout|action taken|presentation|quorum|cancel"
+    r"|treasurer|financial",
+    re.IGNORECASE,
 )
 # A packet is the agenda with its attachments, often hundreds of pages.
 _PACKET = re.compile(r"packet", re.IGNORECASE)
@@ -83,14 +85,20 @@ _DATES = (
         ),
         lambda m: (m.group(3), _month(m.group(1)), m.group(2)),
     ),
+    # Nov16_2026: the day run onto the month, then the year in full
+    (
+        re.compile(rf"(?<![a-z]){_MONTH}(\d{{1,2}}){_SEP}(20\d\d)(?!\d)", re.I),
+        lambda m: (m.group(3), _month(m.group(1)), m.group(2)),
+    ),
     # 2026 November 10, as in Agenda2026November10
     (
         re.compile(rf"(?<!\d)(20\d\d)[\s./-]*{_MONTH}\.?[\s./-]*(\d{{1,2}})(?!\d)", re.I),
         lambda m: (m.group(1), _month(m.group(2)), m.group(3)),
     ),
-    # Oct1326, a month and four digits
+    # Oct1326, a month and four digits. Not june2026: four digits that make a year are a year,
+    # and the name gives a month with no day.
     (
-        re.compile(rf"(?<![a-z]){_MONTH}(\d\d)(\d\d)(?!\d)", re.I),
+        re.compile(rf"(?<![a-z]){_MONTH}(?!20[1-4]\d(?!\d))(\d\d)(\d\d)(?!\d)", re.I),
         lambda m: (m.group(3), _month(m.group(1)), m.group(2)),
     ),
     # 2026-11-17
@@ -121,8 +129,10 @@ class AgendaLink:
     url: str
     text: str  # the link's own words
     date: dt.date | None  # the meeting's date as the page gives it. None if it gives none
-    # Where the date was read: link_text, file_name, row or row_and_upload_folder.
+    # Where the date was read: link_text, file_name, row, row_and_upload_folder or line.
     date_from: str | None
+    # The month, as 2026-11, of a link that names a month and no day.
+    month: str | None = None
 
 
 def _valid(year: object, month: object, day: object, today: dt.date) -> dt.date | None:
@@ -189,6 +199,23 @@ def find_date(text: str, today: dt.date, runs: bool = False) -> dt.date | None:
     return None
 
 
+# A month and a year with no day: "November 2026 Agenda", "sept_2026_agenda", "june2026agenda",
+# "2026-November".
+_MONTH_YEAR = (
+    (re.compile(rf"(?<![a-z]){_MONTH}\.?,?[\s./_-]*(20\d\d)(?!\d)", re.I), (2, 1)),
+    (re.compile(rf"(?<!\d)(20\d\d)[\s./_-]+{_MONTH}(?![a-z])", re.I), (1, 2)),
+)
+
+
+def find_month(text: str, today: dt.date) -> str | None:
+    """The month a text names when it names no day, as 2026-11. None if it names none."""
+    for pattern, (year_at, month_at) in _MONTH_YEAR:
+        found = pattern.search(text)
+        if found and _valid(found.group(year_at), _month(found.group(month_at)), 1, today):
+            return f"{int(found.group(year_at)):04d}-{_month(found.group(month_at)):02d}"
+    return None
+
+
 # A date with no year, as a table of one year's meetings writes it: "January 28".
 _MONTH_DAY = re.compile(rf"(?<![a-z]){_MONTH}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?!\d)", re.I)
 # The folder a site builder files an upload in: /uploads/2026/01/.
@@ -225,6 +252,27 @@ def _up(node: LexborNode, tags: tuple[str, ...], limit: int = 8) -> LexborNode |
         if node.tag in tags:
             return node
     return None
+
+
+_INLINE = ("span", "strong", "b", "em", "i", "u", "font")
+
+
+def _line_before(a: LexborNode) -> str:
+    """The words on a link's own line, before it: back to the last line break or block.
+
+    A list typed as one paragraph puts each meeting on a line: "September 9, 2026 - Agenda".
+    """
+    said: list[str] = []
+    node: LexborNode | None = a
+    while node is not None:
+        before = node.prev
+        while before is not None and before.tag in ("-text", *_INLINE):
+            said.append(before.text())
+            before = before.prev
+        if before is not None or node.parent is None or node.parent.tag not in _INLINE:
+            break
+        node = node.parent
+    return " ".join(" ".join(reversed(said)).split())[-200:]
 
 
 def _column(a: LexborNode) -> str:
@@ -323,20 +371,27 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
                 day, date_from = written[0], "row"
             elif not written and len(set(_MONTH_DAY.findall(row))) == 1:
                 day, date_from = _month_day_in_folder(row, url, today), "row_and_upload_folder"
+        if day is None:
+            written = dates_in(_line_before(a), today)
+            if len(written) == 1:
+                day, date_from = written[0], "line"
         if day is None and named:
             day, date_from = find_date(named, today, runs=True), "file_name"
+        month = None
         if day is None:
             date_from = None
+            month = find_month(text, today) or (find_month(named, today) if named else None)
         silent = not _SAYS_NOTHING.sub("", text)
         says_agenda = bool(
             _AGENDA.search(own)
             or _AGENDA.search(column)
             or (silent and _AGENDA.search(row) and len(row) < 200)
         )
+        # A month alone is not enough: a report for October is named for its month too.
         if not (says_agenda or (about_meetings and day)):
             continue
         seen.add(url)
-        link = AgendaLink(url, text[:160], day, date_from)
+        link = AgendaLink(url, text[:160], day, date_from, month)
         found.append(_Candidate(link, bool(_PACKET.search(own))))
     plain = {c.link.date for c in found if not c.packet}
     return [c.link for c in found if not (c.packet and (c.link.date in plain or not c.link.date))]
@@ -488,9 +543,18 @@ class AgendaPages(Collector):
             key=lambda link: link.date,
             reverse=True,
         )[: self.max_files_per_page]
+        # A link that names a month and no day: last month's, this month's and those to come.
+        oldest = (self.today - dt.timedelta(days=31)).strftime("%Y-%m")
+        newest = last.strftime("%Y-%m")
+        by_month = sorted(
+            (link for link in links if link.month and oldest <= link.month <= newest),
+            key=lambda link: link.month,
+            reverse=True,
+        )[: self.max_undated_per_page]
         # A page that dates nothing: its first links are its newest, by the usual layout.
         undated = [link for link in links if link.date is None][: self.max_undated_per_page]
-        wanted = dated if any(link.date for link in links) else undated
+        told = any(link.date or link.month for link in links)
+        wanted = dated + by_month if told else undated
         out = []
         feed = find_calendar_feed(result.body) if listed else None
         if feed and feed not in self._feeds:
@@ -526,6 +590,7 @@ class AgendaPages(Collector):
                     "text": link.text,
                     "date": link.date.isoformat() if link.date else None,
                     "date_from": link.date_from,
+                    **({"month": link.month} if link.month else {}),
                 }
                 for link in links
             ],
@@ -551,6 +616,7 @@ class AgendaPages(Collector):
             "link_text": link.text,
             "meeting_date": link.date.isoformat() if link.date else None,
             "date_from": link.date_from,
+            **({"meeting_month": link.month} if link.month else {}),
         }
 
     def run(self, *, source, sink, **kwargs):

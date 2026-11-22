@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://www.industrytexas.com/meetings-agendas",
+  "final_url": "https://www.industrytexas.com/meetings-agendas",
+  "retrieved_at": "2026-11-22T16:09:14+00:00",
+  "sha256": "518baa94784e1ef8b044000393d60e3fc8efe193ac16ad958c7bbe672de4ddb4",
+  "bytes": 1617,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "e1c82c497d18fd0ddbf54503f984bcfe80ab9ff48cb5f706d6ee8ef8d4e3136b",
+  "original_bytes": 937280,
+  "note": "The real page, cut down to its list of 2026 council meetings, with scripts, styles and attributes removed. The site's menus, footer, the lists for earlier years and the rest of the page are left out."
+}

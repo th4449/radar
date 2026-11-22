@@ -12,6 +12,8 @@
 #          robots_bar           a robots file on the site or its file host bars the collector, or
 #                               could not be read. The site's terms were not read
 #          refused              the site refused the collector's own request. Not asked again
+#          vendor_site          the whole site is built and hosted by a vendor whose terms cover every
+#                               site it hosts and bar a collector. See config/tx_agenda_platforms.csv
 host,government,platform,checked_on,result,pages_read,note
 www.athenstx.gov,Athens city,civicplus_agendacenter,2026-11-21,own_pages_silent,2,A copyright line reserves all rights. Nothing on automated access.
 www.balchspringstx.gov,Balch Springs city,civicplus_agendacenter,2026-11-21,own_pages_silent,1,A copyright line reserves all rights. Nothing on automated access.
@@ -76,7 +78,7 @@ www.taylorlakevillage.us,Taylor Lake Village city,own_site_files,2026-11-21,refu
 frankstontx.gov,Frankston town,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
 www.hillsborotx.org,Hillsboro city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
 www.keenetx.com,Keene city,own_site_files,2026-11-21,reuse_needs_consent,3,"Terms allow viewing and downloading for personal, educational or non-commercial use. Any other use, reproduction and distribution included, needs the city's written permission. Nothing on automated access."
-www.buffalogaptx.gov,Buffalo Gap town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.buffalogaptx.gov,Buffalo Gap town,own_site_files,2026-11-22,vendor_site,1,"The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers. Found on 2026-11-22 in the page saved by the first run. Read by the collector on 2026-11-21 and 2026-11-22 before this was seen."
 vopv.org,Point Venture village,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
 www.lakesidecitytx.org,Lakeside City town,own_site_files,2026-11-21,own_pages_silent,1,A website usage policy. Nothing on automated access or reuse.
 www.alamoheightstx.gov,Alamo Heights city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
@@ -95,11 +97,11 @@ www.austincounty.com,Austin County,own_site_files,2026-11-21,no_terms_found,1,"N
 bhtx.gov,Balcones Heights city,own_site_files,2026-11-21,robots_bar,0,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from cms3.revize.com, whose robots file bars them. Found on the first run, 2026-11-21. Not asked again."
 www.kirbytx.org,Kirby city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
 morgantx.gov,Morgan city,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
-www.clyde-tx.gov,Clyde city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+www.clyde-tx.gov,Clyde city,own_site_files,2026-11-22,vendor_site,1,"The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers. Found on 2026-11-22 in the page saved by the first run. Read by the collector on 2026-11-21 and 2026-11-22 before this was seen."
 www.edcteaguetx.com,Teague city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
 www.jacintocity-tx.gov,Jacinto City city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
 brownsborotx.gov,Brownsboro city,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
-www.cityofmalakoff.net,Malakoff city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
+www.cityofmalakoff.net,Malakoff city,own_site_files,2026-11-22,vendor_site,1,"The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers. Found on 2026-11-22 in the page saved by the first run. Read by the collector on 2026-11-21 and 2026-11-22 before this was seen."
 cityofcomo.myruralwater.com,Como town,own_site_files,2026-11-21,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent.
 www.camerontexas.net,Cameron city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
 www.cityoftuscolatx.com,Tuscola city,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
@@ -128,7 +130,7 @@ www.cityofcoffeecity.com,Coffee City town,own_site_files,2026-11-21,own_pages_si
 cityofstarharbor.com,Star Harbor city,own_site_files,2026-11-21,no_terms_found,1,No terms page. A copyright line reserves all rights.
 crosstimbertx.com,Cross Timber town,own_site_files,2026-11-21,no_terms_found,0,No terms page. A copyright line reserves all rights.
 www.annettatx.org,Annetta town,own_site_files,2026-11-21,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page."
-www.mustangridgetx.gov,Mustang Ridge city,own_site_files,2026-11-21,no_terms_found,1,"No terms, disclaimer or privacy page linked from the home page."
+www.mustangridgetx.gov,Mustang Ridge city,own_site_files,2026-11-22,vendor_site,1,"The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers. Found on 2026-11-22 in the page saved by the first run. Read by the collector on 2026-11-21 and 2026-11-22 before this was seen."
 hollidaytx.gov,Holliday city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on hollidaytx.gov answers 403.
 helotes-tx.gov,Helotes city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on helotes-tx.gov bars this address.
 nashtx.org,Nash city,own_site_files,2026-11-21,robots_bar,0,Not read: the robots file on nashtx.org answers 403.
@@ -146,3 +148,21 @@ www.co.carson.tx.us,Carson County,cira_county_site,2026-11-22,no_terms_found,2,"
 www.co.falls.tx.us,Falls County,cira_county_site,2026-11-22,no_terms_found,4,"No robots file. No terms, disclaimer or privacy page. A copyright line reserves all rights and nothing else. Its accessibility page and site map were read and link no terms. The Texas Association of Counties provides the site."
 www.co.freestone.tx.us,Freestone County,cira_county_site,2026-11-22,no_terms_found,2,"No robots file. No terms, disclaimer or privacy page linked from the home page or the agenda page. A copyright line and a credit to the Texas Association of Counties, which provides the site."
 www.co.hill.tx.us,Hill County,cira_county_site,2026-11-22,no_terms_found,2,"No robots file. No terms, disclaimer or privacy page linked from the home page or the agenda page. A copyright line and a credit to the Texas Association of Counties, which provides the site."
+www.cityofcreedmoortx.gov,Creedmoor city,own_site_files,2026-11-22,vendor_site,1,The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers.
+www.grapevinetexas.gov,Grapevine city,own_site_files,2026-11-22,vendor_site,1,The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers.
+thehillstx.gov,The Hills village,own_site_files,2026-11-22,vendor_site,1,The site is built and hosted by CivicPlus: its pages carry the credit 'Government Websites by CivicPlus'. CivicPlus' terms cover any user of a CivicPlus site and bar automated systems. Held with the CivicPlus platforms until CivicPlus answers.
+cityofalmatx.gov,Alma town,own_site_files,2026-11-22,bars_automated_access,2,Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent. The same site builder's terms as the eight closed on 2026-11-21.
+cityofabernathy.org,Abernathy city,own_site_files,2026-11-22,bars_automated_access,2,"Its own terms of service, last updated November 14, 2024, bar using any robot, spider or other automatic means to access the site for any purpose."
+idaloutx.com,Idalou city,own_site_files,2026-11-22,refused,0,"The site answered the collector's request with a firewall's script challenge in place of the page, on 2026-11-22. Its robots file allows the page. Not asked again and not worked around."
+citydecordovatx.org,DeCordova city,own_site_files,2026-11-22,own_pages_silent,2,A Terms of Use page and a Privacy Policy page are linked. Both are empty but for their titles.
+www.industrytexas.com,Industry city,own_site_files,2026-11-22,own_pages_silent,2,A Terms & Conditions page says the site is a general guide and not legal advice. A privacy policy. Nothing on automated access or reuse.
+sansabatexas.com,San Saba city,own_site_files,2026-11-22,own_pages_silent,1,A privacy policy. No terms page. Nothing on automated access or reuse.
+millsaptx.com,Millsap town,own_site_files,2026-11-22,own_pages_silent,2,The Terms and Conditions page is the site builder's blank template and states no terms. The privacy page says a policy is coming. A copyright line reserves all rights.
+annettanorth.com,Annetta North town,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page or the agenda page."
+www.meadowlakestexas.org,Meadowlakes city,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page or the agenda page. The site is built by Revize, whose own terms cover its own website only."
+www.cityofmilano.org,Milano city,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked. A copyright line reserves all rights."
+www.richlandsprings.texas.gov,Richland Springs town,own_site_files,2026-11-22,robots_bar,0,"The site's own robots file allows the collector and its own pages say nothing against it. Its agenda files are served from webgen1files1.revize.com, whose robots file bars them. Found on the first run, 2026-11-22. Not asked again."
+rosebudtexas.us,Rosebud city,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked. A copyright line reserves all rights."
+www.cityoftolar.com,Tolar city,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page or the council page."
+www.wallistexas.org,Wallis city,own_site_files,2026-11-22,no_terms_found,0,A footer link 'Website Policies and Disclaimer' leads nowhere. A copyright line reserves all rights.
+www.webberville.org,Webberville village,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page or the meetings page."

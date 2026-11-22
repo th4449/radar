@@ -19,7 +19,7 @@ The owner approved building the agenda collectors by platform. The first step fo
 | Granicus | Granicus | 4 | bars all but three search engines | **Restricted by robots** |
 | Legistar | Granicus | 14 | none | **Cleared.** 9 governments are read. See [tx_agendas_legistar.md](tx_agendas_legistar.md) |
 | County association sites | Texas Association of Counties | 5 | none | **Cleared.** All 5 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
-| Files on the government's own site | each government | 114 | each site's own | **Cleared, one site at a time.** 76 sites read, 44 governments collected. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
+| Files on the government's own site | each government | 110 | each site's own | **Cleared, one site at a time.** 94 sites read, 51 governments collected. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
 | Other outside platforms | various | 23 | not read | Not read |
 
 **117 of the 136 governments in the three platform batches are on a restricted platform.** 100 of them are on a CivicPlus product.
@@ -58,6 +58,7 @@ A collector at one request every 10 seconds stays under the first. The second is
 
 - **27 sites:** the government's own pages say nothing on automated access. Most hold one copyright line that reserves all rights.
 - **3 sites link CivicPlus' terms from their home page:** Selma, DeSoto and Jersey Village. A visitor to those three is pointed at the vendor's terms.
+- **7 more governments post files on a site CivicPlus builds and hosts,** outside its meeting products: Buffalo Gap, Clyde, Malakoff, Mustang Ridge, Creedmoor, Grapevine and The Hills. Each page carries the credit "Government Websites by CivicPlus". The terms address any user of a CivicPlus site, so these seven are held too, as `vendor_site` in `config/tx_agenda_site_terms.csv`. Found November 22, 2026. The collector had read the first four on November 21 and 22.
 - **4 sites** have no terms page that could be found, or pages that load empty.
 - **4 sites did not load** for the reader: Decatur, Marble Falls, Mabank and Ellis County.
 - One reader reported that two pages were fetched through its tool's alternate proxy after errors. I do not know whether those sites were refusing the tool. No collector decision rests on those two pages.
@@ -102,7 +103,7 @@ Not verified: whether the association's terms reach the county sites. None of th
 **For the rest**
 
 5. **Legistar: done.** Each of its 14 governments' own terms was read and the collector uses the published API. Nine governments are read, Harris County and Dallas among them. Five are held out. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
-6. **Own sites: done for the 76 governments whose rows are confirmed.** The owner said on November 21, 2026 to build for them. Each site's robots file and terms were read. 44 governments are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
+6. **Own sites: done.** The owner said on November 21, 2026 to build for the 76 governments whose rows were confirmed, and on November 22 to check the other 38. 51 governments are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 7. **The five county association sites: done.** Their robots files and terms were read on November 22, 2026 and all five are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
 Nothing above is done. Each needs the owner's word.

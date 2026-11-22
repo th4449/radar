@@ -25,6 +25,7 @@ from collectors.tx.agenda_pages import (
     find_calendar_feed,
     find_date,
     find_feed_links,
+    find_month,
     on_the_site,
 )
 from pipeline.config import load_sources
@@ -71,6 +72,8 @@ def source():
         ("11.23.26.pdf", "2026-11-23"),
         ("AGENDA 11 2 2026.docx", "2026-11-02"),
         ("CC-SM-Agenda-11.16.26-Amended.pdf", "2026-11-16"),
+        ("Nov16_2026_Agenda_Regular_Posted", "2026-11-16"),
+        ("Dec4_2025_SpecialAgendaPosted.pdf", "2025-12-04"),
     ],
 )
 def test_a_date_written_out_is_read(written, day):
@@ -98,6 +101,9 @@ def test_digits_run_together_are_read_only_when_asked_and_only_one_way(name, day
     [
         "1122026.pdf",  # January 12 or November 2
         "Council Agenda Nov26.pdf",  # a month and a year, no day
+        "june2026agenda.pdf",  # June 2026, not June 20, 2026
+        "Oct2026.pdf",
+        "sept_2026_agenda.pdf",
         "SKM_C450i26102816540.pdf",  # a copier's serial number
         "nav-30-6b00b8c6913e6.pdf",
         "AGENDA-1.pdf",
@@ -116,6 +122,24 @@ def test_a_date_far_from_today_is_a_number_not_a_meeting():
     assert dates_in("Item 3.4.12 and 11/17/2026 and November 17, 2026", TODAY) == [
         dt.date(2026, 11, 17)
     ]
+
+
+@pytest.mark.parametrize(
+    ("written", "month"),
+    [
+        ("November 2026 Agenda", "2026-11"),
+        ("November, 2026", "2026-11"),
+        ("sept_2026_agenda.pdf", "2026-09"),
+        ("june2026agenda.pdf", "2026-06"),
+        ("2026-November.docx", "2026-11"),
+        ("JULY", None),
+        ("city_council_july_16.pdf", None),
+        ("March 2031 Agenda", None),  # far from today
+        ("Agenda-City-of-DeCordova-11-26.pdf", None),  # November 2026 or November 26
+    ],
+)
+def test_a_month_with_no_day_is_read_as_a_month(written, month):
+    assert find_month(written, TODAY) == month
 
 
 # --- real pages -----------------------------------------------------------------------------------
@@ -177,6 +201,36 @@ def test_quorum_notices_and_minutes_are_left_on_a_page_that_mixes_them():
 # --- the rules, one at a time ---------------------------------------------------------------------
 
 PAGE = "https://www.example.gov/government/agendas"
+
+
+def test_a_list_typed_as_one_paragraph_dates_each_link_by_its_own_line():
+    found = links("industry")
+    # Every link says only "Agenda", and the paragraph holds ten dates. Each line has one.
+    assert len(found) == 10
+    assert {(link.text, link.date_from) for link in found} == {("Agenda", "line")}
+    assert [str(link.date) for link in found][-3:] == ["2026-08-12", "2026-08-26", "2026-09-09"]
+    assert found[-1].url.endswith("/september_9.docx")
+
+
+def test_minutes_and_treasurers_reports_are_left_and_a_month_is_not_made_a_day():
+    found = links("decordova")
+    # Three lists side by side, each a link to a month. Only the agendas are taken.
+    assert len(found) == 10
+    assert all("/Agenda-City-of-DeCordova-" in link.url for link in found)
+    assert all(link.date is None and link.date_from is None for link in found)
+    assert [link.month for link in found][:3] == ["2026-11", "2026-10", "2026-09"]
+
+
+def test_a_year_in_a_files_name_is_not_read_as_a_day_and_a_year():
+    found = {link.url.rsplit("/", 1)[-1]: link for link in links("tolar")}
+    # june2026agenda.pdf is June 2026. It was once read as June 20, 2026.
+    assert (found["june2026agenda.pdf"].date, found["june2026agenda.pdf"].month) == (
+        None,
+        "2026-06",
+    )
+    assert found["sept_2026_agenda.pdf"].month == "2026-09"
+    assert str(found["agenda_1-29-26.pdf"].date) == "2026-01-29"
+    assert (found["june_s_agenda.pdf"].date, found["june_s_agenda.pdf"].month) == (None, None)
 
 
 def page(inner: str, title: str = "Agendas") -> bytes:
@@ -363,7 +417,7 @@ def test_a_feed_that_is_no_longer_a_feed_is_a_changed_layout():
 def test_the_pages_read_are_the_ones_the_inventory_clears():
     pages = cleared_pages(TODAY)
     governments = {p.government for p in pages}
-    assert (len(pages), len(governments)) == (50, 49)
+    assert (len(pages), len(governments)) == (57, 56)
     assert "Austin County" in governments and "Houston city" in governments
     # The five counties on the sites their association provides.
     assert {
@@ -377,6 +431,13 @@ def test_the_pages_read_are_the_ones_the_inventory_clears():
     # closed by the robots file of the host that serves its files.
     closed = ("Irving city", "Frankston town", "Austin city", "New Fairview city", "Sealy city")
     assert not governments & set(closed)
+    # A site built and hosted by a vendor whose terms bar a collector.
+    assert not governments & {
+        "Buffalo Gap town",
+        "Clyde city",
+        "Malakoff city",
+        "Mustang Ridge city",
+    }
     piney = [p for p in pages if p.government == "Piney Point Village city"]
     assert len(piney) == 2 and all(p.counties == ("Harris",) for p in piney)
     assert all(p.url.startswith("http") and p.bodies for p in pages)
@@ -525,6 +586,24 @@ def test_a_page_that_dates_nothing_gives_its_first_two_files(tmp_path):
     assert [u.rsplit("/", 1)[-1] for u in site.page_urls()[1:]] == ["agenda-a.pdf", "agenda-b.pdf"]
     file = next(d for d in sink.documents.values() if d.url.endswith("agenda-a.pdf"))
     assert file.raw_meta["meeting_date"] is None and file.raw_meta["date_from"] is None
+
+
+def test_links_that_name_only_a_month_give_this_months_and_last_months_files(tmp_path):
+    names = ("November 2026", "October 2026", "September 2026", "November 2025")
+    rows = "".join(f'<p><a href="/f/{n[:3]}-{n[-4:]}.pdf">{n} Agenda</a></p>' for n in names)
+    # One old link has a day. Before, that alone kept every month-only link from being read.
+    rows += '<p><a href="/f/old.pdf">Agenda January 5, 2026</a></p>'
+    site = Site({PAGE: httpx.Response(200, content=page(rows))})
+    for n in names:
+        site.routes[f"https://www.example.gov/f/{n[:3]}-{n[-4:]}.pdf"] = httpx.Response(
+            200, content=AGENDA, headers=PDF
+        )
+    sink = MemorySink()
+    run(site, sink, tmp_path, pages=(Page(PAGE, "Example city", ("Travis",), ("x",)),))
+    assert [u.rsplit("/", 1)[-1] for u in site.page_urls()[1:]] == ["Nov-2026.pdf", "Oct-2026.pdf"]
+    file = next(d for d in sink.documents.values() if d.url.endswith("Nov-2026.pdf"))
+    assert file.raw_meta["meeting_date"] is None
+    assert file.raw_meta["meeting_month"] == "2026-11"
 
 
 def test_a_page_that_lists_nothing_is_named_in_the_run_log_and_the_run_goes_on(tmp_path):

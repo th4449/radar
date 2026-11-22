@@ -275,13 +275,13 @@ def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date(
 def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
     rows = inv.load_site_terms()
     hosts = [r["host"] for r in rows]
-    # 38 Agenda Center sites, 14 on Legistar, 76 that post files on their own site and the 5
+    # 38 Agenda Center sites, 14 on Legistar, 94 that post files on their own site and the 5
     # counties on the sites their association provides
-    assert len(set(hosts)) == len(hosts) == 133
+    assert len(set(hosts)) == len(hosts) == 151
     governments = {b.government for b in inv.load_inventory()}
     results = {
         "own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read",
-        "reuse_needs_consent", "bars_automated_access", "robots_bar", "refused",
+        "reuse_needs_consent", "bars_automated_access", "robots_bar", "refused", "vendor_site",
     }  # fmt: skip
     for r in rows:
         assert r["government"] in governments, r["host"]
