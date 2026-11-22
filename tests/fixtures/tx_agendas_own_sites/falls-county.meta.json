@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://www.co.falls.tx.us/page/Agendas.Minutes",
+  "final_url": "https://www.co.falls.tx.us/page/Agendas.Minutes",
+  "retrieved_at": "2026-11-22T06:26:23+00:00",
+  "sha256": "d8ff55caed38c4d673f49e76cf5cbf48bc4cbb92ab296bf5891dc2e61c8b9ded",
+  "bytes": 945,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "8b07b6ffcabdc3a277ea92fbaef00dc0e8f47f9ea3ebe55b2671d792fe815bef",
+  "original_bytes": 61773,
+  "note": "The real page, cut down to its list of 2026 agendas: the first 8 links, with scripts and styles removed. The site's menus, footer and the rest of the page are left out."
+}

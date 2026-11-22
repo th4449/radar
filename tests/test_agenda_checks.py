@@ -417,18 +417,23 @@ def test_no_collector_may_take_a_row_that_is_not_confirmed():
             assert b.agenda_url and b.platform in inv.FOUND
 
 
-def test_what_is_collectable_today_is_legistar_and_own_sites():
-    """The state on file: two platforms cleared, and the governments whose own rules allow it."""
+def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_association_sites():
+    """The state on file: three platforms cleared, and the governments whose own rules allow it."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
     through = [b for b in bodies if ac.collectable(b, checks, TODAY)]
-    assert {b.platform for b in through} == {"legistar", "own_site_files"}
+    assert {b.platform for b in through} == {"legistar", "own_site_files", "cira_county_site"}
     by_platform = {
         name: {b.government for b in through if b.platform == name}
-        for name in ("legistar", "own_site_files")
+        for name in ("legistar", "own_site_files", "cira_county_site")
     }
     assert len(by_platform["legistar"]) == 9
     assert len(by_platform["own_site_files"]) == 44
+    # Four of these five were confirmed in a real browser: their agendas are in a calendar or
+    # a list that a research pass could not see.
+    assert by_platform["cira_county_site"] == {
+        "Archer County", "Carson County", "Falls County", "Freestone County", "Hill County",
+    }  # fmt: skip
     assert "League City city" not in by_platform["legistar"]
     # Closed by a robots file, by the site's own terms, and held for the owner, in that order.
     # The last two refused the collector's own request.

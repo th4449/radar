@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <atom:link href="https://newtools.cira.state.tx.us/page/calrss/35997/0/calendar.rss" rel="self" type="application/rss+xml" />
+    <generator>ezTaskTitanium Feed Generator</generator>
+    <title>Calendar</title>
+    <description>
+    </description>
+    <link><![CDATA[https://newtools.cira.state.tx.us/page/carson.Public.Notices]]></link>
+    <language>en</language>
+    <item>
+      <title><![CDATA[Commissioners Court]]></title>
+      <description><![CDATA[<a href="https://newtools.cira.state.tx.us/upload/template/35997/Agenda November 23 2026.pdf" target="_blank">Agenda November 23 2026.pdf</a>]]></description>
+      <pubDate>Mon, 23 Nov 2026 16:00:00 GMT</pubDate>
+      <link><![CDATA[https://newtools.cira.state.tx.us/page/carson.Public.Notices?date=11-23-2026&id=287]]></link>
+      <guid isPermaLink="false">calendar_287</guid>
+    </item>
+    <item>
+      <title><![CDATA[DPS]]></title>
+      <description><![CDATA[Come Get Your Drivers License]]></description>
+      <pubDate>Tue, 1 Dec 2026 15:00:00 GMT</pubDate>
+      <link><![CDATA[https://newtools.cira.state.tx.us/page/carson.Public.Notices?date=12-01-2026&id=1000000000]]></link>
+      <guid isPermaLink="false">calendar_1000000000</guid>
+    </item>
+    <item>
+      <title><![CDATA[Commissioner Court]]></title>
+      <description><![CDATA[]]></description>
+      <pubDate>Mon, 14 Dec 2026 16:00:00 GMT</pubDate>
+      <link><![CDATA[https://newtools.cira.state.tx.us/page/carson.Public.Notices?date=12-14-2026&id=1000000001]]></link>
+      <guid isPermaLink="false">calendar_1000000001</guid>
+    </item>
+    <item>
+      <title><![CDATA[DPS]]></title>
+      <description><![CDATA[Come Get Your Drivers License]]></description>
+      <pubDate>Tue, 15 Dec 2026 15:00:00 GMT</pubDate>
+      <link><![CDATA[https://newtools.cira.state.tx.us/page/carson.Public.Notices?date=12-15-2026&id=1000000002]]></link>
+      <guid isPermaLink="false">calendar_1000000002</guid>
+    </item>
+  </channel>
+</rss>

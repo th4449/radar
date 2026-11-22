@@ -2,8 +2,8 @@
 
 - Milestone: M8
 - Registry: `config/tx_agenda_platforms.csv`
-- Read: November 21, 2026
-- Result: **six platforms restrict a collector** by their vendor's terms or their robots file. **Legistar is cleared** and has a collector. **Governments' own sites are cleared one site at a time** and have a collector. The county association sites are a candidate.
+- Read: November 21 and 22, 2026
+- Result: **six platforms restrict a collector** by their vendor's terms or their robots file. **Legistar is cleared** and has a collector. **Governments' own sites are cleared one site at a time** and have a collector. **The five county association sites are cleared** and the own-sites collector reads them.
 
 The owner approved building the agenda collectors by platform. The first step for each is to read its terms and robots rules. This note is that reading. It changes the plan, because the largest vendor's terms stand against the radar's use.
 
@@ -18,7 +18,7 @@ The owner approved building the agenda collectors by platform. The first step fo
 | CivicWeb | Diligent | 6 | bars every agent | **Restricted by robots** |
 | Granicus | Granicus | 4 | bars all but three search engines | **Restricted by robots** |
 | Legistar | Granicus | 14 | none | **Cleared.** 9 governments are read. See [tx_agendas_legistar.md](tx_agendas_legistar.md) |
-| County association sites | Texas Association of Counties | 5 | none | Candidate |
+| County association sites | Texas Association of Counties | 5 | none | **Cleared.** All 5 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
 | Files on the government's own site | each government | 114 | each site's own | **Cleared, one site at a time.** 76 sites read, 44 governments collected. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
 | Other outside platforms | various | 23 | not read | Not read |
 
@@ -78,7 +78,9 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 
 ## County association sites
 
-**Candidate.** The Texas Association of Counties hosts these sites. The one checked, Carson County, has no robots file. Its home page links no terms, privacy or policy page and carries a copyright line only. The association's own terms for these sites were not found.
+**Cleared on November 22, 2026.** The Texas Association of Counties provides these sites. None of the five has a robots file, and neither has the association's host for files and calendar feeds. None links a terms, privacy or policy page. The association's terms for county.org say nothing on automated access and bar copying for commercial purposes. The software vendor, ezTask, publishes a privacy policy for its own website only. The owner said on November 22, 2026 to start on these sites. The full reading is in [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
+
+Not verified: whether the association's terms reach the county sites. None of the five links them.
 
 ## What is not verified
 
@@ -86,7 +88,7 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 - **Whether a person's hand reading of a CivicPlus-hosted agenda may then be scored by the radar.** Section 8 speaks of using authority data, not only of collecting it. This needs counsel before reviewers are set to work on those sites.
 - Whether CivicPlus gives written consent for a use like this, and to whom.
 - Robots files were read on one host for each of CivicClerk, Municode Meetings, Legistar, Granicus, Swagit, CivicWeb and the county association sites. Another customer's host may differ.
-- The terms of the five county association sites, and of the 38 own-site governments whose inventory rows are not confirmed.
+- The terms of the 38 own-site governments whose inventory rows are not confirmed.
 
 ## Options for the owner
 
@@ -101,6 +103,6 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 
 5. **Legistar: done.** Each of its 14 governments' own terms was read and the collector uses the published API. Nine governments are read, Harris County and Dallas among them. Five are held out. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
 6. **Own sites: done for the 76 governments whose rows are confirmed.** The owner said on November 21, 2026 to build for them. Each site's robots file and terms were read. 44 governments are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
-7. **Then the five county association sites,** after their terms and robots files are read.
+7. **The five county association sites: done.** Their robots files and terms were read on November 22, 2026 and all five are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
 Nothing above is done. Each needs the owner's word.

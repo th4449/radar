@@ -2,10 +2,10 @@
 
 - Source id: `tx_agendas_own_sites`
 - What it is: the agenda page of each government that posts its agendas as files on its own website, and the agenda files that page links to
-- Checked: November 21, 2026
-- Result: **allowed for 44 of 76 governments, one site at a time.** 32 are closed or held.
+- Checked: November 21 and 22, 2026
+- Result: **allowed for 44 of 76 governments, one site at a time.** 32 are closed or held. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
 - Collector: `collectors/tx/agenda_pages.py`
-- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, four real pages cut down to their agenda lists
+- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, six real pages cut down to their agenda lists and three real calendar feeds
 - Workflow: `.github/workflows/collect-tx-agendas-own-sites.yml`, started by hand only
 
 The owner said on November 21, 2026 to build next for the governments that post agenda files on their own sites. There is no vendor here and no shared rule. Each site has its own robots file and its own terms, so each was read.
@@ -67,6 +67,63 @@ The agenda inventory lists 114 governments with files on their own sites. **76 o
 | Closed by their own terms | 8 |
 | Held for the owner | 4 |
 | Refused the request | 2 |
+
+## The county association sites
+
+The owner said on November 22, 2026 to start on these. Five commissioners courts in the test counties post their agendas on sites the Texas Association of Counties provides: Archer, Carson, Falls, Freestone and Hill. The sites run on software by a vendor named ezTask. They are the counties' own sites, so this collector reads them.
+
+**What was read, on November 22, 2026**
+
+| What | Finding |
+|---|---|
+| The robots file of each of the five sites | None. Each answers 404 |
+| The robots file of the association's host for files and calendar feeds, `newtools.cira.state.tx.us` | None |
+| The home page and agenda page of each site | No terms, disclaimer or privacy page is linked. Each carries a copyright line and a credit to the association. Falls County's line reserves all rights |
+| Falls County's accessibility page and site map | No terms |
+| The association's terms for county.org, dated March 30, 2011 | They speak of "the county.org site and various related services". Nothing on robots or automated access. They bar copying for commercial purposes and republishing content without the association's leave |
+| The association's disclaimer | It grants leave to copy and distribute its information for noncommercial use |
+| The vendor's site | No robots file. A privacy policy for its own website only. No terms of use are linked |
+
+**Nothing read stands against a collector.** All five are marked `no_terms_found` in `config/tx_agenda_site_terms.csv` and the platform is marked `cleared` in `config/tx_agenda_platforms.csv`.
+
+**How each county posts its agendas**
+
+| County | Where the agendas are | How the collector reads it |
+|---|---|---|
+| Archer | A list of files by year on its Public Notices page | The page |
+| Falls | A list of dated links on its Agendas and Minutes page | The page |
+| Carson, Freestone, Hill | Attached to the meeting entries of a calendar that a script draws | The calendar's feed |
+
+**The calendar feed.** The calendar offers its visitors an RSS feed, on the association's host. The feed lists the meetings to come, each with its start time and whatever the county attached. The page gives the feed's address. The collector reads it with one more request and takes a file whose words or name say it is an agenda. The meeting's day is its start time, turned from Greenwich time into Texas time.
+
+- **The feed lists only meetings to come.** An agenda attached after its meeting started is never seen. A daily run sees each agenda while its meeting is still ahead.
+- The page's own script calls are not copied. The feed is what the site publishes for programs.
+- A feed that stops being a feed stops the run for a person to look.
+
+**The independent checks.** A research pass cannot run a calendar's script, and it saw no list on Falls County's page. I opened each page in a real browser on November 22, 2026 and recorded what was there in `config/tx_agenda_checks.csv`:
+
+- Falls: a list of 26 dated agendas for 2026, the newest for November 23.
+- Carson: the calendar entry for November 23 opens one agenda file.
+- Freestone: the entry for November 18 opens one agenda file.
+- Hill: the entry for November 24 opens one agenda file.
+
+Two inventory rows were corrected. Hill County's row had recorded a court rules file as its agenda. Carson County's row said the current agenda was one file linked from the page.
+
+**A run of the collector on the five sites,** November 22, 2026, two files a page, nothing written to a database:
+
+- **14 requests, none refused:** five pages, three feeds and six agenda files.
+- **Six agenda files of four counties stored.** Freestone's feed was empty: its next meeting was not yet entered. The run log names its page.
+- **Four of the six are scans.** Three were read by OCR in the run, at scores of 92.5 to 94.8. The fourth is the fault below.
+- **One signal.** Hill County's file for November 24, 2026 is 108 pages, the agenda with its briefs. It uses the words "data center" on two pages. I read both. One is a session title on a form for training credit. The other is a definition in a software license. Neither is about a development in the county. A reviewer would see that.
+- **A fault found and fixed.** One Falls County scan gave the text reader no pages at all, so it was never sent to OCR and was counted as unread. A PDF is now counted by the page drawer when the text reader finds no pages. That file then read at a score of 93.4.
+- Every file came with a way to ask later whether it changed. The pages and feeds did not.
+
+**Not verified**
+
+- **Whether the association's terms reach the county sites.** None of the five sites links them, and they name county.org. I could not settle it from the pages.
+- **Freestone's feed with an agenda in it.** It was empty on the day. Its calendar attached an agenda to a past meeting, which I saw in the browser.
+- A feed entry that holds two meetings' agendas, or an agenda whose link does not say "agenda". Such a link is left.
+- A second day's run, and a run from GitHub's servers.
 
 ## What the collector does
 
@@ -145,6 +202,7 @@ On November 21, 2026:
 - **How well OCR reads real scans, as a number.** Two pages were checked by eye. Tables come out jumbled. See [tesseract.md](../services/tesseract.md).
 - Grey Forest's file host. Its site is built like the six the first run closed, and it had no recent agenda to ask for. A run will stop at its robots file if that bars the files.
 - Old-format .doc files, which Red Lick posts.
+- The terms of the county association and whether they reach the five county sites. See "The county association sites".
 - Whether the meeting date read from a file's name is always the meeting's. A name can carry the day the file was posted.
 - The site builder's terms for the file host `img1.wsimg.com`. Its robots file is read on every run.
 - A statement on Shoreacres' home page that the city was consolidated into La Porte. I did not check it. Its newest agenda is from May 2026.

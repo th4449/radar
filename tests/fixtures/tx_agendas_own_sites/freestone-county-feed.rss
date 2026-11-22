@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <atom:link href="https://newtools.cira.state.tx.us/page/calrss/6221/0/calendar.rss" rel="self" type="application/rss+xml" />
+    <generator>ezTaskTitanium Feed Generator</generator>
+    <title>Calendar</title>
+    <description>
+    </description>
+    <link><![CDATA[https://newtools.cira.state.tx.us/page/freestone.PublicNotices]]></link>
+    <language>en</language>
+  </channel>
+</rss>

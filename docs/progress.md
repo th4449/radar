@@ -2,6 +2,43 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M8: the five county association sites
+
+The owner said to start on the five commissioners courts whose sites the Texas Association of Counties provides: Archer, Carson, Falls, Freestone and Hill. Terms and robots rules came first.
+
+**Read first**
+
+- **No robots file** on any of the five sites or on the association's host for files and calendar feeds.
+- **No terms, disclaimer or privacy page** on any of the five. Each has a copyright line and a credit to the association.
+- **The association's terms** speak of county.org and its related services. They say nothing on automated access and bar copying for commercial purposes.
+- The software vendor, ezTask, publishes a privacy policy for its own website only.
+- Nothing read stands against a collector. The platform is marked cleared and each county `no_terms_found`.
+
+**Built**
+
+- **The own-sites collector reads these five.** They are the counties' own sites.
+- **Three of them keep agendas in a calendar that a script draws.** The calendar publishes an RSS feed of the meetings to come, with each agenda attached. The page gives the feed's address. The collector reads the feed with one more request. It never copies the page's script calls.
+- A meeting's day is its start time, turned from Greenwich time into Texas time.
+- A space in a file's address is now written `%20`.
+- **A fault in yesterday's OCR found and fixed.** One real scan gave the text reader no pages, so it was never sent to OCR. The page drawer now counts the pages when the text reader finds none.
+- Four browser checks recorded in `config/tx_agenda_checks.csv`. Two inventory rows corrected: Hill County's had recorded a court rules file as its agenda.
+- Five new fixtures cut from the real pages and feeds. 12 new tests. 873 pass.
+
+**Verified live**
+
+- One identified request for each robots file and each page read for terms.
+- **I opened Falls, Carson, Freestone and Hill in a real browser** and saw the agendas listed or attached. Archer's row was already confirmed.
+- **A run of the collector on the five sites,** two files a page, nothing written to a database: 14 requests, none refused. Six agenda files of four counties. Freestone's feed was empty that day.
+- Four of the six files are scans. All four now read by OCR, at scores of 92.5 to 94.8.
+- **One signal.** Hill County's 108-page file for November 24, 2026 uses the words "data center" on two pages. I read both. One is a session title on a form for training credit and the other a definition in a software license. Neither is about a development in the county.
+
+**Not verified**
+
+- **Whether the association's terms reach the county sites.** None of the five links them.
+- Freestone's feed with an agenda in it.
+- An agenda attached to a calendar entry after its meeting started. The feed lists only meetings to come.
+- A second day's run, and a run from GitHub's servers.
+
 ## November 21, 2026 — M8: scanned agendas are read by OCR
 
 The first own-sites run stored 43 agenda files. 28 were scans with no text, and the radar read none of them. The owner said to build OCR.

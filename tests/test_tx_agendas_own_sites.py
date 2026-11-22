@@ -1,8 +1,8 @@
 """Agenda files that governments post on their own sites.
 
-The page fixtures are real pages, saved on November 21, 2026 and cut down to the part that
-lists agendas. Each fixture's .meta.json says so. The agenda files in these tests are made up:
-a real agenda names people.
+The page fixtures are real pages, saved on November 21 and 22, 2026 and cut down to the part
+that lists agendas. The calendar feeds are real and whole. Each fixture's .meta.json says so.
+The agenda files in these tests are made up: a real agenda names people.
 """
 
 from __future__ import annotations
@@ -14,14 +14,17 @@ from pathlib import Path
 import httpx
 import pytest
 
-from collectors.base import Fetcher, LocalArchive
+from collectors.base import Fetcher, LayoutChanged, LocalArchive
 from collectors.tx.agenda_pages import (
+    AgendaLink,
     AgendaPages,
     Page,
     cleared_pages,
     dates_in,
     find_agenda_links,
+    find_calendar_feed,
     find_date,
+    find_feed_links,
     on_the_site,
 )
 from pipeline.config import load_sources
@@ -41,6 +44,11 @@ def saved(name: str) -> tuple[bytes, str]:
 def links(name: str):
     body, url = saved(name)
     return find_agenda_links(body, url, TODAY)
+
+
+def feed(name: str) -> tuple[bytes, str]:
+    meta = json.loads((FIXTURES / f"{name}.meta.json").read_text())
+    return (FIXTURES / f"{name}.rss").read_bytes(), meta["final_url"]
 
 
 def source():
@@ -253,8 +261,100 @@ def test_a_page_with_no_agenda_files_gives_an_empty_list():
 def test_only_the_governments_own_site_and_its_builders_file_host_count_as_the_site():
     assert on_the_site("https://example.gov/f/a.pdf", "https://www.example.gov/agendas")
     assert on_the_site("https://img1.wsimg.com/blobby/go/x/a.pdf", "https://example.gov/agendas")
+    # The county association keeps its counties' calendar files on a host of its own.
+    assert on_the_site(
+        "https://newtools.cira.state.tx.us/upload/template/1/a.pdf", "https://www.co.hill.tx.us/"
+    )
     assert not on_the_site("https://files.example.org/a.pdf", "https://www.example.gov/agendas")
     assert not on_the_site("https://docs.example.gov/a.pdf", "https://www.example.gov/agendas")
+
+
+# --- a calendar and its feed ----------------------------------------------------------------------
+
+HILL_FEED_BODY, HILL_FEED = feed("hill-county-feed")
+HILL_FILE = (
+    "https://newtools.cira.state.tx.us/upload/template/28749/docs/CC%202026/"
+    "RevisedCCAgendaBriefs11242026.pdf"
+)
+
+
+def rss(*items: str) -> bytes:
+    inner = "".join(f"<item>{item}</item>" for item in items)
+    return f'<?xml version="1.0"?><rss version="2.0"><channel>{inner}</channel></rss>'.encode()
+
+
+def test_a_county_association_page_that_lists_its_agendas_by_date():
+    found = links("falls-county")
+    assert len(found) == 8
+    assert found[0] == AgendaLink(
+        "https://www.co.falls.tx.us/upload/page/0070/CC%2011%2023%202026.pdf",
+        "11/23/2026",
+        dt.date(2026, 11, 23),
+        "link_text",
+    )
+    # The page's own date is read, not the one a file's name could be taken for.
+    assert [str(link.date) for link in found[2:4]] == ["2026-10-26", "2026-10-12"]
+    assert all(link.date_from == "link_text" and " " not in link.url for link in found)
+
+
+def test_a_calendar_page_lists_no_agenda_itself_and_names_its_feed():
+    body, url = saved("hill-county")
+    assert find_agenda_links(body, url, TODAY) == []
+    assert find_calendar_feed(body) == HILL_FEED
+    assert find_calendar_feed(saved("falls-county")[0]) is None
+
+
+def test_a_calendar_feed_gives_each_meetings_agenda_and_its_day():
+    # Hill County: one meeting to come, with its agenda and a link to a video meeting room.
+    assert find_feed_links(HILL_FEED_BODY, HILL_FEED) == [
+        AgendaLink(HILL_FILE, "Commissioners Court Agenda", dt.date(2026, 11, 24), "calendar_feed")
+    ]
+    # Carson County: four entries to come. One has an agenda. The others have none yet or are
+    # not meetings.
+    (carson,) = find_feed_links(*feed("carson-county-feed"))
+    assert carson.url == (
+        "https://newtools.cira.state.tx.us/upload/template/35997/Agenda%20November%2023%202026.pdf"
+    )
+    assert (carson.date, carson.date_from) == (dt.date(2026, 11, 23), "calendar_feed")
+    # Freestone County had no meeting to come on the day its feed was saved.
+    assert find_feed_links(*feed("freestone-county-feed")) == []
+
+
+def test_an_evening_meeting_is_dated_by_the_day_in_texas():
+    """The feed gives Greenwich time. Six in the evening in Texas is the next day there."""
+    item = (
+        "<title>Commissioners Court</title><pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate>"
+        '<description>&lt;a href="/upload/template/1/Agenda.pdf"&gt;Agenda&lt;/a&gt;</description>'
+    )
+    (link,) = find_feed_links(rss(item), HILL_FEED)
+    assert link.date == dt.date(2026, 11, 23)
+    # A time that cannot be read dates nothing. The file's own head is read for a date later.
+    undated = item.replace("Tue, 24 Nov 2026 00:00:00 GMT", "next Tuesday")
+    (link,) = find_feed_links(rss(undated), HILL_FEED)
+    assert (link.date, link.date_from) == (None, None)
+
+
+def test_only_a_file_that_says_it_is_an_agenda_is_taken_from_a_feed():
+    def item(*links: tuple[str, str]) -> str:
+        said = "".join(f'&lt;a href="{href}"&gt;{text}&lt;/a&gt;' for href, text in links)
+        when = "<pubDate>Tue, 24 Nov 2026 15:00:00 GMT</pubDate>"
+        return f"<title>Commissioners Court</title>{when}<description>{said}</description>"
+
+    body = rss(
+        item(("/upload/a/Minutes 11 10 2026.pdf", "Minutes"), ("/upload/a/Notice.pdf", "Notice")),
+        item(("https://meeting.example/1", "Agenda and video link")),
+        item(("/upload/a/Agenda Packet.pdf", "Agenda Packet"), ("/upload/a/Agenda.pdf", "Agenda")),
+        item(("/upload/a/Agenda.pdf", "Agenda, again")),
+    )
+    found = find_feed_links(body, HILL_FEED)
+    assert [link.url for link in found] == ["https://newtools.cira.state.tx.us/upload/a/Agenda.pdf"]
+
+
+def test_a_feed_that_is_no_longer_a_feed_is_a_changed_layout():
+    for body in (b"<html><body>Not found</body></html>", b"not xml at all", rss()[:-20]):
+        with pytest.raises(LayoutChanged):
+            find_feed_links(body, HILL_FEED)
+    assert find_feed_links(rss(), HILL_FEED) == []  # a feed with no meeting to come is a feed
 
 
 # --- which pages ----------------------------------------------------------------------------------
@@ -263,8 +363,16 @@ def test_only_the_governments_own_site_and_its_builders_file_host_count_as_the_s
 def test_the_pages_read_are_the_ones_the_inventory_clears():
     pages = cleared_pages(TODAY)
     governments = {p.government for p in pages}
-    assert (len(pages), len(governments)) == (45, 44)
+    assert (len(pages), len(governments)) == (50, 49)
     assert "Austin County" in governments and "Houston city" in governments
+    # The five counties on the sites their association provides.
+    assert {
+        "Archer County",
+        "Carson County",
+        "Falls County",
+        "Freestone County",
+        "Hill County",
+    } <= (governments)
     # Closed by a robots file, by its own terms, held for the owner, refused on request, and
     # closed by the robots file of the host that serves its files.
     closed = ("Irving city", "Frankston town", "Austin city", "New Fairview city", "Sealy city")
@@ -462,3 +570,80 @@ def test_an_agenda_on_some_other_host_is_listed_and_not_followed(tmp_path):
     assert summary.status == "ok"
     assert site.page_urls() == [PAGE]
     assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {PAGE: [elsewhere]}
+
+
+# --- a run that reads a calendar feed ------------------------------------------------------------
+
+HILL_BODY, HILL = saved("hill-county")
+HILL_PAGE = (Page(HILL, "Hill County", ("Hill",), ("Hill County Commissioners Court",)),)
+
+
+def calendar_web(feed_body: bytes = HILL_FEED_BODY) -> Site:
+    html = {"Content-Type": "text/html; charset=utf-8"}
+    return Site(
+        {
+            HILL: httpx.Response(200, content=HILL_BODY, headers=html),
+            HILL_FEED: httpx.Response(
+                200, content=feed_body, headers={"Content-Type": "application/rss+xml"}
+            ),
+            HILL_FILE: httpx.Response(200, content=AGENDA, headers=PDF),
+        }
+    )
+
+
+def test_a_calendar_page_has_its_feed_read_and_the_agenda_in_it_fetched(tmp_path):
+    site, sink = calendar_web(), MemorySink()
+    summary = run(site, sink, tmp_path, pages=HILL_PAGE)
+    assert summary.status == "ok", summary.error
+    assert site.page_urls() == [HILL, HILL_FEED, HILL_FILE]
+    # The page lists nothing itself. Its feed does, so nothing is flagged for a person.
+    assert sink.runs[1]["detail"] == {"governments": 1}
+
+    docs = {d.url: d for d in sink.documents.values()}
+    assert set(docs) == {HILL, HILL_FEED, HILL_FILE}
+    listing = json.loads(LocalArchive(tmp_path).get(docs[HILL_FEED].storage_path))
+    assert (listing["government"], listing["page"]) == ("Hill County", HILL)
+    assert listing["calendar_feed"] == HILL_FEED
+    assert listing["agendas"] == [
+        {
+            "url": HILL_FILE,
+            "text": "Commissioners Court Agenda",
+            "date": "2026-11-24",
+            "date_from": "calendar_feed",
+        }
+    ]
+    assert docs[HILL_FEED].raw_meta["record"] == "agenda_page"
+    # The file is stored with the county's own page, which is what a reviewer opens.
+    facts = docs[HILL_FILE].raw_meta
+    assert (facts["record"], facts["government"], facts["page"]) == (
+        "agenda_file",
+        "Hill County",
+        HILL,
+    )
+    assert (facts["meeting_date"], facts["date_from"]) == ("2026-11-24", "calendar_feed")
+    assert facts["bodies"] == ["Hill County Commissioners Court"]
+
+
+def test_a_second_run_asks_for_the_page_and_its_feed_and_not_for_the_stored_file(tmp_path):
+    sink = MemorySink()
+    run(calendar_web(), sink, tmp_path, pages=HILL_PAGE)
+    site = calendar_web()
+    summary = run(site, sink, tmp_path, pages=HILL_PAGE)
+    assert site.page_urls() == [HILL, HILL_FEED]
+    assert (summary.status, summary.documents_new) == ("ok", 0)
+
+
+def test_a_feed_with_no_agenda_to_come_is_named_in_the_run_log(tmp_path):
+    empty, _ = feed("freestone-county-feed")
+    site, sink = calendar_web(empty), MemorySink()
+    summary = run(site, sink, tmp_path, pages=HILL_PAGE)
+    assert summary.status == "ok"
+    assert site.page_urls() == [HILL, HILL_FEED]
+    assert sink.runs[1]["detail"]["pages_with_no_agenda_links"] == [HILL]
+
+
+def test_a_feed_that_changed_stops_the_run_for_a_person_to_look(tmp_path):
+    site, sink = calendar_web(b"<html><body>Moved</body></html>"), MemorySink()
+    summary = run(site, sink, tmp_path, pages=HILL_PAGE)
+    assert summary.status == "failed" and "calendar feed" in summary.error
+    assert site.page_urls() == [HILL, HILL_FEED]

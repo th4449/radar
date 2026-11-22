@@ -11,6 +11,10 @@ For each page, one run makes:
 A file is fetched only from the government's own site or its site builder's file host. A page
 that lists no agenda does not stop the run: the run log names it for a person to look at.
 
+Some county sites keep their agendas in a calendar and not in a list. That calendar publishes
+a feed of the meetings to come, made for programs, with each agenda attached to its meeting.
+Where a page names such a feed, the run makes one more request, for the feed.
+
 Every site has its own robots file and its own terms. The shared fetcher checks the robots file
 of every host before every request, the file hosts included. Which governments are read is
 decided by the agenda inventory: `cleared_pages` returns a page only when an independent check
@@ -29,9 +33,14 @@ import json
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
+from email.utils import parsedate_to_datetime
 from typing import ClassVar
 from urllib.parse import unquote, urljoin, urlsplit
+from xml.etree.ElementTree import ParseError
+from zoneinfo import ZoneInfo
 
+from defusedxml import DefusedXmlException
+from defusedxml.ElementTree import fromstring as parse_xml
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from collectors.base import Collector, FetchResult, LayoutChanged, Reduced
@@ -192,6 +201,11 @@ _SAYS_NOTHING = re.compile(
 _SCANNER_NAME = re.compile(r"^(doc|document|skm|scan|img|image)[\d_ -]", re.I)
 
 
+def _address(base: str, href: str) -> str:
+    """A link's full address, as it is asked for. A space in a file's name is written %20."""
+    return urljoin(base, href).split("#")[0].replace(" ", "%20")
+
+
 def _words(node: LexborNode | None) -> str:
     return " ".join(node.text(separator=" ").split()) if node is not None else ""
 
@@ -282,7 +296,7 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
         href = (a.attributes.get("href") or "").strip()
         if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
             continue
-        url = urljoin(page_url, href).split("#")[0]
+        url = _address(page_url, href)
         parts = urlsplit(url)
         if parts.scheme not in ("http", "https") or url in seen or _in_chrome(a):
             continue
@@ -328,9 +342,70 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
     return [c.link for c in found if not (c.packet and (c.link.date in plain or not c.link.date))]
 
 
+# The calendar on the sites the Texas Association of Counties provides. It publishes a feed of
+# the meetings to come, and a county attaches each agenda to its meeting there. The feed and
+# the files sit on the association's own host.
+CALENDAR_HOST = "newtools.cira.state.tx.us"
+_FEED = re.compile(r"https://newtools\.cira\.state\.tx\.us/page/calrss/\d+/\d+/calendar\.rss")
+# The feed gives each meeting's start in Greenwich time. A 6 p.m. meeting in Texas is the next
+# day there. All but two Texas counties keep Central time, and those two are an hour behind.
+_TEXAS = ZoneInfo("America/Chicago")
+
+
+def find_calendar_feed(body: bytes) -> str | None:
+    """The address of the calendar feed a page names, if it names one."""
+    found = _FEED.search(body.decode("utf-8", "replace"))
+    return found.group(0) if found else None
+
+
+def _meeting_day(when: str | None) -> dt.date | None:
+    try:
+        start = parsedate_to_datetime(when or "")
+    except (TypeError, ValueError):
+        return None
+    if start.tzinfo is None:
+        return None  # a time with no zone could be either day
+    return start.astimezone(_TEXAS).date()
+
+
+def find_feed_links(body: bytes, feed_url: str) -> list[AgendaLink]:
+    """Agenda files attached to the meetings in a calendar feed, in its order, each once.
+
+    A link is taken when it leads to a file and its own words or its file's name say it is an
+    agenda. Its date is the day its meeting starts, in Texas time. A packet is left when the
+    meeting has the plain agenda too.
+    """
+    try:
+        root = parse_xml(body)
+    except (ParseError, DefusedXmlException) as exc:
+        raise LayoutChanged("the calendar feed could not be read as a feed") from exc
+    if root.tag != "rss" or root.find("channel") is None:
+        raise LayoutChanged("the calendar feed is not the feed it was")
+    found: list[_Candidate] = []
+    seen: set[str] = set()
+    for item in root.iter("item"):
+        day = _meeting_day(item.findtext("pubDate"))
+        for a in LexborHTMLParser(item.findtext("description") or "").css("a[href]"):
+            url = _address(feed_url, (a.attributes.get("href") or "").strip())
+            parts = urlsplit(url)
+            if parts.scheme not in ("http", "https") or url in seen:
+                continue
+            if not _FILE.search(parts.path):
+                continue
+            text = _link_words(a)
+            own = f"{text} {unquote(parts.path.rsplit('/', 1)[-1])}"
+            if not _AGENDA.search(own) or _NOT_AGENDA.search(own):
+                continue
+            seen.add(url)
+            link = AgendaLink(url, text[:160], day, "calendar_feed" if day else None)
+            found.append(_Candidate(link, bool(_PACKET.search(own))))
+    plain = {c.link.date for c in found if not c.packet}
+    return [c.link for c in found if not (c.packet and (c.link.date in plain or not c.link.date))]
+
+
 # Where site builders keep the files of the sites they host. Each has its own robots file,
 # which the fetcher reads like any other.
-FILE_HOSTS = frozenset({"img1.wsimg.com"})
+FILE_HOSTS = frozenset({"img1.wsimg.com", CALENDAR_HOST})
 
 
 def _site(url: str) -> str:
@@ -354,7 +429,7 @@ def cleared_pages(today: dt.date | None = None) -> list[Page]:
     checks = agenda_checks.Checks(agenda_checks.load_checks())
     pages: dict[str, Page] = {}
     for body in agenda_inventory.load_inventory():
-        if body.platform != "own_site_files":
+        if body.platform not in ("own_site_files", "cira_county_site"):
             continue
         if not agenda_checks.collectable(body, checks, today):
             continue
@@ -365,7 +440,10 @@ def cleared_pages(today: dt.date | None = None) -> list[Page]:
 
 
 class AgendaPages(Collector):
-    """Each cleared government's agenda page, then its recent agenda files."""
+    """Each cleared government's agenda page, then its recent agenda files.
+
+    A page that names a calendar feed has that feed read too.
+    """
 
     source_id = "tx_agendas_own_sites"
     refusal_closes_host_only = True
@@ -381,6 +459,7 @@ class AgendaPages(Collector):
         self.pages = {p.url: p for p in (cleared_pages(self.today) if pages is None else pages)}
         self._known: dict[str, dict] = {}
         self._links: dict[str, list[AgendaLink]] = {}
+        self._feeds: dict[str, Page] = {}  # a calendar feed -> the page that named it
         self._files: dict[str, tuple[Page, AgendaLink]] = {}
         self._elsewhere: dict[str, list[str]] = {}
 
@@ -389,11 +468,16 @@ class AgendaPages(Collector):
 
     def _page_links(self, result: FetchResult) -> list[AgendaLink]:
         if result.url not in self._links:
-            self._links[result.url] = find_agenda_links(result.body, result.final_url, self.today)
+            if result.url in self._feeds:
+                found = find_feed_links(result.body, result.final_url)
+            else:
+                found = find_agenda_links(result.body, result.final_url, self.today)
+            self._links[result.url] = found
         return self._links[result.url]
 
     def follow(self, result: FetchResult) -> Iterable[str]:
-        page = self.pages.get(result.url)
+        listed = self.pages.get(result.url)
+        page = listed or self._feeds.get(result.url)
         if page is None:
             return ()
         links = self._page_links(result)
@@ -408,8 +492,12 @@ class AgendaPages(Collector):
         undated = [link for link in links if link.date is None][: self.max_undated_per_page]
         wanted = dated if any(link.date for link in links) else undated
         out = []
+        feed = find_calendar_feed(result.body) if listed else None
+        if feed and feed not in self._feeds:
+            self._feeds[feed] = page
+            out.append(feed)
         for link in wanted:
-            if not on_the_site(link.url, result.final_url):
+            if not (on_the_site(link.url, result.final_url) or on_the_site(link.url, page.url)):
                 self._elsewhere.setdefault(page.url, []).append(link.url)
                 continue
             stored = self._known.get(link.url)
@@ -422,7 +510,7 @@ class AgendaPages(Collector):
         return out
 
     def reduce(self, result: FetchResult) -> Reduced | None:
-        page = self.pages.get(result.url)
+        page = self.pages.get(result.url) or self._feeds.get(result.url)
         if page is None:
             if result.url not in self._files:
                 raise LayoutChanged(f"an address this collector did not ask for: {result.url}")
@@ -431,6 +519,7 @@ class AgendaPages(Collector):
         listing = {
             "government": page.government,
             "page": page.url,
+            **({"calendar_feed": result.url} if result.url in self._feeds else {}),
             "agendas": [
                 {
                     "url": link.url,
@@ -446,7 +535,7 @@ class AgendaPages(Collector):
         return Reduced(body, "application/json", meta)
 
     def content_key(self, result: FetchResult) -> str | None:
-        if result.url in self.pages:
+        if result.url in self.pages or result.url in self._feeds:
             # The list of agenda links. The rest of a page changes without meaning anything.
             return hashlib.sha256(self.reduce(result).body).hexdigest()
         return None
@@ -472,7 +561,10 @@ class AgendaPages(Collector):
     def _detail(self) -> dict:
         """What a person should look at after a run. A page that lists nothing has changed."""
         detail: dict = {"governments": len({p.government for p in self.pages.values()})}
-        empty = sorted(url for url, links in self._links.items() if not links)
+        # A page whose agendas are in its calendar feed lists none itself. That is not a change.
+        fed = {page.url for feed, page in self._feeds.items() if self._links.get(feed)}
+        empty = sorted(u for u, links in self._links.items() if not links and u in self.pages)
+        empty = [url for url in empty if url not in fed]
         if empty:
             detail["pages_with_no_agenda_links"] = empty
         if self._elsewhere:

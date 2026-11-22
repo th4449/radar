@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://newtools.cira.state.tx.us/page/calrss/6221/0/calendar.rss",
+  "final_url": "https://newtools.cira.state.tx.us/page/calrss/6221/0/calendar.rss",
+  "retrieved_at": "2026-11-22T06:31:42+00:00",
+  "sha256": "0300db3adfe8997315440d6324ecfd0c39ae7aea49085fd113f9986c7eba54c7",
+  "bytes": 560,
+  "content_type": "application/rss+xml",
+  "kind": "rss",
+  "trimmed": true,
+  "original_sha256": "0300db3adfe8997315440d6324ecfd0c39ae7aea49085fd113f9986c7eba54c7",
+  "original_bytes": 560,
+  "note": "The real feed, whole."
+}

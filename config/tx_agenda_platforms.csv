@@ -1,5 +1,5 @@
 # What each agenda platform's own rules say about a program reading it. BUILD_PLAN.md section 6.
-# A platform is read by a collector only when its status is `cleared`. Nothing is cleared yet.
+# A platform is read by a collector only when its status is `cleared`.
 #
 # status   restricted   the vendor's terms or the platform's robots file bar what a collector does
 #          candidate    nothing was found against it. Each government's own terms are still unread
@@ -16,7 +16,7 @@ granicus,Granicus,restricted,disallowed,2026-11-21,https://granicus.com/trust-ce
 civicweb,Diligent,restricted,disallowed,2026-11-21,,"The robots file on a customer's CivicWeb host bars every agent. The vendor's terms were not read: the robots file settles it."
 swagit,Granicus,restricted,mixed,2026-11-21,https://granicus.com/trust-center/terms-of-use/,"A customer's Swagit pages are allowed. The host that holds the agenda files answers 403 for its robots file, which the fetcher treats as a refusal."
 legistar,Granicus,cleared,none,2026-11-21,https://granicus.com/trust-center/terms-of-use/,"No robots file on any of the 14 governments' Legistar hosts or on the Legistar Web API, which Granicus publishes for reading public records. Its website terms speak of its own website and say nothing on automated access. The owner said on 2026-11-21 to go ahead. Only the API is read: the hosts that store agenda files bar robots. Each government is read only if its own terms allow it."
-cira_county_site,Texas Association of Counties,candidate,none,2026-11-21,,"No robots file on the one county site checked, and no terms page linked from its home page. The association's own terms for these sites were not found. Each county's site is unread."
+cira_county_site,Texas Association of Counties,cleared,none,2026-11-22,https://www.county.org/disclosures-privacy-policy/terms-and-conditions,"No robots file on any of the five county sites or on the association's host for files and calendar feeds. None of the five sites links any terms. The association's terms speak of county.org and its related services. They say nothing on automated access and bar copying for commercial purposes. The software vendor, ezTask, publishes a privacy policy for its own website only. The owner said on 2026-11-22 to start on these sites. The own-sites collector reads them, one county at a time: see config/tx_agenda_site_terms.csv."
 own_site_files,each government,cleared,mixed,2026-11-21,,"There is no vendor. Each government's own robots file and terms decide, one site at a time: see config/tx_agenda_site_terms.csv. Read on 2026-11-21 for the 76 governments whose rows are confirmed: 44 are read, 18 are closed by a robots file, 8 by their own terms, 2 refused the request and 4 wait on the owner. The owner said on 2026-11-21 to build for own sites. The fetcher reads the robots file of every host before every request."
 other,various,not_read,not_read,,,"Small outside platforms, each with its own rules. None is read."
 boarddocs,Diligent,not_read,not_read,,,"No government in the inventory uses it."

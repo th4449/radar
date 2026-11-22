@@ -143,7 +143,7 @@ Ten research passes read 320 agenda pages a second time. They also searched agai
 - **CivicPlus' terms restrict the radar's use.** They cover the Agenda Center, CivicClerk and Municode Meetings: 100 governments.
 - **Granicus pages, Swagit and CivicWeb are closed by their robots files:** 17 governments.
 - **Legistar is cleared and has a collector.** It reads 9 of the 14 governments on it. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
-- **The county association sites are a candidate:** 5 commissioners courts.
+- **The county association sites are cleared and read by the own-sites collector:** 5 commissioners courts. Three keep their agendas in a calendar, which is read through its feed.
 - **Own sites are cleared one site at a time and have a collector.** Of 114 governments, 76 have a confirmed row. Each one's robots file and terms were read. 44 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
 `collectable()` needs three things: a row an independent check confirmed, a platform marked `cleared` in `config/tx_agenda_platforms.csv`, and the government's own terms read with nothing against it in `config/tx_agenda_site_terms.csv`. A test pins each platform's standing.

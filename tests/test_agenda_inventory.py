@@ -233,7 +233,7 @@ def test_every_platform_has_its_standing_on_file():
 
 
 def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
-    """Read on November 21, 2026. Changing one of these takes a new reading and the owner's word."""
+    """Read on November 21 and 22, 2026. Changing one takes a new reading and the owner's word."""
     terms = inv.load_platform_terms()
     standing = {name: t.status for name, t in terms.items() if t.status != "not_read"}
     assert standing == {
@@ -244,13 +244,14 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
         "civicweb": "restricted",
         "swagit": "restricted",
         "legistar": "cleared",
-        "cira_county_site": "candidate",
+        "cira_county_site": "cleared",
         "own_site_files": "cleared",
     }
-    # Both were cleared on the owner's word, after their rules and each government's were read.
-    # Own sites have no vendor: each site's own robots file and terms decide.
+    # Each was cleared on the owner's word, after its rules and each government's were read.
+    # Own sites have no vendor: each site's own robots file and terms decide. The county
+    # association's sites are counties' own sites too, and are read one county at a time.
     cleared = sorted(name for name, t in terms.items() if t.status == "cleared")
-    assert cleared == ["legistar", "own_site_files"]
+    assert cleared == ["cira_county_site", "legistar", "own_site_files"]
 
 
 def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date():
@@ -274,8 +275,9 @@ def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date(
 def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
     rows = inv.load_site_terms()
     hosts = [r["host"] for r in rows]
-    # 38 Agenda Center sites, 14 on Legistar and 76 that post files on their own site
-    assert len(set(hosts)) == len(hosts) == 128
+    # 38 Agenda Center sites, 14 on Legistar, 76 that post files on their own site and the 5
+    # counties on the sites their association provides
+    assert len(set(hosts)) == len(hosts) == 133
     governments = {b.government for b in inv.load_inventory()}
     results = {
         "own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read",

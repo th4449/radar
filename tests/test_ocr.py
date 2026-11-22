@@ -87,6 +87,18 @@ def test_a_failure_of_the_program_leaves_the_scan_unread(monkeypatch):
     assert (out.text, out.needs_ocr, out.ocr) == ("", True, None)
 
 
+def test_a_scan_whose_pages_the_text_reader_cannot_find_is_still_counted_as_a_scan(monkeypatch):
+    """A real county agenda gave the text reader no pages at all. The page drawer found two."""
+    monkeypatch.setattr(ocr, "engine", lambda: None)
+    monkeypatch.setattr(extract_module, "_pdf_pages", lambda body: [])
+    out = extract(make_scan([HEAD, ITEMS]))
+    assert (out.pages, out.text, out.needs_ocr) == (2, "", True)
+    # A file neither can open has no pages and is not called a scan.
+    monkeypatch.setattr(extract_module, "_page_count", lambda body: 0)
+    out = extract(make_scan([HEAD]))
+    assert (out.pages, out.needs_ocr) == (0, False)
+
+
 def test_a_pdf_that_has_text_is_never_sent_to_tesseract(monkeypatch):
     def never(body):
         raise AssertionError("a file with a text layer was sent to OCR")
@@ -128,6 +140,14 @@ def test_the_extractor_reads_a_scan_and_says_the_text_is_a_machines_reading():
     assert out.ocr["engine"].startswith("tesseract ")
     assert out.ocr["dpi"] == 300 and out.ocr["pages_read"] == 2
     assert out.ocr["confidence"] > 80 and out.ocr["words"] > 30
+
+
+@needs_tesseract
+def test_a_scan_whose_pages_the_text_reader_cannot_find_is_read_all_the_same(monkeypatch):
+    monkeypatch.setattr(extract_module, "_pdf_pages", lambda body: [])
+    out = extract(make_scan([HEAD, ITEMS]))
+    assert (out.pages, out.needs_ocr) == (2, False)
+    assert "reinvestment zone" in out.text and out.ocr["pages_read"] == 2
 
 
 @needs_tesseract

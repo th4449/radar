@@ -200,13 +200,27 @@ def _pdf(body: bytes, inside: bool = False) -> Extracted:
         if inner.text:
             parts.append(f"File: {name}\n{inner.text}")
     text = "\n\n".join(parts)
-    read = _scan(body) if pages and not text else None
+    # Some scans are files whose pages the text reader cannot find at all. The page drawer can.
+    count = len(pages) or (0 if text else _page_count(body))
+    read = _scan(body) if count and not text else None
     if read is not None:
         text = "\n\n".join(_tidy(page) for page in read.pages if page.strip())
     return Extracted(
-        "pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text,
+        "pdf", text, pages=count, needs_ocr=bool(count) and not text,
         members=tuple(members), ocr=read.facts() if read is not None and text else None,
     )  # fmt: skip
+
+
+def _page_count(body: bytes) -> int:
+    """How many pages the page drawer finds in a PDF. 0 when it cannot open the file."""
+    try:
+        document = pdfium.PdfDocument(body)
+    except pdfium.PdfiumError:
+        return 0
+    try:
+        return len(document)
+    finally:
+        document.close()
 
 
 def _scan(body: bytes) -> ocr.OcrResult | None:

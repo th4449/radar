@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://www.co.hill.tx.us/page/hill.public.notices",
+  "final_url": "https://www.co.hill.tx.us/page/hill.public.notices",
+  "retrieved_at": "2026-11-22T06:26:36+00:00",
+  "sha256": "e5a32f605a64cd876510d6a0d9cbc1b12427184b94bb064973ad31d0ccb7867c",
+  "bytes": 4884,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "97eafb7859b01420fbb26e964ec8d810f154ddcb7cc1ee4a6cd0381de3f49afc",
+  "original_bytes": 70433,
+  "note": "The real page, cut down to the menu of its calendar, which names the calendar's feeds. The calendar itself is drawn by a script and is not in the page. The site's menus, footer and the rest of the page are left out."
+}

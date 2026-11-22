@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://newtools.cira.state.tx.us/page/calrss/28749/0/calendar.rss",
+  "final_url": "https://newtools.cira.state.tx.us/page/calrss/28749/0/calendar.rss",
+  "retrieved_at": "2026-11-22T06:31:29+00:00",
+  "sha256": "8fbbdb7a84ba464da1ea257894c503c3b233ee39dc61f536025e3a0fd99305fe",
+  "bytes": 1296,
+  "content_type": "application/rss+xml",
+  "kind": "rss",
+  "trimmed": true,
+  "original_sha256": "0e1e635a9fdbd07d90aef6aa64e701856d793ab5a9fdca601a90ce16e70e3851",
+  "original_bytes": 1308,
+  "note": "The real feed, whole, with the address of a video meeting room replaced by a made-up one."
+}

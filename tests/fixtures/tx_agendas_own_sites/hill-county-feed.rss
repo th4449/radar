@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <atom:link href="https://newtools.cira.state.tx.us/page/calrss/28749/0/calendar.rss" rel="self" type="application/rss+xml" />
+    <generator>ezTaskTitanium Feed Generator</generator>
+    <title>Calendar</title>
+    <description>
+    </description>
+    <link><![CDATA[https://newtools.cira.state.tx.us/page/hill.Public.Notices]]></link>
+    <language>en</language>
+    <item>
+      <title><![CDATA[Hill County Commissioners Court ]]></title>
+      <description><![CDATA[<p><a href="https://newtools.cira.state.tx.us/upload/template/28749/docs/CC 2026/RevisedCCAgendaBriefs11242026.pdf" target="_blank">Commissioners Court Agenda</a></p>
+<p><a href="https://meeting.example/1" target="_blank" style="margin: 0px; color: #333333; background-color: #ffffff; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; font-size: 11px;">Zoom Link</a></p>]]></description>
+      <pubDate>Tue, 24 Nov 2026 14:30:00 GMT</pubDate>
+      <link><![CDATA[https://newtools.cira.state.tx.us/page/hill.Public.Notices?date=11-24-2026&id=1031]]></link>
+      <guid isPermaLink="false">calendar_1031</guid>
+    </item>
+  </channel>
+</rss>
