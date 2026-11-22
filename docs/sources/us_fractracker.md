@@ -3,8 +3,31 @@
 - Source id: `us_fractracker`
 - Layer: baseline of known sites
 - Page: https://www.fractracker.org/data-centers
-- Checked: November 19, 2026
-- Method: manual. A person pulls counts by hand about once a month. No scheduled job.
+- Checked: November 19, 2026, and again on November 22, 2026
+- Method: manual. **Since November 22, 2026 nothing is taken from it by program at all.** See "Read again on November 22, 2026".
+- Result: **restricted.** Its terms now ask for agreement and Esri's terms bar harvesting from the map's service.
+
+## Read again on November 22, 2026
+
+The backtest in milestone M9 needs a list of known projects. Before taking any record I read the terms again, and Esri's for the first time. Both stand in the way.
+
+**FracTracker's terms have changed since November 19.**
+
+- The sentence that the data can be downloaded and shared freely for non-commercial use with credit is gone from the page.
+- The map now opens on a notice of six terms and a box to tick: "I agree to the above terms and conditions". I did not tick it.
+- The terms say FracTracker keeps all rights in the data compilation. Use must be consistent with and supportive of its mission, and it alone decides whether a use is. Any public use must cite FracTracker Alliance. Using the site is agreeing to its Terms of Service.
+- The Terms of Service, last updated November 20, 2025, ask anyone unsure whether a use fits the mission to write first. The Data Statement asks to be listed as co-author where published work relies heavily on its data.
+- **The map links a spreadsheet to view and download the data.** That is the channel FracTracker offers. I did not open it.
+
+**Esri's terms.**
+
+- ArcGIS Online's terms of use say public content is subject to the content owner's terms of use, and that a user must abide by them. That points back to FracTracker's terms.
+- Esri's Web Site and Service Terms of Use, section 2.3, bar reaching services other than through a standard web browser or Esri products, and bar harvesting information from the service by hand or systematically. Whether "the Service" there covers a layer a customer hosts is not something I can settle.
+- **So no record is taken from the map's service by program.** The counts below and the counts of November 22 were taken that way, by a script and not a browser: six requests on November 19 and six on November 22. I read that now as against section 2.3. No more are made.
+
+**Counts taken on November 22, before this reading.** 98 records in the 30 test counties, in 21 of them: 41 proposed, 14 approved or under construction, 4 expanding, 38 operating and 1 cancelled. Nine of the 30 counties have no record. The layer holds no date a project became public. It holds the dates its own record was made and updated, an expected date online and up to eight source links.
+
+**For the owner.** Taking FracTracker's records, even from the spreadsheet it offers, means agreeing to its terms for the organization. That is the owner's to do. The terms invite a letter first.
 
 ## What was verified
 
@@ -20,7 +43,7 @@
 
 - `https://services.arcgis.com/robots.txt` returned 403 with the text "Invalid URL". That host publishes no robots file we could read.
 - The ArcGIS items carry no license text of their own. The only terms found are the sentence on the FracTracker page.
-- Esri's ArcGIS Online terms of use were not read. That is the reason this source stays manual.
+- Esri's ArcGIS Online terms of use were not read on November 19. They were read on November 22, 2026: see above.
 - How often FracTracker updates the layer. The layer's last data edit was in November 2026.
 
 ## How we use it

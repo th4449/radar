@@ -27,9 +27,16 @@ The owner said to start M9. The harness is built and tested on made-up signals. 
 - **Control counties.** The plan asks for false alarms in them and names none. All 30 counties were picked for data center activity.
 - **History.** The collectors read the present. The pending air permit lists go back to 2023 and drop a permit once it is decided. The planning group's older years, older well reports and older agendas each need a one-time run.
 
+**FracTracker's records cannot be taken as things stand**
+
+- The owner said to build the project list from FracTracker and news reports. I read the terms before taking any record.
+- **FracTracker's terms changed since November 19.** The map opens on six terms and a box to agree. Use must fit its mission, as it alone judges, and must cite it. The line about free non-commercial use is gone. I did not agree to them: that is the owner's to do.
+- **Esri's terms bar harvesting from the map's service,** and bar reaching it other than through a browser or Esri's products. The counts of November 19 and today were taken by script. No more are made.
+- `us_fractracker` is now marked `restricted`. See [us_fractracker.md](sources/us_fractracker.md).
+
 **Not verified**
 
-- Esri's terms for the service that holds FracTracker's layer. Unread since November 19, which is why that source is counts only.
+- Whether Esri's section 2.3 covers a layer that a customer hosts.
 - How many of the 98 records became public inside the years the records cover.
 - Whether old agenda files are still posted for the 59 governments read. Sandy Oaks' list goes back to 2019.
 
