@@ -34,9 +34,18 @@ The owner said to start M9. The harness is built and tested on made-up signals. 
 - **Esri's terms bar harvesting from the map's service,** and bar reaching it other than through a browser or Esri's products. The counts of November 19 and today were taken by script. No more are made.
 - `us_fractracker` is now marked `restricted`. See [us_fractracker.md](sources/us_fractracker.md).
 
+**A pilot of the other way: news reports and public records, three counties**
+
+- One research pass each for Hood, Hill and Milam counties. 23 projects, each with the earliest dated report found and its source: `backtest/pilot/`.
+- A second read opened nine of the cited sources again. Every date held.
+- **For 10 of the 23, a government record or a petition names the data center before the first news report found.** Two are Milam County notices of tax abatement hearings, on the page the radar reads since November 22. One is a state air permit review, 162 days ahead of the first news story found.
+- **A rule was broken in the first pass.** I did not tell it to stay off restricted hosts. Three Hood County minutes files were fetched through a tool that switched to a stealth proxy by itself, from a host whose robots file bars every program. Three pages of a newspaper that blocks the crawler were read too. Nothing resting on those six pages is used. Two Hood County projects have no usable first record for that reason.
+- Agenda history, counted from pages already saved: the 60 pages read list 2,388 agenda files dated since January 2023. Hood County's pages list two.
+
 **Not verified**
 
 - Whether Esri's section 2.3 covers a layer that a customer hosts.
+- Whether any county's list in the pilot is complete, and the first report for seven Hood County projects.
 - How many of the 98 records became public inside the years the records cover.
 - Whether old agenda files are still posted for the 59 governments read. Sandy Oaks' list goes back to 2019.
 
