@@ -98,6 +98,20 @@ def test_robots_rule_for_our_agent_is_honored():
         fetcher_for(site).get(PAGE)
 
 
+def test_a_byte_order_mark_does_not_hide_the_first_robots_rule():
+    # Documents On Demand serves exactly this file. Read with the mark left in, the first line
+    # is no rule at all and the file would allow every path.
+    served = httpx.Response(
+        200,
+        content=b"\xef\xbb\xbfUser-agent: *\r\nDisallow: /",
+        headers={"content-type": "text/plain"},
+    )
+    site = Site({"https://records.example.gov/robots.txt": served, PAGE: HTML})
+    with pytest.raises(RobotsDisallowed):
+        fetcher_for(site).get(PAGE)
+    assert site.page_urls() == []
+
+
 def test_no_robots_file_means_allowed():
     site = Site({PAGE: HTML}, robots=None)
     assert fetcher_for(site).get(PAGE).status == 200

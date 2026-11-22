@@ -2,6 +2,48 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M8: the rules of the smaller outside services
+
+The owner said to read them. 28 governments sat under one name, "other", with no rules read.
+
+**Read**
+
+- **The robots file of each service's host,** one identified request each, and of the hosts they led to: 22 hosts.
+- **The terms of seven services:** Google, HeyGov, General Code (eCode360), BoardBook, Municipal Impact, Laserfiche, and the City of Trent's own. Four more are closed by their robots files, so their terms were not read. JustMeetings and Town Web publish no terms that I could find.
+- Nine pages opened in a browser.
+
+**What it found**
+
+- **Seven services restrict a collector: 9 governments.** TownCloud, Diligent Community, Documents On Demand and Dropbox by their robots files. eCode360, BoardBook and Municipal Impact by terms.
+- **Nothing was found against four: 17 governments.** Google Drive 11, HeyGov 4, JustMeetings 1, the Laserfiche portal 1. None is cleared. That takes the owner's word. Sunset Valley, the one city on the Laserfiche portal, refused the request for its own robots file and is closed.
+- **Milam County is now read.** The inventory had its commissioners court on BoardBook only. The county also lists every agenda on its own site. 57 governments and 58 pages are read, up from 56 and 57.
+- Matagorda County's agenda page still shows no agenda.
+
+**What changed in the code and config**
+
+- **Each service has its own name** and address pattern in `pipeline/agenda_inventory.py`, and its own row in `config/tx_agenda_platforms.csv`. 33 inventory rows renamed. Every verdict was compared before and after: only Milam County's changed.
+- **A fault in the fetcher, fixed.** A robots file that starts with a byte order mark was read without its first line. Documents On Demand's file bars every path and read as allowing all. The fetcher now strips the mark. No request was made on the wrong reading, and none of the 182 robots files saved earlier is judged differently.
+- 19 new tests. 910 pass.
+
+**Verified live**
+
+- One run of the own-sites collector on Milam County, two files, no database. Both files are scans of notices for the court's meeting of December 14, 2026, read by character recognition. **Both gave a signal on the words "reinvestment zone".** The notices are for a hearing on a tax abatement in a zone named for a solar project. Neither names a data center.
+
+**Not verified**
+
+- Whether HeyGov's terms reach a city's files on its file host. I read them as covering HeyGov's own website.
+- Google's API terms, and whether the API costs anything.
+- What the signal `use=reference` in two robots files asks of a reader.
+- The terms of the four services closed by robots files.
+- The own terms of the 16 governments on Google Drive, HeyGov and JustMeetings.
+- Whether Milam County's file addresses, which end in a time stamp, stay the same from day to day.
+- A second day's run, and a run from GitHub's servers.
+
+**Waiting on the owner**
+
+- Whether to go ahead with HeyGov (4 governments, no new code), Google Drive (11, needs an API key) or JustMeetings (1, needs a small collector).
+- CivicPlus' answer. Austin, Archer City, Live Oak and Keene. League City, Lubbock County and Fort Worth.
+
 ## November 22, 2026 — M8: the 38 own-site governments that were not confirmed
 
 The owner said to check them. Each agenda page was opened in a real browser. Robots files came first and terms before any collecting.

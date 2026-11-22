@@ -57,6 +57,19 @@ _BY_ADDRESS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("iqm2", re.compile(r"^[^/]*iqm2\.com", re.I)),
     ("civicweb", re.compile(r"^[^/]*civicweb\.net", re.I)),
     ("destiny_hosted", re.compile(r"^[^/]*destinyhosted\.com", re.I)),
+    # Smaller outside services, each named on November 22, 2026 when its rules were read.
+    ("google_drive", re.compile(r"^(?:drive|docs)\.google\.com", re.I)),
+    ("heygov", re.compile(r"^(?:[^/]*\.)?heygov\.com", re.I)),
+    ("towncloud", re.compile(r"^(?:[^/]*\.)?towncloud\.io", re.I)),
+    ("diligent_community", re.compile(r"^[^/]*\.diligentoneplatform\.com", re.I)),
+    ("ecode360", re.compile(r"^(?:www\.)?ecode360\.com", re.I)),
+    ("documents_on_demand", re.compile(r"^[^/]*\.documents-on-demand\.com", re.I)),
+    ("boardbook", re.compile(r"^(?:[^/]*\.)?boardbook\.org", re.I)),
+    ("municipal_impact", re.compile(r"^[^/]*\.municipalimpact\.com", re.I)),
+    # JustMeetings was AgendaLink. Its pages still answer on the older name.
+    ("justmeetings", re.compile(r"^(?:[^/]*\.)?(?:agendalink\.app|justmeetings\.com)", re.I)),
+    ("dropbox", re.compile(r"^(?:www\.)?dropbox\.com", re.I)),
+    ("laserfiche_portal", re.compile(r"^portal\.laserfiche\.com", re.I)),
 )
 # A Texas county site run on the county association's shared hosting.
 _COUNTY_SITE = re.compile(r"^(?:www\.)?co\.[a-z-]+\.tx\.us$", re.I)

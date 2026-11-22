@@ -428,7 +428,7 @@ def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_associat
         for name in ("legistar", "own_site_files", "cira_county_site")
     }
     assert len(by_platform["legistar"]) == 9
-    assert len(by_platform["own_site_files"]) == 51
+    assert len(by_platform["own_site_files"]) == 52
     # Four of these five were confirmed in a real browser: their agendas are in a calendar or
     # a list that a research pass could not see.
     assert by_platform["cira_county_site"] == {
@@ -446,5 +446,8 @@ def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_associat
     # Clyde's site is built and hosted by a vendor whose terms bar a collector. Alma's own terms
     # bar robots. Idalou answered the collector with a firewall's challenge.
     assert "Webberville village" in by_platform["own_site_files"]
+    # Milam County posts on BoardBook, whose terms bar a robot, and on its own site, which is
+    # read. Found on November 22, 2026 when the outside services' rules were read.
+    assert "Milam County" in by_platform["own_site_files"]
     for government in ("Clyde city", "Alma town", "Idalou city", "Grapevine city"):
         assert government not in by_platform["own_site_files"]

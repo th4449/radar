@@ -3,7 +3,7 @@
 - Milestone: M8
 - Registry: `config/tx_agenda_platforms.csv`
 - Read: November 21 and 22, 2026
-- Result: **six platforms restrict a collector** by their vendor's terms or their robots file. **Legistar is cleared** and has a collector. **Governments' own sites are cleared one site at a time** and have a collector. **The five county association sites are cleared** and the own-sites collector reads them.
+- Result: **six platforms restrict a collector** by their vendor's terms or their robots file. **Legistar is cleared** and has a collector. **Governments' own sites are cleared one site at a time** and have a collector. **The five county association sites are cleared** and the own-sites collector reads them. **Of eleven smaller outside services, seven restrict a collector.** Nothing was found against the other four, and none of them is cleared.
 
 The owner approved building the agenda collectors by platform. The first step for each is to read its terms and robots rules. This note is that reading. It changes the plan, because the largest vendor's terms stand against the radar's use.
 
@@ -19,8 +19,8 @@ The owner approved building the agenda collectors by platform. The first step fo
 | Granicus | Granicus | 4 | bars all but three search engines | **Restricted by robots** |
 | Legistar | Granicus | 14 | none | **Cleared.** 9 governments are read. See [tx_agendas_legistar.md](tx_agendas_legistar.md) |
 | County association sites | Texas Association of Counties | 5 | none | **Cleared.** All 5 are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
-| Files on the government's own site | each government | 110 | each site's own | **Cleared, one site at a time.** 94 sites read, 51 governments collected. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
-| Other outside platforms | various | 23 | not read | Not read |
+| Files on the government's own site | each government | 111 | each site's own | **Cleared, one site at a time.** 95 sites read, 52 governments collected. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md) |
+| Eleven smaller outside services | various | 26 | each its own | **Seven restricted, four with nothing against them and not cleared.** See "The smaller outside services" below |
 
 **117 of the 136 governments in the three platform batches are on a restricted platform.** 100 of them are on a CivicPlus product.
 
@@ -83,6 +83,84 @@ So the governments themselves mostly say nothing. The restriction is the vendor'
 
 Not verified: whether the association's terms reach the county sites. None of the five links them.
 
+## The smaller outside services
+
+**Read on November 22, 2026,** on the owner's word. 28 governments sat in the inventory under one name, "other", with no rules read. They are on eleven services, and one county has no agenda to read. Each service now has its own name in the inventory and its own row in `config/tx_agenda_platforms.csv`.
+
+For each service I read the robots file of the host that holds the agendas, with one identified request, and then the service's terms.
+
+| Service | Governments | Robots file | Terms | Standing |
+|---|---:|---|---|---|
+| Google Drive and Docs | 11 | allows folder, file and document pages | bar automated access only where a robots file bars it | Nothing against it. **Not cleared** |
+| HeyGov | 4 | no rule on the file host. Each city's file allows | speak of heygov.com only | Nothing against it. **Not cleared** |
+| JustMeetings, once AgendaLink | 1 | allows. Says no AI training | none found | Nothing against it. **Not cleared** |
+| Laserfiche portal | 1 | none | silent on automated access | Nothing against the portal. **The one city's own site refused** |
+| TownCloud | 3 | bars every agent | not read | **Restricted by robots** |
+| eCode360 | 2 | allows the document addresses | personal use only | **Restricted by terms** |
+| Diligent Community | 1 | bars every agent | not read | **Restricted by robots** |
+| Documents On Demand | 1 | bars every agent | not read | **Restricted by robots** |
+| Municipal Impact | 1 | allows, 5 second delay | the town's own terms bar robots | **Restricted by terms** |
+| Dropbox | 1 | bars shared file addresses | not read | **Restricted by robots** |
+| BoardBook | 0 | none | bar copying by a robot | **Restricted by terms** |
+
+**9 governments are on a restricted service. 17 are on one with nothing found against it.** A service with nothing against it is a `candidate` in the registry. No collector takes it until the owner says so and each government's own terms are read.
+
+### Nothing found against
+
+**Google Drive and Docs.** Briaroaks, Buckholts, Clifton, Cottonwood Shores, Coyote Flats, Cranfills Gap, Hico, Italy, Paradise, Reno and Runaway Bay.
+
+- **Read:** Google's Terms of Service, https://policies.google.com/terms, effective July 30, 2026. Drive's added terms, effective October 22, 2025. The abuse policies for Drive and Docs. I read the passages on automated access and on other people's content, not every section.
+- Among the things users must not do, the terms list using automated means to reach content against the machine-readable instructions on Google's pages. A robots file is the example they give. Automated access that keeps to the robots file is not on the list.
+- The robots files of `drive.google.com` and `docs.google.com` allow folder, file and document pages for every agent and ask for a 1 second delay. They bar the direct download address.
+- The terms say content that belongs to someone else may be used only with that party's leave or as the law allows. A city's posted agenda is a public record.
+- **What stands in the way is how the pages work.** A folder page draws its list by script, and the address a file downloads from is barred. Reading a folder needs Google's Drive API, which takes a key from a Google account. A key is a secret, and the API has terms of its own that I have not read. Nothing is built.
+
+**HeyGov.** Highland Haven, Sanctuary, Sandy Oaks and Shallowater.
+
+- Each city lists its agenda files as plain links on its own page. Town Web builds the sites. The files sit on `files.heygov.com`.
+- The file host's robots file holds a notice about content signals and no rule. Each of the four cities' robots files allows every path.
+- **Read:** HeyGov's terms, https://heygov.com/terms-and-conditions. They speak of the website at heygov.com and bar republishing or copying its material. My reading is that this means HeyGov's own material, not a city's agenda. That reading is not verified.
+- Town Web's home page links a privacy policy and an accessibility statement. I found no terms of use.
+- I opened Sandy Oaks' page in a browser. It links a privacy policy of its own. I have not read the four cities' privacy pages.
+- The own-sites collector could read these pages as they are.
+
+**JustMeetings.** Cibolo.
+
+- The city's page embeds a meeting page on `horizon.agendalink.app`. The agenda file is on `files.justmeetings.com`. MCCi sells the product.
+- `horizon.agendalink.app` has no robots file. The file host's robots file allows every path for an agent it does not name, bars a list of named AI crawlers and says content may not be used to train AI models. The radar trains no model.
+- **No terms of use were found** on justmeetings.com, agendalink.app or the meeting page. MCCi links a privacy policy only.
+- The meeting page is drawn by script. A collector would have to be built for it.
+
+**Laserfiche portal.** Sunset Valley.
+
+- The portal's robots address answers with the portal's own page. It publishes no rules.
+- **Read in full:** Laserfiche's Terms of Use, effective May 22, 2023. They speak of Laserfiche's website and services. They ask users not to copy content they have no right to. They say nothing on automated access.
+- **Sunset Valley's own site, which lists the agendas, answered 403 for its robots file.** A robots file that cannot be read is a refusal. Nothing of Sunset Valley is read.
+
+### Restricted
+
+- **eCode360.** New Deal and Slaton. **Read in full:** General Code's terms, https://ecode360.com/docs/TOS.html, undated. Content is for personal use only. They bar copying any part of the site for commercial, non-profit or public purposes. The robots file allows the document addresses and says content may not be used to train AI models. The terms settle it.
+- **BoardBook.** Milam County. **Read in full:** the terms at https://www.boardbook.org/boardbook-terms-and-conditions-of-use, version of June 11, 2020, from the Texas Association of School Boards. They cover the online applications at boardbook.org. They bar copying or distributing any content by a robot, spider or other automatic process unless the supplier authorizes it. `meetings.boardbook.org` has no robots file. **Milam County also posts its agendas on its own site, and is read there.** See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
+- **Municipal Impact.** Trent. The robots file allows the agenda pages with a 5 second delay. **The town's own terms of service** say the license to use the site does not include robots or data gathering tools, and bar downloading without written consent. It is the same wording as Alma's and the eight sites closed on November 21. The vendor's terms for its own website, https://municipalimpact.com/terms/, bar copying beyond one-time personal use.
+- **TownCloud.** Hudson Oaks, Murchison and Volente. The robots file on `towncloud.io` bars every agent from every path.
+- **Diligent Community.** Bee Cave. The robots file on the city's Diligent host bars every agent from every path, then names several hundred more.
+- **Documents On Demand.** Hood County. The robots file on the county's host bars every agent from every path.
+- **Dropbox.** De Kalb. The robots file on `www.dropbox.com` bars shared file addresses for every agent it does not name.
+
+For the last four the vendor's terms were not read. The robots file settles each.
+
+### One county with nothing to read
+
+**Matagorda County** stays under "other". Its agenda page is on a county association site and showed no agenda on November 21 or on November 22, 2026, in a browser both times.
+
+### A fault in the fetcher, found here and fixed
+
+Documents On Demand's robots file starts with a byte order mark, three bytes a reader does not see. The parser took the first line as no rule at all. **A file that bars every path read as allowing every path.**
+
+- The fetcher now strips the mark before it reads a robots file. A test holds it, with that file's exact bytes.
+- No request was made on the wrong reading. I caught it comparing the parser's answer with the file's plain text.
+- I checked the 182 robots files saved since November 21. Two others start with the mark. Both are error pages with no rules, so no earlier decision changes.
+
 ## What is not verified
 
 - **Whether CivicPlus' terms bind a visitor to a government's site.** That is a legal question.
@@ -90,6 +168,9 @@ Not verified: whether the association's terms reach the county sites. None of th
 - Whether CivicPlus gives written consent for a use like this, and to whom.
 - Robots files were read on one host for each of CivicClerk, Municode Meetings, Legistar, Granicus, Swagit, CivicWeb and the county association sites. Another customer's host may differ.
 - The terms of the 38 own-site governments whose inventory rows are not confirmed.
+- **For the smaller services:** whether HeyGov's terms reach a city's files on its file host. Google's API terms. What the signal `use=reference` in the JustMeetings and eCode360 robots files asks of a reader. The terms of TownCloud, Diligent, Documents On Demand and Dropbox. The own terms of the 16 governments on Google Drive, HeyGov and JustMeetings.
+- I read each smaller service's robots file on one host. Another customer's host may differ.
+- Volente keeps older agendas on its own site and Bee Cave's development corporation has a site of its own. Neither was opened.
 
 ## Options for the owner
 
@@ -103,7 +184,14 @@ Not verified: whether the association's terms reach the county sites. None of th
 **For the rest**
 
 5. **Legistar: done.** Each of its 14 governments' own terms was read and the collector uses the published API. Nine governments are read, Harris County and Dallas among them. Five are held out. See [tx_agendas_legistar.md](tx_agendas_legistar.md).
-6. **Own sites: done.** The owner said on November 21, 2026 to build for the 76 governments whose rows were confirmed, and on November 22 to check the other 38. 51 governments are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
+6. **Own sites: done.** The owner said on November 21, 2026 to build for the 76 governments whose rows were confirmed, and on November 22 to check the other 38. 52 governments are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 7. **The five county association sites: done.** Their robots files and terms were read on November 22, 2026 and all five are read. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
-Nothing above is done. Each needs the owner's word.
+**For the smaller outside services**
+
+8. **HeyGov: 4 governments.** On the owner's word I would read each city's own terms and add the four to the own-sites collector. No new code is needed.
+9. **Google Drive: 11 governments.** It needs a collector that uses Google's Drive API, and a key, which is a secret the owner would add. I have not read the API's terms or checked whether it costs anything.
+10. **JustMeetings: 1 government.** It needs a small collector for a page drawn by script.
+11. **The seven restricted services: 9 governments.** Leave them out, or ask the government for its agendas.
+
+Options 1 to 4 and 8 to 11 are not done. Each needs the owner's word.

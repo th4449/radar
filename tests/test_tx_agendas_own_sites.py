@@ -417,8 +417,9 @@ def test_a_feed_that_is_no_longer_a_feed_is_a_changed_layout():
 def test_the_pages_read_are_the_ones_the_inventory_clears():
     pages = cleared_pages(TODAY)
     governments = {p.government for p in pages}
-    assert (len(pages), len(governments)) == (57, 56)
+    assert (len(pages), len(governments)) == (58, 57)
     assert "Austin County" in governments and "Houston city" in governments
+    assert "Milam County" in governments
     # The five counties on the sites their association provides.
     assert {
         "Archer County",

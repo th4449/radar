@@ -3,7 +3,7 @@
 - Source id: `tx_agendas_own_sites`
 - What it is: the agenda page of each government that posts its agendas as files on its own website, and the agenda files that page links to
 - Checked: November 21 and 22, 2026
-- Result: **allowed for 51 of 110 governments, one site at a time.** 43 are closed or held and 16 are not read. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
+- Result: **allowed for 52 of 111 governments, one site at a time.** 43 are closed or held and 16 are not read. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
 - Collector: `collectors/tx/agenda_pages.py`
 - Fixtures: `tests/fixtures/tx_agendas_own_sites/`, nine real pages cut down to their agenda lists and three real calendar feeds
 - Workflow: `.github/workflows/collect-tx-agendas-own-sites.yml`, started by hand only
@@ -12,11 +12,11 @@ The owner said on November 21, 2026 to build next for the governments that post 
 
 ## Which governments were looked at
 
-The agenda inventory listed 114 governments with files on their own sites. **76 of them had a row that an independent check confirmed.** Those were read on November 21, 2026. The other 38 were checked on November 22, 2026. See "The other 38" below. Four of them turned out to post elsewhere, so the inventory now lists 110.
+The agenda inventory listed 114 governments with files on their own sites. **76 of them had a row that an independent check confirmed.** Those were read on November 21, 2026. The other 38 were checked on November 22, 2026. See "The other 38" below. Four of them turned out to post elsewhere, so the inventory listed 110. Milam County was added the same day: see "Milam County" below. The inventory now lists 111.
 
-| Of the 110 governments, on November 22, 2026 | |
+| Of the 111 governments, on November 22, 2026 | |
 |---|---:|
-| Read | 51 |
+| Read | 52 |
 | Closed by a robots file, their own or their file host's | 19 |
 | Closed by their own terms | 10 |
 | Built and hosted by CivicPlus, held with its platforms | 7 |
@@ -135,6 +135,23 @@ Two inventory rows were corrected. Hill County's row had recorded a court rules 
 - **Freestone's feed with an agenda in it.** It was empty on the day. Its calendar attached an agenda to a past meeting, which I saw in the browser.
 - A feed entry that holds two meetings' agendas, or an agenda whose link does not say "agenda". Such a link is left.
 - A second day's run, and a run from GitHub's servers.
+
+## Milam County, added on November 22, 2026
+
+The inventory had the Milam County Commissioners Court on BoardBook. BoardBook's terms bar copying by an automatic process, so that page is closed. See [tx_agenda_platform_terms.md](tx_agenda_platform_terms.md).
+
+**The county also lists its agendas on its own site,** at `milamcounty.net/how_do_i/view/agendas_minutes.php`. I opened the page in a browser. It lists the court's meetings by year from 2019, a date to a row, with links Agenda, Packet and Minutes to files on the county's site. 321 Agenda links in all, the newest for a meeting on December 14, 2026.
+
+| What | Finding |
+|---|---|
+| Robots file | The address leads to the site builder's host, which answers 404. No rules |
+| Terms | No terms, disclaimer or privacy page is linked from the home page or the agenda page |
+| Site builder | Revize. Its terms cover its own website only |
+| Link finder | 318 links read from the saved page, every one dated. The newest dates match what the browser showed |
+
+**First run, two files, no database.** Both files are scans of notices for the court's meeting of December 14, 2026. Character recognition read them at 85 and 88 percent confidence. **Both gave a signal on the words "reinvestment zone".** The notices are for a hearing on a tax abatement in a reinvestment zone named for a solar project. Neither names a data center.
+
+Not verified: whether the file addresses, which end in a time stamp, stay the same from day to day. If they change, a file would be fetched again under a new address.
 
 ## The other 38, checked on November 22, 2026
 

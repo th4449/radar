@@ -156,7 +156,9 @@ class Robots:
             rules = False  # could not read the rules, so do not proceed
         else:
             if resp.status_code == 200:
-                rules = Protego.parse(resp.text)
+                # A byte order mark at the start would hide the first line from the parser,
+                # and a file that bars every path would then read as allowing them all.
+                rules = Protego.parse(resp.text.lstrip("﻿"))
             elif resp.status_code in (404, 410):
                 rules = True  # the site publishes no rules
             else:

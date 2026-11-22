@@ -58,6 +58,20 @@ def body(**changes) -> inv.AgendaBody:
             "municode_meetings",
         ),
         ("https://public.destinyhosted.com/agenda_publish.cfm?id=1", "destiny_hosted"),
+        # The smaller services, named on November 22, 2026.
+        ("https://drive.google.com/drive/folders/EXAMPLE", "google_drive"),
+        ("https://docs.google.com/document/d/EXAMPLE/edit", "google_drive"),
+        ("https://files.heygov.com/example-tx.gov/meetings/me_1/agenda.pdf", "heygov"),
+        ("https://towncloud.io/go/example-tx/agendas/1", "towncloud"),
+        ("https://exampletx.community.diligentoneplatform.com/Portal/", "diligent_community"),
+        ("https://ecode360.com/EX0001/documents/Agendas", "ecode360"),
+        ("https://examplecountytx.documents-on-demand.com/?l=1", "documents_on_demand"),
+        ("https://meetings.boardbook.org/Public/Organization/1", "boardbook"),
+        ("https://example.municipalimpact.com/agendas", "municipal_impact"),
+        ("https://horizon.agendalink.app/engage-v2/exampletx/1", "justmeetings"),
+        ("https://files.justmeetings.com/exampletx/pdfs/agenda/1/a.pdf", "justmeetings"),
+        ("https://www.dropbox.com/scl/fi/EXAMPLE/CM-20260113.pdf", "dropbox"),
+        ("https://portal.laserfiche.com/Portal/DocView.aspx?id=1&repo=r-1", "laserfiche_portal"),
     ],
 )
 def test_an_outside_platform_is_named_from_its_address(url, platform):
@@ -74,6 +88,11 @@ def test_an_outside_platform_is_named_from_its_address(url, platform):
         "https://www.example-tx.gov/legistar-archive.pdf",
         "https://www.example-tx.gov/files/agendacenter-notes.pdf",
         "https://notcivicclerk.example.org/",
+        # Google hosts that are not Drive, a file on a builder's storage, a look-alike.
+        "https://www.google.com/url?q=https://drive.google.com/drive/folders/EXAMPLE",
+        "https://storage.googleapis.com/example/agenda.pdf",
+        "https://notheygov.com/agenda.pdf",
+        "https://www.example-tx.gov/dropbox.com/agenda.pdf",
     ],
 )
 def test_an_address_that_names_no_platform_says_nothing(url):
@@ -246,12 +265,53 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
         "legistar": "cleared",
         "cira_county_site": "cleared",
         "own_site_files": "cleared",
+        # The smaller services, read on November 22, 2026. Four are closed by a robots file
+        # and three by terms. Nothing was found against the last five. None is cleared: that
+        # takes the owner's word.
+        "towncloud": "restricted",
+        "diligent_community": "restricted",
+        "documents_on_demand": "restricted",
+        "dropbox": "restricted",
+        "ecode360": "restricted",
+        "boardbook": "restricted",
+        "municipal_impact": "restricted",
+        "google_drive": "candidate",
+        "heygov": "candidate",
+        "justmeetings": "candidate",
+        "laserfiche_portal": "candidate",
+        "other": "candidate",
     }
     # Each was cleared on the owner's word, after its rules and each government's were read.
     # Own sites have no vendor: each site's own robots file and terms decide. The county
     # association's sites are counties' own sites too, and are read one county at a time.
     cleared = sorted(name for name, t in terms.items() if t.status == "cleared")
     assert cleared == ["cira_county_site", "legistar", "own_site_files"]
+
+
+def test_the_smaller_outside_services_each_have_a_name():
+    """Until November 22, 2026 these governments sat under one name, other, with no rules read."""
+    primary = [
+        b for b in inv.load_inventory() if b.body_type in ("commissioners_court", "city_council")
+    ]
+    governments = {name: 0 for name in inv.OUTSIDE[inv.OUTSIDE.index("google_drive") :]}
+    for b in primary:
+        if b.platform in governments:
+            governments[b.platform] += 1
+    assert governments == {
+        "google_drive": 11,
+        "heygov": 4,
+        "towncloud": 3,
+        "diligent_community": 1,
+        "ecode360": 2,
+        "documents_on_demand": 1,
+        "boardbook": 0,  # Milam County is read on its own site
+        "municipal_impact": 1,
+        "justmeetings": 1,
+        "dropbox": 1,
+        "laserfiche_portal": 1,
+    }
+    # One county is left with no name for where its agendas are: its page shows none.
+    assert [b.government for b in primary if b.platform == "other"] == ["Matagorda County"]
 
 
 def test_a_platform_cannot_be_cleared_against_its_robots_file_or_without_a_date():
@@ -276,8 +336,9 @@ def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
     rows = inv.load_site_terms()
     hosts = [r["host"] for r in rows]
     # 38 Agenda Center sites, 14 on Legistar, 94 that post files on their own site and the 5
-    # counties on the sites their association provides
-    assert len(set(hosts)) == len(hosts) == 151
+    # counties on the sites their association provides. Then Milam County's own site and two
+    # sites read with the outside services: Trent's and Sunset Valley's.
+    assert len(set(hosts)) == len(hosts) == 154
     governments = {b.government for b in inv.load_inventory()}
     results = {
         "own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read",
