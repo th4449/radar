@@ -11,6 +11,10 @@ For each page, one run makes:
 A file is fetched only from the government's own site or its site builder's file host. A page
 that lists no agenda does not stop the run: the run log names it for a person to look at.
 
+Some cities' files are kept by HeyGov, each city's in a folder named for its site. Such a page
+is read like any other when it holds its list as plain links. A page that draws its list by
+script from HeyGov's API is not read: the API's robots file bars every program.
+
 Some county sites keep their agendas in a calendar and not in a list. That calendar publishes
 a feed of the meetings to come, made for programs, with each agenda attached to its meeting.
 Where a page names such a feed, the run makes one more request, for the feed.
@@ -129,7 +133,7 @@ class AgendaLink:
     url: str
     text: str  # the link's own words
     date: dt.date | None  # the meeting's date as the page gives it. None if it gives none
-    # Where the date was read: link_text, file_name, row, row_and_upload_folder or line.
+    # Where the date was read: link_text, card, file_name, row, row_and_upload_folder or line.
     date_from: str | None
     # The month, as 2026-11, of a link that names a month and no day.
     month: str | None = None
@@ -300,6 +304,23 @@ def _file_links(node: LexborNode) -> list[str]:
     return [h for h in hrefs if _FILE.search(h) or _FILE_VIEW.search(urlsplit(h).path)]
 
 
+# A meeting card on the sites Town Web builds. The card gives its meeting's day to programs.
+_CARD_DAY = "data-am-date"
+
+
+def _card_day(a: LexborNode, today: dt.date) -> dt.date | None:
+    """The day of the meeting card a link sits in. None when it sits in none, or none says."""
+    node: LexborNode | None = a
+    for _ in range(8):
+        node = node.parent
+        if node is None:
+            return None
+        if node.tag == "article" and _CARD_DAY in node.attributes:
+            said = re.fullmatch(r"(\d{4})-(\d\d)-(\d\d)", node.attributes[_CARD_DAY] or "")
+            return _valid(*said.groups(), today) if said else None
+    return None
+
+
 def _month_day_in_folder(row: str, url: str, today: dt.date) -> dt.date | None:
     """The date of a row that gives a month and a day, with the year of the upload folder.
 
@@ -358,11 +379,14 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
             continue
         held = _up(a, ("tr", "li", "article", "p"), 6)
         row = _words(held)[:400]
-        # The page's words about this link come first. Then the file's name, which can be the
-        # day the file was written or posted. A row is read only when it is about one meeting:
-        # it holds one date and a few files. A scanner's file name is never read.
+        # The page's words about this link come first, then the day its meeting card gives.
+        # Then the file's name, which can be the day the file was written or posted, or carry
+        # last year's year. A row is read only when it is about one meeting: it holds one date
+        # and a few files. A scanner's file name is never read.
         named = None if _SCANNER_NAME.match(name) else name
         day, date_from = find_date(text, today), "link_text"
+        if day is None:
+            day, date_from = _card_day(a, today), "card"
         if day is None and named:
             day, date_from = find_date(named, today), "file_name"
         if day is None and held is not None and len(_file_links(held)) <= _ROW_FILES:
@@ -461,6 +485,10 @@ def find_feed_links(body: bytes, feed_url: str) -> list[AgendaLink]:
 # Where site builders keep the files of the sites they host. Each has its own robots file,
 # which the fetcher reads like any other.
 FILE_HOSTS = frozenset({"img1.wsimg.com", CALENDAR_HOST})
+# HeyGov keeps every government's files on one host, each in a folder named for its site.
+HEYGOV_FILES = "files.heygov.com"
+# The platforms whose agenda pages this collector reads, once each is cleared.
+PLATFORMS_READ = ("own_site_files", "cira_county_site", "heygov")
 
 
 def _site(url: str) -> str:
@@ -471,9 +499,13 @@ def on_the_site(link: str, page_url: str) -> bool:
     """True for a file on the government's own site or on its site builder's file host.
 
     The terms that were read are the government's. A link that leads anywhere else is listed
-    and not followed.
+    and not followed. On HeyGov's file host only the government's own folder counts.
     """
-    return _site(link) == _site(page_url) or urlsplit(link).netloc.lower() in FILE_HOSTS
+    parts = urlsplit(link)
+    host = parts.netloc.lower()
+    if host == HEYGOV_FILES:
+        return parts.path.lower().startswith(f"/{_site(page_url)}/")
+    return _site(link) == _site(page_url) or host in FILE_HOSTS
 
 
 def cleared_pages(today: dt.date | None = None) -> list[Page]:
@@ -484,7 +516,7 @@ def cleared_pages(today: dt.date | None = None) -> list[Page]:
     checks = agenda_checks.Checks(agenda_checks.load_checks())
     pages: dict[str, Page] = {}
     for body in agenda_inventory.load_inventory():
-        if body.platform not in ("own_site_files", "cira_county_site"):
+        if body.platform not in PLATFORMS_READ:
             continue
         if not agenda_checks.collectable(body, checks, today):
             continue

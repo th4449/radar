@@ -92,7 +92,7 @@ For each service I read the robots file of the host that holds the agendas, with
 | Service | Governments | Robots file | Terms | Standing |
 |---|---:|---|---|---|
 | Google Drive and Docs | 11 | allows folder, file and document pages | bar automated access only where a robots file bars it | Nothing against it. **Not cleared** |
-| HeyGov | 4 | no rule on the file host. Each city's file allows | speak of heygov.com only | Nothing against it. **Not cleared** |
+| HeyGov | 4 | no rule on the file host. **The API bars every agent.** Each city's file allows | speak of heygov.com only | **Cleared on November 22, 2026.** 2 read, 2 closed by the API's robots file |
 | JustMeetings, once AgendaLink | 1 | allows. Says no AI training | none found | Nothing against it. **Not cleared** |
 | Laserfiche portal | 1 | none | silent on automated access | Nothing against the portal. **The one city's own site refused** |
 | TownCloud | 3 | bars every agent | not read | **Restricted by robots** |
@@ -103,7 +103,7 @@ For each service I read the robots file of the host that holds the agendas, with
 | Dropbox | 1 | bars shared file addresses | not read | **Restricted by robots** |
 | BoardBook | 0 | none | bar copying by a robot | **Restricted by terms** |
 
-**9 governments are on a restricted service. 17 are on one with nothing found against it.** A service with nothing against it is a `candidate` in the registry. No collector takes it until the owner says so and each government's own terms are read.
+**9 governments are on a restricted service. 17 were on one with nothing found against it.** A service with nothing against it is a `candidate` in the registry. No collector takes it until the owner says so and each government's own terms are read. The owner cleared HeyGov the same day: see "HeyGov, cleared" below. The other three, 13 governments, are still candidates.
 
 ### Nothing found against
 
@@ -117,12 +117,28 @@ For each service I read the robots file of the host that holds the agendas, with
 
 **HeyGov.** Highland Haven, Sanctuary, Sandy Oaks and Shallowater.
 
-- Each city lists its agenda files as plain links on its own page. Town Web builds the sites. The files sit on `files.heygov.com`.
+- Each city lists its agenda files on its own page. Town Web builds the sites. The files sit on `files.heygov.com`.
+- **Corrected the same day:** I first wrote that all four pages hold their lists as plain links. Two do. See "HeyGov, cleared" below.
 - The file host's robots file holds a notice about content signals and no rule. Each of the four cities' robots files allows every path.
 - **Read:** HeyGov's terms, https://heygov.com/terms-and-conditions. They speak of the website at heygov.com and bar republishing or copying its material. My reading is that this means HeyGov's own material, not a city's agenda. That reading is not verified.
 - Town Web's home page links a privacy policy and an accessibility statement. I found no terms of use.
-- I opened Sandy Oaks' page in a browser. It links a privacy policy of its own. I have not read the four cities' privacy pages.
-- The own-sites collector could read these pages as they are.
+- I opened Sandy Oaks' page in a browser. It links a privacy policy of its own.
+
+**HeyGov, cleared.** The owner said on November 22, 2026 to go ahead with the four cities. I then read each city's own pages and looked at each agenda page as the server sends it, before any script runs.
+
+| City | Its own pages | The agenda page as served | Standing |
+|---|---|---|---|
+| Sandy Oaks | a privacy policy and an accessibility statement. Silent on automated access | holds the list: 1,078 links to its HeyGov folder | **Read** |
+| Shallowater | the same two pages, the same wording | holds the list: 326 links | **Read** |
+| Highland Haven | the same two pages | holds no list. A script draws it from `api.heygov.com` | **Closed by robots** |
+| Sanctuary | a privacy policy, the same wording | holds no list. The same script | **Closed by robots** |
+
+- **The robots file of `api.heygov.com` bars every agent from every path.** I read it with one identified request. A collector could list Highland Haven's and Sanctuary's agendas only by asking that API, so it does not. Their files sit on the file host, which bars nothing, but the collector has no list to find them by and does not guess addresses.
+- **My earlier note was wrong for those two.** I had read all four pages through a browser, where the script had already run, and wrote that each holds plain links. The check that caught it was asking for the page with no script.
+- No city links any terms of use. Each footer names Town Web as the site's builder.
+- The file host's robots file was read again: the same notice about content signals, and no rule and no signal line.
+- **The collector takes a HeyGov file only from the folder named for the city's own site,** `files.heygov.com/<the city's site>/`. Another city's folder and HeyGov's other hosts are never followed.
+- Sandy Oaks and Shallowater are read by the own-sites collector. See [tx_agendas_own_sites.md](tx_agendas_own_sites.md).
 
 **JustMeetings.** Cibolo.
 
@@ -168,7 +184,7 @@ Documents On Demand's robots file starts with a byte order mark, three bytes a r
 - Whether CivicPlus gives written consent for a use like this, and to whom.
 - Robots files were read on one host for each of CivicClerk, Municode Meetings, Legistar, Granicus, Swagit, CivicWeb and the county association sites. Another customer's host may differ.
 - The terms of the 38 own-site governments whose inventory rows are not confirmed.
-- **For the smaller services:** whether HeyGov's terms reach a city's files on its file host. Google's API terms. What the signal `use=reference` in the JustMeetings and eCode360 robots files asks of a reader. The terms of TownCloud, Diligent, Documents On Demand and Dropbox. The own terms of the 16 governments on Google Drive, HeyGov and JustMeetings.
+- **For the smaller services:** whether HeyGov's terms reach a city's files on its file host. The owner went ahead on my reading that they cover HeyGov's own website. Whether HeyGov would let a program read its API if asked. Google's API terms. What the signal `use=reference` in the JustMeetings and eCode360 robots files asks of a reader. The terms of TownCloud, Diligent, Documents On Demand and Dropbox. The own terms of the 12 governments on Google Drive and JustMeetings.
 - I read each smaller service's robots file on one host. Another customer's host may differ.
 - Volente keeps older agendas on its own site and Bee Cave's development corporation has a site of its own. Neither was opened.
 
@@ -189,9 +205,9 @@ Documents On Demand's robots file starts with a byte order mark, three bytes a r
 
 **For the smaller outside services**
 
-8. **HeyGov: 4 governments.** On the owner's word I would read each city's own terms and add the four to the own-sites collector. No new code is needed.
+8. **HeyGov: done for 2 of 4 governments.** The owner said on November 22, 2026 to go ahead. Sandy Oaks and Shallowater are read. Highland Haven and Sanctuary are closed by the robots file of HeyGov's API. To open them, ask HeyGov for leave to read the API, or ask each city for its agendas.
 9. **Google Drive: 11 governments.** It needs a collector that uses Google's Drive API, and a key, which is a secret the owner would add. I have not read the API's terms or checked whether it costs anything.
 10. **JustMeetings: 1 government.** It needs a small collector for a page drawn by script.
 11. **The seven restricted services: 9 governments.** Leave them out, or ask the government for its agendas.
 
-Options 1 to 4 and 8 to 11 are not done. Each needs the owner's word.
+Options 1 to 4 and 9 to 11 are not done. Each needs the owner's word.

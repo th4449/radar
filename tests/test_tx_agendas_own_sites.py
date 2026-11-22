@@ -323,6 +323,90 @@ def test_only_the_governments_own_site_and_its_builders_file_host_count_as_the_s
     assert not on_the_site("https://docs.example.gov/a.pdf", "https://www.example.gov/agendas")
 
 
+def test_a_heygov_file_counts_only_in_the_folder_named_for_the_governments_site():
+    page_url = "https://www.example.gov/agendas-minutes/"
+    assert on_the_site("https://files.heygov.com/example.gov/meetings/me_1/agenda.pdf", page_url)
+    # Another government's folder, and HeyGov's other hosts. Its API bars every program.
+    assert not on_the_site("https://files.heygov.com/other.gov/meetings/me_1/agenda.pdf", page_url)
+    assert not on_the_site("https://files.heygov.com/example.gov.evil/me_1/agenda.pdf", page_url)
+    assert not on_the_site("https://api.heygov.com/example.gov/meetings", page_url)
+    assert not on_the_site("https://app.heygov.com/example.gov/agenda.pdf", page_url)
+
+
+# --- a page of meeting cards ----------------------------------------------------------------------
+
+
+def test_a_meeting_card_dates_its_agenda_by_the_cards_own_day():
+    """Sandy Oaks' page, built by Town Web. Each meeting is a card that carries its day."""
+    found = links("sandy-oaks")
+    folder = "https://files.heygov.com/cityofsandyoaks.com/meetings/"
+    assert [
+        (link.date.isoformat(), link.date_from, link.url.removeprefix(folder)) for link in found
+    ] == [
+        ("2026-11-19", "card", "me_01m7816z1f647e3kpcsj8nh3y3/1-november-19-agenda-v3.pdf"),
+        (
+            "2026-11-17",
+            "card",
+            "me_01m76r5wkaj1h9c3f0hw4eyfap/november-17-2026-canvassing-meeting-agenda-1.pdf",
+        ),
+        ("2026-10-22", "card", "me_01m1cjvx262dss6nbdqmprsyz5/october-22-meeting-agenda-v3.pdf"),
+        (
+            "2026-10-13",
+            "card",
+            "me_01m4znswjd0bkh8rms5v0pq1se/park-meeting-agenda-october-13-2026.pdf",
+        ),
+        ("2026-10-08", "card", "me_01m1cjv4v9hd8md6hj42ny8rwd/1-october-8-agenda-1.pdf"),
+        (
+            "2026-09-24",
+            "card",
+            "me_01m1cjsqwpt700yxctk09mn3j3/"
+            "01-260924-mtg-agenda-final-amended-september-24-2026-at-112916-1.pdf",
+        ),
+        # This file's name holds its day only as a run of digits. The card says it outright.
+        ("2026-09-10", "card", "me_01m1cjqamaxs3493ybggjrg4gs/01-260910-mtg-agenda-final.pdf"),
+    ]
+    # The notice that November 12's meeting was canceled, the minutes and the videos are left.
+    assert all(link.text == "Agenda" for link in found)
+    assert all(on_the_site(link.url, saved("sandy-oaks")[1]) for link in found)
+
+
+def test_a_second_page_of_meeting_cards_reads_the_same_way():
+    found = links("shallowater")
+    assert [(link.date.isoformat(), link.date_from) for link in found] == [
+        ("2026-11-16", "card"),
+        ("2026-10-19", "card"),
+        ("2026-10-05", "card"),
+        ("2026-09-22", "card"),
+        ("2026-09-15", "card"),
+    ]
+    assert all("/shallowatertx.us/meetings/me_" in link.url for link in found)
+
+
+def card(day: str, href: str, words: str = "Agenda") -> bytes:
+    return page(
+        f'<article data-am-date="{day}"><time datetime="{day}">{day}</time>'
+        f'<h4>Regular Council Meeting</h4><a href="{href}">{words}</a></article>'
+    )
+
+
+def test_a_cards_day_outranks_a_year_mistyped_in_the_files_name():
+    """Both real pages hold such a file: a clerk types last year's year in January."""
+    (link,) = find_agenda_links(card("2026-02-03", "/f/agenda-february-3-2025.pdf"), PAGE, TODAY)
+    assert (link.date, link.date_from) == (dt.date(2026, 2, 3), "card")
+
+
+def test_a_links_own_words_outrank_the_card():
+    body = card("2026-11-10", "/f/agenda.pdf", "Agenda for November 17, 2026")
+    (link,) = find_agenda_links(body, PAGE, TODAY)
+    assert (link.date, link.date_from) == (dt.date(2026, 11, 17), "link_text")
+
+
+@pytest.mark.parametrize("day", ["", "soon", "2026-13-40", "1999-01-05", "11/17/2026"])
+def test_a_card_whose_day_cannot_be_read_falls_back_to_the_files_name(day):
+    (link,) = find_agenda_links(card(day, "/f/agenda-11-17-2026.pdf"), PAGE, TODAY)
+    assert (link.date, link.date_from) == (dt.date(2026, 11, 17), "file_name")
+
+
 # --- a calendar and its feed ----------------------------------------------------------------------
 
 HILL_FEED_BODY, HILL_FEED = feed("hill-county-feed")
@@ -417,9 +501,13 @@ def test_a_feed_that_is_no_longer_a_feed_is_a_changed_layout():
 def test_the_pages_read_are_the_ones_the_inventory_clears():
     pages = cleared_pages(TODAY)
     governments = {p.government for p in pages}
-    assert (len(pages), len(governments)) == (58, 57)
+    assert (len(pages), len(governments)) == (60, 59)
     assert "Austin County" in governments and "Houston city" in governments
     assert "Milam County" in governments
+    # Two cities whose files HeyGov keeps, cleared on November 22, 2026. Their pages hold their
+    # lists as plain links. The other two draw theirs from HeyGov's API, which bars every program.
+    assert {"Sandy Oaks city", "Shallowater city"} <= governments
+    assert not governments & {"Highland Haven city", "Sanctuary town"}
     # The five counties on the sites their association provides.
     assert {
         "Archer County",
@@ -650,6 +738,52 @@ def test_an_agenda_on_some_other_host_is_listed_and_not_followed(tmp_path):
     assert summary.status == "ok"
     assert site.page_urls() == [PAGE]
     assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {PAGE: [elsewhere]}
+
+
+def test_a_citys_files_on_heygov_are_fetched_and_another_citys_are_not(tmp_path):
+    body, url = saved("shallowater")
+    folder = "https://files.heygov.com/shallowatertx.us/meetings/"
+    newest = folder + "me_01m714dv9rc2ghp6wrk261p43x/agenda-november-16-2026-signed.pdf"
+    site = Site(
+        {
+            url: httpx.Response(200, content=body),
+            newest: httpx.Response(200, content=AGENDA, headers=PDF),
+        }
+    )
+    sink = MemorySink()
+    pages = (Page(url, "Shallowater city", ("Lubbock",), ("Shallowater City Council",)),)
+    summary = run(site, sink, tmp_path, pages=pages)
+    assert summary.status == "ok", summary.error
+    # November 16 is the one meeting in the last three weeks. Its robots file is asked first.
+    assert site.urls() == [
+        "https://shallowatertx.us/robots.txt",
+        url,
+        "https://files.heygov.com/robots.txt",
+        newest,
+    ]
+    stored = next(d for d in sink.documents.values() if d.url == newest)
+    assert stored.raw_meta["meeting_date"] == "2026-11-16"
+    assert stored.raw_meta["date_from"] == "card"
+    assert stored.raw_meta["government"] == "Shallowater city"
+
+    # The same link on some other city's page is listed and not followed.
+    other = "https://www.example.gov/agendas"
+    site = Site({other: httpx.Response(200, content=body)})
+    sink = MemorySink()
+    summary = run(
+        site, sink, tmp_path / "b", pages=(Page(other, "Example city", ("Travis",), ("x",)),)
+    )
+    assert site.page_urls() == [other]
+    assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {other: [newest]}
+
+
+def test_heygovs_api_is_never_asked(tmp_path):
+    """Its robots file bars every program. A page that links into it has the link left."""
+    api = "https://api.heygov.com/example.gov/meetings/agenda-2026-11-17.pdf"
+    site = Site({PAGE: httpx.Response(200, content=page(f'<p><a href="{api}">Agenda</a></p>'))})
+    sink = MemorySink()
+    run(site, sink, tmp_path, pages=(Page(PAGE, "Example city", ("Travis",), ("x",)),))
+    assert site.urls() == ["https://www.example.gov/robots.txt", PAGE]
 
 
 # --- a run that reads a calendar feed ------------------------------------------------------------

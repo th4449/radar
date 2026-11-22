@@ -9,8 +9,8 @@
 #                               government's written consent. Held out until the owner decides
 #          could_not_read       the site did not load for the reader
 #          bars_automated_access  the site's own terms bar robots or data gathering tools
-#          robots_bar           a robots file on the site or its file host bars the collector, or
-#                               could not be read. The site's terms were not read
+#          robots_bar           a robots file on the site, its file host or the host its list of
+#                               agendas is drawn from bars the collector, or could not be read
 #          refused              the site refused the collector's own request. Not asked again
 #          vendor_site          the whole site is built and hosted by a vendor whose terms cover every
 #                               site it hosts and bar a collector. See config/tx_agenda_platforms.csv
@@ -169,3 +169,7 @@ www.webberville.org,Webberville village,own_site_files,2026-11-22,no_terms_found
 www.milamcounty.net,Milam County,own_site_files,2026-11-22,no_terms_found,0,"No terms, disclaimer or privacy page linked from the home page or the agenda page. The site is built by Revize, whose own terms cover its own website only. The site's robots address leads to Revize's host, which has no robots file."
 trent.municipalimpact.com,Trent town,municipal_impact,2026-11-22,bars_automated_access,1,"Its terms of service say the license to use the site does not include data mining or robots and bar downloading without written consent. The same wording as Alma's."
 www.sunsetvalley.gov,Sunset Valley city,laserfiche_portal,2026-11-22,robots_bar,0,"The site answered the request for its robots file with 403 Access Denied on 2026-11-22. A robots file that cannot be read is treated as a refusal. Not asked again and not worked around."
+cityofsandyoaks.com,Sandy Oaks city,heygov,2026-11-22,own_pages_silent,2,"A privacy policy and an accessibility statement. Nothing on automated access or reuse. The footer reserves all rights to Town Web, the site's builder. The agenda page holds its list as plain links to files.heygov.com."
+shallowatertx.us,Shallowater city,heygov,2026-11-22,own_pages_silent,2,"A privacy policy and an accessibility statement. Nothing on automated access or reuse. The footer reserves all rights to Town Web, the site's builder. The agenda page holds its list as plain links to files.heygov.com."
+highlandhaventx.com,Highland Haven city,heygov,2026-11-22,robots_bar,2,"The agenda page as served holds no list. A script draws it from api.heygov.com, whose robots file bars every agent from every path. The API is not asked. The city's own privacy policy and accessibility statement say nothing on automated access."
+cityofsanctuarytexas.com,Sanctuary town,heygov,2026-11-22,robots_bar,1,"The agenda page as served holds no list. A script draws it from api.heygov.com, whose robots file bars every agent from every path. The API is not asked. The town's own privacy policy says nothing on automated access."

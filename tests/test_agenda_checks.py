@@ -418,15 +418,16 @@ def test_no_collector_may_take_a_row_that_is_not_confirmed():
 
 
 def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_association_sites():
-    """The state on file: three platforms cleared, and the governments whose own rules allow it."""
+    """The state on file: four platforms cleared, and the governments whose own rules allow it."""
     bodies = inv.load_inventory()
     checks = ac.Checks(ac.load_checks())
     through = [b for b in bodies if ac.collectable(b, checks, TODAY)]
-    assert {b.platform for b in through} == {"legistar", "own_site_files", "cira_county_site"}
-    by_platform = {
-        name: {b.government for b in through if b.platform == name}
-        for name in ("legistar", "own_site_files", "cira_county_site")
-    }
+    cleared = ("legistar", "own_site_files", "cira_county_site", "heygov")
+    assert {b.platform for b in through} == set(cleared)
+    by_platform = {name: {b.government for b in through if b.platform == name} for name in cleared}
+    # Cleared on November 22, 2026. Highland Haven and Sanctuary are on HeyGov too. Their pages
+    # draw their lists from HeyGov's API, whose robots file bars every program.
+    assert by_platform["heygov"] == {"Sandy Oaks city", "Shallowater city"}
     assert len(by_platform["legistar"]) == 9
     assert len(by_platform["own_site_files"]) == 52
     # Four of these five were confirmed in a real browser: their agendas are in a calendar or

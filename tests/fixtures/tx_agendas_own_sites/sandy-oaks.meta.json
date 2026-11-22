@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://cityofsandyoaks.com/agendas-and-minutes/",
+  "final_url": "https://cityofsandyoaks.com/agendas-and-minutes/",
+  "retrieved_at": "2026-11-22T22:43:53+00:00",
+  "sha256": "8b76275df8b7870552cb77d4eff3e82166442ddb2bbca611895c7473adfea7a7",
+  "bytes": 4403,
+  "content_type": "text/html",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "92f8b3ccd7c97391bb55d5934d109fbf0bc90c630ce3a4655e5c0202136a3178",
+  "original_bytes": 1390965,
+  "note": "The real page, cut down to its 8 newest meeting cards, with scripts, styles, icons and most attributes removed. Each card keeps the attribute and the time element that give its meeting's day. The site's menus, footer, search form, the lists by category and the older meetings are left out."
+}

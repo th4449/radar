@@ -3,9 +3,9 @@
 - Source id: `tx_agendas_own_sites`
 - What it is: the agenda page of each government that posts its agendas as files on its own website, and the agenda files that page links to
 - Checked: November 21 and 22, 2026
-- Result: **allowed for 52 of 111 governments, one site at a time.** 43 are closed or held and 16 are not read. **Five more counties are read on the sites their association provides.** See "The county association sites" below.
+- Result: **allowed for 52 of 111 governments, one site at a time.** 43 are closed or held and 16 are not read. **Five more counties are read on the sites their association provides.** See "The county association sites" below. **Two more cities are read whose files HeyGov keeps.** See "Two cities on HeyGov" below. 59 governments in all, on 60 pages.
 - Collector: `collectors/tx/agenda_pages.py`
-- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, nine real pages cut down to their agenda lists and three real calendar feeds
+- Fixtures: `tests/fixtures/tx_agendas_own_sites/`, eleven real pages cut down to their agenda lists and three real calendar feeds
 - Workflow: `.github/workflows/collect-tx-agendas-own-sites.yml`, started by hand only
 
 The owner said on November 21, 2026 to build next for the governments that post agenda files on their own sites. There is no vendor here and no shared rule. Each site has its own robots file and its own terms, so each was read.
@@ -153,6 +153,27 @@ The inventory had the Milam County Commissioners Court on BoardBook. BoardBook's
 
 Not verified: whether the file addresses, which end in a time stamp, stay the same from day to day. If they change, a file would be fetched again under a new address.
 
+## Two cities on HeyGov, added on November 22, 2026
+
+Sandy Oaks and Shallowater list their agendas on their own pages. The files are kept by HeyGov, on `files.heygov.com`, each city's in a folder named for its site. The owner said on November 22, 2026 to go ahead with HeyGov. The service's own rules are in [tx_agenda_platform_terms.md](tx_agenda_platform_terms.md).
+
+| What | Sandy Oaks | Shallowater |
+|---|---|---|
+| Robots file | allows every path | allows every path |
+| Its own pages | a privacy policy and an accessibility statement. Nothing on automated access or reuse | the same |
+| The page as served | 1.4 MB, the whole list from 2019 on | 0.3 MB, the whole list |
+| Link finder | 360 agenda links, every one dated | 88 agenda links, every one dated |
+| Newest agenda | November 19, 2026 | November 16, 2026 |
+
+- **Two more cities are on HeyGov and are not read:** Highland Haven and Sanctuary. Their pages draw their lists by script from HeyGov's API, whose robots file bars every agent.
+- **Each meeting is a card that carries its own day.** The collector now reads that day ahead of the file's name. On these two pages the card and the file's name agree for 444 of 448 links. The four that differ are from 2020 to early 2026, and each differs by a year or by a day of the month. I did not open those four files to see which is right.
+- **A HeyGov file is fetched only from the city's own folder.** A link into another city's folder is listed in the run log and not followed.
+- The notice that a meeting was canceled is left, as on every page. So are minutes and videos.
+
+**First run, two files a page, no database.** Both pages answered and three files were stored, two for Sandy Oaks and one for Shallowater. Shallowater's is a scan, read by character recognition at 94 percent confidence. **None of the three gave a signal.** They are a special meeting and public hearing on November 19, a canvass of election results on November 17 and a regular council meeting on November 16.
+
+Not verified: a second day's run, and whether HeyGov's file addresses stay the same when a clerk replaces a file.
+
 ## The other 38, checked on November 22, 2026
 
 The owner said on November 22, 2026 to check them. For each: the robots file, then the agenda page opened in a real browser, then the site's terms for the ones a collector could read.
@@ -230,7 +251,7 @@ For each page, one run makes:
 
 - Requests go through the shared fetcher: the robots file of every host is read first, one request every 5 seconds to a host, longer if the robots file asks, with the radar's user agent and contact address.
 - **A refusal closes that site for the rest of the run and the other sites go on.** The run log names the site. Nothing is retried. A person then marks the site `refused`.
-- **A file is fetched only from the government's own site** or from its site builder's file host. A link to any other host is listed in the run log and not followed.
+- **A file is fetched only from the government's own site** or from its site builder's file host. A link to any other host is listed in the run log and not followed. On HeyGov's file host only the folder named for the government's own site counts.
 - A stored file is asked for again only if the site gave a way to ask whether it changed.
 - PDF and Word .docx files are read. An old-format .doc file is not.
 - A page that lists no agenda does not stop the run. The run log names it.
@@ -248,11 +269,12 @@ Left alone: minutes, recordings, handouts, presentations, action summaries, quor
 **How a date is read.** In this order:
 
 1. The link's own words, such as "November 17, 2026".
-2. The file's name, when a date is written out in it.
-3. The row, only when the row holds one date and no more than four files.
-4. A row that gives a month and a day, with the year of the folder the file was uploaded to.
-5. The words on the link's own line before it, when a list is typed as one paragraph: "September 9, 2026 - Agenda".
-6. Digits run together in the file's name, such as `11172026`, only when they can be read one way.
+2. The day of the meeting card the link sits in, on the pages Town Web builds. Each card gives its meeting's day in a form made for programs.
+3. The file's name, when a date is written out in it.
+4. The row, only when the row holds one date and no more than four files.
+5. A row that gives a month and a day, with the year of the folder the file was uploaded to.
+6. The words on the link's own line before it, when a list is typed as one paragraph: "September 9, 2026 - Agenda".
+7. Digits run together in the file's name, such as `11172026`, only when they can be read one way.
 
 - A scanner's file name is never read. It gives the minute the page was scanned.
 - **A date that is not sure is no date.** `1122026` could be January 12 or November 2.

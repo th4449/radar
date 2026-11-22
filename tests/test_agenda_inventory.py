@@ -266,8 +266,8 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
         "cira_county_site": "cleared",
         "own_site_files": "cleared",
         # The smaller services, read on November 22, 2026. Four are closed by a robots file
-        # and three by terms. Nothing was found against the last five. None is cleared: that
-        # takes the owner's word.
+        # and three by terms. Nothing was found against the last five. The owner cleared
+        # HeyGov that day. The other four are not cleared: that takes the owner's word.
         "towncloud": "restricted",
         "diligent_community": "restricted",
         "documents_on_demand": "restricted",
@@ -276,7 +276,7 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
         "boardbook": "restricted",
         "municipal_impact": "restricted",
         "google_drive": "candidate",
-        "heygov": "candidate",
+        "heygov": "cleared",
         "justmeetings": "candidate",
         "laserfiche_portal": "candidate",
         "other": "candidate",
@@ -284,8 +284,11 @@ def test_the_platforms_whose_rules_bar_a_collector_are_marked_so():
     # Each was cleared on the owner's word, after its rules and each government's were read.
     # Own sites have no vendor: each site's own robots file and terms decide. The county
     # association's sites are counties' own sites too, and are read one county at a time.
+    # HeyGov keeps files for four cities. Two hold their lists as plain links and are read.
+    # The other two draw theirs from HeyGov's API, whose robots file bars every program.
     cleared = sorted(name for name, t in terms.items() if t.status == "cleared")
-    assert cleared == ["cira_county_site", "legistar", "own_site_files"]
+    assert cleared == ["cira_county_site", "heygov", "legistar", "own_site_files"]
+    assert terms["heygov"].robots == "mixed"
 
 
 def test_the_smaller_outside_services_each_have_a_name():
@@ -337,8 +340,12 @@ def test_each_sites_own_terms_are_on_file_once_and_for_a_government_we_know():
     hosts = [r["host"] for r in rows]
     # 38 Agenda Center sites, 14 on Legistar, 94 that post files on their own site and the 5
     # counties on the sites their association provides. Then Milam County's own site and two
-    # sites read with the outside services: Trent's and Sunset Valley's.
-    assert len(set(hosts)) == len(hosts) == 154
+    # sites read with the outside services: Trent's and Sunset Valley's. Then the four cities
+    # whose files HeyGov keeps.
+    assert len(set(hosts)) == len(hosts) == 158
+    by_host = {r["host"]: r["result"] for r in rows}
+    assert by_host["cityofsandyoaks.com"] == by_host["shallowatertx.us"] == "own_pages_silent"
+    assert by_host["highlandhaventx.com"] == by_host["cityofsanctuarytexas.com"] == "robots_bar"
     governments = {b.government for b in inv.load_inventory()}
     results = {
         "own_pages_silent", "links_vendor_terms", "no_terms_found", "could_not_read",

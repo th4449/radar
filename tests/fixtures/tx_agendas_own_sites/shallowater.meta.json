@@ -1,0 +1,14 @@
+{
+  "source_id": "tx_agendas_own_sites",
+  "url": "https://shallowatertx.us/agendas-minutes/",
+  "final_url": "https://shallowatertx.us/agendas-minutes/",
+  "retrieved_at": "2026-11-22T22:43:59+00:00",
+  "sha256": "c14f56c80ca8e73e7fe24669ffe60e92e7765def6726dec1f4d6930b59314a0c",
+  "bytes": 3415,
+  "content_type": "text/html",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "fb2a6d0eec4fc8edd8a74c235c6d864f03a77d1a4b40b0f607ee69c3bac60ac7",
+  "original_bytes": 280878,
+  "note": "The real page, cut down to its 6 newest meeting cards, with scripts, styles, icons and most attributes removed. Each card keeps the attribute and the time element that give its meeting's day. The site's menus, footer, search form, the lists by category and the older meetings are left out."
+}

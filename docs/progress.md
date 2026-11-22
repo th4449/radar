@@ -2,6 +2,50 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M8: HeyGov cleared, two of its four cities read
+
+The owner said to go ahead with the four HeyGov cities. Two are read. Two are closed.
+
+**Read**
+
+- **Each city's own pages,** in a browser: a privacy policy and an accessibility statement on each, the same wording on all four. None speaks of automated access or reuse. No city links any terms of use.
+- **Each agenda page as the server sends it,** with no script run.
+- **The robots files of three HeyGov hosts,** one identified request each: the API, the script host and the file host again.
+
+**What it found**
+
+- **Sandy Oaks and Shallowater hold their lists as plain links.** They are read.
+- **Highland Haven and Sanctuary hold no list in the page.** A script draws it from `api.heygov.com`, and that host's robots file bars every agent from every path. They are closed. The API is never asked.
+- **I had this wrong on the last pass.** I wrote that all four pages hold plain links and that no new code was needed. I had looked at them through a browser, after the script ran. The owner's go-ahead rested on that note.
+- 59 governments on 60 pages are read, up from 57 and 58.
+
+**What changed in the code and config**
+
+- `heygov` is `cleared` in `config/tx_agenda_platforms.csv`, on the owner's word. Four rows in `config/tx_agenda_site_terms.csv`: two `own_pages_silent`, two `robots_bar`.
+- **The own-sites collector takes a HeyGov file only from the folder named for the city's own site.** Another city's folder and HeyGov's other hosts are listed and not followed.
+- **A meeting card's own day is read ahead of the file's name.** Town Web's pages give each meeting's day in a form made for programs. A file's name can carry last year's year. The rule touches only pages with such cards. None of the 48 pages saved from earlier passes has one.
+- Shallowater's inventory row is now `seen`, with its newest agenda.
+- Two new fixtures, each a real page cut to its newest cards. 12 new tests. 922 pass.
+
+**Verified live**
+
+- One identified request to each of the two pages. The link finder reads 360 agenda links at Sandy Oaks and 88 at Shallowater, every one dated. The card's day and the file's name agree on 444 of the 448.
+- **One run of the collector on the two cities,** two files a page, no database. Both pages answered and three files were stored. One is a scan, read by character recognition at 94 percent confidence. **None gave a signal.**
+
+**Not verified**
+
+- Whether HeyGov's terms reach a city's files on its file host. I read them as covering HeyGov's own website, and the owner went ahead on that reading.
+- Which is right where a card's day and a file's name differ. Four old files do. I did not open them.
+- Whether HeyGov would let a program read its API if asked.
+- Whether a HeyGov file's address stays the same when a clerk replaces the file.
+- A second day's run, and a run from GitHub's servers.
+
+**Waiting on the owner**
+
+- Highland Haven and Sanctuary: ask HeyGov for leave to read its API, ask the two cities for their agendas, or leave them out.
+- Google Drive (11 governments, needs an API key) and JustMeetings (1, needs a small collector).
+- CivicPlus' answer. Austin, Archer City, Live Oak and Keene. League City, Lubbock County and Fort Worth.
+
 ## November 22, 2026 — M8: the rules of the smaller outside services
 
 The owner said to read them. 28 governments sat under one name, "other", with no rules read.
