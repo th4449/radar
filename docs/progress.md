@@ -33,7 +33,7 @@ The first own-sites run stored 43 agenda files. 28 were scans with no text, and 
 - **How well it reads real scans, as a number.** There is no typed copy to check against. Two pages were checked by eye.
 - **Tables come out jumbled.** Sentences read correctly.
 - Sideways pages, handwriting, and a file that is part text and part scan. Only a file with no text at all is read by OCR.
-- The Tesseract version on GitHub's runners. CI will show it.
+- Whether GitHub's runners read a real scan as this machine does. CI passed there with Tesseract 5.5.0 and Ubuntu's English data package 4.1.0, all 861 tests, none skipped. This machine has 5.5.4, and the 28 scans were measured here only.
 
 ## November 21, 2026 — M8: the second agenda collector, for governments' own sites
 

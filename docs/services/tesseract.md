@@ -51,5 +51,5 @@ On November 21, 2026, with Tesseract 5.5.4, on the 43 agenda files the first own
 - Handwriting, and any language but English.
 - **A file that is part text and part scan.** Only a file with no text at all is read by OCR, so a typed agenda with scanned attachments is read for its typed pages only.
 - A scan embedded inside another PDF or held in a zip file. Those are not read by OCR.
-- The Tesseract version GitHub's runners install. The tests ask for the words on a made-up typed page and not for an exact reading.
+- **Whether GitHub's runners read a real scan as this machine does.** The runner installs Tesseract 5.5.0 with Ubuntu's English data package 4.1.0. This machine has 5.5.4 from Homebrew, and the 28 scans were measured here only. All tests pass on the runner (CI run 44969618367, November 21, 2026). They ask for the words on a made-up typed page and not for an exact reading.
 - Scans stored before this was built. There are none in a database yet. A stored scan is read when the file is next fetched or its text is extracted again.
