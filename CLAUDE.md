@@ -10,6 +10,7 @@ A public tool that names companies and tells communities a data center may be co
 
 - This repository is public. Never commit keys, tokens, reviewer data or subscriber emails. When a secret is needed, stop and ask the owner to add it as a GitHub or Supabase secret.
 - Stop and ask before anything in BUILD_PLAN.md section 11. That includes paid resources, real email, making the site public, lifting the admin gate, any reviewer approval, the Texas county list and scoring thresholds after the backtest.
+- A research pass handed to a subagent carries the same rules as a collector. Tell it so in its brief: a plain connection only and never a stealth proxy, stay off every host marked restricted in `config/tx_agenda_platforms.csv` and `config/sources.yaml`, stop at a 403 or 429, and do not open FracTracker's map or its service. On November 22, 2026 a brief left this out and six pages were read against a block.
 - Before writing a collector, open the source, read its terms of use and robots rules and write a note in `docs/sources/<source-id>.md`. If the source restricts automated access, set `method: manual` in `config/sources.yaml`, tell the owner and move on. Never work around a block, a captcha or a login.
 - A source with `verified_at: null` in `config/sources.yaml` must not be fetched by a scheduled job.
 - Collector tests use fixtures in `tests/fixtures`. Tests never touch a live site.
