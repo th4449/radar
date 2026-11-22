@@ -2,6 +2,42 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M9 started: the backtest harness, and what the backtest still needs
+
+The owner said to start M9. The harness is built and tested on made-up signals. **No backtest has been run.** It needs three things the plan does not give, each the owner's call.
+
+**Built**
+
+- `backtest/harness.py`. Given known projects and dated signals, it finds each project's signals, replays its score day by day with the production scoring, and says whether the site would have reached the reviewers before the project was public.
+- **It reuses the production rules.** A signal belongs to a project for the reasons a signal joins a site in `pipeline/cluster.py`. The score is `pipeline/score.py`'s.
+- **A signal counts from the day it could be seen,** not the day it is dated.
+- Outcomes: `hit`, `late`, `below_threshold`, `no_signal`. Not judged: `undated`, and `before_history` for a project public before the records begin.
+- A false alarm is a site over the threshold in a control county. Signals in a test county that fit no known project are listed apart: an unannounced project would look the same.
+- A sweep shows hits, lead time and false alarms at each threshold. A count by signal type shows which came first and how early.
+- 19 tests, written first. 941 pass.
+
+**Checked**
+
+- **FracTracker's baseline, counts only,** by hand, six requests: 98 records in the 30 counties, in 21 of them. 41 proposed, 14 approved or under construction, 4 expanding, 38 operating, 1 cancelled. Nine of the 30 counties have no record.
+- **The baseline has no date a project became public.** It has the dates its own record was made and updated, an expected date online and up to eight source links.
+
+**What the backtest still needs**
+
+- **A list of known projects with the date each became public.** The plan names none. The date has to be found for each project and its source kept.
+- **Control counties.** The plan asks for false alarms in them and names none. All 30 counties were picked for data center activity.
+- **History.** The collectors read the present. The pending air permit lists go back to 2023 and drop a permit once it is decided. The planning group's older years, older well reports and older agendas each need a one-time run.
+
+**Not verified**
+
+- Esri's terms for the service that holds FracTracker's layer. Unread since November 19, which is why that source is counts only.
+- How many of the 98 records became public inside the years the records cover.
+- Whether old agenda files are still posted for the 59 governments read. Sandy Oaks' list goes back to 2019.
+
+**Limits to say now**
+
+- Four kinds of signal have a collector: air permits, planning group filings, well reports and agendas. Abatement notices, stormwater notices, commission dockets and land purchases have none, so the backtest cannot weigh them.
+- A permit decided before November 2026 is not on a pending list. The backtest will undercount air permits for older projects.
+
 ## November 22, 2026 — M8: HeyGov cleared, two of its four cities read
 
 The owner said to go ahead with the four HeyGov cities. Two are read. Two are closed.

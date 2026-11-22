@@ -54,6 +54,7 @@ A public tool that names companies and tells communities a data center may be co
 - Bump `RULES_VERSION` in `pipeline/signals.py` when a rule changes. Reading documents again only adds signals.
 - The model's answer is stored beside a signal. It never creates, removes or rewrites one.
 - `sites.py` groups signals into sites and scores them at the end of every run. A signal already on a site never moves, and a job never merges, splits, confirms or rejects a site. The database refuses a status change from a job other than candidate to in_review.
+- `backtest/harness.py` judges known projects against dated signals for milestone M9. It reuses the rules of `cluster.py` and `score.py` and touches no database. A signal counts from the day it could be seen. The words hit, miss and false alarm are defined at the top of the file. The known projects, their public dates and the control counties are the owner's to approve.
 
 ## Database
 
