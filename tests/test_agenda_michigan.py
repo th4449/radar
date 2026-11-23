@@ -136,16 +136,57 @@ def test_each_state_has_its_own_checks_and_site_terms_files():
     assert len(inv.load_site_terms()) > 100
 
 
-def test_no_michigan_government_is_a_collectors_to_read_until_its_row_is_cleared():
-    # The collectors are shared code. They ask the inventory of the state they are given, and
-    # Michigan's has no confirmed row with its site's terms read.
-    from collectors.tx.agenda_pages import cleared_pages
+HELD = (
+    "access_means_clause",
+    "noncommercial_only",
+    "reuse_needs_consent",
+    "vendor_site",
+    "could_not_read",
+    "robots_bar",
+    "refused",
+)
+
+
+def test_a_michigan_row_is_cleared_only_when_confirmed_and_every_host_of_its_site_allows_it():
+    today = dt.date(2026, 11, 23)
+    bodies = inv.load_inventory(state="MI")
+    checks = ac.Checks(ac.load_checks(state="MI"))
+    sites = inv.load_site_terms(state="MI")
+    platforms = inv.load_platform_terms()
+    results = collections.defaultdict(set)
+    for row in sites:
+        results[(row["government"], row["platform"])].add(row["result"])
+    assert {r for rs in results.values() for r in rs} <= {*ac.SITE_ALLOWS, *HELD}
+    cleared = [b for b in bodies if ac.collectable(b, checks, today, platforms, sites, state="MI")]
+    assert cleared
+    for b in cleared:
+        assert ac.verdict(b, checks, today)[0] == "confirmed"
+        assert b.platform in ("own_site_files", "legistar")
+        assert results[(b.government, b.platform)] <= set(ac.SITE_ALLOWS)
+    governments = {b.government for b in cleared}
+    # Sites whose terms are held for the owner, or built by a vendor whose terms bar a collector.
+    for held in (
+        "Dearborn city",
+        "Rochester city",
+        "Ross township",
+        "Rockwood city",
+        "Detroit city",
+    ):
+        assert held not in governments
+    # Texas is as it was.
     from collectors.tx.legistar import cleared_clients
 
-    today = dt.date(2026, 11, 23)
-    assert cleared_clients(today, state="MI") == []
-    assert cleared_pages(today, state="MI") == []
-    assert len(cleared_clients(dt.date(2026, 11, 21))) == 9  # Texas is as it was
+    assert len(cleared_clients(dt.date(2026, 11, 21))) == 9
+
+
+def test_no_job_reads_a_michigan_agenda_source_yet():
+    # A cleared row is a row a collector could take. Whether any collector runs is the source's
+    # setting, and both Michigan agenda sources are still collected by nobody.
+    from pipeline import config
+
+    sources = {s.id: s for s in config.load_sources().sources}
+    for name in ("mi_agendas_legistar", "mi_agendas_own_sites"):
+        assert sources[name].method == "manual"
 
 
 def test_washtenaw_has_every_government_and_one_governing_body_for_each():
@@ -169,13 +210,14 @@ def test_michigan_checks_are_second_reads_of_pages_the_inventory_names():
     assert len({(c.government, c.page) for c in checks}) == len(checks)
 
 
-def test_a_confirmed_michigan_row_is_still_not_a_collectors_until_its_site_terms_are_read():
+def test_most_michigan_candidate_rows_are_confirmed_and_every_site_has_a_terms_row():
     checks = ac.Checks(ac.load_checks(state="MI"))
     today = dt.date(2026, 11, 23)
     verdicts = [ac.verdict(b, checks, today)[0] for b in inv.load_inventory(state="MI")]
     assert verdicts.count("confirmed") > 150
-    # No Michigan site's own terms have been read, so nothing is cleared.
-    assert inv.load_site_terms(state="MI") == []
+    # Each site's own terms were read on November 23, 2026: one row for each host.
+    hosts = [row["host"] for row in inv.load_site_terms(state="MI")]
+    assert len(hosts) == len(set(hosts)) >= 90
 
 
 def test_every_government_in_the_six_counties_has_one_governing_body():

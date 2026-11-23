@@ -271,7 +271,7 @@ sources:
     robots_status: not_checked
     verified_at: null
     personal_rows: true
-    notes: Milestone M11. Not read yet. The inventory of governments in Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne counties is in config/mi_agenda_inventory.csv and no row in it is cleared. The Legistar Web API was read for Texas on 2026-11-21. Each Michigan government's own Legistar host still has to be read before a job reads it.
+    notes: Milestone M11. Not read by any job. One government of 220 uses Legistar, Ann Arbor. Its rows are confirmed, its Legistar host has no robots file and its own terms say its information may be copied. No request has been made to the Legistar Web API for it, and the owner has not said whether the clearing given for Texas holds for Michigan. See docs/sources/mi_agendas_legistar.md.
 
   - id: mi_agendas_own_sites
     state: MI
@@ -284,7 +284,7 @@ sources:
     robots_status: not_checked
     verified_at: null
     personal_rows: true
-    notes: Milestone M11. Not read yet. Many sites, each with its own robots file and terms. None has been read for a collector. A government is read only after an independent check confirms its inventory row and its own terms and robots file are read.
+    notes: Milestone M11. Not read by any job. Many sites, each with its own robots file and terms. On 2026-11-23 the inventory, an independent second read, each site's robots file and each site's own terms were read. 77 of 220 governments have a row a collector could take. Eight sites' terms are held for the owner and two are built by CivicPlus. No Michigan collector is written. See docs/sources/mi_agendas_own_sites.md.
 
   # Baselines of known sites and infrastructure.
   - id: us_fractracker

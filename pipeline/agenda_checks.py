@@ -319,11 +319,18 @@ SITE_ALLOWS = ("own_pages_silent", "no_terms_found")
 
 
 def site_allows(body: AgendaBody, sites: list[dict[str, str]]) -> bool:
-    """True when the government's own terms were read and nothing in them stands against it."""
-    for row in sites:
-        if row["government"] == body.government and row["platform"] == body.platform:
-            return row["result"] in SITE_ALLOWS
-    return False  # not read is not allowed
+    """True when the government's own terms were read and nothing in them stands against it.
+
+    A government can have two hosts, such as a city's site and its development authority's.
+    Every one that was read must allow it.
+    """
+    rows = [
+        row
+        for row in sites
+        if row["government"] == body.government and row["platform"] == body.platform
+    ]
+    # Not read is not allowed.
+    return bool(rows) and all(row["result"] in SITE_ALLOWS for row in rows)
 
 
 def collectable(

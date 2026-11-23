@@ -401,6 +401,15 @@ def test_a_governments_own_terms_can_keep_a_confirmed_row_out():
     assert not ac.collectable(body(), confirmed, TODAY, platforms(), [])
 
 
+def test_a_government_with_two_hosts_is_read_only_when_both_allow_it():
+    confirmed = ac.Checks([check()])
+    city = {"government": "Example city", "platform": body().platform, "result": "own_pages_silent"}
+    authority = {**city, "result": "reuse_needs_consent"}
+    assert ac.collectable(body(), confirmed, TODAY, platforms(), [city])
+    assert not ac.collectable(body(), confirmed, TODAY, platforms(), [city, authority])
+    assert not ac.collectable(body(), confirmed, TODAY, platforms(), [authority, city])
+
+
 def test_no_collector_may_take_a_row_that_is_not_confirmed():
     """The gate every agenda collector goes through, with platforms and sites cleared."""
     bodies = inv.load_inventory()

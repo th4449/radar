@@ -1,0 +1,113 @@
+# What each Michigan government's own website says about a program reading it. BUILD_PLAN.md section 6.
+# One row per host. Read by research passes on the date shown, through a page-reading tool that
+# gives a summary. Nine terms pages were then read in full by the radar's own reader.
+# The site's robots file is a separate matter: see docs/sources/mi_agenda_robots.csv.
+#
+# result   own_pages_silent     terms-like pages were read and none speaks against automated access or reuse
+#          no_terms_found       no terms-like page could be found on the site
+#          access_means_clause  the terms bar obtaining material by any means the site does not itself
+#                               provide. They name no robot. Held out until the owner decides
+#          noncommercial_only   the terms allow non-commercial use and ask written consent for
+#                               commercial or other use. Held out until the owner decides
+#          reuse_needs_consent  the terms bar using or copying the site's content without the
+#                               government's written consent. Held out until the owner decides
+#          vendor_site          the whole site is built and hosted by a vendor whose terms cover every
+#                               site it hosts and bar a collector. See config/tx_agenda_platforms.csv
+#          could_not_read       the site's home page gave the reader nothing to read
+#          robots_bar           the site's robots file bars the collector, or could not be read
+#          refused              the site refused the collector's own request. Not asked again
+# Only own_pages_silent and no_terms_found let a collector take a confirmed row.
+# A government with two hosts is read only when both allow it.
+host,government,platform,checked_on,result,pages_read,note
+www.cityofallegan.org,Allegan city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Revize."
+www.cityofallenpark.org,Allen Park city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+a2gov.legistar.com,Ann Arbor city,legistar,2026-11-23,no_terms_found,0,The Legistar calendar page was read once and came back cut off before its foot. No terms were seen on it.
+www.a2gov.org,Ann Arbor city,legistar,2026-11-23,own_pages_silent,2,"Its policies page says information on the site ""is considered public information and may be distributed or copied"", but for logos and for material marked with a copyright. Nothing on automated access. Read in full by the radar's reader. Site credit: Govstack."
+www.auburnhills.org,Auburn Hills city,own_site_files,2026-11-23,own_pages_silent,2,A privacy or site policy page only. Nothing on automated access or reuse.
+augustatownship.org,Augusta charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+berlinchartertwp.com,Berlin charter township,own_site_files,2026-11-23,access_means_clause,2,"Its terms of use say ""You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided for through"" the site. They name no robot or program and set no limit on reuse beyond a copyright line. Read in full by the radar's reader."
+www.bhamgov.org,Birmingham city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+twp-bridgewater.org,Bridgewater township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: digital Web Leprechauns."
+www.brownstown-mi.org,Brownstown charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.charlestontownship.org,Charleston township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.city-chelsea.org,Chelsea city,own_site_files,2026-11-23,no_terms_found,1,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+cheshiretownshipmi.gov,Cheshire township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site."
+www.commercetwp.com,Commerce charter township,own_site_files,2026-11-23,own_pages_silent,1,A copyright line reserves all rights. A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Muniweb.
+comstockmi.gov,Comstock charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.dearbornheightsmi.gov,Dearborn Heights city,own_site_files,2026-11-23,vendor_site,2,"The site is built and hosted by CivicPlus, as its foot says. CivicPlus' terms cover every site it hosts. See config/tx_agenda_platforms.csv."
+dearborn.gov,Dearborn city,own_site_files,2026-11-23,noncommercial_only,1,"Its policy page says ""Commercial use of material contained at this site is prohibited without the express written permission of the City of Dearborn."" It also bars use of the site ""for other than its intended purposes"". Nothing on automated access. Read in full by the radar's reader."
+detroitmi.gov,Detroit city,own_site_files,2026-11-23,refused,0,The site answered 403 to the collector's request for its robots file. Not asked again.
+www.dextertownshipmi.gov,Dexter township,own_site_files,2026-11-23,robots_bar,0,The robots file could not be read: the connection dropped. Not asked again.
+dorrtownshipmi.gov,Dorr township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Shumaker Technology Group."
+www.ecorsemi.gov,Ecorse city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+erietownshipmi.gov,Erie township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.fhgov.com,Farmington Hills city,own_site_files,2026-11-23,no_terms_found,1,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Muniweb."
+www.farmgov.com,Farmington city,own_site_files,2026-11-23,own_pages_silent,1,A copyright line reserves all rights. A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Muniweb.
+www.flatrockmi.org,Flat Rock city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.franklin.mi.us,Franklin village,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+twp-freedom.org,Freedom township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.galesburgcity.org,Galesburg city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+gangestownship.gov,Ganges township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: MIWDD."
+www.grossepointecity.org,Grosse Pointe city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.gunplain.org,Gun Plain township,own_site_files,2026-11-23,no_terms_found,1,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Pixelvine."
+hamtramckcity.gov,Hamtramck city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+harperwoodscity.org,Harper Woods city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Eighth Day Media."
+heathtownship.net,Heath township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.highlandparkmi.gov,Highland Park city,own_site_files,2026-11-23,own_pages_silent,1,A copyright line reserves all rights. A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Muniweb.
+www.highlandtwp.net,Highland charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: WebMatters."
+www.hollyvillage.org,Holly village,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: WebMatters."
+www.hwmi.org,Huntington Woods city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+idatownshipmi.gov,Ida township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.keegoharbor.org,Keego Harbor city,own_site_files,2026-11-23,noncommercial_only,3,"Its terms say ""You may view, download, and print content for personal, educational, or non-commercial use. Any other use (including reproduction, modification, or distribution) requires prior written permission from the City of Keego Harbor."" Nothing on automated access. Read in full by the radar's reader. Site credit: Revize."
+lasalletwpmi.com,La Salle township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights."
+laketowntwp.org,Laketown township,own_site_files,2026-11-23,own_pages_silent,1,A privacy or site policy page only. Nothing on automated access or reuse.
+leightontownship.org,Leighton township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+loditownshipmi.org,Lodi township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Graphikitchen."
+www.cityoflunapier.com,Luna Pier city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Shumaker Technology Group."
+lyndontownshipmi.gov,Lyndon township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Flexicodes."
+twp-manchester.org,Manchester township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.melvindale.org,Melvindale city,own_site_files,2026-11-23,own_pages_silent,1,A copyright line reserves all rights. A privacy or site policy page only. Nothing on automated access or reuse. Site credit: NCG.
+www.milanmi.gov,Milan city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+milantownship.org,Milan township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: digital Web Leprechauns."
+www.cityofnovi.org,Novi city,own_site_files,2026-11-23,own_pages_silent,1,Its site use policy says the site is available to the public. A copyright line reserves all rights. Nothing on automated access. Site credit: Muniweb.
+www.oriontownship.org,Orion charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.oshtemo.org,Oshtemo charter township,own_site_files,2026-11-23,own_pages_silent,1,"A disclaimer and privacy page only. Nothing on automated access or reuse. The site is powered by Granicus, whose terms speak of its own website."
+www.cityofotsego.org,Otsego city,own_site_files,2026-11-23,own_pages_silent,1,Its privacy page says materials on the site are the property of the city and reserves all rights. Nothing on automated access or on permission. Site credit: Pixelvine.
+www.otsegotownship.org,Otsego township,own_site_files,2026-11-23,access_means_clause,2,"Its terms of use say ""You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided for through"" the site. They name no robot or program and set no limit on reuse beyond a copyright line. Read in full by the radar's reader. Site credit: Shumaker Technology Group."
+oxfordtwpmi.gov,Oxford charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.thevillageofoxford.org,Oxford village,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.plainwell.org,Plainwell city,own_site_files,2026-11-23,own_pages_silent,1,A copyright line reserves all rights. A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Muniweb.
+www.plymouthtownshipmi.gov,Plymouth charter township,own_site_files,2026-11-23,access_means_clause,2,"Its terms of use say ""You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided for through"" the site. They name no robot or program and set no limit on reuse beyond a copyright line. Read in full by the radar's reader. Site credit: Revize."
+www.pontiacmi.gov,Pontiac city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+prairierondetwp.net,Prairie Ronde township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Geek Genius."
+www.richlandtwp.net,Richland township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Revize."
+cityofriverrouge.net,River Rouge city,own_site_files,2026-11-23,own_pages_silent,1,A privacy or site policy page only. Nothing on automated access or reuse.
+www.cityofriverview.com,Riverview city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.downtownrochestermi.com,Rochester city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site."
+www.rochestermi.org,Rochester city,own_site_files,2026-11-23,vendor_site,1,"The site runs on the CivicPlus content management system, as its copyright page says. CivicPlus' terms cover every site it hosts. See config/tx_agenda_platforms.csv."
+www.rockwoodmi.org,Rockwood city,own_site_files,2026-11-23,reuse_needs_consent,3,"Its legal page says ""No such information shall be used other than to view the same without the written permission of the City of Rockwood."" The foot of every page bars reproducing or mirroring the site without written consent. Site credit: Electronic Computer Services."
+www.rosetownship.com,Rose township,own_site_files,2026-11-23,could_not_read,0,The home page loaded and gave the reader no links and no text to read. A script probably draws it.
+rosstownshipmi.gov,Ross township,own_site_files,2026-11-23,reuse_needs_consent,1,"Its terms say ""You will use protected content solely for your personal use, and will make no other use of the content without the express written permission of Ross Township and the copyright owner."" They also bar obtaining material by any means the site does not provide. Read in full by the radar's reader."
+salinetownship.org,Saline township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.saugatuckcity.com,Saugatuck city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights."
+saugatucktownshipmi.gov,Saugatuck township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Insight."
+schoolcrafttownshipmi.gov,Schoolcraft township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+villageofschoolcraft.com,Schoolcraft village,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights."
+www.southlyonmi.org,South Lyon city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.villageofsouthrockwoodmi.com,South Rockwood village,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+southfieldtownshipmi.gov,Southfield township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.southgatemi.gov,Southgate city,own_site_files,2026-11-23,noncommercial_only,3,"Its terms say ""Content may generally be viewed, downloaded, or printed for personal, educational, informational, or other lawful non-commercial purposes."" Nothing on automated access. Read in full by the radar's reader. Site credit: Revize."
+www.springfield-twp.us,Springfield charter township,own_site_files,2026-11-23,own_pages_silent,1,A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Revize.
+sumptertwp.org,Sumpter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+superiortownship.org,Superior charter township,own_site_files,2026-11-23,own_pages_silent,1,A privacy or site policy page only. Nothing on automated access or reuse. Site credit: JCM Media Group.
+www.sylvanlake.org,Sylvan Lake city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.valleytownshipmi.gov,Valley township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site."
+vbtmi.gov,Van Buren charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Revize."
+www.villageofclarkston.org,Village of Clarkston city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.gpshoresmi.gov,Village of Grosse Pointe Shores city,own_site_files,2026-11-23,own_pages_silent,1,A privacy policy only. Nothing on automated access or reuse. Read in full by the radar's reader. Site credit: Revize.
+www.walledlake.us,Walled Lake city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: WebMatters."
+www.webstermi.us,Webster township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+whitefordtownshipmi.gov,Whiteford township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. A copyright line reserves all rights. Site credit: Shumaker Technology Group."
+www.woodhavenmi.org,Woodhaven city,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+www.twp-york.org,York charter township,own_site_files,2026-11-23,no_terms_found,0,"No terms, disclaimer or privacy page was found on the site. Site credit: Revize."
+ypsitownship.org,Ypsilanti charter township,own_site_files,2026-11-23,own_pages_silent,1,A privacy or site policy page only. Nothing on automated access or reuse. Site credit: Revize.

@@ -2,6 +2,53 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: each confirmed site's own terms read
+
+**Pushed** on the owner's word, as `e6b3546`. CI passed.
+
+**What was done**
+
+- Five passes read the terms of the 90 hosts that carry a confirmed row, for 88 governments. Every home page loaded and none refused.
+- The reading tool cut long sentences short. **Nine terms pages were then read in full by the radar's own reader,** one request each, robots checked first.
+- `config/mi_agenda_site_terms.csv` holds one row for each host. `docs/sources/mi_agendas_own_sites.md` and `docs/sources/mi_agendas_legistar.md` are the source notes.
+
+| What the site says | Hosts | A collector |
+|---|---|---|
+| No terms, disclaimer or privacy page | 63 | may read |
+| A policy page that says nothing on automated access or reuse | 16 | may read |
+| Terms bar obtaining material by means the site does not provide | 3 | held for the owner |
+| Terms allow non-commercial use and ask consent for other use | 3 | held for the owner |
+| Terms bar use or copying without written consent | 2 | held for the owner |
+| Built and hosted by CivicPlus | 2 | held with the CivicPlus platforms |
+| The home page gave the reader nothing | 1 | not read |
+
+- **No site's terms name a robot, a crawler or a scraper.**
+- **Held for the owner, eight sites:** Otsego Township, Berlin Charter Township, Plymouth Charter Township, Ross Township, Rockwood, Keego Harbor, Southgate and Dearborn. The source note quotes each sentence.
+- Rochester and Dearborn Heights run on CivicPlus and wait with its platforms.
+
+**What a collector could take: 168 rows of 77 governments,** 71 of them with their governing body. By county: Oakland 18, Washtenaw 13, Wayne 13, Allegan 12, Monroe 9, Kalamazoo 8. **No job reads any of them.** Both Michigan agenda sources are still `manual`, no Michigan collector is written, and a test holds both.
+
+**Two things the shared platforms file does that the owner has not said for Michigan.** It clears "own_site_files" and Legistar on the owner's word of November 21, 2026, given for the Texas build. The same file now counts Michigan rows as cleared. I did not treat that as the owner's word for Michigan. It is asked.
+
+**Code:** a government with two hosts is read only when both allow it. Before, the first row in the terms file decided. Rochester's development authority has its own site, which is why it mattered. A test holds it.
+
+**Slips, as the passes reported them**
+
+- One pass opened a page of legal postings on Dearborn Heights' site that was not a policy page.
+- One pass added two words to the list it asked about. It filed the finding where the brief says.
+- Waits between requests were not timed.
+
+**Not verified**
+
+- **81 of the 90 hosts rest on the reading tool's summary** that no terms page exists or that a page says nothing. I read nine in full.
+- **The terms of 15 site builders were not read.** A builder's terms could cover the sites it hosts, as CivicPlus' do. Revize's and Granicus' speak of their own websites.
+- Whether Ann Arbor's Legistar answers the published API without a token. No request has been made to it.
+- The signal rule for a body meeting under a code name has not been tried on a Michigan agenda.
+
+**Cost:** 10 requests by the radar's reader. The five passes made 151 tool calls and used about 755,000 tokens. No web search.
+
+**Tests:** 1,173 pass.
+
 ## November 23, 2026 — M11: the four moved sites read, and a second read of 195 pages
 
 **The owner's word:** read the four moved sites before the second reads start.

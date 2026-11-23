@@ -161,4 +161,4 @@ uv run python scripts/backup.py trial <the dump file>
 ## Not written yet
 
 - Restoring the sign-in accounts. They belong to the hosted service.
-- Michigan. No Michigan source is read. The agenda inventory and its second reads exist, and no site's terms have been read.
+- Michigan. No Michigan source is read. The agenda inventory, its second reads and each site's terms are on file. No Michigan collector is written.
