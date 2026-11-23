@@ -36,11 +36,17 @@ The owner said to start M9. The harness is built and tested on made-up signals. 
 
 **A pilot of the other way: news reports and public records, three counties**
 
-- One research pass each for Hood, Hill and Milam counties. 23 projects, each with the earliest dated report found and its source: `backtest/pilot/`.
+- One research pass each for Hood, Hill and Milam counties. 23 projects, each with the earliest dated report found and its source: `backtest/known_projects_tx.csv`, first kept in `backtest/pilot/`.
 - A second read opened nine of the cited sources again. Every date held.
 - **For 10 of the 23, a government record or a petition names the data center before the first news report found.** Two are Milam County notices of tax abatement hearings, on the page the radar reads since November 22. One is a state air permit review, 162 days ahead of the first news story found.
 - **A rule was broken in the first pass.** I did not tell it to stay off restricted hosts. Three Hood County minutes files were fetched through a tool that switched to a stealth proxy by itself, from a host whose robots file bars every program. Three pages of a newspaper that blocks the crawler were read too. Nothing resting on those six pages is used. Two Hood County projects have no usable first record for that reason.
 - Agenda history, counted from pages already saved: the 60 pages read list 2,388 agenda files dated since January 2023. Hood County's pages list two.
+
+**The owner's decisions, November 22**
+
+- **The date a project became public is the first news report or company announcement.** A government record is a signal. `backtest/projects.py` reads the list that way.
+- **The owner agreed to FracTracker's terms.** Nothing has been taken since. A letter to FracTracker is drafted, not sent, for `info@fractracker.org`, the address its Terms of Service name. The map's service stays closed to programs.
+- **Carry on with news research for the other 27 counties.** Each pass now carries the collectors' rules in its brief.
 
 **Not verified**
 

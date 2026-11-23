@@ -1,8 +1,10 @@
-# Pilot: known projects in three counties
+# Known projects: how the list is made
 
-A trial of one way to build the backtest's list of known projects: news reports and public records only, with no use of FracTracker. Done on November 22, 2026 for Hood, Hill and Milam counties. **It is not the backtest's list and the owner has not approved it.**
+`known_projects_tx.csv` is the backtest's list of known data center projects in the Texas test counties. It is built from news reports and public records only, with no use of FracTracker. `backtest/projects.py` loads it and refuses a row that breaks a rule.
 
-`known_projects_pilot.csv` holds 23 projects: 10 in Hood, 7 in Milam and 6 in Hill.
+The first three counties were a trial on November 22, 2026: Hood, Hill and Milam, 23 projects. The owner then said to carry on with the other 27 the same way.
+
+**The date a project became public is its `news_date`:** the first news report or company announcement. The owner settled that on November 22, 2026. A government record is a signal, never the public date.
 
 ## How it was made
 
