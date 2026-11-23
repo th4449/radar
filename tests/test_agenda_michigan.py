@@ -146,3 +146,13 @@ def test_no_michigan_government_is_a_collectors_to_read_until_its_row_is_cleared
     assert cleared_clients(today, state="MI") == []
     assert cleared_pages(today, state="MI") == []
     assert len(cleared_clients(dt.date(2026, 11, 21))) == 9  # Texas is as it was
+
+
+def test_washtenaw_has_every_government_and_one_governing_body_for_each():
+    bodies = [b for b in inv.load_inventory(state="MI") if "Washtenaw" in b.counties]
+    places = [name for name, counties in inv.load_places(state="MI") if "Washtenaw" in counties]
+    assert len(places) == 28
+    governing = collections.Counter(b.government for b in bodies if b.body_type in inv.GOVERNING)
+    assert governing == dict.fromkeys(["Washtenaw County", *places], 1)
+    # Research only. No row is a collector's until an independent check confirms it.
+    assert ac.load_checks(state="MI") == []

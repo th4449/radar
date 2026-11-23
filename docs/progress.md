@@ -2,6 +2,39 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: the Washtenaw County inventory, a one-county trial
+
+**What was done:** a research pass read the websites of the 29 governments in Washtenaw County and recorded where each body posts its agendas. 68 rows are in `config/mi_agenda_inventory.csv`. **They are research. No independent check has been made and no collector may take a row.**
+
+**What it found, by government**
+
+- 14 post agenda files on their own sites: Chelsea, Milan and 12 townships, Saline Township among them.
+- 1 uses Legistar: Ann Arbor.
+- 4 use CivicPlus products, which are held until CivicPlus answers the letter: Washtenaw County, Ypsilanti, Pittsfield Township and Manchester.
+- 5 keep agendas on Documents On Demand, whose robots file bars every program: Ann Arbor Township, Barton Hills, Northfield, Salem and Sharon. Lima Township links only minutes there.
+- 4 have sites that are closed to the reader: Dexter and Saline by a robots file, Sylvan by a robots file that names the reader, Scio by a 403 on its robots file.
+- **At most 15 of 29 could be read by a collector,** before any second read or reading of each site's terms.
+
+**Corrected before the rows went in:** 17 rows. Ten were renamed to the Documents On Demand platform their address shows. Five that rested on a search excerpt are marked not found. The county's row is marked inferred. The Ann Arbor development authority's row points at the city's Legistar calendar.
+
+**Slips in the research pass, as it reported them**
+
+- **A rendered read of the county's page reached the CivicClerk host before that host's robots file was read.** The file bars a reader of this kind. The host was not opened again and the row is marked inferred.
+- After Scio Township's site refused, one web search was run on its agendas. Nothing was opened.
+- Searches limited to three closed sites were run and only the result excerpts were used.
+- For four townships the robots file was read on the www address and the pages were read there, while the sites write their links without www.
+- The gaps between requests were not timed, including the 20 seconds the county's robots file asks for.
+
+**Cost:** 16 web searches, 161 tool calls and 14 minutes.
+
+**Not verified**
+
+- Every page was read through a summarizing reader, not as raw HTML. Dates and links are as it reported them.
+- Manchester now calls itself a city. The Census list of 2020 has it as a village and the inventory keeps that name.
+- Whether Bridgewater Township still posts agendas: its newest was from August.
+- No development body was looked for where a government's agenda host is closed.
+- 1,166 tests pass.
+
 ## November 23, 2026 — M11 begun: the agenda code reads a second state
 
 **The owner's word:** start milestone M11, Michigan agendas, with Washtenaw, Wayne, Oakland, Monroe, Allegan and Kalamazoo counties.
