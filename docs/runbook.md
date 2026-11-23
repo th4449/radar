@@ -109,7 +109,7 @@ Nine letters are out, listed in `docs/progress.md`. A source waiting on an answe
 
 ## The email job
 
-It only does dry runs today. A dry run shows on the desk what would be sent, in counts. It prints no address. Real sending is the owner's decision and is not built.
+It does a dry run unless the owner has unlocked sending. A dry run shows on the desk what would be sent, in counts. It prints no address. Real sending needs three things only the owner sets: the variable `RADAR_EMAIL_LIVE`, the provider's key, and the site's address and the from address in `config/email.yaml`.
 
 ## What an administrator never does
 
@@ -119,8 +119,25 @@ It only does dry runs today. A dry run shows on the desk what would be sent, in 
 - Put a key, a subscriber's address or reviewer data in the repository. It is public.
 - Change the Texas county list or the scoring thresholds. Those are the owner's.
 
+## Backups
+
+```
+uv run python scripts/backup.py dump <a folder outside the repository>
+uv run python scripts/backup.py trial <the dump file>
+```
+
+- `dump` needs `DATABASE_URL`. It writes one file and, beside it, the number of rows in each table that day.
+- `trial` needs `TRIAL_DATABASE_URL`, a Postgres server **on this computer**. It restores the dump into a scratch database, counts every table against the dump's numbers, and drops the scratch database. Run it after every dump you mean to rely on.
+- **A dump holds subscribers' addresses and reviewers' records.** The command refuses to write one inside the repository. Never upload one as a workflow artifact.
+- A trial restores the radar's own tables. The sign-in accounts belong to the hosted service and are not in the dump: ask the service how it backs them up.
+
+## When an email run fails
+
+- The run stops at the batch the provider refused. What went before it is recorded as sent, so nobody gets it twice.
+- The error names the provider's answer, never a person or the key. Read it on the desk under Alert emails.
+- Start the same run again once the cause is fixed. A batch sent again within a day is taken once by the provider.
+
 ## Not written yet
 
-- Restoring the database from a backup. No hosted database exists.
-- What to do when the email provider refuses a send. No sender exists.
+- Restoring the sign-in accounts. They belong to the hosted service.
 - Michigan. No Michigan source is read.

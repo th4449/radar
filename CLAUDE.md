@@ -34,6 +34,8 @@ A public tool that names companies and tells communities a data center may be co
 - `pipeline/ocr.py` reads a PDF that has no text at all with Tesseract, a program installed with `brew install tesseract` or `apt-get`, not a Python package. Nothing leaves the machine. Text read this way is marked on the stored document (`raw_meta.ocr`) and on any signal made from it, in the summary too. Without Tesseract a scan is stored unread and nothing fails. Tests that need it skip unless `RADAR_REQUIRE_OCR=1`, which CI sets.
 - `collectors/tx/legistar.py` reads agendas through the Legistar Web API and never fetches an agenda file: the hosts that hold them bar robots. An agenda names people, so the source is `personal_rows` and an agenda signal's summary never quotes an item.
 - `scripts/dev_seed.py` fills a local database from the test fixtures. It refuses any other database.
+- `scripts/backup.py` dumps the radar's own schemas and proves a dump restores: `trial` restores it into a scratch database on this computer and counts every table. **A dump holds subscribers' addresses.** The command refuses to write one inside the repository. Never upload one as a workflow artifact.
+- **Real runs are the owner's switch.** Every workflow is a dry run, or does nothing, unless the repository variable `RADAR_LIVE` is the word true. Never put a schedule in a workflow or hard-code that switch.
 - `db/migrations/` SQL migrations named `<UTC timestamp>_<name>.sql`. `supabase/migrations` is a symlink to this folder so the Supabase CLI finds them.
 - `tests/db/` policy tests. They run against `supabase db start`.
 - `docs/sources/` one note per source. `docs/services/` one note per outside service the site leans on. `docs/progress.md` gets a few lines at the end of every session.

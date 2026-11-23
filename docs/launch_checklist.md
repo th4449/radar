@@ -18,16 +18,19 @@ Nothing below starts without a yes to its line.
 - [ ] **Owner.** Adopt the reviewer terms at `/review/terms/`. They are a draft.
 - [ ] **Owner.** Keep or change the review threshold of 3 and one confirmation for an alert. Both are working numbers. See [findings_tx.md](../backtest/findings_tx.md).
 
-## 2. Not built yet
+## 2. Built, and waiting for the hosted project
 
-**The radar cannot launch until these exist.** Each is session work that waits on a decision above.
+The owner said on November 23, 2026 to build everything before putting anything online. These were built that day. **None has run against a hosted service, because none exists.** Each is switched on by a setting only the owner can make.
 
-- [ ] **A place for the archive in the hosted project.** Only a folder on one machine is written (`LocalArchive`). Every stored file, its hash and its path depend on this.
-- [ ] **Real runs in the workflows.** Every collector workflow is a dry run that keeps nothing, started by hand. A real run needs the database and the archive.
-- [ ] **A workflow for processing.** `python -m pipeline.process` turns stored documents into signals and sites. Nothing runs it.
-- [ ] **A sender for real email.** The email job is given no sender and cannot send. `site_url` in `config/email.yaml` is empty.
+- [x] **A place for the archive in the hosted project.** One private bucket in the project's storage, made by a migration. Tried against the storage service's local copy. `collectors/hosted_archive.py`.
+- [x] **Real runs in the workflows.** Every collector workflow is a dry run unless the repository variable `RADAR_LIVE` is the word true. No commit can switch it.
+- [x] **A workflow for processing,** started by hand, and only when `RADAR_LIVE` is true.
+- [x] **A sender for real email,** behind three locks: the variable `RADAR_EMAIL_LIVE`, the secret `RESEND_API_KEY`, and the site's address and the from address in `config/email.yaml`. `pipeline/email_sender.py`. Not run against the provider.
+- [x] **A backup command and a restore trial.** `scripts/backup.py`. Tried on the history database on November 23, 2026: 5,919 documents were dumped, restored into a scratch database and counted back whole. Not tried on a hosted database.
+
+## 2a. Not built yet
+
 - [ ] **Hosting for the site.** The build is static and passes in CI. It is deployed nowhere.
-- [ ] **A backup of the hosted database,** and one trial of restoring it.
 - [ ] **A way to enter a record a person read by hand,** for the sources that stay manual. Only a whole saved page can be stored today, for one source.
 
 ## 3. Secrets and settings
@@ -35,10 +38,14 @@ Nothing below starts without a yes to its line.
 | Name | Where | For | Exists |
 |---|---|---|---|
 | `RADAR_CONTACT` | GitHub variable, not a secret | The public contact address in every request | Check before the first real run |
-| `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing and the monitor write and read the database | No |
-| Archive credentials | GitHub secret | Storing each file | No. Waits on how the archive is hosted |
+| `RADAR_LIVE` | GitHub variable | The word true switches the workflows from dry runs to real runs. **The owner's switch** | No |
+| `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing, the email job and the monitor write and read the database | No |
+| `RADAR_ARCHIVE_URL` | GitHub variable | The hosted project's address, for the archive | No |
+| `RADAR_ARCHIVE_KEY` | GitHub secret | The project's service key, which alone reads and writes the archive's bucket | No |
 | `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` | Site build | Sent to every browser. The anonymous key reads one view | No |
-| Email provider key | Supabase or GitHub secret | Sending alerts | No |
+| `RADAR_EMAIL_LIVE` | GitHub variable | The word true lets the email job send. **The owner's switch** | No |
+| `RESEND_API_KEY` | GitHub secret | Sending alerts | No |
+| `site_url`, `from_address` | `config/email.yaml` | The links in every email, and the address they are from. The provider sends only from a domain the owner has proved | Not set |
 | `ANTHROPIC_API_KEY`, with `RADAR_TRIAGE` and `RADAR_TRIAGE_MONTHLY_CAP_USD` | GitHub secret and variables | Optional model triage. Off by default. The radar works without it | No |
 
 ## 4. Before the first real run
