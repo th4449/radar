@@ -35,3 +35,12 @@ Read from the saved copy.
 - The same robots file and policy cover `tx_comptroller_local_agreements`, which is under `/economy/`. That source still needs its own note before a collector is written.
 - Low cadence. Once a month is enough for a baseline list.
 - If the tables or their headers change, the parser stops with `LayoutChanged` and stores nothing.
+
+## November 23, 2026: the site refused the collector
+
+- The collector was run once, to give the backtest's history its own copy of the list. **It stored nothing.** The fetcher asked for `https://comptroller.texas.gov/robots.txt` and got a 403, and the fetcher treats a robots file it cannot read as a closed site.
+- One more request for the robots file, with the same user agent, got the same answer: a 403 page with the message code `CTG-CF-403`. Two requests in all. Nothing else was tried.
+- On November 19 the same address answered 200 and allowed `/taxes/`.
+- **Not verified:** whether the refusal is lasting, and whether it is aimed at the collector's user agent, at this connection or at every program.
+- The backtest uses the copy saved with the tests on November 19, 2026. That is the real page of that day.
+- The source's `method` is unchanged and nothing collects it on a schedule. **The owner decides** whether to mark it manual now or to ask once more on a later day. While the robots file answers 403, every run stops as this one did.
