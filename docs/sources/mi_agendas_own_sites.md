@@ -31,7 +31,7 @@ One identified request for each host, redirects followed as RFC 9309 section 2.3
 - Plainwell answers the robots request with its page-not-found page and a 200. That is no robots file.
 - Six hosts ask for 3 to 20 seconds between requests. The fetcher keeps a site's own delay.
 
-**Revize.** About 50 of the sites are hosted by Revize. A Revize site's robots request redirects to a Revize file host. Most answer 404 there: no file. The 13 Revize file hosts themselves bar every program from everything but document files such as PDFs. So a collector may fetch an agenda PDF kept on a Revize file host and may not read a page there. Revize's own terms of use speak of its own website only, read November 22, 2026.
+**Revize.** About 50 of the sites are hosted by Revize. A Revize site's robots request redirects to a Revize file host. Most answer 404 there: no file. The 13 Revize file hosts themselves bar every program from everything but document files: the rule allows an address that ends in `.pdf`. **The sites write each file's address with `?t=` and a number after it, and the rule bars that address.** So the collector reads a Revize site's list and is refused its files. The run by hand of November 23 showed it on 24 sites. An earlier version of this note said the files were open. That was wrong. Revize's own terms of use speak of its own website only, read November 22, 2026.
 
 ## Terms of use
 
@@ -66,7 +66,7 @@ The eight held for the owner:
 
 The owner said on November 23, 2026 that the clearing of own sites given for Texas holds for Michigan. The same day ten cleared pages were fetched once each by the radar's fetcher, which read each host's robots file first. All ten loaded. Each is a governing body's page, and they cover the six counties: Allegan, Auburn Hills, Chelsea, Comstock Township, Erie Township, Luna Pier, Novi, Oshtemo Township, River Rouge and Superior Township. Each was cut down to its agenda list and saved as a fixture.
 
-- **On nine of the ten the collector finds the agendas.** Its newest agenda matches the second read's on all nine.
+- **On nine of the ten the collector finds the agendas.** Its newest agenda matches the second read's on all nine. Two of the ten, Chelsea and Allegan, are Revize sites. Their lists are read. On the run below Chelsea's files were refused and Allegan's failed.
 - **One fault was found and fixed.** Oshtemo Township lists a report of receipts and disbursements between its packets, in a file named for the meeting's day. Read as an agenda, the report took the place of that day's packet. Such a report is now left, for both states.
 - **Novi's agendas are not read.** Its list links each meeting to a page of its own, not to a file. The collector reads files only. The run log names such a page.
 
@@ -82,10 +82,41 @@ The owner said on November 23, 2026 that the clearing of own sites given for Tex
 
 **Seven governments' pages carry the year in their address:** Novi, Commerce Township, Farmington, Farmington Hills, Highland Park, Holly and Plainwell, 21 pages. Each needs a new inventory row in January.
 
+## The run by hand of November 23, 2026
+
+On the owner's word the collector ran once, by hand, with nothing stored: each cleared page and at most one agenda file from each. The run log was kept in memory and the files in a scratch folder outside the repository.
+
+| | |
+|---|---|
+| Pages asked for | 145 |
+| Pages read | 142 |
+| Pages whose newest agenda matches the second read's | 111 |
+| Pages where it differs | 22 |
+| Pages that gave no agenda link | 9 |
+| Sites whose files a robots rule refused | 25 |
+| Agenda files fetched | 56, of 36 governments |
+| Files that are text, and scans read by character recognition | 54 and 2 |
+| Draft signals in those 56 files | 23 |
+
+**Refused, 25 sites.** 24 are Revize sites whose file addresses the file host's robots rule bars, as above. The 25th is Plainwell: the fetcher's robots request did not come back open, and its three pages were not read. The fetcher left each site alone after the refusal.
+
+**Failed, 4 files.** Three of Allegan's and one of Leighton Township's, whose page writes the link without `https://`. The run log does not keep the reason for a failure.
+
+**No agenda link, 9 pages:** Novi's council and economic development pages, Otsego's two, Heath Township, Lyndon Township, Holly, Dorr Township's development authority and Saugatuck's planning commission.
+
+**Where the newest agenda differs, 22 pages.** Three kinds:
+
+- **The reader misread a date in a file's name.** Six ways, each now fixed and tested on the names the run reported: the day run onto the year (`August-102026`), the month run onto the word before it (`PacketAPR72026`), a number before the date (`1_3-27-2024`), the day first (`10Nov2026`), a run of digits in a folder for another year (`/2012/Agendas/a120626s.pdf`, read as December 2026) and a year mistyped in a name (`1.27.2027` in the upload folder of January 2026). A notice that there is no meeting is no longer taken as an agenda.
+- **The page has more on it than the second read counted,** or the site slipped. A later agenda of another board on a shared page, a notice of a special meeting, a link whose words say 2026 over a file named 2025.
+- **The collector does not take the newest file.** Packets that nothing calls an agenda, on a page whose title does not speak of meetings: Bridgewater Township, Auburn Hills' planning commission, Schoolcraft Township's November files, Walled Lake. A name that gives a month and a day and no year: Whiteford Township. These are not fixed.
+
+**The draft signals were stored nowhere.** 15 of the 23 came from the words "data center", in the agendas of 14 governments: mostly a moratorium or a zoning amendment under discussion, one a line in a list of bills. The other 8 came from "special land use" or "development agreement" alone, for a drive-through, a campground and the like. "Special land use" is Michigan's ordinary term for a use that needs a hearing. The keyword rules were written for Texas and are untried here. One township's file came out of extraction with its letters spaced apart.
+
 ## Not verified
 
-- **The collector has read ten of the 145 cleared pages.** What it finds on the other 135 is not known.
-- **No agenda file has been fetched.** Whether the files are text or scans, and which host a file's address leads to, is not known.
+- **The pages were not read again after the fixes.** The fixes are tested on the file names and addresses the run reported, not on the pages.
+- **Why Plainwell's robots request failed, and why three of Allegan's files failed.**
+- **The files of the 24 Revize sites.** None was fetched.
 - **Most terms were read through a page-reading tool that gives a summary.** It cut long sentences short. The nine pages that mattered were read again in full by the radar's reader. The other 81 hosts rest on the summary's word that no terms page exists or that a page says nothing.
 - **The terms of site builders other than CivicPlus, Revize and Granicus were not read.** Fifteen other builders are credited across the sites. A builder's terms could cover the sites it hosts, as CivicPlus' do. Each row's note names its site's credit.
 - **Which host an agenda file is on,** where a page gives a relative link. A PDF on a Revize file host is open to the collector. The fetcher checks the robots file of every host before every request, so a file on a closed host is not fetched.
@@ -95,6 +126,7 @@ The owner said on November 23, 2026 that the clearing of own sites given for Tex
 ## Before a job reads it
 
 1. The owner decides the eight held sites. Until then they stay held.
-2. The owner says to run it.
-3. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
-4. A first run by hand, with nothing written to a database, and its report read. It shows what the collector finds on the other 135 pages.
+2. **The owner decides the Revize file addresses.** As the sites write them the robots rule bars them. The same file without the `?t=` mark is an address the rule allows. Asking for that address is a choice the collector does not make by itself. Until the owner decides, a Revize site's list is read and its files are not.
+3. The owner says to run it.
+4. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
+5. The keyword rules are tried against Michigan agendas before any Michigan signal is shown to a reviewer.

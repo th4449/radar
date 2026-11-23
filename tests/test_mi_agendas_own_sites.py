@@ -22,7 +22,12 @@ import pytest
 from collectors import run as runner
 from collectors.base import Fetcher, LocalArchive, NotPermitted
 from collectors.mi.agenda_pages import MichiganAgendaPages
-from collectors.tx.agenda_pages import AgendaPages, cleared_pages, find_agenda_links
+from collectors.tx.agenda_pages import (
+    AgendaPages,
+    cleared_pages,
+    find_agenda_links,
+    find_date,
+)
 from pipeline.config import load_sources
 from pipeline.store import MemorySink
 
@@ -192,6 +197,70 @@ def test_a_page_that_leads_to_a_page_for_each_meeting_gives_no_file():
     assert links("novi") == []
 
 
+# --- dates, as Michigan sites write them --------------------------------------------------------
+#
+# Every name and address below is one a cleared page gave on the run by hand of November 23,
+# 2026. Each was read wrongly, or not at all, before that run.
+
+
+@pytest.mark.parametrize(
+    ("name", "day"),
+    [
+        # The day run onto the year. Read before as October 20.
+        ("August-102026-PC-Pack.pdf", dt.date(2026, 8, 10)),
+        # The month run onto the word before it, the day onto the year. Read before as July 20.
+        ("Council_PacketAPR72026.pdf", dt.date(2026, 4, 7)),
+        # A number before the date. Read before as January 3 of 2027.
+        ("1_3-27-2024 PC Agenda.pdf", dt.date(2024, 3, 27)),
+        # The day first. Not read before.
+        ("GANGES-TOWNSHIP-BOARD-Regular-Monthly-Mtg-Agenda-10Nov2026.pdf", dt.date(2026, 11, 10)),
+        ("PC_Agenda_16Nov2026.pdf", dt.date(2026, 11, 16)),
+        # And these read as they did.
+        ("Agenda-11-9-26-1.pdf", dt.date(2026, 11, 9)),
+        ("Council_PacketJuly07072026.pdf", dt.date(2026, 7, 7)),
+        ("10.5.26PCMEETINGPACK.pdf", dt.date(2026, 10, 5)),
+        ("CA112426.pdf", dt.date(2026, 11, 24)),
+    ],
+)
+def test_a_date_in_a_michigan_files_name_is_read(name, day):
+    assert find_date(name, TODAY, runs=True) == day
+
+
+def listed(href: str, text: str = "Agenda"):
+    page = (
+        "<html><head><title>Agendas and Minutes</title></head><body>"
+        f'<table><tr><td><a href="{href}">{text}</a></td></tr></table></body></html>'
+    )
+    return find_agenda_links(page.encode(), "https://www.example-twp.org/agendas.php", TODAY)
+
+
+def test_digits_run_together_are_not_a_date_when_the_files_year_folder_says_otherwise():
+    # A document center files by year. a120626 in the folder for 2012 is December 26 of 2012.
+    # It was read as December 6 of 2026, and so as the newest agenda on the page.
+    old = listed("/document_center/Agendas & Minutes/Township Board/2012/Agendas/a120626s.pdf")
+    assert [link.date for link in old] == [None]
+    new = listed("/document_center/Agendas & Minutes/Township Board/2026/Agendas/a112426.pdf")
+    assert [link.date for link in new] == [dt.date(2026, 11, 24)]
+    # A date written out is not second-guessed: one site keeps its 2026 files in a 2024 folder.
+    kept = listed("/Agendas & Minutes/Planning Commission/2024/Packets/10-14-26 PC Agenda.pdf")
+    assert [link.date for link in kept] == [dt.date(2026, 10, 14)]
+
+
+def test_a_files_name_cannot_date_a_meeting_long_after_the_file_was_uploaded():
+    # A slip of the hand: a packet for January 27, 2026, named 2027, in the folder of the month
+    # it was uploaded. It was read as a meeting to come in 2027.
+    slip = listed("/wp-content/uploads/2026/01/1.27.2027PCagenda.pdf")
+    assert [link.date for link in slip] == [None]
+    # An agenda posted the month before its meeting is as it was.
+    early = listed("/wp-content/uploads/2026/11/12.08.2026-Agenda.pdf")
+    assert [link.date for link in early] == [dt.date(2026, 12, 8)]
+
+
+def test_a_notice_that_there_is_no_meeting_is_not_an_agenda():
+    assert listed("/11.20.2026_SS_No Meeting Notice.pdf", "11.23.2026_SS_No Meeting Notice") == []
+    assert len(listed("/11.16.2026 Agenda Packet_FINAL.pdf", "11.16.2026_RM_Agenda Packet")) == 1
+
+
 # --- which pages --------------------------------------------------------------------------------
 
 
@@ -226,11 +295,14 @@ def test_the_michigan_collector_reads_michigans_inventory_and_the_texas_one_read
 
 # --- a run --------------------------------------------------------------------------------------
 
-CHELSEA_BODY, CHELSEA = saved("chelsea")
+COMSTOCK_BODY, COMSTOCK = saved("comstock")
 ERIE_BODY, ERIE = saved("erie")
 NOVI_BODY, NOVI = saved("novi")
-PAGES = (CLEARED[CHELSEA], CLEARED[ERIE], CLEARED[NOVI])
-CHELSEA_FILES = ["https://www.city-chelsea.org/11.09.26%20Agenda.pdf?t=202611051031130"]
+CHELSEA_BODY, CHELSEA = saved("chelsea")
+PAGES = (CLEARED[COMSTOCK], CLEARED[ERIE], CLEARED[NOVI])
+COMSTOCK_FILES = [
+    "https://comstockmi.gov/wp-content/uploads/2026/11/Board_Meeting_Agenda-11.16.26.pdf"
+]
 ERIE_FILES = [
     "https://erietownshipmi.gov/wp-content/uploads/2026/11/November-17-2026-Regular-Meeting-1.pdf",
     "https://erietownshipmi.gov/wp-content/uploads/2026/11/November-12-2026-special-meeting.pdf",
@@ -246,11 +318,11 @@ def agenda(n: int = 0) -> bytes:
 def web() -> Site:
     html = {"Content-Type": "text/html; charset=utf-8"}
     routes = {
-        CHELSEA: httpx.Response(200, content=CHELSEA_BODY, headers=html),
+        COMSTOCK: httpx.Response(200, content=COMSTOCK_BODY, headers=html),
         ERIE: httpx.Response(200, content=ERIE_BODY, headers=html),
         NOVI: httpx.Response(200, content=NOVI_BODY, headers=html),
     }
-    for n, url in enumerate(CHELSEA_FILES + ERIE_FILES):
+    for n, url in enumerate(COMSTOCK_FILES + ERIE_FILES):
         routes[url] = httpx.Response(200, content=agenda(n), headers=PDF)
     return Site(routes)
 
@@ -271,7 +343,7 @@ def test_a_run_reads_each_page_then_its_recent_agenda_files(tmp_path):
     summary = run(site, sink, tmp_path)
     assert summary.status == "ok", summary.error
     # The three pages first, then the files from the last three weeks, newest first.
-    assert site.page_urls() == [CHELSEA, ERIE, NOVI, *CHELSEA_FILES, *ERIE_FILES]
+    assert site.page_urls() == [COMSTOCK, ERIE, NOVI, *COMSTOCK_FILES, *ERIE_FILES]
     assert (summary.documents_seen, summary.documents_new) == (6, 6)
     assert all(r.headers["user-agent"].startswith("DataCenterRadar/") for r in site.requests)
     assert {d.source_id for d in sink.documents.values()} == {"mi_agendas_own_sites"}
@@ -287,8 +359,8 @@ def test_a_file_is_stored_with_its_government_its_county_and_its_meetings_day(tm
     sink = MemorySink()
     run(web(), sink, tmp_path)
     docs = {d.url: d for d in sink.documents.values()}
-    listing = json.loads(LocalArchive(tmp_path).get(docs[CHELSEA].storage_path))
-    assert listing["government"] == "Chelsea city" and len(listing["agendas"]) == 6
+    listing = json.loads(LocalArchive(tmp_path).get(docs[COMSTOCK].storage_path))
+    assert listing["government"] == "Comstock charter township" and len(listing["agendas"]) == 5
     file = docs[ERIE_FILES[0]]
     assert "rezoning" in file.text
     kept = {k: file.raw_meta[k] for k in ("record", "government", "counties", "bodies", "page")}
@@ -310,8 +382,47 @@ def test_a_second_run_asks_only_for_the_pages(tmp_path):
     run(web(), sink, tmp_path)
     again = web()
     summary = run(again, sink, tmp_path)
-    assert again.page_urls() == [CHELSEA, ERIE, NOVI]
+    assert again.page_urls() == [COMSTOCK, ERIE, NOVI]
     assert (summary.status, summary.documents_new) == ("ok", 0)
+
+
+# What Revize's file hosts publish, as read on November 23, 2026. The five named crawlers above
+# this rule in the real file are left out.
+REVIZE_ROBOTS = """User-agent: *
+Allow: /*.pdf$
+Allow: /*.DOC$
+Allow: /*.DOCX$
+Allow: /*.PPT$
+Allow: /*.PPTX$
+Disallow: /
+"""
+
+
+def test_a_revize_sites_list_is_read_and_its_files_are_refused_as_the_site_writes_them(tmp_path):
+    """The run by hand of November 23, 2026 met this on 24 sites.
+
+    A Revize site sends a request for a file on to Revize's file host. That host's robots rule
+    allows an address that ends in .pdf. The site writes the address with ?t= and a number
+    after it, so the rule bars it. The fetcher obeys the rule as written and leaves the site.
+    """
+    file = "https://www.city-chelsea.org/11.09.26%20Agenda.pdf?t=202611051031130"
+    kept_at = "https://cms3.revize.com/revize/chelseami/11.09.26%20Agenda.pdf?t=202611051031130"
+    site = web()
+    site.routes[CHELSEA] = httpx.Response(200, content=CHELSEA_BODY)
+    site.routes[file] = httpx.Response(302, headers={"Location": kept_at})
+    site.routes[kept_at] = httpx.Response(200, content=agenda(9), headers=PDF)
+    site.routes["https://cms3.revize.com/robots.txt"] = httpx.Response(200, text=REVIZE_ROBOTS)
+    sink = MemorySink()
+    summary = run(site, sink, tmp_path, pages=(CLEARED[CHELSEA], CLEARED[ERIE]))
+    assert summary.status == "partial"
+    assert kept_at not in site.page_urls()
+    assert list(sink.runs[1]["detail"]["refused_hosts"]) == ["www.city-chelsea.org"]
+    assert (
+        "robots.txt does not allow"
+        in sink.runs[1]["detail"]["refused_hosts"]["www.city-chelsea.org"]
+    )
+    # The list is still read and stored, and the other site's files are fetched.
+    assert {d.url for d in sink.documents.values()} == {CHELSEA, ERIE, *ERIE_FILES}
 
 
 # --- not yet ------------------------------------------------------------------------------------

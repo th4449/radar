@@ -58,7 +58,7 @@ _MEETINGS = re.compile(r"agenda|meeting", re.IGNORECASE)
 # What a link says it is when it is not the agenda.
 _NOT_AGENDA = re.compile(
     r"minutes|video|audio|recording|handout|action taken|presentation|quorum|cancel"
-    r"|treasurer|financial|disbursement",
+    r"|treasurer|financial|disbursement|no meeting",
     re.IGNORECASE,
 )
 # A packet is the agenda with its attachments, often hundreds of pages.
@@ -94,6 +94,19 @@ _DATES = (
         re.compile(rf"(?<![a-z]){_MONTH}(\d{{1,2}}){_SEP}(20\d\d)(?!\d)", re.I),
         lambda m: (m.group(3), _month(m.group(1)), m.group(2)),
     ),
+    # August-102026 and APR72026: the day run onto the year
+    (
+        re.compile(rf"(?<![a-z]){_MONTH}[\s./-]*(\d{{1,2}})(20\d\d)(?!\d)", re.I),
+        lambda m: (m.group(3), _month(m.group(1)), m.group(2)),
+    ),
+    # 10Nov2026 and 16 November 2026: the day first
+    (
+        re.compile(
+            rf"(?<!\d)(\d{{1,2}})(?:st|nd|rd|th)?[\s./-]*{_MONTH}\.?,?[\s./-]*(20\d\d)(?!\d)",
+            re.I,
+        ),
+        lambda m: (m.group(3), _month(m.group(2)), m.group(1)),
+    ),
     # 2026 November 10, as in Agenda2026November10
     (
         re.compile(rf"(?<!\d)(20\d\d)[\s./-]*{_MONTH}\.?[\s./-]*(\d{{1,2}})(?!\d)", re.I),
@@ -107,6 +120,12 @@ _DATES = (
     ),
     # 2026-11-17
     (re.compile(rf"(?<!\d)(20\d\d){_SEP}(\d{{1,2}}){_SEP}(\d{{1,2}})(?!\d)"), lambda m: m.groups()),
+    # 3-27-2024, the year in full. Tried before the short year, so that "1 3-27-2024" is not
+    # read as January 3 of 2027.
+    (
+        re.compile(rf"(?<!\d)(\d{{1,2}}){_SEP}(\d{{1,2}}){_SEP}(20\d\d)(?!\d)"),
+        lambda m: (m.group(3), m.group(1), m.group(2)),
+    ),
     # 11/17/2026, 11-17-26, 11.17.26
     (
         re.compile(rf"(?<!\d)(\d{{1,2}}){_SEP}(\d{{1,2}}){_SEP}(20\d\d|\d\d)(?!\d)"),
@@ -177,15 +196,26 @@ def _run_date(digits: str, today: dt.date) -> dt.date | None:
     return found.pop() if len(found) == 1 else None
 
 
+def _spaced(text: str) -> str:
+    """A name with its words set apart: an underscore is a space, and so is the join in
+    PacketAPR72026, where a word in small letters runs onto one in capitals."""
+    return re.sub(r"(?<=[a-z])(?=[A-Z])", " ", text.replace("_", " "))
+
+
 def dates_in(text: str, today: dt.date) -> list[dt.date]:
     """Every date written out in the text, each once, the surest way of writing first."""
-    text = text.replace("_", " ")
+    text = _spaced(text)
     found: list[dt.date] = []
+    read: list[tuple[int, int]] = []  # the characters a surer pattern already read as a date
     for pattern, parts in _DATES:
         for match in pattern.finditer(text):
+            if any(match.start() < end and start < match.end() for start, end in read):
+                continue
             day = _valid(*parts(match), today)
-            if day and day not in found:
-                found.append(day)
+            if day:
+                read.append(match.span())
+                if day not in found:
+                    found.append(day)
     return found
 
 
@@ -194,7 +224,7 @@ def find_date(text: str, today: dt.date, runs: bool = False) -> dt.date | None:
     written = dates_in(text, today)
     if written:
         return written[0]
-    text = text.replace("_", " ")
+    text = _spaced(text)
     if runs:
         for match in _RUN.finditer(text):
             found = _run_date(match.group(0), today)
@@ -224,6 +254,30 @@ def find_month(text: str, today: dt.date) -> str | None:
 _MONTH_DAY = re.compile(rf"(?<![a-z]){_MONTH}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?(?!\d)", re.I)
 # The folder a site builder files an upload in: /uploads/2026/01/.
 _UPLOADED = re.compile(r"/(20\d\d)/(\d\d)/")
+# A folder named for a year, as a document center files its agendas: /Township Board/2012/.
+_YEAR_FOLDER = re.compile(r"/((?:19|20)\d\d)(?=/)")
+
+
+def _fits_its_folders(day: dt.date, url: str) -> bool:
+    """False for a date read from a file's name that its own address contradicts.
+
+    Digits run together can be read two ways: a120626 in a folder for 2012 is December 26 of
+    2012, not December 6 of 2026. And a file cannot be uploaded months before a meeting it
+    names: 1.27.2027 in the upload folder of January 2026 is a slip of the hand.
+    """
+    path = unquote(urlsplit(url).path)
+    filed = _UPLOADED.search(path)
+    if filed and 1 <= int(filed.group(2)) <= 12:
+        folder = dt.date(int(filed.group(1)), int(filed.group(2)), 1)
+        return (day - folder).days <= 150
+    return True
+
+
+def _year_folders_agree(day: dt.date, url: str) -> bool:
+    years = {int(year) for year in _YEAR_FOLDER.findall(unquote(urlsplit(url).path))}
+    return not years or any(abs(day.year - year) <= 1 for year in years)
+
+
 # Words a link uses when it says nothing of what it leads to.
 _SAYS_NOTHING = re.compile(
     rf"\b({_MONTH[1:-1]}|view|download|open|click|here|pdf|file|link|document|the|for|of)\b|[\W\d_]",
@@ -389,6 +443,8 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
             day, date_from = _card_day(a, today), "card"
         if day is None and named:
             day, date_from = find_date(named, today), "file_name"
+            if day and not _fits_its_folders(day, url):
+                day = None
         if day is None and held is not None and len(_file_links(held)) <= _ROW_FILES:
             written = dates_in(row, today)
             if len(written) == 1:
@@ -401,6 +457,9 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
                 day, date_from = written[0], "line"
         if day is None and named:
             day, date_from = find_date(named, today, runs=True), "file_name"
+            # A run of digits is the least sure reading. A year folder that disagrees wins.
+            if day and not (_fits_its_folders(day, url) and _year_folders_agree(day, url)):
+                day = None
         month = None
         if day is None:
             date_from = None

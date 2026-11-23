@@ -271,7 +271,7 @@ sources:
     robots_status: allowed
     verified_at: 2026-11-23
     personal_rows: true
-    notes: Milestone M11. Not read by any job. One government of 220 uses Legistar, Ann Arbor. Its rows are confirmed, its Legistar host has no robots file and its own terms say its information may be copied. The owner said on 2026-11-23 that the clearing of Legistar given for Texas holds for Michigan. A collector is written and tested on saved answers. The method stays manual until the owner says to run it. See docs/sources/mi_agendas_legistar.md.
+    notes: Milestone M11. Not read by any job. One government of 220 uses Legistar, Ann Arbor. Its rows are confirmed, its Legistar host has no robots file and its own terms say its information may be copied. The owner said on 2026-11-23 that the clearing of Legistar given for Texas holds for Michigan. A collector is written and tested on saved answers. One run by hand on 2026-11-23, with nothing stored, read the list and six agendas. The method stays manual until the owner says to run it. See docs/sources/mi_agendas_legistar.md.
 
   - id: mi_agendas_own_sites
     state: MI
@@ -284,7 +284,7 @@ sources:
     robots_status: allowed
     verified_at: 2026-11-23
     personal_rows: true
-    notes: Milestone M11. Not read by any job. Many sites, each with its own robots file and terms. On 2026-11-23 the inventory, an independent second read, each site's robots file and each site's own terms were read. 77 of 220 governments have a row a collector could take. Eight sites' terms are held for the owner and two are built by CivicPlus. The owner said on 2026-11-23 that the clearing of own sites given for Texas holds for Michigan. A collector is written and tested on saved pages. The method stays manual until the owner says to run it. The fetcher checks the robots file of every host before every request. See docs/sources/mi_agendas_own_sites.md.
+    notes: Milestone M11. Not read by any job. Many sites, each with its own robots file and terms. On 2026-11-23 the inventory, an independent second read, each site's robots file and each site's own terms were read. 77 of 220 governments have a row a collector could take. Eight sites' terms are held for the owner and two are built by CivicPlus. The owner said on 2026-11-23 that the clearing of own sites given for Texas holds for Michigan. A collector is written and tested on saved pages. One run by hand on 2026-11-23, with nothing stored, read 142 of 145 pages and fetched 56 agenda files. The files of 24 sites Revize hosts were refused by the file host's robots rule, as the sites write their addresses. The method stays manual until the owner says to run it. The fetcher checks the robots file of every host before every request. See docs/sources/mi_agendas_own_sites.md.
 
   # Baselines of known sites and infrastructure.
   - id: us_fractracker

@@ -2,6 +2,44 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: one run by hand of the Michigan collectors, nothing stored
+
+**On the owner's word.** Each cleared page once and at most one agenda file from each, then Ann Arbor's list and its published agendas. The run log stayed in memory and the files in a scratch folder outside the repository. Both sources are still `manual`.
+
+**Legistar, Ann Arbor:** seven requests, all answered. Six agendas, 127 items, no draft signal.
+
+**Own sites**
+
+| | |
+|---|---|
+| Pages asked for | 145 |
+| Pages read | 142 |
+| Newest agenda matches the second read's | 111 |
+| Differs | 22 |
+| No agenda link | 9 |
+| Sites whose files a robots rule refused | 25 |
+| Agenda files fetched | 56, of 36 governments |
+| Text, and scans read by character recognition | 54 and 2 |
+| Draft signals, stored nowhere | 23 |
+
+**What the run showed**
+
+- **Revize's file hosts refuse the files as the sites write them.** The robots rule allows an address that ends in `.pdf`. The sites add `?t=` and a number. 24 sites' files were refused, and the fetcher left each site alone. **My note of this morning said those files were open. It was wrong, and is corrected** in the source note and the robots table. The same file without the `?t=` mark is an address the rule allows. Whether to ask for it is the owner's to decide. It is not done.
+- **Plainwell was not read.** The fetcher's robots request did not come back open. This morning's answer was a web page with a 200. Why it differed is not known.
+- **The date reader misread six kinds of file name,** one of them badly: a 2012 agenda in a folder for 2012 was read as December 2026 and asked for as the newest. All six are fixed and tested on the names the run reported. A notice that there is no meeting is no longer an agenda.
+- **Five or more pages' newest files are not taken:** packets that nothing calls an agenda on a page whose title does not speak of meetings, and names with a month and a day and no year. Not fixed.
+- **15 of the 23 draft signals came from "data center",** in the agendas of 14 governments. Most are a moratorium or a zoning amendment under discussion. The other 8 came from "special land use" or "development agreement" alone. "Special land use" is Michigan's ordinary term. The keyword rules were written for Texas and need trying here before any Michigan signal reaches a reviewer.
+
+**Code:** `collectors/tx/agenda_pages.py`, the date reader, for both states. 13 new tests. Texas' fixtures read as before.
+
+**Not verified**
+
+- The 142 pages were not read again after the fixes.
+- Why three of Allegan's files failed. The run log does not keep the reason for a failure.
+- Any file of the 24 Revize sites.
+
+**Cost:** about 330 requests by the radar's fetcher: 7 to Legistar's API, 142 pages, 56 files fetched, 28 file requests refused or failed, and about 90 robots requests, one for each host. The count is worked out from the report, not logged. No subagent and no web search.
+
 ## November 23, 2026 — M11: Michigan collectors written on the owner's word
 
 **The owner said the Texas clearing of own sites and Legistar holds for Michigan.** The platforms file records it for both. The eight sites whose terms are held stay held.

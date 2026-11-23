@@ -10,19 +10,19 @@
 # judged too, and none is barred.
 # A yes here is one condition of several. See config/mi_agenda_checks.csv and the site's own terms.
 host,kind,asked_on,answer,read_at,collector,crawl_delay,note
-cms1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms2.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms3.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms4files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms4files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms5.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms6.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms7files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms7files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms8.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-cms9files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-webgen1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
-webgen1files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms2.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms3.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms4files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms4files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms5.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms6.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms7files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms7files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms8.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+cms9files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+webgen1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
+webgen1files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs. The rule allows an address that ends in .pdf. The sites write each file's address with ?t= and a number after it, which the rule bars. The fetcher refused 24 sites' files for that on the run by hand of 2026-11-23.
 a2gov.legistar.com,site,2026-11-23,404,,yes,,No robots file.
 augustatownship.org,site,2026-11-23,200,,yes,,
 bellevilleonthelake.com,site,2026-11-23,200,,yes,,
@@ -113,7 +113,7 @@ www.oriontownship.org,site,2026-11-23,404,https://cms9files.revize.com/oriontwp/
 www.oshtemo.org,site,2026-11-23,200,,yes,,
 www.otsegotownship.org,site,2026-11-23,200,,yes,,
 www.paviliontwpmi.gov,site,2026-11-23,200,,yes,,
-www.plainwell.org,site,2026-11-23,"200, a web page",,yes,,A page-not-found page served with a 200. No robots file.
+www.plainwell.org,site,2026-11-23,"200, a web page",,yes,,A page-not-found page served with a 200. No robots file. On the run by hand later the same day the fetcher's own robots request did not come back open and it left the site alone. Why is not known.
 www.plymouthmi.gov,site,2026-11-23,200,,yes,,
 www.plymouthtownshipmi.gov,site,2026-11-23,404,https://cms5.revize.com/revize/plymouthtownshipmi/robots.txt,yes,,No robots file.
 www.plymouthtwp.org,site,2026-11-23,404,https://cms5.revize.com/revize/plymouthtownshipmi/robots.txt,yes,,No robots file.

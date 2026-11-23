@@ -31,11 +31,10 @@ Of 220 governments in the six counties, one posts its agendas on Legistar: Ann A
 
 - The calendar page came back cut off before its foot, so any terms linked there were not seen.
 - Where Ann Arbor's agenda files sit was read from the API's answer: `a2gov.legistar1.com`. Its robots file was not read, and the collector never asks that host.
-- No run has been made. The collector has read two saved answers and nothing live.
+- **One run by hand, November 23, 2026, on the owner's word, nothing stored.** Seven requests: the list and the six published agendas. All answered. 127 agenda items, no draft signal.
 - The code-name signal rule is untried on Michigan agendas.
 
 ## Before a job reads it
 
 1. The owner says to run it.
 2. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
-3. A first run by hand, with nothing written to a database, and its report read.
