@@ -3,8 +3,12 @@ name: Collect
 # The shared steps for every collector. Each feed has its own small workflow file that calls
 # this one with its source id.
 #
-# Until launch every run is a dry run: it fetches the source and reports what it found, and
-# keeps nothing. Real runs need the hosted database and archive, which the owner approves first.
+# Every run is a dry run unless the repository variable RADAR_LIVE is the word true. A dry run
+# fetches the source and reports what it found, and keeps nothing.
+#
+# A real run writes to the hosted database and archive. It needs the owner's go-ahead, which
+# the owner gives by setting RADAR_LIVE and the secrets in the repository's settings. No
+# commit can switch it on. See docs/launch_checklist.md.
 
 on:
   workflow_call:
@@ -46,4 +50,16 @@ jobs:
           # secret. The fetcher refuses to run without it.
           RADAR_CONTACT: ${{ vars.RADAR_CONTACT }}
           RADAR_RUNNER: gha-${{ github.run_id }}
-        run: uv run python -m collectors.run "$SOURCE_ID" --dry-run
+          RADAR_LIVE: ${{ vars.RADAR_LIVE }}
+          # Used by a real run only. The address of the hosted project is a variable. The
+          # database address and the service key are secrets.
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+          RADAR_ARCHIVE_URL: ${{ vars.RADAR_ARCHIVE_URL }}
+          RADAR_ARCHIVE_KEY: ${{ secrets.RADAR_ARCHIVE_KEY }}
+        run: |
+          if [ "$RADAR_LIVE" = "true" ]; then
+            uv run python -m collectors.run "$SOURCE_ID"
+          else
+            echo "Dry run: RADAR_LIVE is not set to true. Nothing is kept."
+            uv run python -m collectors.run "$SOURCE_ID" --dry-run
+          fi

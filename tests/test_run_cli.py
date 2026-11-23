@@ -95,6 +95,29 @@ def test_every_collector_has_a_workflow_file_that_is_not_scheduled():
     assert "--dry-run" in shared
 
 
+def test_a_workflow_keeps_nothing_unless_the_owner_has_switched_real_runs_on():
+    """A real run writes to the hosted database. That is the owner's decision, given by a
+    repository variable and secrets that no commit can set."""
+    workflows = Path(__file__).parents[1] / ".github" / "workflows"
+    shared = (workflows / "collect.yml").read_text()
+    assert 'if [ "$RADAR_LIVE" = "true" ]; then' in shared
+    live, dry = shared.split('if [ "$RADAR_LIVE" = "true" ]; then')[1].split("else")
+    assert "--dry-run" not in live and "--dry-run" in dry
+    process = (workflows / "process.yml").read_text()
+    assert 'if [ "$RADAR_LIVE" != "true" ]; then' in process and "exit 0" in process
+    for name in ("collect.yml", "process.yml", "monitor.yml"):
+        text = (workflows / name).read_text()
+        assert "schedule:" not in text and "cron:" not in text, name
+        # Addresses and keys come from the repository's settings, never from the file.
+        assert "postgresql://" not in text and "supabase.co" not in text, name
+        assert "secrets.RADAR_DATABASE_URL" in text, name
+    # A caller hands the shared steps the secrets a real run reads.
+    for source_id in runner.REGISTRY:
+        path = workflows / f"collect-{source_id.replace('_', '-')}.yml"
+        if path.exists():
+            assert "secrets: inherit" in path.read_text(), path.name
+
+
 # --- a one-time history run, for the backtest ----------------------------------------------------
 
 

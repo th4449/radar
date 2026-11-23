@@ -1,0 +1,49 @@
+name: Process
+
+# Reads stored documents and writes their signals, then groups signals into sites and scores
+# every site. See pipeline/process.py and BUILD_PLAN.md milestones M4 and M5.
+#
+# It runs only when the repository variable RADAR_LIVE is the word true: there is nothing to
+# read until the hosted database and archive exist. The owner sets that variable and the
+# secrets. No commit can switch it on.
+#
+# Started by hand only. A schedule is a launch decision and needs the owner's go-ahead.
+# The model triage step stays off: it needs its own switch and a spending cap.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: process
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Read stored documents and score every site
+        env:
+          RADAR_LIVE: ${{ vars.RADAR_LIVE }}
+          RADAR_RUNNER: gha-${{ github.run_id }}
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+          RADAR_ARCHIVE_URL: ${{ vars.RADAR_ARCHIVE_URL }}
+          RADAR_ARCHIVE_KEY: ${{ secrets.RADAR_ARCHIVE_KEY }}
+        run: |
+          if [ "$RADAR_LIVE" != "true" ]; then
+            echo "Not launched: RADAR_LIVE is not set to true. Nothing was read."
+            exit 0
+          fi
+          uv run python -m pipeline.process

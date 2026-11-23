@@ -19,3 +19,5 @@ jobs:
     uses: ./.github/workflows/collect.yml
     with:
       source_id: tx_tceq_air_pending_legacy
+    # A real run reads the database address and the archive key. A dry run uses neither.
+    secrets: inherit
