@@ -154,8 +154,28 @@ def test_washtenaw_has_every_government_and_one_governing_body_for_each():
     assert len(places) == 28
     governing = collections.Counter(b.government for b in bodies if b.body_type in inv.GOVERNING)
     assert governing == dict.fromkeys(["Washtenaw County", *places], 1)
-    # Research only. No row is a collector's until an independent check confirms it.
-    assert ac.load_checks(state="MI") == []
+
+
+def test_michigan_checks_are_second_reads_of_pages_the_inventory_names():
+    checks = ac.load_checks(state="MI")
+    bodies = inv.load_inventory(state="MI")
+    pages = {(b.government, b.agenda_url.rstrip("/").lower()) for b in bodies if b.agenda_url}
+    assert len(checks) >= 195
+    for c in checks:
+        assert c.kind == "read_page"
+        assert (c.government, c.page.rstrip("/").lower()) in pages, c.page
+        # A read sent to a page on the government's own site or on Legistar, and nowhere else.
+        assert inv.platform_of(c.page) in (None, "legistar"), c.page
+    assert len({(c.government, c.page) for c in checks}) == len(checks)
+
+
+def test_a_confirmed_michigan_row_is_still_not_a_collectors_until_its_site_terms_are_read():
+    checks = ac.Checks(ac.load_checks(state="MI"))
+    today = dt.date(2026, 11, 23)
+    verdicts = [ac.verdict(b, checks, today)[0] for b in inv.load_inventory(state="MI")]
+    assert verdicts.count("confirmed") > 150
+    # No Michigan site's own terms have been read, so nothing is cleared.
+    assert inv.load_site_terms(state="MI") == []
 
 
 def test_every_government_in_the_six_counties_has_one_governing_body():

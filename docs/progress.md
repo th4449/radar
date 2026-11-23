@@ -2,6 +2,62 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: the four moved sites read, and a second read of 195 pages
+
+**The owner's word:** read the four moved sites before the second reads start.
+
+**The four moved sites**
+
+- The radar's reader asked each new address for its robots file, once. All four redirect to the same Revize file as the old address and answer 404 there. No robots file, so open.
+- A research pass then read the four sites. **Pontiac, Plymouth Charter Township and Van Buren Charter Township post agendas on their own sites.** Milford Charter Township sends its to Documents On Demand, which is closed.
+- `config/mi_agenda_inventory.csv` now holds **526 bodies of 220 governments**. One row was dropped before it went in: a joint body on an outside host whose name and kind are not known.
+
+**The robots files of every candidate host**
+
+- A candidate is a row on the government's own site or on Legistar: 232 rows, on 198 pages, on 103 hosts, for 99 governments.
+- The radar's reader asked each host for its robots file, once, six seconds apart. `docs/sources/mi_agenda_robots.csv` holds every answer of the day: 122 site hosts and the 13 Revize file hosts.
+- **Two hosts are closed to the collector.** Detroit's site answered 403 to the robots request itself. Dexter Township's dropped the connection. Neither was asked again, and their three pages got no second read.
+- Plainwell's site answers the robots request with its page-not-found page and a 200. That is no robots file. It was read as open.
+- Six hosts ask for a delay between requests, of 3 to 20 seconds. No agenda page on an open host is barred.
+
+**The second read**
+
+- Six passes opened the other 195 pages, one request each, with no search and no agenda file opened. The readers were not told what the inventory says. **All 195 loaded. No host refused.**
+- `config/mi_agenda_checks.csv` holds the 195 reads as observations. `pipeline/agenda_checks.py` compares them with the inventory.
+
+| Verdict | Rows | Governing bodies |
+|---|---|---|
+| Confirmed | 194 | 80 |
+| The newest agenda is old or undated | 12 | 5 |
+| The page was read and showed no agendas | 17 | 4 |
+| The body was not seen named on the page | 5 | 2 |
+| The second read saw another platform | 1 | 1 |
+| No second read: host closed | 3 | 1 |
+| Total | 232 | 93 |
+
+- **80 of the 93 candidate governments have a confirmed governing body.** Among them Ann Arbor, Dearborn, Pontiac, Novi, Farmington Hills and Auburn Hills.
+- Not confirmed, for a person to read: Wayne County's commission page lists meetings and no agenda files. Belleville and the city of Plymouth draw their lists by script. Exeter Township's page holds minutes. Saugatuck's newest agenda is on Google Drive. Carleton and Royal Oak Township list agendas without naming the body. Five townships post one undated agenda.
+- Five Dearborn boards show no agendas on the page the inventory names. Each links a page for the year, one step on, that was not opened.
+- **A confirmed row is still not a collector's.** No site's own terms have been read: `config/mi_agenda_site_terms.csv` does not exist. A test holds that.
+
+**Slips, as the passes reported them**
+
+- The research pass on the moved sites asked one outside host, a development authority's, for its robots file. The request redirected to a Revize host and was not followed. The host was not read.
+- Readers did not treat packets alike. Some counted a dated packet as an agenda and some did not. Dorr Township's three rows are not on the same footing.
+- Three pages that list several bodies were captured in part: Lyndon Township, Riverview and Grosse Pointe Shores.
+- Two readers removed backslashes that the reading tool had put before brackets in an address.
+- About 24 long pages were read only in their first 100,000 characters, where the newest items sit.
+
+**Not verified**
+
+- **I opened no page myself.** Every observation came through the fetch tool's summary of a page, not its raw HTML. The tool may have completed a relative address. No read was made in a real browser.
+- Which host the agenda files are on, where a page gives relative links. Those links are quoted in the notes and joined to nothing.
+- The signal rule for a body meeting under a code name was written for Texas. It has not been tried on a Michigan agenda.
+
+**Cost:** 83 requests by the radar's reader. The moved-sites pass made 24 tool calls and used about 159,000 tokens. The six second reads made 246 tool calls and used about 1.13 million tokens. No web search.
+
+**Tests:** 1,171 pass.
+
 ## November 23, 2026 — M11: the Revize robots files read, and 27 more sites inventoried
 
 **The owner's word:** read the Revize robots files where their redirect leads.
