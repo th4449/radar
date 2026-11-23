@@ -1,0 +1,126 @@
+# Administrator runbook
+
+BUILD_PLAN.md milestone M10. Written November 23, 2026, before launch. It says what an administrator does and what to do when something breaks. Administrators are Dekleptocracy Alliance staff.
+
+**Three rules sit above everything here.**
+
+1. **Never work around a refusal.** A site that refuses the radar's reader is left alone: no retry, no other tool, no other connection. A person reads the source note and decides.
+2. **Never say a data center is planned unless a record says so.** An alert restates public records.
+3. **Never write a private person's name** in a note, an alert or a correction's answer. Companies and officials acting in office are in scope.
+
+## Each weekday
+
+1. **Read the monitor.** See "The monitor" below. Once it is on a schedule, a failed run arrives as an email from GitHub to the account that set the schedule.
+2. **Open the queue** at `/review/queue/`. A site is there because its score reached the review bar or a reviewer opened it.
+3. **Read corrections** on the administrator's desk at `/review/admin/`. Anyone can send one, with no account.
+4. **During the first 30 days, approve alerts.** While the approval gate is on, only an administrator can publish.
+
+## The monitor
+
+```
+uv run python -m pipeline.health
+```
+
+It needs `DATABASE_URL`. It reads the run log, changes nothing and sends nothing. It ends with an error code when any source needs a person. Each watched source has one state.
+
+| State | What it means | What to do |
+|---|---|---|
+| `ok` | Read cleanly and recently enough | Nothing |
+| `failing` | The newest run failed or finished with errors | Read the error on the desk under Recent runs. See "A collector fails" |
+| `blocked` | The site refused | **Do not run it again.** See "A site refuses" |
+| `stuck` | A run started hours ago and never finished | Look at the run in GitHub Actions. Start it once more by hand only if nothing refused |
+| `stale` | No clean run within its cadence | Find out why no run started: a schedule that is off, or a workflow that was disabled |
+| `never_run` | No run is logged | Expected before launch. After launch, the workflow has never run |
+| `due_by_hand` | A page a person saves is older than its cadence | See "The Comptroller's list" |
+
+A source held for a permission is not watched. Nothing is supposed to run.
+
+## A collector fails
+
+- **The layout changed.** The run stops and keeps the page that surprised it. Nothing is guessed. A person compares the stored page with the test copy in `tests/fixtures/`, and a build session changes the parser with a new test.
+- **Some addresses failed.** A run that reads many sites ends as partial when a link is dead. Read the failed addresses in the run's detail. A government that moved its agendas needs its row in `config/tx_agenda_inventory.csv` checked again by an independent read.
+- **A file could not be read.** A scan with no text is stored unread and counted. Nobody has read it. Open it yourself if the meeting matters.
+
+## A site refuses
+
+A 403, a robots file that bars the path or cannot be read, a captcha or a login page.
+
+1. **Stop.** The run already has. Do not start it again.
+2. Write what happened in the source's note in `docs/sources/`: the day, the address, the answer.
+3. For one government of many, set its row in `config/tx_agenda_site_terms.csv` to `refused` or `robots_bar`. The collector then leaves it alone and the other governments are still read.
+4. For a whole source, the owner decides: wait, write to the agency, or mark the source `manual`. Only the owner marks a source `hand_saved`.
+
+## The Comptroller's list
+
+The Comptroller's site refused the reader on November 23, 2026. A person saves the page once a month.
+
+1. Open https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php in a browser.
+2. Save it as HTML only: "Page Source" in Safari, "Webpage, HTML Only" in Chrome. Not a web archive and not a PDF.
+3. Store it, with the name the browser gave the file:
+
+```
+uv run python -m collectors.by_hand tx_comptroller_data_centers "<the saved file>"
+```
+
+The command makes no request. It refuses a file that is not the page and stores nothing then. **Never use it on a file a program fetched.**
+
+## Reviewers
+
+- **Applications** are on the administrator's desk. Approve only a person the organization knows. An administrator cannot approve themselves, and the database refuses it.
+- **Suspend** a reviewer on the same screen. A suspended reviewer can do nothing.
+- **Reverse a decision** on the site's page, with a reason. The reason is kept. If a published alert then lacks the confirmations it needs, the database takes it down.
+- Every action is in the audit log at the foot of the desk.
+
+## What a reviewer confirms
+
+- A record that points at a site: a company, a place, a project name.
+- **A rule on data centers that a government is weighing:** a moratorium, a zoning change. The owner decided this on November 23, 2026.
+- Not a government buying data center services for its own computers. The radar sets most of those aside. Reject one that gets through.
+- Not a passing mention.
+- The reviewer opens each source record first and ticks that they did.
+
+## Publishing an alert
+
+On a site's page an administrator writes a headline and a body, saves a draft and publishes.
+
+- The database publishes only when the site has the confirmations it needs and no standing rejection.
+- **The body restates the records.** Say which government, which meeting or filing, and what the record says. Use the word signal. Do not say a data center is planned, coming or approved unless the record says it in those words.
+- A site held by a meeting's agenda says where the record is, not where a project is. Say so if the record gives no place.
+- To take an alert down, unpublish it on the same form. The public page then says there is no alert at that address.
+
+## Corrections
+
+1. Read it on the desk. The sender may be the company, the government or a neighbor.
+2. Open the alert and its records again.
+3. If the alert is wrong, unpublish it or fix the text, and reverse the decision behind it with the reason.
+4. Mark the correction handled with a short note. The note names no private person.
+
+## Sites that may be the same place
+
+The desk lists signals that fit two sites. The radar never merges sites by itself. An administrator merges them on the site's page, with a note.
+
+## Settings
+
+The desk shows the two settings: confirmations needed for an alert, and the approval gate. **The owner changes them in the database, not from the desk.** Every change is logged.
+
+## Letters and permissions
+
+Nine letters are out, listed in `docs/progress.md`. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
+
+## The email job
+
+It only does dry runs today. A dry run shows on the desk what would be sent, in counts. It prints no address. Real sending is the owner's decision and is not built.
+
+## What an administrator never does
+
+- Run a collector again after a refusal.
+- Approve, suspend or remove a reviewer by any path but the desk, or let a job do it.
+- Share an unpublished site, signal or note outside the desk.
+- Put a key, a subscriber's address or reviewer data in the repository. It is public.
+- Change the Texas county list or the scoring thresholds. Those are the owner's.
+
+## Not written yet
+
+- Restoring the database from a backup. No hosted database exists.
+- What to do when the email provider refuses a send. No sender exists.
+- Michigan. No Michigan source is read.

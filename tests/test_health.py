@@ -170,3 +170,16 @@ def test_the_monitor_workflow_is_started_by_hand_and_sends_nothing():
     assert "schedule:" not in text and "cron:" not in text
     # The address of the database is a secret, never written into the file.
     assert "secrets.RADAR_DATABASE_URL" in text and "postgresql://" not in text
+
+
+def test_the_runbook_says_what_to_do_for_every_state():
+    from pathlib import Path
+
+    runbook = (Path(__file__).parents[1] / "docs" / "runbook.md").read_text()
+    states = ("ok", "failing", "blocked", "stuck", "stale", "never_run", "due_by_hand")
+    for state in states:
+        assert f"| `{state}` |" in runbook, state
+    # And the monitor gives no state the runbook does not know.
+    sources = [source("tx_a")]
+    for runs in ([], [run(1)], [run(1, "failed")], [run(1, "blocked")], [run(1, "running")]):
+        assert one(sources, runs).state in states

@@ -37,6 +37,8 @@ A public tool that names companies and tells communities a data center may be co
 - `db/migrations/` SQL migrations named `<UTC timestamp>_<name>.sql`. `supabase/migrations` is a symlink to this folder so the Supabase CLI finds them.
 - `tests/db/` policy tests. They run against `supabase db start`.
 - `docs/sources/` one note per source. `docs/services/` one note per outside service the site leans on. `docs/progress.md` gets a few lines at the end of every session.
+- `docs/launch_checklist.md` what stands between the radar and launch, and who does each step. `docs/runbook.md` what an administrator does and what to do when something breaks. Keep both true when a rule or a screen changes.
+- `pipeline/health.py` says which sources need a person, from the run log: a failed run, a refusal, a source nobody has read for too long, a page a person is due to save. It writes and sends nothing. `.github/workflows/monitor.yml` runs it, by hand only until launch.
 
 ## Public site and alerts
 

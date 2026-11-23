@@ -2,6 +2,37 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M10: monitoring, the launch checklist and the runbook
+
+**The radar is not launched.** M10 builds what launch needs and launches nothing.
+
+**Built, tests first**
+
+- `python -m pipeline.health`: monitoring for failed collectors. It reads the run log and gives each watched source one state: ok, failing, blocked, stuck, stale, never run or due by hand. It writes and sends nothing, and ends with an error code when a source needs a person.
+- `.github/workflows/monitor.yml` runs it. Started by hand only. A schedule is a launch decision.
+- [launch_checklist.md](launch_checklist.md): the owner's decisions, what is not built, the secrets, the steps before the first real run and the first 30 days.
+- [runbook.md](runbook.md): what an administrator does each weekday and what to do for each state, a refusal, a correction, a reviewer and an alert.
+- 22 tests. 1,087 pass.
+
+**Verified live**
+
+- The monitor run on the history database gave the right states: the own-site run as failing, because two sites refused, and the Comptroller's list as stored by a person today.
+- **Two governments are now closed in the config,** which that reading showed was owed: Grey Forest and Meadowlakes keep their agenda files on a host whose robots file bars them. 57 governments' own sites are read, down from 59.
+- GitHub's documentation says a failed scheduled run is reported to the account that last changed the schedule. Read November 23, 2026.
+
+**What launch still lacks,** all in the checklist
+
+- A hosted database, and a place for the archive in it. Only a folder on one machine is written.
+- Real runs in the workflows, a workflow for processing and any schedule.
+- A sender for real email, hosting for the site and a backup.
+- Each waits on a decision that section 11 keeps for the owner.
+
+**Not verified**
+
+- The prices of the hosted services on the day.
+- That sign-in emails from the hosted project arrive, and within what limits.
+- How long an everyday run of each collector takes on GitHub's runners.
+
 ## November 23, 2026 — A government's own computers are set aside, and two verdicts changed
 
 **The owner's instructions**
