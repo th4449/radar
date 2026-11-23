@@ -15,6 +15,7 @@ BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest r
 - **No source read says in words that the Orion Data Center and the SB Energy project are one.** The tie rests on the place, the timing and the address of the project's first news story, which carries the word orion.
 - Both early records are Milam County agendas. Both sit on a site a reviewer would see.
 - 58 sites that fit no known project reach the bar, one fewer than in the second run.
+- **The owner reviewed those 58 on November 23, 2026: 30 confirmed and 28 rejected.** See "The owner's review of the 58 sites".
 - 71 of 73 judged projects still have no signal before their public date.
 
 ## The second run, with the three changes
@@ -56,6 +57,24 @@ After the first run the report listed 42 records tied to no project that say "da
 
 Three sites that fit no known project carry a company and coordinates, all from well reports: two in Travis County and one in Carson County. They are unreviewed and are not named in this repository.
 
+## The owner's review of the 58 sites
+
+On November 23, 2026 the owner read a list of the 58 sites that fit no known project and reach the bar of 3, each with a link to its record, and gave a verdict for each group.
+
+| What the record is | Sites | Verdict |
+|---|---|---|
+| A government's own computers: a hosting contract, equipment, a vendor's paper | 28 | Rejected |
+| A rule or a discussion on data centers, with no project named | 20 | Confirmed |
+| An agenda about a specific project | 5 | Confirmed |
+| Well reports with a company and coordinates | 3 | Confirmed |
+| ERCOT planning files with a project number | 2 | Confirmed |
+
+- **About half of what reaches a reviewer at this bar is noise:** 28 of 58, seven a year. All 28 are a county or a city buying data center services for itself, and 22 of them are Harris County and Houston.
+- **30 of 58 are worth an alert by the owner's reading,** 20 of them because the owner decided that a moratorium or a zoning rule is an alert.
+- **A verdict on this list publishes nothing.** No alert exists until a site is confirmed on the reviewer desk, and the desk has no database yet.
+- The list names companies and is not in this repository.
+- **A rule could take most of the 28 out before a reviewer sees them:** an agenda item about a government's own information technology. That is a proposal. Nothing is changed.
+
 ## Decided
 
 The owner approved all of this on November 23, 2026. It is done, and the second run above has it.
@@ -81,7 +100,7 @@ The owner approved all of this on November 23, 2026. It is done, and the second 
 
 - **The public dates.** Each is the earliest news report found. An older report would shorten or erase the one lead. 49 projects have no public date and are not judged.
 - **The day an agenda file was posted.** It is not kept, so a file counts from the day of its meeting. The one lead is 39 days on that rule and 70 days by the file's own date.
-- **How many of the 59 sites a reviewer would call noise.** None has been read as a reviewer would.
+- **Each of the 58 sites one at a time.** The owner gave the verdicts by group, not site by site. Two of the 20 policy items are passing mentions of data centers and not a rule.
 - **The ties.** A program tied each record to a project, and nobody has checked them. One is known to be wrong: a Carrollton item on the city's own computing contract is tied to a Garland project by the vendor's name. That project is not judged.
 - **The Comptroller's list as it stood in the past.** A company counts as listed from the day its registration took effect. Whether the list showed it that day is not known.
 - **Whether a control county has a project.** The screen behind the list rests on two or three searches a county.

@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — The owner reviewed the 58 sites: 30 confirmed, 28 rejected
+
+- The owner read a list of the 58 sites that fit no known project and reach the bar of 3, with a link to each record, and gave a verdict for each group.
+- **Rejected, 28:** a government's own computers. 22 of them are Harris County and Houston.
+- **Confirmed, 30:** 20 rules or discussions on data centers, 5 agendas about a specific project, 3 groups of well reports and 2 ERCOT planning files.
+- So at the bar of 3 about half of what reaches a reviewer is noise, seven sites a year in these records.
+- **A verdict on the list publishes nothing.** No alert exists until a site is confirmed on the reviewer desk, and the desk has no database yet. The list is not in the repository.
+- The first version of the list cut each record's words short. It was rebuilt to show the whole agenda item.
+- **Not verified:** each site one at a time. The verdicts were given by group. Two of the 20 policy items are passing mentions and not a rule.
+- **Proposed, not built:** a rule that sets aside an agenda item about a government's own information technology.
+
 ## November 23, 2026 — A rule on data centers is an alert, and a watch on the mailboxes
 
 **The owner's decisions**
