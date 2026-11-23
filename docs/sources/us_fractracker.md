@@ -35,7 +35,7 @@ The backtest in milestone M9 needs a list of known projects. Before taking any r
 - **Nothing has been taken since.** The agreement opens one channel: the spreadsheet FracTracker links from the map. It has not been opened. Taking it waits for the owner's word.
 - **The map's service stays closed to programs.** Esri's section 2.3 is Esri's rule, and FracTracker's terms do not lift it.
 - What the terms bind the project to: use that fits FracTracker's mission as it judges, FracTracker Alliance cited in anything public, and co-authorship offered where published work relies heavily on its data.
-- A letter to FracTracker is drafted, not sent. It goes to `info@fractracker.org`. The Terms of Service name that address for questions on whether a use fits the mission, read on November 22, 2026. The contact page lists the same address for general inquiries.
+- **The owner sent a letter to FracTracker on November 23, 2026, through the form on its website.** It says how the data has been used and asks whether that use fits FracTracker's mission. No answer yet. It was first drafted for `info@fractracker.org`. The Terms of Service name that address for questions on whether a use fits the mission, read on November 22, 2026. The contact page lists the same address for general inquiries.
 
 ## The owner said to use the data, November 23, 2026
 

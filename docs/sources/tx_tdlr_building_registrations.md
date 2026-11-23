@@ -54,8 +54,8 @@ Texas requires a building project above a cost threshold to be registered with t
 
 **The owner chose the first on November 23, 2026: write to the agency first.**
 
-- A letter is drafted and not sent. Sending it is the owner's to do.
-- It goes to `Open.Records@tdlr.texas.gov`, the Public Information Coordinator in the Office of the General Counsel. The agency's policy page names that address for requests for information, read in the copy saved on November 22, 2026.
+- **The owner sent the letter on November 23, 2026.** No answer yet.
+- It was drafted for `Open.Records@tdlr.texas.gov`, the Public Information Coordinator in the Office of the General Counsel. The agency's policy page names that address for requests for information, read in the copy saved on November 22, 2026.
 - The letter asks whether a slow reader may use the search, and otherwise for registrations in the 30 counties since January 1, 2023 as a file.
 - **Until the agency answers, the search is asked nothing.**
 

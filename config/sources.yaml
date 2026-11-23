@@ -134,7 +134,7 @@ sources:
     robots_status: allowed
     verified_at: null
     personal_rows: true
-    notes: Proposed on November 23, 2026 at the owner's request. Not in the build plan's table and nothing collects it. The robots file leaves /TABS/ open and bars every .csv address, and the terms say nothing on automated access. The search answers only through the page's own script call, which has not been asked anything. The owner chose to write to the agency first, and the search is asked nothing until it answers. See docs/sources/tx_tdlr_building_registrations.md.
+    notes: Proposed on November 23, 2026 at the owner's request. Not in the build plan's table and nothing collects it. The robots file leaves /TABS/ open and bars every .csv address, and the terms say nothing on automated access. The search answers only through the page's own script call, which has not been asked anything. The owner wrote to the agency on November 23, 2026, and the search is asked nothing until it answers. See docs/sources/tx_tdlr_building_registrations.md.
 
   - id: tx_comptroller_local_agreements
     state: TX

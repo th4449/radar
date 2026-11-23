@@ -2,6 +2,13 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — Two letters sent by the owner
+
+- **FracTracker Alliance:** sent through the form on its website. It says how the tracker data has been used and asks whether that use fits FracTracker's mission.
+- **TDLR:** sent. It asks whether a slow reader may use the registration search. Until the agency answers, the search is asked nothing.
+- No answer to either yet.
+- A review list of the 58 sites that fit no known project was made for the owner, with a link to each record. It is not in the repository: nothing on it has been reviewed.
+
 ## November 23, 2026 — The Comptroller's list is saved by hand
 
 **The owner's decisions**
