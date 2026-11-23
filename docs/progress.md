@@ -2,6 +2,18 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: the Revize files stay closed, on the owner's word
+
+**The owner said to leave the 24 Revize sites' files closed.** No address is built to pass the robots rule.
+
+- The 24 sites are marked `robots_bar` in `config/mi_agenda_site_terms.csv`, the way Texas' two such sites are. No run asks them for anything, their lists included. A list with no file gives the radar nothing, and each run would have been refused 24 times.
+- **I told the owner the lists would still be read. That was wrong** by Texas' own precedent, and is corrected here.
+- **What a collector could take is now 112 rows of 53 governments,** 48 with their governing body: Allegan 12, Oakland 10, Washtenaw 9, Kalamazoo 6, Monroe 6, Wayne 5. It was 168 rows of 77.
+- Seven other sites Revize builds stay cleared. Four gave the run a file. Three were not settled by it: Allegan, Birmingham and Sylvan Lake.
+- A letter to Revize is not written. It would be the owner's to send.
+
+**Not verified:** whether the three unsettled Revize sites' files are barred too. A run would be refused and say so.
+
 ## November 23, 2026 — M11: one run by hand of the Michigan collectors, nothing stored
 
 **On the owner's word.** Each cleared page once and at most one agenda file from each, then Ann Arbor's list and its published agendas. The run log stayed in memory and the files in a scratch folder outside the repository. Both sources are still `manual`.

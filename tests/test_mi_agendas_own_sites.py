@@ -1,9 +1,9 @@
 """The own-sites agenda collector for Michigan, run against saved pages.
 
 Ten real pages, saved on November 23, 2026 with one identified request each and cut down to the
-part that lists agendas. Each fixture's .meta.json says so. Every one is a page the agenda
-inventory clears, of a governing body, and between them they cover the six counties. No test
-here touches the network.
+part that lists agendas. Each fixture's .meta.json says so. Every one was a page the agenda
+inventory cleared that day, of a governing body, and between them they cover the six counties.
+Chelsea's was closed later the same day. No test here touches the network.
 
 The source is marked manual: no job reads it until the owner says so. The run tests use a copy
 of the source marked http, as it will be then.
@@ -24,6 +24,7 @@ from collectors.base import Fetcher, LocalArchive, NotPermitted
 from collectors.mi.agenda_pages import MichiganAgendaPages
 from collectors.tx.agenda_pages import (
     AgendaPages,
+    Page,
     cleared_pages,
     find_agenda_links,
     find_date,
@@ -81,6 +82,11 @@ def test_each_saved_page_is_one_the_inventory_clears_and_was_cut_down():
         assert m["source_id"] == "mi_agendas_own_sites"
         assert m["trimmed"] is True and m["bytes"] < m["original_bytes"]
         assert m["url"] == m["final_url"]  # none of the ten redirected
+        if name == "chelsea":
+            # Cleared when it was saved. Closed the same day: its files sit on a host whose
+            # robots rule bars them, and the owner said to leave them closed.
+            assert m["url"] not in CLEARED
+            continue
         page = CLEARED[m["url"]]
         assert len(page.bodies) == 1
         counties.update(page.counties)
@@ -266,8 +272,11 @@ def test_a_notice_that_there_is_no_meeting_is_not_an_agenda():
 
 def test_the_pages_read_are_the_ones_michigans_inventory_clears():
     governments = {p.government for p in CLEARED.values()}
-    assert (len(CLEARED), len(governments)) == (145, 76)
-    assert {"Chelsea city", "Novi city", "Pontiac city", "Oshtemo charter township"} <= governments
+    # 145 pages of 76 governments until the run by hand of November 23, 2026. It met 24 sites
+    # whose agenda files sit on a host that bars them as the sites write their addresses.
+    assert (len(CLEARED), len(governments)) == (101, 52)
+    assert {"Allegan city", "Novi city", "Oshtemo charter township"} <= governments
+    assert not governments & {"Chelsea city", "Pontiac city", "Allen Park city", "Milan city"}
     # Held for the owner by their own terms, built by CivicPlus, refused, or closed by robots.
     assert not governments & {
         "Dearborn city",
@@ -404,6 +413,8 @@ def test_a_revize_sites_list_is_read_and_its_files_are_refused_as_the_site_write
     A Revize site sends a request for a file on to Revize's file host. That host's robots rule
     allows an address that ends in .pdf. The site writes the address with ?t= and a number
     after it, so the rule bars it. The fetcher obeys the rule as written and leaves the site.
+    The owner said to leave those files closed, and the 24 sites are no longer cleared, so no
+    run asks. This holds what the fetcher does if one is asked.
     """
     file = "https://www.city-chelsea.org/11.09.26%20Agenda.pdf?t=202611051031130"
     kept_at = "https://cms3.revize.com/revize/chelseami/11.09.26%20Agenda.pdf?t=202611051031130"
@@ -413,7 +424,8 @@ def test_a_revize_sites_list_is_read_and_its_files_are_refused_as_the_site_write
     site.routes[kept_at] = httpx.Response(200, content=agenda(9), headers=PDF)
     site.routes["https://cms3.revize.com/robots.txt"] = httpx.Response(200, text=REVIZE_ROBOTS)
     sink = MemorySink()
-    summary = run(site, sink, tmp_path, pages=(CLEARED[CHELSEA], CLEARED[ERIE]))
+    chelsea = Page(CHELSEA, "Chelsea city", ("Washtenaw",), ("Chelsea City Council",))
+    summary = run(site, sink, tmp_path, pages=(chelsea, CLEARED[ERIE]))
     assert summary.status == "partial"
     assert kept_at not in site.page_urls()
     assert list(sink.runs[1]["detail"]["refused_hosts"]) == ["www.city-chelsea.org"]

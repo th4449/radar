@@ -3,7 +3,7 @@
 - Source id: `mi_agendas_own_sites`
 - Interface: each government's own website. The list is `config/mi_agenda_inventory.csv`
 - Checked: November 23, 2026
-- Result: **77 of 220 governments have a row a collector could take. A collector is written. No job reads any of them.** The source is still marked `manual`, and only the owner changes that.
+- Result: **53 of 220 governments have a row a collector could take. A collector is written. No job reads any of them.** It was 77 until the run by hand of November 23 met 24 sites whose files a robots rule bars. The owner said to leave those closed. The source is still marked `manual`, and only the owner changes that.
 - Collector: `collectors/mi/agenda_pages.py`, which is Texas' `collectors/tx/agenda_pages.py` pointed at Michigan's inventory
 - Tests: `tests/test_mi_agendas_own_sites.py`, on ten saved pages
 - Counties: Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne
@@ -112,6 +112,12 @@ On the owner's word the collector ran once, by hand, with nothing stored: each c
 
 **The draft signals were stored nowhere.** 15 of the 23 came from the words "data center", in the agendas of 14 governments: mostly a moratorium or a zoning amendment under discussion, one a line in a list of bills. The other 8 came from "special land use" or "development agreement" alone, for a drive-through, a campground and the like. "Special land use" is Michigan's ordinary term for a use that needs a hearing. The keyword rules were written for Texas and are untried here. One township's file came out of extraction with its letters spaced apart.
 
+**After the run: 53 governments.** The 24 Revize sites are closed, on the owner's word. What a collector could take is now 112 rows of 53 governments, 48 of them with their governing body: Allegan 12, Oakland 10, Washtenaw 9, Kalamazoo 6, Monroe 6 and Wayne 5. That is 101 pages on own sites and Ann Arbor on Legistar.
+
+The 24: Allen Park, Brownstown Township, Charleston Township, Chelsea, Clarkston, Flat Rock, Franklin, Freedom Township, Galesburg, Grosse Pointe, Grosse Pointe Shores, Huntington Woods, Milan, Orion Township, the village of Oxford, Pontiac, Riverview, South Lyon, South Rockwood, Springfield Township, Sumpter Township, Van Buren Township, Webster Township and Woodhaven.
+
+Seven other sites Revize builds stay cleared. Four gave the run a file: Ecorse, Richland Township, York Township and Ypsilanti Township. Three were not settled by it: Allegan, whose files failed, and Birmingham and Sylvan Lake, which had no file in the run's window.
+
 ## Not verified
 
 - **The pages were not read again after the fixes.** The fixes are tested on the file names and addresses the run reported, not on the pages.
@@ -126,7 +132,7 @@ On the owner's word the collector ran once, by hand, with nothing stored: each c
 ## Before a job reads it
 
 1. The owner decides the eight held sites. Until then they stay held.
-2. **The owner decides the Revize file addresses.** As the sites write them the robots rule bars them. The same file without the `?t=` mark is an address the rule allows. Asking for that address is a choice the collector does not make by itself. Until the owner decides, a Revize site's list is read and its files are not.
+2. **Decided: the Revize files stay closed.** As the sites write them the robots rule bars them. The same file without the `?t=` mark is an address the rule allows. The owner said on November 23, 2026 to leave them closed. The 24 sites are marked `robots_bar` in `config/mi_agenda_site_terms.csv`, as Texas' two such sites are, so no run asks them for anything. A letter to Revize is not written.
 3. The owner says to run it.
 4. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
 5. The keyword rules are tried against Michigan agendas before any Michigan signal is shown to a reviewer.
