@@ -12,6 +12,7 @@ from pipeline.config import load_sources
 
 from .helpers import CONTACT, FakeClock, Site
 from .test_tx_comptroller_data_centers import BODY, ROBOTS, URL
+from .test_tx_comptroller_data_centers import source as lists_when_a_job_read_it
 
 
 def test_every_source_cleared_for_fetching_has_a_collector_and_no_other_does():
@@ -19,9 +20,18 @@ def test_every_source_cleared_for_fetching_has_a_collector_and_no_other_does():
     cleared = {
         s.id for s in load_sources().sources if s.may_fetch_automatically and s.layer != "lookup"
     }
-    assert cleared == set(runner.REGISTRY)
+    # A source a person saves by hand keeps its collector: the saved page goes through it.
+    by_hand = {s.id for s in load_sources().sources if s.hand_saved}
+    assert cleared | by_hand == set(runner.REGISTRY)
+    assert not cleared & by_hand
     for source_id, collector in runner.REGISTRY.items():
         assert collector.source_id == source_id
+
+
+def test_a_source_saved_by_hand_does_not_start_and_the_refusal_says_what_to_do():
+    lists = load_sources().by_id("tx_comptroller_data_centers")
+    with pytest.raises(runner.CannotStart, match="collectors.by_hand"):
+        runner.run_source(lists, dry_run=True, contact=CONTACT)
 
 
 def test_a_dry_run_fetches_and_keeps_nothing(monkeypatch):
@@ -29,7 +39,7 @@ def test_a_dry_run_fetches_and_keeps_nothing(monkeypatch):
     web = Site({URL: httpx.Response(200, content=BODY)}, robots=ROBOTS)
     clock = FakeClock()
     summary = runner.run_source(
-        load_sources().by_id("tx_comptroller_data_centers"),
+        lists_when_a_job_read_it(),
         dry_run=True,
         contact=CONTACT,
         transport=web.transport,
@@ -52,7 +62,7 @@ def test_a_real_run_needs_a_database_and_an_archive(monkeypatch):
     web = Site({URL: httpx.Response(200, content=BODY)}, robots=ROBOTS)
     with pytest.raises(runner.CannotStart, match="DATABASE_URL"):
         runner.run_source(
-            load_sources().by_id("tx_comptroller_data_centers"),
+            lists_when_a_job_read_it(),
             dry_run=False,
             contact=CONTACT,
             transport=web.transport,
@@ -70,8 +80,13 @@ def test_command_line_exit_codes(capsys, monkeypatch):
 
 def test_every_collector_has_a_workflow_file_that_is_not_scheduled():
     workflows = Path(__file__).parents[1] / ".github" / "workflows"
+    sources = load_sources()
     for source_id in runner.REGISTRY:
-        text = (workflows / f"collect-{source_id.replace('_', '-')}.yml").read_text()
+        path = workflows / f"collect-{source_id.replace('_', '-')}.yml"
+        if sources.by_id(source_id).hand_saved:
+            assert not path.exists()  # no job reads it, so no workflow offers to
+            continue
+        text = path.read_text()
         assert f"source_id: {source_id}" in text
         assert "workflow_dispatch:" in text
         # A schedule is a launch decision. It needs the owner's go-ahead.
@@ -86,7 +101,7 @@ def test_every_collector_has_a_workflow_file_that_is_not_scheduled():
 def test_a_history_run_is_refused_for_a_collector_that_has_no_history_setting():
     import datetime as dt
 
-    lists = load_sources().by_id("tx_comptroller_data_centers")
+    lists = lists_when_a_job_read_it()
     with pytest.raises(runner.CannotStart, match="no history"):
         runner.run_source(lists, dry_run=True, contact=CONTACT, history_since=dt.date(2023, 1, 1))
 

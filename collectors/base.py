@@ -466,6 +466,14 @@ class Collector:
     def urls(self) -> Iterable[str]:
         raise NotImplementedError
 
+    def saved_page(self, body: bytes) -> str:
+        """The address of the page a person saved in a browser, after checking the file is
+        that page. Raises LayoutChanged when it is not.
+
+        Only the collector of a source marked hand_saved defines this. See collectors/by_hand.py.
+        """
+        raise NotImplementedError(f"{self.source_id} takes no page saved by hand")
+
     def follow(self, result: FetchResult) -> Iterable[str]:
         """More URLs found in a page that was just fetched in full. Each URL is fetched once."""
         return ()

@@ -73,6 +73,10 @@ def run_source(
 ) -> RunSummary:
     if source.id not in REGISTRY:
         raise CannotStart(f"no collector is written for {source.id}")
+    if source.hand_saved:
+        raise CannotStart(
+            f"{source.id} is saved by a person, not read by a job. See python -m collectors.by_hand"
+        )
     if not source.may_fetch_automatically:
         raise CannotStart(f"{source.id} is marked manual in config/sources.yaml")
     if history_since is None:

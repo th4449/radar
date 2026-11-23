@@ -37,3 +37,10 @@ def test_the_site_never_lists_a_source_as_read_that_may_not_be_fetched():
     assert "TCEQ pending air permit lists on the older site" in read
     assert "Texas newspaper public notices, including 30 day tax abatement notices" not in read
     assert not [s for s in data["sources"] if s["state"] == "MI" and s["read"]]
+
+
+def test_a_page_a_person_saves_is_listed_as_read_and_said_to_be_saved_by_hand():
+    data = export.build()
+    (lists,) = [s for s in data["sources"] if s["name"] == "Comptroller registered data centers"]
+    assert lists["read"] and lists["by_hand"]
+    assert [s["name"] for s in data["sources"] if s["by_hand"]] == [lists["name"]]

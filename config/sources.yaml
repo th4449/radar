@@ -115,12 +115,13 @@ sources:
     name: Comptroller registered data centers
     url: https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php
     layer: baseline
-    method: http
+    method: manual
     intended_method: http
     cadence: monthly
-    robots_status: allowed
+    robots_status: blocked
     verified_at: 2026-11-19
-    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt and the fetcher stored nothing, on two runs about six hours apart. The owner decides whether to mark the source manual. See docs/sources/tx_comptroller_data_centers.md.
+    hand_saved: true
+    notes: One page with two tables. No county or address field. The site says its information is public domain. A job read it on November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt on two runs about six hours apart, and the owner marked the source manual that day. A person saves the page in a browser once a month and stores it with collectors/by_hand.py. See docs/sources/tx_comptroller_data_centers.md.
 
   - id: tx_tdlr_building_registrations
     state: TX

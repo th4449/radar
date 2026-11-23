@@ -4,7 +4,7 @@
 - Layer: baseline of known sites
 - Page: https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php
 - Checked: November 19, 2026
-- Method: plain HTTP, once a month. Collector: `collectors/tx/comptroller_data_centers.py`.
+- Method: **saved by a person, once a month, since November 23, 2026.** No job reads it. See "Saved by hand". Before that: plain HTTP. Collector and parser: `collectors/tx/comptroller_data_centers.py`.
 - Fixture: `tests/fixtures/tx_comptroller_data_centers/data-center-lists.html`, saved November 19, 2026 (UTC November 20) with one request.
 
 ## What was verified
@@ -46,4 +46,30 @@ Read from the saved copy.
 - The owner said on November 23, 2026 to ask once more on a later day, and later that day said to give the site a run.
 - **That run, at 11:46 UTC on November 23, was refused the same way.** One request, for the robots file. Nothing was stored and nothing else was tried. That makes three requests for the robots file that day, about six hours apart, all refused.
 - A second refusal on the same day does not show whether the refusal is lasting.
-- The source's `method` is unchanged and nothing collects it on a schedule. **The owner decides** whether to mark it manual now. While the robots file answers 403, every run stops as these did.
+- **The owner marked the source manual the same day.** See "Saved by hand".
+
+## Saved by hand
+
+The owner's decision of November 23, 2026. In `config/sources.yaml` the source is `method: manual`, `robots_status: blocked` and `hand_saved: true`. The fetcher refuses it, by a job or by hand, and its workflow file is gone.
+
+**What a person does, about once a month**
+
+1. Open https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php in a browser.
+2. Save the page as "Webpage, HTML only". Not a web archive and not a PDF.
+3. Run the command on the saved file, with `DATABASE_URL` and `RADAR_ARCHIVE_DIR` set as for a real run:
+
+   ```
+   uv run python -m collectors.by_hand tx_comptroller_data_centers ~/Downloads/data-center-lists.html
+   ```
+
+**What the command does**
+
+- It makes no request.
+- It reads the file with the collector's own parser. A file that is not the page with its two tables is refused and nothing is stored: the site's refusal page, a browser's archive format, the wrong page.
+- It stores the file with the page's address, the time and the file's hash, as a run does, and the record says a person saved it. The time is the file's own unless `--saved-at` gives another. The file's name is not kept.
+- The rules then use the newest stored copy, whoever stored it.
+
+**Not verified**
+
+- **That a browser's "HTML only" save is a file the parser reads.** The command was tested on the copy a job fetched on November 19, 2026. No page saved from a browser has been tried. If the parser refuses one, nothing is stored and the command says so.
+- Whether the site would answer a job again. To find out, the owner sets the source back and one run asks.

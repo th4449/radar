@@ -50,11 +50,14 @@ def build() -> dict:
             "name": s.name,
             "state": s.state,
             "url": str(s.url),
-            "read": s.may_fetch_automatically,
+            "read": s.may_fetch_automatically or s.hand_saved,
+            # A person saves the page in a browser. No program asks the site for it.
+            "by_hand": s.hand_saved,
             "use": s.layer,
         }
         for s in load_sources().sources
-        if s.layer == "signal" or (s.may_fetch_automatically and s.layer != "lookup")
+        if s.layer == "signal"
+        or ((s.may_fetch_automatically or s.hand_saved) and s.layer != "lookup")
     ]
     return {"states": states, "sources": sources}
 

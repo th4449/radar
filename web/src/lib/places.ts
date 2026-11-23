@@ -19,8 +19,10 @@ export interface SourceInfo {
   name: string;
   state: string;
   url: string;
-  /** True when a collector reads this source today. */
+  /** True when the radar holds this source today: a collector reads it, or a person saves it. */
   read: boolean;
+  /** True when a person saves the page in a browser and no program asks the site for it. */
+  by_hand: boolean;
   use: string;
 }
 

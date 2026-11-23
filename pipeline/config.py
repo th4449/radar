@@ -43,6 +43,9 @@ class Source(_Strict):
     # The source is a list that names people, such as permit applicants or well owners. Its
     # documents are stored restricted: an administrator reads them, a reviewer does not.
     personal_rows: bool = False
+    # The site refuses the radar's reader, and a person saves the page in a browser and stores
+    # it with collectors/by_hand.py. Only the owner marks a source this way.
+    hand_saved: bool = False
     notes: str = ""
 
     @model_validator(mode="after")
@@ -53,6 +56,8 @@ class Source(_Strict):
                 raise ValueError(f"{self.id}: method {self.method} needs verified_at")
             if self.robots_status != "allowed":
                 raise ValueError(f"{self.id}: method {self.method} needs robots_status allowed")
+        if self.hand_saved and self.method != "manual":
+            raise ValueError(f"{self.id}: hand_saved is for a source marked manual")
         if not self.id.startswith(self.state.lower() + "_"):
             raise ValueError(f"{self.id}: id prefix does not match state {self.state}")
         return self

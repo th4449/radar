@@ -36,7 +36,16 @@ ROBOTS = "User-agent: *\nDisallow: /*/\nAllow: /taxes/\nAllow: /economy/\n"
 
 
 def source():
-    return load_sources().by_id("tx_comptroller_data_centers")
+    """The source as it stood on November 19, 2026, when a job read it.
+
+    On November 23 the site refused the reader and the owner marked the source manual. The
+    collector is kept and still tested: a person's saved page goes through its parser, and the
+    setting comes back if the site answers again.
+    """
+    today = load_sources().by_id("tx_comptroller_data_centers")
+    return today.model_copy(
+        update={"method": "http", "robots_status": "allowed", "hand_saved": False}
+    )
 
 
 # --- the parser ---------------------------------------------------------------------------------
@@ -126,11 +135,21 @@ def run(tmp_path, sink, robots=ROBOTS):
     return summary, web
 
 
-def test_the_source_is_cleared_for_the_fetcher():
-    src = source()
+def test_the_source_is_saved_by_hand_and_no_job_reads_it():
+    src = load_sources().by_id("tx_comptroller_data_centers")
     assert str(src.url) == URL == META["url"]
-    assert src.may_fetch_automatically
+    assert not src.may_fetch_automatically
+    assert src.hand_saved and src.robots_status == "blocked"
     assert (FIXTURES.parents[2] / "docs" / "sources" / f"{src.id}.md").exists()
+
+
+def test_the_fetcher_refuses_the_source_as_it_is_marked_today():
+    from collectors.base import Fetcher, NotPermitted
+
+    src = load_sources().by_id("tx_comptroller_data_centers")
+    for by_hand in (False, True):
+        with pytest.raises(NotPermitted):
+            Fetcher(src, contact=CONTACT, by_hand=by_hand)
 
 
 def test_the_page_is_archived_end_to_end(tmp_path):

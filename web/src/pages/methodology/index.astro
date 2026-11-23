@@ -53,6 +53,7 @@ const stateOf = (code: string) => STATES.find((s) => s.code === code)?.name ?? c
             , {stateOf(s.state)}.
             {s.use === "baseline" && " A list of companies, used to recognize a name in other records."}
             {s.use === "context" && " Statewide totals, kept for context. It names no site."}
+            {s.by_hand && " A person saves this page by hand. No program asks the site for it."}
           </li>
         ))
       }

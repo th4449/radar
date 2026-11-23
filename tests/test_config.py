@@ -85,6 +85,28 @@ def test_source_cannot_be_automated_without_verification():
     assert ok.may_fetch_automatically
 
 
+def test_only_a_manual_source_can_be_saved_by_hand():
+    base = dict(
+        id="tx_example",
+        state="TX",
+        name="Example",
+        url="https://example.gov/x",
+        layer="baseline",
+        intended_method="http",
+        cadence="monthly",
+        notes="",
+        verified_at=dt.date(2026, 11, 19),
+        hand_saved=True,
+    )
+    with pytest.raises(ValidationError, match="hand_saved"):
+        config.Source(**base, method="http", robots_status="allowed")
+    kept = config.Source(**base, method="manual", robots_status="blocked")
+    assert kept.hand_saved and not kept.may_fetch_automatically
+    # One source is marked so today: the owner's decision of November 23, 2026.
+    marked = {s.id for s in config.load_sources().sources if s.hand_saved}
+    assert marked == {"tx_comptroller_data_centers"}
+
+
 def test_source_rejects_unknown_keys():
     with pytest.raises(ValidationError):
         config.SourcesFile.model_validate({"sources": [], "extra": 1})

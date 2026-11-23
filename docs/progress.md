@@ -2,6 +2,26 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — The Comptroller's list is saved by hand
+
+**The owner's decisions**
+
+- Mark the Comptroller's list of registered data centers manual, and build the command that stores a page a person saved.
+- For TDLR registrations, write to the agency first. The letter is drafted and not sent.
+
+**Built, tests first**
+
+- `python -m collectors.by_hand <source-id> <file>` stores a page a person saved in a browser. It makes no request, checks the file with the collector's own parser, and stores it as a run does, marked as saved by hand. A file that is not the page is refused and nothing is stored.
+- A new setting in `config/sources.yaml`, `hand_saved`, which only a manual source may carry. The Comptroller's list is `manual`, `blocked` and `hand_saved`. The fetcher refuses it, and its workflow file is removed.
+- The collector and its parser stay, with their tests, on the source as it stood on November 19.
+- The methodology page lists the source as read and says a person saves it.
+- 18 tests. 1,054 pass. The site's type check, tests and build pass in a copy outside iCloud.
+
+**Not verified**
+
+- **That a browser's "HTML only" save is a file the parser reads.** No page saved from a browser has been tried. The test file is the copy a job fetched on November 19.
+- No real database holds a copy of the list yet. The first hand-saved page will be the first.
+
 ## November 23, 2026 — M9: a name added, the Comptroller refused again, TDLR proposed
 
 **The owner's instructions**

@@ -586,6 +586,7 @@
       "state": "TX",
       "url": "https://www.texaspublicnotices.com/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -593,6 +594,7 @@
       "state": "TX",
       "url": "https://permit-search.tceq.texas.gov/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -600,6 +602,7 @@
       "state": "TX",
       "url": "https://www.tceq.texas.gov/permitting/air/airpermit-applications-notices",
       "read": true,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -607,6 +610,7 @@
       "state": "TX",
       "url": "https://cdn.fs.pathlms.com/1dL9jIAmRK2KniXfbkzs?dl=true",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -614,6 +618,7 @@
       "state": "TX",
       "url": "https://www.ercot.com/committees/other/rpg",
       "read": true,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -621,6 +626,7 @@
       "state": "TX",
       "url": "https://www.ercot.com/committees/tac/llwg",
       "read": true,
+      "by_hand": false,
       "use": "context"
     },
     {
@@ -628,6 +634,7 @@
       "state": "TX",
       "url": "https://interchange.puc.texas.gov/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -635,6 +642,7 @@
       "state": "TX",
       "url": "https://www.twdb.texas.gov/groundwater/data/data-well-reports.asp",
       "read": true,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -642,6 +650,7 @@
       "state": "TX",
       "url": "https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php",
       "read": true,
+      "by_hand": true,
       "use": "baseline"
     },
     {
@@ -649,6 +658,7 @@
       "state": "TX",
       "url": "https://www.tdlr.texas.gov/TABS/Search",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -656,6 +666,7 @@
       "state": "TX",
       "url": "https://comptroller.texas.gov/economy/development/search-tools/sb1340/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -663,6 +674,7 @@
       "state": "TX",
       "url": "https://rjionline.org/news/welcome-to-agenda-watch/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -670,6 +682,7 @@
       "state": "TX",
       "url": "https://webapi.legistar.com/",
       "read": true,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -677,6 +690,7 @@
       "state": "TX",
       "url": "https://github.com/th4449/radar/blob/main/config/tx_agenda_inventory.csv",
       "read": true,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -684,6 +698,7 @@
       "state": "MI",
       "url": "https://mi-psc.my.site.com/s/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -691,6 +706,7 @@
       "state": "MI",
       "url": "https://www.egle.state.mi.us/aps/downloads/permits/PubNotice/NSR_PTIs_Pending_Decision.pdf",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -698,6 +714,7 @@
       "state": "MI",
       "url": "https://www.michigan.gov/egle/maps-data/mienviroportal",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -705,6 +722,7 @@
       "state": "MI",
       "url": "https://www.michiganbusiness.org/services/data-center/",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     },
     {
@@ -712,6 +730,7 @@
       "state": "MI",
       "url": "https://zeus-milenia.legislature.mi.gov/documents/mcl/pdf/mcl-125-3103.pdf",
       "read": false,
+      "by_hand": false,
       "use": "signal"
     }
   ]

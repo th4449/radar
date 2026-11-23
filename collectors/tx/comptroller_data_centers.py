@@ -133,3 +133,7 @@ class ComptrollerDataCenters(Collector):
 
     def urls(self) -> list[str]:
         return [URL]
+
+    def saved_page(self, body: bytes) -> str:
+        parse(body)  # raises LayoutChanged unless both tables are there with their columns
+        return URL
