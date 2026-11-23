@@ -16,11 +16,12 @@ Newest first. Each entry says what was built, what was verified live and what is
 - `config/counties_tx_control.yaml`: the eleven control counties. The radar does not watch them.
 - 14 tests, written first. 988 pass.
 
-**Collected, into the local database and a folder outside the repository and outside iCloud**
+**Collected, into a database of its own on the local Postgres and a folder outside the repository and outside iCloud**
 
 - **Well reports:** one download. 15,986 rows kept since January 1, 2023, in the 30 counties and the eleven controls.
 - **Pending air permit lists:** both pages as they stand.
 - **Still running when this was written:** the ERCOT planning group, governments' own agenda pages and Legistar.
+- **A slip of mine.** The runs first wrote to the database the tests use, and 12 database tests failed because they expect it empty. One commit, `64b587d`, was made in that state. I stopped the three runs after 12 minutes, moved the 405 stored documents to a database of their own, checked the copy by count and hash, cleared the first and started the runs again. They skip what is stored. 988 tests pass.
 
 **FracTracker's file**
 
