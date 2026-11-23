@@ -35,7 +35,7 @@ The same paragraph allows an exception only under "a separate, written agreement
 The owner asked the Public Service Commission for a written agreement on November 19, 2026. The commission's Executive Business Section refused on November 20, 2026. The reply says the State of Michigan has not historically granted this permission and that its terms expressly prohibit automated access. It also says no agreement is needed to use information from the website. The full account is in [mi_mpsc_dockets.md](mi_mpsc_dockets.md).
 
 - **`mi_mpsc_dockets` is closed to automation.** The refusal is in writing.
-- **The two EGLE feeds stay restricted.** The answer came from the commission, not from EGLE, and the requests drafted for EGLE were not sent. But the reply states the practice of the State as a whole. Expect the same answer. Sending the EGLE requests is the owner's call.
+- **The two EGLE feeds stay restricted.** The answer came from the commission, not from EGLE, and the requests drafted for EGLE had not been sent then. The owner has since sent them, and said so on November 23, 2026. But the reply states the practice of the State as a whole. Expect the same answer. Sending the EGLE requests is the owner's call.
 
 ## Options for the owner
 

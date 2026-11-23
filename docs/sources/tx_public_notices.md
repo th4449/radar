@@ -38,7 +38,7 @@ Both the automated-access wording and the damages clause were read twice, once b
 
 ## Options for the owner
 
-1. Ask the Texas Press Association for written permission. The terms list a contact address on the site.
+1. Ask the Texas Press Association for written permission. The terms list a contact address on the site. **The owner has sent the request, and said so on November 23, 2026. No answer yet.**
 2. Have a reviewer subscribe to Smart Search alerts and read them. Whether a signal may then be recorded with a link back, and no copied text, is a question about these terms that the owner should settle, with counsel if needed.
 3. Go to the primary record instead. An abatement needs a public hearing and a posted agenda, so commissioners court and city agendas (milestone M8) carry the same event. The lead time there is the agenda posting period, which is shorter than 30 days.
 4. Check individual newspapers' own notice pages. Each has its own terms.

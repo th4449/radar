@@ -21,7 +21,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: The site's terms forbid automated collection and forbid putting its content in any database or archive, with liquidated damages. No collector. Needs the owner's decision. See docs/sources/tx_public_notices.md.
+    notes: The site's terms forbid automated collection and forbid putting its content in any database or archive, with liquidated damages. No collector. The owner has asked the Texas Press Association for permission. No answer yet. See docs/sources/tx_public_notices.md.
 
   - id: tx_tceq_air_pending
     state: TX
@@ -94,7 +94,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: Access is not barred, but the commission's link policy asks for a permission request before content is copied. Held until the owner decides. See docs/sources/tx_puc_interchange.md.
+    notes: Access is not barred, but the commission's link policy asks for a permission request before content is copied. The owner has sent that request. Held until the commission answers. See docs/sources/tx_puc_interchange.md.
 
   - id: tx_twdb_well_reports
     state: TX
@@ -146,7 +146,7 @@ sources:
     cadence: monthly
     robots_status: restricted
     verified_at: 2026-11-20
-    notes: The search pages are open, but the data is seven CSV files on assets.comptroller.texas.gov, and that host answers 403 for robots.txt. The fetcher refuses it. Held until the Comptroller answers or the owner decides. Chapter 380 and 381 agreements are reported within 14 days, so part of this feed is not lagging. See docs/sources/tx_comptroller_local_agreements.md.
+    notes: The search pages are open, but the data is seven CSV files on assets.comptroller.texas.gov, and that host answers 403 for robots.txt. The fetcher refuses it. The owner has asked the Comptroller. Held until it answers. Chapter 380 and 381 agreements are reported within 14 days, so part of this feed is not lagging. See docs/sources/tx_comptroller_local_agreements.md.
 
   - id: tx_comptroller_entity_lookup
     state: TX
@@ -221,7 +221,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: Two PDF lists on a State of Michigan host, one for permits to install and one for general permits. Treated as covered by the Michigan.gov terms, which bar automated access. Request for a written agreement drafted, not sent. See docs/sources/mi_egle_air_pending.md.
+    notes: Two PDF lists on a State of Michigan host, one for permits to install and one for general permits. Treated as covered by the Michigan.gov terms, which bar automated access. The owner has sent a request for a written agreement. No answer yet. See docs/sources/mi_egle_air_pending.md.
 
   - id: mi_egle_notices
     state: MI
@@ -233,7 +233,7 @@ sources:
     cadence: daily
     robots_status: restricted
     verified_at: 2026-11-19
-    notes: Michigan.gov terms bar automated access without a written agreement. The portal's public notice search needs no account. Its alerts do. Request for a written agreement drafted, not sent. See docs/sources/mi_egle_notices.md.
+    notes: Michigan.gov terms bar automated access without a written agreement. The portal's public notice search needs no account. Its alerts do. The owner has sent a request for a written agreement. No answer yet. See docs/sources/mi_egle_notices.md.
 
   - id: mi_msf_board
     state: MI

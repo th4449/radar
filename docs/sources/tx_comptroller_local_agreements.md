@@ -3,7 +3,7 @@
 - Source id: `tx_comptroller_local_agreements`
 - Page: https://comptroller.texas.gov/economy/development/search-tools/sb1340/
 - Checked: November 20, 2026
-- Result: **held. Manual for now.** The search pages are open. The data behind them sits on two other hosts whose robots files cannot be read, so our fetcher refuses them. No collector is written. A request to the Comptroller is drafted and not sent.
+- Result: **held. Manual for now.** The search pages are open. The data behind them sits on two other hosts whose robots files cannot be read, so our fetcher refuses them. No collector is written. **The owner has sent the request to the Comptroller, and said so on November 23, 2026. No answer yet.**
 
 ## What was verified
 
@@ -35,7 +35,7 @@ The earlier note called this record lagging. That is half right. The overview pa
 
 ## Options for the owner
 
-1. **Ask first. Recommended.** Send the drafted note to the Comptroller's transparency office. It asks whether a monthly download of the seven published CSV files is acceptable and whether the hosts have robots rules. Until an answer comes, a person downloads the files with the page's own buttons when needed.
+1. **Ask first. Recommended, and done:** the owner sent the note to the Comptroller's transparency office. It asks whether a monthly download of the seven published CSV files is acceptable and whether the hosts have robots rules. Until an answer comes, a person downloads the files with the page's own buttons when needed.
 2. **Stay manual.** A reviewer downloads `ch380.csv` once a month by hand. Seven clicks cover everything.
 3. **Approve an exception without asking.** Name the one host in config as publishing no robots rules, and collect the seven files monthly. The files are public, linked from a public page and called public domain. It still changes how the fetcher reads a refusal, for that host only.
 

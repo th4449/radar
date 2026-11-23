@@ -2,6 +2,24 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — Every drafted letter has been sent
+
+The owner said on November 23, 2026 that all the letters have been sent. The day each went out is not recorded here.
+
+| To | About | Answer |
+|---|---|---|
+| Michigan Public Service Commission | its docket site | Refused on November 20, 2026 |
+| Texas Press Association | the statewide public notice site | None yet |
+| Public Utility Commission of Texas | Interchange filings | None yet |
+| EGLE | pending air permit lists | None yet |
+| EGLE | MiEnviro Portal public notices | None yet |
+| Texas Comptroller | local development agreement files | None yet |
+| CivicPlus | its three agenda platforms | None yet. Sent November 21 |
+| FracTracker Alliance | how the tracker data is used | None yet. Sent through its website |
+| TDLR | the building registration search | None yet |
+
+**Nothing changes until an answer comes.** Every one of these sources stays as it is marked: no collector reads it. An answer is the owner's to pass on.
+
 ## November 23, 2026 — Two letters sent by the owner
 
 - **FracTracker Alliance:** sent through the form on its website. It says how the tracker data has been used and asks whether that use fits FracTracker's mission.

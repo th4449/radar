@@ -3,7 +3,7 @@
 - Source id: `tx_puc_interchange`
 - Site: https://interchange.puc.texas.gov
 - Checked: November 19, 2026
-- Result: **held as restricted until the owner decides.** Access is not barred. The commission's link policy asks for a permission request before content is copied, and our archive copies documents.
+- Result: **held as restricted until the commission answers.** Access is not barred. The commission's link policy asks for a permission request before content is copied, and our archive copies documents. **The owner has sent that request, and said so on November 23, 2026. No answer yet.**
 
 ## What was verified
 
