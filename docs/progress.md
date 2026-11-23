@@ -48,7 +48,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 - A scheduled task on the owner's computer checks two mailboxes at 10 and 4 on weekdays and reports any reply. It reads only: it sends nothing, changes nothing and does not say what an answer allows. It runs while the desktop app is open.
 - **What the mailboxes show today:** five letters went out on November 23 from the Anti-Corruption Action address, to the Texas Press Association, the PUC, EGLE twice and the Comptroller. No reply to any yet. CivicPlus sent only an automatic acknowledgment on November 21.
-- **No sent copy of the TDLR letter was found in any connected mailbox.** The owner says it was sent. Where its answer will arrive is not known.
+- **No sent copy of the TDLR letter was found in any connected mailbox** when the watch was set up. **The owner sent it later that day, at 16:38 UTC,** to the agency's open records address from the Anti-Corruption Action address. The sent copy is in the mailbox and the watch names it.
 
 ## November 23, 2026 — Every drafted letter has been sent
 
