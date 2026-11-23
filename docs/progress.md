@@ -2,6 +2,35 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — Built before going online: archive, real runs, email, backups
+
+**The owner's decision:** build everything before putting anything online. Nothing here is switched on.
+
+**Built, tests first**
+
+- **The archive in the hosted project.** `collectors/hosted_archive.py`: one private bucket, each file under its hash, never written over, and checked against its name when read back. A migration makes the bucket with no policy, so only the service key reaches it. The jobs pick their archive from the settings.
+- **A switch for real runs.** Every collector workflow is a dry run unless the repository variable `RADAR_LIVE` is the word true. New workflows run processing and the email job, by hand only. No commit can switch a real run on, and no workflow has a schedule.
+- **A sender for real email.** `pipeline/email_sender.py` hands a batch to Resend in one request, in plain words, each email with its own unsubscribe link and each batch with a key that stops it going twice. `--send` is refused unless a switch, the provider's key, the site's address and a from address are all set. The settings as they stand cannot send.
+- **A backup command and a restore trial.** `scripts/backup.py`. It refuses to write a dump inside the repository.
+- 30 tests. 1,117 pass.
+
+**Verified live**
+
+- **The archive, against the storage service's local copy:** a file stored, stored again, read back and a missing file asked for. The service answers a duplicate and a missing file with a 400 whose body carries the real status, and the store reads both forms.
+- **The backup, on the history database:** 5,919 documents dumped, restored into a scratch database and counted back whole. The first trial failed, rightly: the sites table needs the map extension, which a bare database lacks. The trial now prepares the scratch database.
+- Resend's batch address, its limit of 100 emails a request and its idempotency key, read in its documentation on November 23, 2026. I read the request example, the parameters and the response, not the whole page.
+
+**Not verified**
+
+- **Anything against a hosted service.** No hosted database, storage or email account exists.
+- That the storage service of a hosted project answers as its local copy does.
+- Whether the bucket's default size limit takes the largest file a collector keeps.
+
+**Not built yet**
+
+- A way to enter a record a person read by hand. It needs the owner's word on which sources and on keeping a copy: the public notice site's terms bar storing its content at all.
+- Hosting for the site.
+
 ## November 23, 2026 — M10: monitoring, the launch checklist and the runbook
 
 **The radar is not launched.** M10 builds what launch needs and launches nothing.
