@@ -27,6 +27,8 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 - One sheet, downloaded once through the spreadsheet's own export address: 1,733 rows, 230 in Texas, 98 in the 30 counties. It is kept outside this repository. See [us_fractracker.md](sources/us_fractracker.md).
 - A program matched 72 of the 98 to 51 of the list's 126 projects. **Nine proposed or approved projects matched nothing** and went to a research pass.
+- **The research pass:** four of the nine are already in the list under another name, one is outside the 30 counties, one is older than the 2023 cut and one is marketed land. **Two were added, with no date and rated low:** land on State Highway 16 in Bexar County and a 217 acre tract at Venus whose county is unsettled. The list now holds 128 projects. 79 have a public date.
+- A lead for a person: the City of Venus record that would date the Venus tract is on a meeting platform that is not cleared.
 - **FracTracker lists nothing in the eleven control counties** and nothing in the five test counties where the list has none.
 - It gives no date a project became public.
 

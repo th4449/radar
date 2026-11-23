@@ -2,7 +2,7 @@
 
 `known_projects_tx.csv` is the backtest's list of known data center projects in the 30 Texas test counties. It was built from news reports and public records only. On November 23, 2026 it was checked against FracTracker Alliance's dataset: see the section below. `backtest/projects.py` loads it and refuses a row that breaks a rule.
 
-It holds **126 projects in 25 counties**. All of it was researched on November 22, 2026.
+It holds **128 projects in 25 counties**. 126 were researched on November 22, 2026. Two were added on November 23 from the check against FracTracker's dataset.
 
 **The date a project became public is its `news_date`:** the first news report or company announcement. The owner settled that on November 22, 2026. A government record is a signal, never the public date. **A local blog counts as a first report.** The owner settled that on November 23, 2026. One Tom Green County row rests on one.
 
@@ -42,7 +42,7 @@ How far a page was checked:
 | County | Projects | County | Projects |
 |---|---|---|---|
 | Dallas | 28 | Travis | 3 |
-| Bexar | 15 | Austin | 2 |
+| Bexar | 16 | Austin | 2 |
 | Ellis | 10 | Carson | 2 |
 | Hood | 10 | Henderson | 2 |
 | Harris | 9 | Somervell | 2 |
@@ -52,13 +52,13 @@ How far a page was checked:
 | Potter | 4 | Callahan | 1 |
 | Tom Green | 4 | Freestone | 1 |
 | Bowie | 3 | Hopkins | 1 |
-| Johnson | 3 | Parker | 1 |
+| Johnson | 4 | Parker | 1 |
 | Matagorda | 3 | | |
 
 **No known project was found in five counties:** Burnet, Erath, Falls, San Saba and Wise. In each, the county's agendas or the local papers were closed to the pass, so "none found" is weak.
 
-- **79 of the 126 have a public date.** 73 of those fall in 2023 or later, inside the years the radar's records can cover.
-- **47 have none.** No news report was found, or the only one sits on a site closed to the reader.
+- **79 of the 128 have a public date.** 73 of those fall in 2023 or later, inside the years the radar's records can cover.
+- **49 have none.** No news report was found, or the only one sits on a site closed to the reader.
 - 75 have a dated government record. 45 of those were read on the page.
 - **34 records are state building registrations** at the Texas Department of Licensing and Regulation. No other kind is as common. The plan does not list that source.
 
@@ -82,8 +82,13 @@ For 18 projects both a government record and the first report were read on the p
 The owner said on November 23, 2026 to use FracTracker's data. Its spreadsheet was downloaded once that day. The file is kept outside this repository. Data provided by FracTracker Alliance (2026). Accessed via https://www.fractracker.org/data-centers/
 
 - **FracTracker lists 98 records in the 30 counties.** 38 are operating buildings, 41 proposed, 14 approved or under construction, 4 expanding and 1 cancelled.
-- **A program matched 72 of the 98 to 51 of the list's 126 projects,** by a shared company or project name inside one county, or a point within one kilometer. The match is a machine's and has not been checked by a person. FracTracker often has one record a building where the list has one row a site.
-- **26 records matched nothing.** 17 are operating buildings, most of them older than the list's 2023 cut for the urban counties. **Nine are proposed or approved** and went to a research pass: two in Ellis County and one each in Dallas, Matagorda, Milam, Travis, Johnson and two in Bexar. Two of the nine were left out of the list earlier for want of a source.
+- **A program matched 72 of the 98 to 51 of the list's 126 projects of that day,** by a shared company or project name inside one county, or a point within one kilometer. The match is a machine's and has not been checked by a person. FracTracker often has one record a building where the list has one row a site.
+- **26 records matched nothing.** 17 are operating buildings, most of them older than the list's 2023 cut for the urban counties. **Nine are proposed or approved** and went to a research pass, which started from FracTracker's own source links:
+  - **Four are already in the list** under another name: one each in Dallas and Milam counties, one FracTracker places in Ellis County that the list has in Dallas County, and one Matagorda County record that covers two of the list's rows.
+  - **Two were added,** each with no date and rated low. Land on State Highway 16 in Bexar County, left out earlier because no source then called it a data center: three trackers now do. And a 217 acre tract at Venus, keyed to Johnson County. **Its county is unsettled** between Johnson and Ellis. The city record that would date it sits on a meeting platform that is not cleared.
+  - **One is outside the 30 counties.** Caldwell County's minutes of April 9, 2026 show talks on it. Only an unsourced listing says Travis County.
+  - **One is left out as older than the cut:** a federal data center in San Antonio first reported in 2007.
+  - **One is left out as marketed land:** a parcel in a land broker's sales deck near Midlothian and Venus, with no operator and no record.
 - **75 of the list's projects have no match in FracTracker's file.**
 - **FracTracker lists nothing in the eleven control counties,** and nothing in the five test counties where the list has no project: Burnet, Erath, Falls, San Saba and Wise.
 - The file gives no date a project became public, so it changes no date here.
@@ -91,7 +96,7 @@ The owner said on November 23, 2026 to use FracTracker's data. Its spreadsheet w
 ## Left out, and why
 
 - **Rumors.** Erath County: land on two county roads, no developer and no record. Marlin in Falls County: the mayor says the city was approached, nothing in writing.
-- **Land with no data center announced.** A power company's tracts near Red Lick in Bowie County and on State Highway 16 in Bexar County.
+- **Land with no data center announced.** A power company's tract near Red Lick in Bowie County. Its tract on State Highway 16 in Bexar County was left out at first and added on November 23: see the check against FracTracker's dataset.
 - **Marketed sites.** A broker's 190 acres at Glen Rose and about 212 acres for sale in the city of Burnet.
 - **A designation, not a project.** Land at the former army depot in Bowie County named a data center park in 2023.
 - **Sites no source calls a data center.** A 20 MW crypto mining site in Wise County that only trackers file as one.
@@ -132,7 +137,7 @@ No date in the list rests on any of them.
 ## Not verified
 
 - **Whether any county's list is complete.** Officials in Hill, Freestone, Parker, Tom Green and Lubbock counties spoke of more projects than were found. A newspaper counts 23 planned in Bexar County and 15 are listed.
-- **The first report for 47 projects.**
+- **The first report for 49 projects.**
 - The day a government record could first be seen online. Minutes carry the day of the meeting, and in Archer County a file was made eight weeks after it.
 - Whether a state registration covers the whole campus. Many are for one building.
 - Street addresses and coordinates. 41 rows have a point, most from the Census geocoder for a street address.

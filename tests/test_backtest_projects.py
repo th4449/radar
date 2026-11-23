@@ -158,7 +158,7 @@ def test_the_real_list_loads_and_every_project_is_in_a_test_county() -> None:
     from backtest.projects import KNOWN_PROJECTS_TX
 
     projects = load_known_projects(KNOWN_PROJECTS_TX)
-    assert len(projects) == 126
+    assert len(projects) == 128
     assert len({p.county for p in projects}) == 25
     # A page read against a block is never the source of a date.
     assert not [p.key for p in projects if p.record_read == "set_aside" and p.record_date]
