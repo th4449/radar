@@ -17,7 +17,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 - **TDLR building registrations are proposed.** [tx_tdlr_building_registrations.md](sources/tx_tdlr_building_registrations.md) is the proposal, and the source is in `config/sources.yaml` as `manual`. Nothing collects it and the site was asked nothing today.
   - 34 of the 128 known projects have a registration as their earliest record, 31 of them in Dallas, Bexar and Harris counties, where agendas showed nothing.
   - For 21 with both dates, the registration came before the first news report in 13 and the same day or after in 8. The median is two days ahead.
-  - **The open question:** the search answers only through the page's own script call. I recommend a letter to the agency first.
+  - **The open question:** the search answers only through the page's own script call. **The owner chose to write to the agency first.** A letter to its Public Information Coordinator is drafted and not sent. Until the agency answers, the search is asked nothing.
 
 **Not verified**
 

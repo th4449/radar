@@ -52,6 +52,13 @@ Texas requires a building project above a cost threshold to be registered with t
   2. Test the search with a few slow requests under the project's user agent, and build if nothing refuses. Faster, and it rests on the robots file alone.
   3. Leave it manual: a person searches by county each week and saves what a reviewer needs.
 
+**The owner chose the first on November 23, 2026: write to the agency first.**
+
+- A letter is drafted and not sent. Sending it is the owner's to do.
+- It goes to `Open.Records@tdlr.texas.gov`, the Public Information Coordinator in the Office of the General Counsel. The agency's policy page names that address for requests for information, read in the copy saved on November 22, 2026.
+- The letter asks whether a slow reader may use the search, and otherwise for registrations in the 30 counties since January 1, 2023 as a file.
+- **Until the agency answers, the search is asked nothing.**
+
 ## If the owner says yes
 
 - A new kind of signal, with its own points in `config/scoring.yaml`. That file is the owner's to change.
