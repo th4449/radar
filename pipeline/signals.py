@@ -212,6 +212,11 @@ class Rules:
                 )
         return None
 
+    def listings_for(self, party: str) -> list[Listing]:
+        """Every appearance on the Comptroller's list that the rules tie to this name."""
+        listed = self._listed(party)
+        return listed[2] if listed else []
+
     def how_sure(self, reasons: list[dict]) -> float:
         return max(self.confidence[r["rule"]] for r in reasons)
 

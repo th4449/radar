@@ -12,6 +12,11 @@ What the words mean here.
   pipeline/cluster.py: the same project name or number, the same company, or coordinates close
   by, always inside one county. A signal that fits two projects goes to the one it sits
   nearest. If that cannot be told, it is given to neither and listed for a person.
+- **One more reason is the backtest's own:** the record's words carry the project's company
+  or code name. An agenda signal carries no company, because an agenda names people, so the
+  everyday radar cannot tie it to a site. The backtest knows the projects' names and looks
+  for them. A hit that rests on this reason shows what the record held, not what the radar
+  would have flagged. The report counts the two apart.
 - **A signal counts from the day it could be seen,** not the day it is dated. A well is
   drilled weeks before its report is filed.
 - **A hit** is a project whose signals took its score to the review threshold before its
@@ -75,6 +80,9 @@ class Signal:
     entity_id: int | None = None
     names: frozenset[str] = frozenset()
     point: Point | None = None
+    # Keys of the known projects whose company or code name the record's words carry. Set by
+    # backtest/history.py. The everyday pipeline has no such thing: see match().
+    names_projects: frozenset[str] = frozenset()
 
 
 def _distance(signal: Signal, project: Project) -> float | None:
@@ -89,6 +97,8 @@ def match(signal: Signal, project: Project, rules: Clustering) -> str | None:
         return None
     if signal.names & project.names:
         return "the same project name or number"
+    if project.key in signal.names_projects:
+        return "the record names the project's company or code name"
     distance = _distance(signal, project)
     same_company = signal.entity_id is not None and signal.entity_id in project.entity_ids
     if same_company and (distance is None or distance <= rules.same_company_m):

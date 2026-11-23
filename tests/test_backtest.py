@@ -99,6 +99,22 @@ def test_a_signal_matches_a_project_for_the_reasons_a_site_takes_a_signal():
     )
 
 
+def test_a_signal_whose_record_names_the_project_belongs_to_it():
+    # The backtest's own reason. backtest/history.py reads the record's words for the names of
+    # known projects, which the everyday pipeline cannot do.
+    p = project()
+    named = signal("agenda_keyword", "2026-01-05", names_projects=frozenset({"p1"}))
+    assert match(named, p, RULES.clustering) == (
+        "the record names the project's company or code name"
+    )
+    other = signal("agenda_keyword", "2026-01-05", names_projects=frozenset({"p2"}))
+    assert match(other, p, RULES.clustering) is None
+    elsewhere = signal(
+        "agenda_keyword", "2026-01-05", county=HILL, names_projects=frozenset({"p1"})
+    )
+    assert match(elsewhere, p, RULES.clustering) is None
+
+
 def test_a_signal_in_another_county_or_with_nothing_in_common_matches_nothing():
     p = project()
     clustering = RULES.clustering
