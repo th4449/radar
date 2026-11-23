@@ -43,4 +43,4 @@ Read from the saved copy.
 - On November 19 the same address answered 200 and allowed `/taxes/`.
 - **Not verified:** whether the refusal is lasting, and whether it is aimed at the collector's user agent, at this connection or at every program.
 - The backtest uses the copy saved with the tests on November 19, 2026. That is the real page of that day.
-- The source's `method` is unchanged and nothing collects it on a schedule. **The owner decides** whether to mark it manual now or to ask once more on a later day. While the robots file answers 403, every run stops as this one did.
+- **The owner said on November 23, 2026 to ask once more on a later day.** The source's `method` is unchanged and nothing collects it on a schedule. The next ask is one ordinary run of the collector, not on November 23. If the robots file answers 403 again, the run stops as this one did and the owner is told.

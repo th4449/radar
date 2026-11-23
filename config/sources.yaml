@@ -120,7 +120,7 @@ sources:
     cadence: monthly
     robots_status: allowed
     verified_at: 2026-11-19
-    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt and the fetcher stored nothing. The owner decides whether to mark the source manual. See docs/sources/tx_comptroller_data_centers.md.
+    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt and the fetcher stored nothing. The owner said that day to ask once more on a later day. See docs/sources/tx_comptroller_data_centers.md.
 
   - id: tx_comptroller_local_agreements
     state: TX
