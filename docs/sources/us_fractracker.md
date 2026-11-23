@@ -37,6 +37,16 @@ The backtest in milestone M9 needs a list of known projects. Before taking any r
 - What the terms bind the project to: use that fits FracTracker's mission as it judges, FracTracker Alliance cited in anything public, and co-authorship offered where published work relies heavily on its data.
 - A letter to FracTracker is drafted, not sent. It goes to `info@fractracker.org`. The Terms of Service name that address for questions on whether a use fits the mission, read on November 22, 2026. The contact page lists the same address for general inquiries.
 
+## The owner said to use the data, November 23, 2026
+
+- The owner gave the address of the spreadsheet and said to use it. The sheet's own README carries the same six terms the owner agreed to, and this citation: **Data provided by FracTracker Alliance (2026). Accessed via https://www.fractracker.org/data-centers/**
+- **I cannot confirm it is the spreadsheet the map links,** since I did not open the map's link. Its title is `Data_Centers_Database`, its README is FracTracker's and its last change was made by an account named `data-center-sync`.
+- **One download, once.** The sheet `FracTracker Data Centers` as a CSV file, through the spreadsheet's own export address. Google's robots file allows `/spreadsheet` with a delay of one second. The redirect's host has no robots file. 849,527 bytes, SHA-256 `7c22627bf3dfac93301860284993c58a59e35d8e50ebad13d71a143dc686839f`, 1,733 rows, 230 in Texas.
+- **The file is not in this repository.** It is kept in `~/.local/share/radar/backtest/fractracker/` with its address, time and hash. FracTracker keeps its rights in the compilation, and this repository is public.
+- **What it is used for:** a check of the backtest's list of known projects. See [known_projects.md](../../backtest/known_projects.md). A project the list gains from it carries FracTracker's name in its notes.
+- **The sheet has no date a project became public.** It has the day FracTracker made and last changed each record, and up to eight source links.
+- The map's service stays closed to programs, as before.
+
 ## What was verified
 
 - **Terms.** The page says the data "can be downloaded and shared freely for non-commercial use with credit to FracTracker." This project is non-commercial. Every use must credit FracTracker Alliance.

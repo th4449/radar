@@ -1,10 +1,10 @@
 # Known projects: how the list is made
 
-`known_projects_tx.csv` is the backtest's list of known data center projects in the 30 Texas test counties. It is built from news reports and public records only, with no use of FracTracker. `backtest/projects.py` loads it and refuses a row that breaks a rule.
+`known_projects_tx.csv` is the backtest's list of known data center projects in the 30 Texas test counties. It was built from news reports and public records only. On November 23, 2026 it was checked against FracTracker Alliance's dataset: see the section below. `backtest/projects.py` loads it and refuses a row that breaks a rule.
 
 It holds **126 projects in 25 counties**. All of it was researched on November 22, 2026.
 
-**The date a project became public is its `news_date`:** the first news report or company announcement. The owner settled that on November 22, 2026. A government record is a signal, never the public date.
+**The date a project became public is its `news_date`:** the first news report or company announcement. The owner settled that on November 22, 2026. A government record is a signal, never the public date. **A local blog counts as a first report.** The owner settled that on November 23, 2026. One Tom Green County row rests on one.
 
 **Nothing here is a finding about a company or a place.** A row says what a dated source says. A date is the earliest found, not the earliest that exists.
 
@@ -76,6 +76,17 @@ For 18 projects both a government record and the first report were read on the p
 - A state registration is filed when a building is designed, which can be long after a campus is announced. Six of the nine late records are registrations.
 - The two longest leads are doubtful. The pass that found the 918-day one says the registration may not be the same work as the announcement.
 - It counts records a person found by searching. The backtest asks what the radar's own collectors would have seen.
+
+## Checked against FracTracker Alliance's dataset
+
+The owner said on November 23, 2026 to use FracTracker's data. Its spreadsheet was downloaded once that day. The file is kept outside this repository. Data provided by FracTracker Alliance (2026). Accessed via https://www.fractracker.org/data-centers/
+
+- **FracTracker lists 98 records in the 30 counties.** 38 are operating buildings, 41 proposed, 14 approved or under construction, 4 expanding and 1 cancelled.
+- **A program matched 72 of the 98 to 51 of the list's 126 projects,** by a shared company or project name inside one county, or a point within one kilometer. The match is a machine's and has not been checked by a person. FracTracker often has one record a building where the list has one row a site.
+- **26 records matched nothing.** 17 are operating buildings, most of them older than the list's 2023 cut for the urban counties. **Nine are proposed or approved** and went to a research pass: two in Ellis County and one each in Dallas, Matagorda, Milam, Travis, Johnson and two in Bexar. Two of the nine were left out of the list earlier for want of a source.
+- **75 of the list's projects have no match in FracTracker's file.**
+- **FracTracker lists nothing in the eleven control counties,** and nothing in the five test counties where the list has no project: Burnet, Erath, Falls, San Saba and Wise.
+- The file gives no date a project became public, so it changes no date here.
 
 ## Left out, and why
 

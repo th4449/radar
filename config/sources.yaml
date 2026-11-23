@@ -256,7 +256,7 @@ sources:
     cadence: monthly
     robots_status: restricted
     verified_at: 2026-11-22
-    notes: Read again on 2026-11-22. FracTracker's terms now ask for agreement, limit use to what fits its mission and require citation. Esri's terms bar harvesting from the map's service. Nothing is taken by program. Counts taken earlier, no raw data in this repository. The owner agreed to its terms on 2026-11-22. Nothing has been taken since. The spreadsheet it links is the one channel and waits for the owner's word. See docs/sources/us_fractracker.md.
+    notes: Read again on 2026-11-22. FracTracker's terms now ask for agreement, limit use to what fits its mission and require citation. Esri's terms bar harvesting from the map's service. Nothing is taken by program. Counts taken earlier, no raw data in this repository. The owner agreed to its terms on 2026-11-22 and on 2026-11-23 said to use the data and gave the spreadsheet's address. One sheet was downloaded once that day and is kept outside this repository. It is used to check the backtest's list of known projects. Every public use cites FracTracker Alliance. See docs/sources/us_fractracker.md.
 
   - id: us_more_than_just_parks
     state: US

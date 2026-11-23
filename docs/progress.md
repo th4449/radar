@@ -2,6 +2,39 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M9: history runs started, FracTracker's file taken, two decisions by the owner
+
+**The owner's decisions**
+
+- Go ahead with the history runs and the eleven control counties.
+- **A local blog counts as a first report.** The Tom Green County row that rests on one is back at medium.
+- **Use FracTracker's data.** The owner gave the spreadsheet's address.
+
+**Built**
+
+- A history setting for four collectors: Legistar, the ERCOT planning group, governments' own agenda pages and the well reports. `python -m collectors.run <source> --history-since 2023-01-01`. Each reads only what an everyday run may read, at the same pace, and skips what is stored.
+- `config/counties_tx_control.yaml`: the eleven control counties. The radar does not watch them.
+- 14 tests, written first. 988 pass.
+
+**Collected, into the local database and a folder outside the repository and outside iCloud**
+
+- **Well reports:** one download. 15,986 rows kept since January 1, 2023, in the 30 counties and the eleven controls.
+- **Pending air permit lists:** both pages as they stand.
+- **Still running when this was written:** the ERCOT planning group, governments' own agenda pages and Legistar.
+
+**FracTracker's file**
+
+- One sheet, downloaded once through the spreadsheet's own export address: 1,733 rows, 230 in Texas, 98 in the 30 counties. It is kept outside this repository. See [us_fractracker.md](sources/us_fractracker.md).
+- A program matched 72 of the 98 to 51 of the list's 126 projects. **Nine proposed or approved projects matched nothing** and went to a research pass.
+- **FracTracker lists nothing in the eleven control counties** and nothing in the five test counties where the list has none.
+- It gives no date a project became public.
+
+**Not verified**
+
+- The machine's matches. No person has checked them.
+- That the spreadsheet is the one the map links. I did not open the map's link.
+- Whether FracTracker judges this use to fit its mission. Its terms leave that to FracTracker. The letter drafted for it has not been sent by me.
+
 ## November 22, 2026 — M9: what a history run would ask for, and control counties proposed
 
 The owner said to push. The six commits are on `main` and the checks passed. **No backtest has run and no history has been collected.** This entry is a proposal for the owner.
