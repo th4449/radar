@@ -1,4 +1,8 @@
-"""The inventory of Texas public bodies and where each posts its agendas. BUILD_PLAN.md M8.
+"""The inventory of public bodies and where each posts its agendas. BUILD_PLAN.md M8 and M11.
+
+Texas came first: 30 counties. Michigan has its own files and its own kinds of body, for the
+six counties whose agendas come first. Every function takes the state and reads Texas when
+none is given.
 
 config/tx_agenda_inventory.csv has one row per body: a commissioners court, a city council, a
 planning body or a development corporation in the 30 test counties. It records the page where
@@ -25,12 +29,37 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from pipeline.config import CONFIG_DIR, load_counties
 
+State = Literal["TX", "MI"]
 INVENTORY = CONFIG_DIR / "tx_agenda_inventory.csv"
 PLACES = CONFIG_DIR / "tx_places.csv"
+# One set of files for each state. Michigan's are for the six counties whose agendas come
+# first. See BUILD_PLAN.md milestone M11.
+INVENTORIES = {"TX": INVENTORY, "MI": CONFIG_DIR / "mi_agenda_inventory.csv"}
+PLACE_LISTS = {"TX": PLACES, "MI": CONFIG_DIR / "mi_places.csv"}
 
 BodyType = Literal[
-    "commissioners_court", "city_council", "planning_body", "development_corporation"
+    "commissioners_court",  # a Texas county
+    "county_board",  # a Michigan county's board of commissioners
+    "city_council",
+    "township_board",  # Michigan
+    "village_council",  # Michigan
+    "planning_body",
+    "development_corporation",
 ]
+# The body that governs: every government has exactly one.
+GOVERNING = (
+    "commissioners_court", "county_board", "city_council", "township_board", "village_council",
+)  # fmt: skip
+
+
+def agenda_counties(state: State) -> set[str]:
+    """The counties whose local agendas the inventory covers."""
+    counties = load_counties(state).counties
+    if state == "MI":
+        return {c.name for c in counties if c.agenda_priority == 1}
+    return {c.name for c in counties}
+
+
 Status = Literal["seen", "inferred", "not_found"]
 
 # An outside meeting platform, recognized by the host or path of an agenda address.
@@ -180,25 +209,27 @@ def _data_lines(path: Path) -> list[str]:
     ]
 
 
-def load_inventory(path: Path | None = None) -> list[AgendaBody]:
+def load_inventory(path: Path | None = None, state: State = "TX") -> list[AgendaBody]:
     """Every body in the inventory. Raises on a row that breaks a rule."""
-    reader = csv.DictReader(_data_lines(path or INVENTORY))
+    reader = csv.DictReader(_data_lines(path or INVENTORIES[state]))
     if tuple(reader.fieldnames or ()) != COLUMNS:
         raise ValueError(f"inventory columns are {reader.fieldnames}, expected {COLUMNS}")
-    scope = {c.name for c in load_counties("TX").counties}
+    scope = agenda_counties(state)
     bodies = []
     for row in reader:
         counties = tuple(c.strip() for c in row["counties"].split(";") if c.strip())
         outside = [c for c in counties if c not in scope]
         if outside:
-            raise ValueError(f"{row['body']}: {outside} is not one of the 30 counties")
+            raise ValueError(
+                f"{row['body']}: {outside} is not one of the {len(scope)} {state} counties"
+            )
         bodies.append(AgendaBody(**{**row, "counties": counties}))
     return bodies
 
 
-def load_places(path: Path | None = None) -> list[tuple[str, tuple[str, ...]]]:
-    """Every incorporated place in the 30 counties, with the test counties it lies in."""
-    reader = csv.DictReader(_data_lines(path or PLACES))
+def load_places(path: Path | None = None, state: State = "TX") -> list[tuple[str, tuple[str, ...]]]:
+    """Every city, village and township the inventory covers, with the counties it lies in."""
+    reader = csv.DictReader(_data_lines(path or PLACE_LISTS[state]))
     return [(row["place"], tuple(c.strip() for c in row["counties"].split(";"))) for row in reader]
 
 
@@ -244,16 +275,22 @@ def load_platform_terms(path: Path | None = None) -> dict[str, PlatformTerms]:
 SITE_TERMS = CONFIG_DIR / "tx_agenda_site_terms.csv"
 
 
-def load_site_terms(path: Path | None = None) -> list[dict[str, str]]:
+SITE_TERMS_BY_STATE = {"TX": SITE_TERMS, "MI": CONFIG_DIR / "mi_agenda_site_terms.csv"}
+
+
+def load_site_terms(path: Path | None = None, state: State = "TX") -> list[dict[str, str]]:
     """What each government's own site says about a program reading it, one row per host."""
-    return list(csv.DictReader(_data_lines(path or SITE_TERMS)))
+    path = path or SITE_TERMS_BY_STATE[state]
+    if not path.exists():
+        return []
+    return list(csv.DictReader(_data_lines(path)))
 
 
 def summary(bodies: list[AgendaBody]) -> str:
     """Counts a person can read: bodies and governments by platform, and counties reached."""
     import collections
 
-    primary = [b for b in bodies if b.body_type in ("commissioners_court", "city_council")]
+    primary = [b for b in bodies if b.body_type in GOVERNING]
     by_platform = collections.Counter(b.platform for b in bodies)
     governments = collections.Counter(b.platform for b in primary)
     counties: dict[str, set[str]] = collections.defaultdict(set)
@@ -276,4 +313,6 @@ def summary(bodies: list[AgendaBody]) -> str:
 
 
 if __name__ == "__main__":
-    print(summary(load_inventory()))
+    import sys
+
+    print(summary(load_inventory(state="MI" if "MI" in sys.argv[1:] else "TX")))

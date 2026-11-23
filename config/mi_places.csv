@@ -1,0 +1,224 @@
+# Every city, village and township in the six Michigan counties whose agendas come first:
+# Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne. BUILD_PLAN.md milestone M11.
+# Cities and villages are from the Census file national_place_by_county2020.txt, read 2026-11-20,
+# sha256 9996494d33cf6ee4527491508aa1b8dae85dcff3a979886e19b0b375e5d06ec6.
+# Townships are from the Census file national_cousub2020.txt, read 2026-11-23,
+# sha256 2f292e90e56b1c1b085402bef6e4dc9d9404b0006e44988860226759217c7cf3. Class T1, active: a township with its own government.
+# A city's or village's code is its 7 digit place code. A township's is 26, its county and its
+# 5 digit subdivision code. Two townships of one name carry their county in the name.
+# Census designated places are left out: they have no government.
+place,place_fips,counties
+Addison township,2612500400,Oakland
+Alamo township,2607700840,Kalamazoo
+Allegan city,2601260,Allegan
+Allegan township,2600501280,Allegan
+Allen Park city,2601380,Wayne
+Ann Arbor charter township,2616103020,Washtenaw
+Ann Arbor city,2603000,Washtenaw
+Ash township,2611503680,Monroe
+Auburn Hills city,2604105,Oakland
+Augusta charter township,2616104180,Washtenaw
+Augusta village,2604160,Kalamazoo
+Barton Hills village,2605660,Washtenaw
+Bedford township,2611506740,Monroe
+Belleville city,2607020,Wayne
+Berkley city,2607660,Oakland
+Berlin charter township,2611507720,Monroe
+Beverly Hills village,2608160,Oakland
+Bingham Farms village,2608460,Oakland
+Birmingham city,2608640,Oakland
+Bloomfield Hills city,2609180,Oakland
+Bloomfield charter township,2612509110,Oakland
+Brady township,2607709920,Kalamazoo
+Brandon charter township,2612510040,Oakland
+Bridgewater township,2616110560,Washtenaw
+Brownstown charter township,2616311220,Wayne
+Canton charter township,2616313120,Wayne
+Carleton village,2613220,Monroe
+Casco township,2600513700,Allegan
+Charleston township,2607714720,Kalamazoo
+Chelsea city,2615020,Washtenaw
+Cheshire township,2600515200,Allegan
+Clawson city,2616160,Oakland
+Climax township,2607716460,Kalamazoo
+Climax village,2616440,Kalamazoo
+Clyde township,2600516720,Allegan
+Commerce charter township,2612517640,Oakland
+Comstock charter township,2607717680,Kalamazoo
+Cooper charter township,2607717980,Kalamazoo
+Dearborn Heights city,2621020,Wayne
+Dearborn city,2621000,Wayne
+Detroit city,2622000,Wayne
+Dexter city,2622160,Washtenaw
+Dexter township,2616122180,Washtenaw
+Dorr township,2600522680,Allegan
+Douglas city,2622740,Allegan
+Dundee township,2611523400,Monroe
+Dundee village,2623380,Monroe
+Ecorse city,2624740,Wayne
+Erie township,2611526320,Monroe
+Estral Beach village,2626460,Monroe
+Exeter township,2611526880,Monroe
+Farmington Hills city,2627440,Oakland
+Farmington city,2627380,Oakland
+Fennville city,2627740,Allegan
+Fenton city,2627760,Oakland
+Ferndale city,2627880,Oakland
+Fillmore township,2600528120,Allegan
+Flat Rock city,2628360,Monroe; Wayne
+Franklin village,2630340,Oakland
+Freedom township,2616130520,Washtenaw
+Frenchtown township,2611530820,Monroe
+Galesburg city,2631260,Kalamazoo
+Ganges township,2600531360,Allegan
+Garden City city,2631420,Wayne
+Gibraltar city,2632020,Wayne
+Grosse Ile township,2616335420,Wayne
+Grosse Pointe Farms city,2635520,Wayne
+Grosse Pointe Park city,2635540,Wayne
+Grosse Pointe Woods city,2635580,Wayne
+Grosse Pointe city,2635480,Wayne
+Groveland township,2612535640,Oakland
+Gun Plain township,2600535720,Allegan
+Hamtramck city,2636280,Wayne
+Harper Woods city,2636700,Wayne
+Hazel Park city,2637420,Oakland
+Heath township,2600537460,Allegan
+Highland Park city,2638180,Wayne
+Highland charter township,2612538080,Oakland
+Holland city,2638640,Allegan
+Holly township,2612538720,Oakland
+Holly village,2638700,Oakland
+Hopkins township,2600539200,Allegan
+Hopkins village,2639180,Allegan
+Huntington Woods city,2640000,Oakland
+Huron charter township,2616340040,Wayne
+Ida township,2611540260,Monroe
+Independence charter township,2612540400,Oakland
+Inkster city,2640680,Wayne
+Kalamazoo charter township,2607742180,Kalamazoo
+Kalamazoo city,2642160,Kalamazoo
+Keego Harbor city,2642460,Oakland
+La Salle township,2611546260,Monroe
+Lake Angelus city,2644440,Oakland
+Lake Orion village,2644940,Oakland
+Laketown township,2600545180,Allegan
+Lathrup Village city,2646320,Oakland
+Lee township,2600546600,Allegan
+Leighton township,2600546760,Allegan
+Leonard village,2646940,Oakland
+Lima township,2616147460,Washtenaw
+Lincoln Park city,2647800,Wayne
+Livonia city,2649000,Wayne
+Lodi township,2616149120,Washtenaw
+London township,2611549180,Monroe
+Luna Pier city,2649700,Monroe
+Lyndon township,2616149780,Washtenaw
+Lyon charter township,2612549820,Oakland
+Madison Heights city,2650560,Oakland
+Manchester township,2616150680,Washtenaw
+Manchester village,2650660,Washtenaw
+Manlius township,2600550840,Allegan
+Martin township,2600552000,Allegan
+Martin village,2651980,Allegan
+Maybee village,2652440,Monroe
+Melvindale city,2652940,Wayne
+Milan city,2653920,Monroe; Washtenaw
+Milan township,2611553900,Monroe
+Milford charter township,2612553980,Oakland
+Milford village,2653960,Oakland
+Monroe charter township,2611555040,Monroe
+Monroe city,2655020,Monroe
+Monterey township,2600555200,Allegan
+Northfield township,2616158280,Washtenaw
+Northville city,2658980,Oakland; Wayne
+Northville township,2616359000,Wayne
+Novi city,2659440,Oakland
+Novi township,2612559460,Oakland
+Oak Park city,2659920,Oakland
+Oakland charter township,2612559820,Oakland
+Orchard Lake Village city,2661020,Oakland
+Orion charter township,2612561100,Oakland
+Ortonville village,2661220,Oakland
+Oshtemo charter township,2607761400,Kalamazoo
+Otsego city,2661620,Allegan
+Otsego township,2600561640,Allegan
+Overisel township,2600561820,Allegan
+Oxford charter township,2612562040,Oakland
+Oxford village,2662020,Oakland
+Parchment city,2662340,Kalamazoo
+Pavilion township,2607762960,Kalamazoo
+Petersburg city,2663800,Monroe
+Pittsfield charter township,2616164560,Washtenaw
+Plainwell city,2664740,Allegan
+Pleasant Ridge city,2664900,Oakland
+Plymouth charter township,2616365080,Wayne
+Plymouth city,2665060,Wayne
+Pontiac city,2665440,Oakland
+Portage city,2665560,Kalamazoo
+Prairie Ronde township,2607766200,Kalamazoo
+Raisinville township,2611566900,Monroe
+Redford charter township,2616367625,Wayne
+Richland township,2607768260,Kalamazoo
+Richland village,2668240,Kalamazoo
+River Rouge city,2668760,Wayne
+Riverview city,2668880,Wayne
+Rochester Hills city,2669035,Oakland
+Rochester city,2669020,Oakland
+Rockwood city,2669180,Wayne
+Romulus city,2669420,Wayne
+Rose township,2612569580,Oakland
+Ross township,2607769820,Kalamazoo
+Royal Oak charter township,2612570060,Oakland
+Royal Oak city,2670040,Oakland
+Salem township (Allegan County),2600571100,Allegan
+Salem township (Washtenaw County),2616171130,Washtenaw
+Saline city,2671140,Washtenaw
+Saline township,2616171160,Washtenaw
+Saugatuck city,2671700,Allegan
+Saugatuck township,2600571720,Allegan
+Schoolcraft township,2607771880,Kalamazoo
+Schoolcraft village,2671860,Kalamazoo
+Scio township,2616171940,Washtenaw
+Sharon township,2616172760,Washtenaw
+South Haven city,2674980,Allegan
+South Lyon city,2675100,Oakland
+South Rockwood village,2675280,Monroe
+Southfield city,2674900,Oakland
+Southfield township,2612574920,Oakland
+Southgate city,2674960,Wayne
+Springfield charter township,2612575760,Oakland
+Summerfield township,2611577140,Monroe
+Sumpter township,2616377360,Wayne
+Superior charter township,2616177560,Washtenaw
+Sylvan Lake city,2677860,Oakland
+Sylvan township,2616177800,Washtenaw
+Taylor city,2679000,Wayne
+Texas charter township,2607779300,Kalamazoo
+Trenton city,2680420,Wayne
+Trowbridge township,2600580620,Allegan
+Troy city,2680700,Oakland
+Valley township,2600581580,Allegan
+Van Buren charter township,2616381660,Wayne
+Vicksburg village,2682300,Kalamazoo
+Village of Clarkston city,2682450,Oakland
+Village of Grosse Pointe Shores city,2682453,Wayne
+Wakeshma township,2607782840,Kalamazoo
+Walled Lake city,2683060,Oakland
+Waterford charter township,2612584240,Oakland
+Watson township,2600584580,Allegan
+Wayland city,2684880,Allegan
+Wayland township,2600584900,Allegan
+Wayne city,2684940,Wayne
+Webster township,2616185100,Washtenaw
+West Bloomfield charter township,2612585480,Oakland
+Westland city,2686000,Wayne
+White Lake charter township,2612586860,Oakland
+Whiteford township,2611586740,Monroe
+Wixom city,2688140,Oakland
+Wolverine Lake village,2688260,Oakland
+Woodhaven city,2688380,Wayne
+Wyandotte city,2688900,Wayne
+York charter township,2616189100,Washtenaw
+Ypsilanti charter township,2616189160,Washtenaw
+Ypsilanti city,2689140,Washtenaw

@@ -259,6 +259,33 @@ sources:
     verified_at: null
     notes: No statewide notice site confirmed yet. Verify first. The URL is the 15 day notice statute.
 
+  # Michigan local agendas. BUILD_PLAN.md milestone M11. Six counties first.
+  - id: mi_agendas_legistar
+    state: MI
+    name: Meeting agendas of Michigan governments that use Legistar
+    url: https://webapi.legistar.com/
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    personal_rows: true
+    notes: Milestone M11. Not read yet. The inventory of governments in Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne counties is in config/mi_agenda_inventory.csv and no row in it is cleared. The Legistar Web API was read for Texas on 2026-11-21. Each Michigan government's own Legistar host still has to be read before a job reads it.
+
+  - id: mi_agendas_own_sites
+    state: MI
+    name: Meeting agendas that Michigan governments post as files on their own websites
+    url: https://github.com/th4449/radar/blob/main/config/mi_agenda_inventory.csv
+    layer: signal
+    method: manual
+    intended_method: http
+    cadence: daily
+    robots_status: not_checked
+    verified_at: null
+    personal_rows: true
+    notes: Milestone M11. Not read yet. Many sites, each with its own robots file and terms. None has been read for a collector. A government is read only after an independent check confirms its inventory row and its own terms and robots file are read.
+
   # Baselines of known sites and infrastructure.
   - id: us_fractracker
     state: US

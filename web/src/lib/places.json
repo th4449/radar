@@ -732,6 +732,22 @@
       "read": false,
       "by_hand": false,
       "use": "signal"
+    },
+    {
+      "name": "Meeting agendas of Michigan governments that use Legistar",
+      "state": "MI",
+      "url": "https://webapi.legistar.com/",
+      "read": false,
+      "by_hand": false,
+      "use": "signal"
+    },
+    {
+      "name": "Meeting agendas that Michigan governments post as files on their own websites",
+      "state": "MI",
+      "url": "https://github.com/th4449/radar/blob/main/config/mi_agenda_inventory.csv",
+      "read": false,
+      "by_hand": false,
+      "use": "signal"
     }
   ]
 }

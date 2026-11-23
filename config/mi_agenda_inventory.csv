@@ -1,0 +1,7 @@
+# Where each public body in six Michigan counties posts its agendas. BUILD_PLAN.md milestone M11.
+# The counties are Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne.
+# One row for each body: a county board, a city council, a township board, a village council,
+# a planning commission or a development body. Research, done by reading each government's own
+# website. A row says what was seen on the day in its check. No row is a collector's to take
+# until an independent check confirms it: see config/mi_agenda_checks.csv.
+government,counties,body,body_type,official_site,agenda_url,platform,evidence,status,notes

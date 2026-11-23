@@ -508,17 +508,17 @@ def on_the_site(link: str, page_url: str) -> bool:
     return _site(link) == _site(page_url) or host in FILE_HOSTS
 
 
-def cleared_pages(today: dt.date | None = None) -> list[Page]:
-    """The agenda pages this collector may read today, from the agenda inventory."""
+def cleared_pages(today: dt.date | None = None, state: str = "TX") -> list[Page]:
+    """The agenda pages this collector may read today, from a state's agenda inventory."""
     from pipeline import agenda_checks, agenda_inventory
 
     today = today or dt.datetime.now(dt.UTC).date()
-    checks = agenda_checks.Checks(agenda_checks.load_checks())
+    checks = agenda_checks.Checks(agenda_checks.load_checks(state=state))
     pages: dict[str, Page] = {}
-    for body in agenda_inventory.load_inventory():
+    for body in agenda_inventory.load_inventory(state=state):
         if body.platform not in PLATFORMS_READ:
             continue
-        if not agenda_checks.collectable(body, checks, today):
+        if not agenda_checks.collectable(body, checks, today, state=state):
             continue
         known = pages.get(body.agenda_url)
         bodies = (*known.bodies, body.body) if known else (body.body,)

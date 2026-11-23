@@ -87,19 +87,19 @@ def client_name(*addresses: str) -> str | None:
     return None
 
 
-def cleared_clients(today: dt.date | None = None) -> list[Client]:
-    """The governments this collector may read today, from the agenda inventory."""
+def cleared_clients(today: dt.date | None = None, state: str = "TX") -> list[Client]:
+    """The governments this collector may read today, from a state's agenda inventory."""
     from pipeline import agenda_checks, agenda_inventory
 
     today = today or dt.datetime.now(dt.UTC).date()
-    checks = agenda_checks.Checks(agenda_checks.load_checks())
+    checks = agenda_checks.Checks(agenda_checks.load_checks(state=state))
     clients: dict[str, Client] = {}
-    for body in agenda_inventory.load_inventory():
+    for body in agenda_inventory.load_inventory(state=state):
         if body.platform != "legistar":
             continue
-        if body.body_type not in ("commissioners_court", "city_council"):
+        if body.body_type not in agenda_inventory.GOVERNING:
             continue
-        if not agenda_checks.collectable(body, checks, today):
+        if not agenda_checks.collectable(body, checks, today, state=state):
             continue
         name = client_name(body.agenda_url, body.evidence)
         if name:

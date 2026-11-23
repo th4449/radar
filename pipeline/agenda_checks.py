@@ -57,6 +57,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from pipeline.agenda_inventory import (
+    GOVERNING,
     OUTSIDE,
     AgendaBody,
     PlatformTerms,
@@ -70,6 +71,7 @@ from pipeline.agenda_inventory import (
 from pipeline.config import CONFIG_DIR
 
 CHECKS = CONFIG_DIR / "tx_agenda_checks.csv"
+CHECKS_BY_STATE = {"TX": CHECKS, "MI": CONFIG_DIR / "mi_agenda_checks.csv"}
 
 # A newest agenda older than this, on the day of the check, is not current.
 CURRENT_DAYS = 400
@@ -111,7 +113,9 @@ class Check(BaseModel):
     result: Result
     opened: str = Field(pattern=_URL)
     followed_to: str = Field(pattern=_URL)
-    names_texas: Literal["yes", "no", "unknown"]
+    # Whether the page is for a place in the inventory's own state. A township's name is
+    # often a town's name somewhere else.
+    names_state: Literal["yes", "no", "unknown"]
     agenda_links: tuple[str, ...]
     # Dated agendas seen listed for the expected bodies. A page can list agendas that open by
     # script and so give no address to copy.
@@ -163,7 +167,7 @@ COLUMNS = (
     "result",
     "opened",
     "followed_to",
-    "names_texas",
+    "names_state",
     "agenda_links",
     "agendas_listed",
     "newest_agenda_date",
@@ -174,8 +178,8 @@ COLUMNS = (
 _LISTS = ("agenda_links", "bodies_listed", "other_hosts")
 
 
-def load_checks(path: Path | None = None) -> list[Check]:
-    path = path or CHECKS
+def load_checks(path: Path | None = None, state: str = "TX") -> list[Check]:
+    path = path or CHECKS_BY_STATE[state]
     if not path.exists():
         return []
     reader = csv.DictReader(_data_lines(path))
@@ -237,7 +241,7 @@ class Checks:
 
 def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, str]:
     """What this row has earned, and the reason in a sentence."""
-    primary = body.body_type in ("commissioners_court", "city_council")
+    primary = body.body_type in GOVERNING
 
     if body.platform == "no_website":
         check = checks.of_search(body, "find_site")
@@ -245,7 +249,7 @@ def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, 
             return "unchecked", "No second search was made for a website."
         if (today - check.checked_on).days > RECHECK_DAYS:
             return "expired", f"Last checked {check.checked_on}."
-        if check.result == "read" and check.opened and check.names_texas != "no":
+        if check.result == "read" and check.opened and check.names_state != "no":
             return "contradicted", f"A second search found a site: {check.opened}"
         return "agreed_none", "Two searches found no official website."
 
@@ -267,7 +271,7 @@ def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, 
         return "unreadable", f"The check could not read the page: {check.result}. {check.notes}"
     if check.result == "not_found":
         return "contradicted", "The check found no such page."
-    if check.names_texas == "no":
+    if check.names_state == "no":
         return "contradicted", "The page is for a place in another state."
 
     # Agreement rests on the agenda addresses the check copied, not on the page's own address:
@@ -328,26 +332,28 @@ def collectable(
     today: dt.date,
     platforms: dict[str, PlatformTerms] | None = None,
     sites: list[dict[str, str]] | None = None,
+    state: str = "TX",
 ) -> bool:
     """True only when a collector may take this row. Three things must all hold.
 
     The row is right: an independent check confirmed it. The platform may be read: its own
     terms and robots rules were read, nothing in them stands against a collector, and the owner
     said to go ahead. And the government's own terms were read and say nothing against it.
-    See config/tx_agenda_platforms.csv and config/tx_agenda_site_terms.csv.
+    See config/tx_agenda_platforms.csv, which both states share, and each state's own
+    site terms file: config/tx_agenda_site_terms.csv and config/mi_agenda_site_terms.csv.
     """
     platforms = load_platform_terms() if platforms is None else platforms
     terms = platforms.get(body.platform)
     if terms is None or terms.status != "cleared":
         return False
-    if not site_allows(body, load_site_terms() if sites is None else sites):
+    if not site_allows(body, load_site_terms(state=state) if sites is None else sites):
         return False
     return verdict(body, checks, today)[0] == "confirmed"
 
 
 def report(bodies: list[AgendaBody], checks: Checks, today: dt.date, listing: bool) -> str:
     verdicts = [(b, *verdict(b, checks, today)) for b in bodies]
-    primary = [v for v in verdicts if v[0].body_type in ("commissioners_court", "city_council")]
+    primary = [v for v in verdicts if v[0].body_type in GOVERNING]
     counts = collections.Counter(v[1] for v in verdicts)
     governments = collections.Counter(v[1] for v in primary)
     lines = [
@@ -371,7 +377,8 @@ def queue_csv(bodies: list[AgendaBody], checks: Checks, today: dt.date) -> str:
     """Every row that needs a person, as a CSV to work through. Commissioners courts first."""
     import io
 
-    rank = {"commissioners_court": 0, "city_council": 1, "planning_body": 2}
+    rank = {"commissioners_court": 0, "county_board": 0, "city_council": 1,
+            "township_board": 1, "village_council": 1, "planning_body": 2}  # fmt: skip
     out = io.StringIO()
     writer = csv.writer(out, lineterminator="\n")
     writer.writerow(
@@ -394,8 +401,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--list", action="store_true", help="list every row that needs a person")
     parser.add_argument("--csv", action="store_true", help="the same list as a CSV")
+    parser.add_argument("--state", choices=("TX", "MI"), default="TX")
     args = parser.parse_args(argv)
-    bodies, checks, today = load_inventory(), Checks(load_checks()), dt.date.today()
+    bodies = load_inventory(state=args.state)
+    checks, today = Checks(load_checks(state=args.state)), dt.date.today()
     if args.csv:
         print(queue_csv(bodies, checks, today), end="")
     else:

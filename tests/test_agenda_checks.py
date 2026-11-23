@@ -43,7 +43,7 @@ def check(**changes) -> ac.Check:
         "result": "read",
         "opened": PAGE,
         "followed_to": "",
-        "names_texas": "yes",
+        "names_state": "yes",
         "agenda_links": (FILE,),
         "agendas_listed": 12,
         "newest_agenda_date": dt.date(2026, 11, 17),
@@ -154,7 +154,7 @@ def test_a_platform_where_the_row_says_own_site_contradicts_it():
 
 
 def test_a_page_for_another_state_contradicts_the_row():
-    assert earned(body(), check(names_texas="no")) == "contradicted"
+    assert earned(body(), check(names_state="no")) == "contradicted"
 
 
 def test_a_platform_reached_through_a_link_from_the_citys_page_agrees():
@@ -266,12 +266,12 @@ SEARCH = {
 def test_no_website_holds_only_when_a_second_search_also_found_none():
     row = body(**NOSITE)
     assert earned(row) == "unchecked"
-    none = check(**SEARCH, result="not_found", opened="", bodies_listed=(), names_texas="unknown")
+    none = check(**SEARCH, result="not_found", opened="", bodies_listed=(), names_state="unknown")
     assert earned(row, none) == "agreed_none"
     found = check(**SEARCH, opened="https://www.example-tx.gov/", bodies_listed=())
     assert earned(row, found) == "contradicted"
     # A same-named town in another state is not a find.
-    elsewhere = check(**SEARCH, opened="https://www.example-il.gov/", names_texas="no")
+    elsewhere = check(**SEARCH, opened="https://www.example-il.gov/", names_state="no")
     assert earned(row, elsewhere) == "agreed_none"
 
 
@@ -306,7 +306,7 @@ def test_the_newest_check_decides_and_a_hand_check_outranks_a_second_read():
     )
     assert earned(body(), earlier, check()) == "confirmed"
     assert earned(body(), check(), earlier) == "confirmed"
-    by_hand = check(by="hand", names_texas="no")
+    by_hand = check(by="hand", names_state="no")
     assert earned(body(), check(), by_hand) == "contradicted"
     assert earned(body(), by_hand, check()) == "contradicted"
     in_browser = check(by="browser_read")

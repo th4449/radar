@@ -215,6 +215,9 @@ def test_the_lists_that_name_people_are_marked():
         "tx_agendas_legistar",
         "tx_agendas_own_sites",
         "tx_tdlr_building_registrations",
+        # Michigan's agendas name people as Texas's do. Neither source is read yet.
+        "mi_agendas_legistar",
+        "mi_agendas_own_sites",
     }
 
 

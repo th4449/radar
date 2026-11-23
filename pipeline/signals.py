@@ -572,6 +572,33 @@ Processor = Callable[[Doc, Rules], Outcome]
 # --- meeting agendas from Legistar ---------------------------------------------------------------
 
 _PLACE_KIND = re.compile(r"\s+(city|town|village)$")
+_IN_A_COUNTY = re.compile(r"\s*\([^)]*County\)$")  # "Salem township (Washtenaw County)"
+_TOWNSHIP = re.compile(r"\s+(charter\s+)?township$")
+
+
+def place_name(government: str) -> str:
+    """A government as people say it: "Round Rock", "Lodi Township", "Washtenaw County".
+
+    The inventory writes a place as the Census does: "Round Rock city". The kind is dropped
+    for a city, a town or a village. A Michigan township keeps it, because a township and a
+    city often share a name: Ann Arbor is both.
+    """
+    name = _IN_A_COUNTY.sub("", government)
+    township = _TOWNSHIP.search(name)
+    if township:
+        kind = "Charter Township" if township.group(1) else "Township"
+        return f"{name[: township.start()]} {kind}"
+    return _PLACE_KIND.sub("", name)
+
+
+def _counties_of(doc: Doc, rules: Rules) -> CountyIndex:
+    """The counties of the state a document's source belongs to: tx_... or mi_..."""
+    state = doc.source_id.split("_", 1)[0].upper()
+    if state not in rules.counties:
+        raise ValueError(f"{doc.source_id} is a source from no state the radar reads")
+    return rules.counties[state]
+
+
 # An agenda calls every road job "Project" something. A code name is a reason only where the
 # agenda speaks of economic development negotiations, the closed session Texas law allows for
 # them under Government Code 551.087.
@@ -587,7 +614,7 @@ def _meeting(government: str, day: dt.date, reasons: list[dict]) -> str | None:
     """
     if not any(r["rule"] == "direct_term" for r in reasons):
         return None
-    return f"{_PLACE_KIND.sub('', government)}, meeting of {_long_date(day)}"
+    return f"{place_name(government)}, meeting of {_long_date(day)}"
 
 
 def _set_aside(own: str | None) -> dict:
@@ -616,7 +643,7 @@ def _agenda_item(passage: str, start: int, end: int) -> str:
 
 def _body_name(government: str, body: str) -> str:
     """ "Round Rock City Council", "Harris County Commissioners Court"."""
-    place = _PLACE_KIND.sub("", government)
+    place = place_name(government)
     return body if body.lower().startswith(place.lower()) else f"{place} {body}"
 
 
@@ -632,7 +659,7 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         return out  # the list of meetings holds nothing to read
     agenda = json.loads(doc.body)
     day = _iso_date(str(agenda.get("date") or ""))
-    counties = rules.counties["TX"]
+    counties = _counties_of(doc, rules)
     named = [str(c) for c in agenda.get("counties") or []]
     in_scope = [f for f in (counties.fips(name) for name in named) if f]
     fips = in_scope[0] if in_scope else None
@@ -779,7 +806,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
     if day is None:
         out.undated = 1
         return out
-    counties = rules.counties["TX"]
+    counties = _counties_of(doc, rules)
     named = [str(c) for c in meta.get("counties") or []]
     in_scope = [f for f in (counties.fips(name) for name in named) if f]
     if not in_scope:
@@ -797,7 +824,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
         for piece in _narrow_snippets(passage, hits):
             if piece not in snippets:
                 snippets.append(piece)
-    place = _PLACE_KIND.sub("", str(meta["government"]))
+    place = place_name(str(meta["government"]))
     terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
     out.drafts.append(
         Draft(
@@ -835,6 +862,9 @@ PROCESSORS: dict[str, Processor] = {
     "tx_ercot_rpg": ercot_rpg_file,
     "tx_agendas_legistar": legistar_agenda,
     "tx_agendas_own_sites": agenda_file,
+    # Michigan's agendas are read by the same two processors. BUILD_PLAN.md milestone M11.
+    "mi_agendas_legistar": legistar_agenda,
+    "mi_agendas_own_sites": agenda_file,
 }
 
 

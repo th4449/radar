@@ -2,6 +2,31 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11 begun: the agenda code reads a second state
+
+**The owner's word:** start milestone M11, Michigan agendas, with Washtenaw, Wayne, Oakland, Monroe, Allegan and Kalamazoo counties.
+
+**Built, tests first**
+
+- `config/mi_places.csv`: every city, village and township in the six counties, from two Census files. 86 cities, 24 villages and 104 townships. With the six county boards that is **220 governments**. Two townships named Salem carry their county in the name.
+- The inventory and its checks take a state. Michigan has its own inventory, checks and site terms files. The platforms file is shared. Texas is read when no state is given, and nothing about Texas changed.
+- Michigan's kinds of body: county board, city council, township board, village council. A row in a county outside the six is refused.
+- The check column `names_texas` is now `names_state`: whether a page is for a place in the inventory's own state.
+- The two agenda processors read the state from the source a document was stored under. A Michigan record is placed in a Michigan county and never in a Texas one. A township is named with its kind, "Ann Arbor Charter Township", because a city and a township often share a name.
+- Two sources added and **marked manual: `mi_agendas_legistar` and `mi_agendas_own_sites`.** No job reads them. The site lists them as not read.
+- 23 tests. 1,165 pass.
+
+**Verified**
+
+- The Census Bureau's robots file was read before the township file was downloaded, once, on November 23.
+- With an empty Michigan inventory the collectors' lists of governments they may read are empty for Michigan and unchanged for Texas: 9 Legistar governments.
+
+**Not verified**
+
+- **No Michigan government's website has been read for a collector.** The inventory file has its header and no rows. A one-county research pass, Washtenaw, was running when this was written.
+- Whether a Michigan agenda speaks of "economic development" beside a code name as a Texas one does. The rule for code names was written from Texas agendas and Texas law. No Michigan agenda has been read against it.
+- No Michigan collector exists. None is written until each site's terms and robots file are read.
+
 ## November 23, 2026 — Entering a record by hand
 
 **The owner's decision:** build hand entry as a command that keeps a saved copy and works only for sources the owner marks.
