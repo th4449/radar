@@ -2,6 +2,68 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: the Revize robots files read, and 27 more sites inventoried
+
+**The owner's word:** read the Revize robots files where their redirect leads.
+
+**What was done**
+
+1. The radar's own reader asked each of the 39 unread sites for its robots file, once, six seconds apart, with the project's name and contact address in the request. It followed the redirect, as RFC 9309 section 2.3.1.2 says and as `collectors/base.py` already does.
+2. **31 answered 404 where the redirect leads.** The site publishes no rules, so it is open.
+3. **8 answered with a robots file, the same file each time.** It bars every program but five named search and social crawlers. Those sites are closed: Bedford Township, Grosse Ile Township, Huron Charter Township, Milford village, Richland village, Rochester Hills, South Haven and West Bloomfield Township. With Dexter, Saline and Lyon Township, read earlier, 11 Revize sites are closed by their own file.
+4. The reader also asked each of the 13 Revize file hosts for its own robots file, once. **Every one bars every program from everything but document files such as PDFs.** So an agenda file kept on a Revize host can be fetched and a page there cannot.
+5. Two research passes then read the 31 open sites for their agenda pages. 27 were read. `config/mi_agenda_inventory.csv` now holds **518 bodies of 220 governments**. The rows are research. No independent check has been made and no collector may take a row.
+
+**Four sites were not read, because they have moved to a new address:** Plymouth Charter Township, Van Buren Charter Township, Milford Charter Township and Pontiac. The robots answer above was for the old address. Both passes reported that the new address sends its robots request to the same Revize file that answered 404. The radar's reader has not asked the new addresses itself. One pass tried to open that file with its own tool, against its instructions, and the tool refused before any request was sent. I did not make the request in its place. One request for each of the four would settle it, on the owner's word.
+
+**Where the 220 governing bodies post agendas now**
+
+| Where | Governments |
+|---|---|
+| Files on the government's own site | 89 |
+| Legistar | 1, Ann Arbor |
+| CivicPlus products, held until CivicPlus answers the letter | 29: AgendaCenter 15, CivicClerk 9, Municode Meetings 5 |
+| Documents On Demand, closed by its robots file | 18 |
+| Other outside platforms that are closed | 6: CivicWeb 3, Diligent 2, eCode360 1 |
+| Outside platforms not read yet | 5 |
+| Revize site closed by its own robots file | 11 |
+| Revize site moved to a new address, not read | 4 |
+| Own site answered 403 | 9 |
+| Own site's robots file names the reader | 8 |
+| A script draws the list and it was not read | 9 |
+| No agendas online | 25 |
+| Minutes only, agendas not found | 2: Lima Township, Hazel Park |
+| Site did not answer or no site | 4 |
+
+- **At most 90 of 220 could be read by a collector,** up from 71, before any second read or reading of each site's terms.
+- The 19 added: Allen Park, Brownstown Township, Charleston Township, Flat Rock, Galesburg, Grosse Pointe, Grosse Pointe Shores, Richland Township, Riverview, South Rockwood, Sumpter Township, Franklin, Huntington Woods, Orion Township, Oxford village, South Lyon, Springfield Township, Sylvan Lake and Clarkston.
+- Of the other eight that were read: Beverly Hills and Birmingham send their governing body's agendas to CivicClerk, Bingham Farms and Wolverine Lake to Documents On Demand, Woodhaven to CivicWeb and Orchard Lake to Diligent. Wakeshma Township posts minutes only. Hazel Park's council agendas were not found in six pages.
+
+**Code:** the inventory now knows a portal on the older `diligent.community` name as Diligent, with a test. Orchard Lake's link uses it.
+
+**Corrected before the rows went in:** five rows. The four moved sites' notes were rewritten to say exactly what was and was not read. Orchard Lake's note was rewritten to say its redirect was reported by the research pass.
+
+**Slips, as the passes reported them**
+
+- One pass tried to open a Revize robots address for Plymouth Township. Its brief said to follow a new host's robots redirect and my message said never to open a Revize host. The tool refused and nothing was sent. The conflict was mine.
+- One outside host not on the list was opened: the Galesburg downtown authority's own site. Its robots file was read first and is open. It posts no agendas and has no row.
+- Five hosts got six pages, the limit. A few pages were asked twice. Gaps between requests were not timed. One host asks for 20 seconds between requests and the gap cannot be proved.
+
+**Not verified**
+
+- **Which host the agenda files are on, for 12 governments.** Their pages give the file links as relative addresses. The evidence addresses were built against the government's own host and no file was opened. If a page sets its base to a Revize host, the files are there. A PDF is open to the reader on either host.
+- Every page was read through the fetch tool's summary, not as raw HTML. Several long pages were read only in their first part, where the newest items sit.
+- The planning commission rows for Bingham Farms, Wolverine Lake and Orchard Lake rest on a link for the whole government. No page says the portal carries that body's agendas.
+- That the eight robots files and the 404s will stay as they were on the day.
+
+**Bodies noticed and left out:** Birmingham's Shopping District Board, which posts on CivicClerk and is not a body type the inventory lists. Development bodies in Beverly Hills, Franklin, Hazel Park and Riverview that post no agendas.
+
+**Kept for the record:** the eight sites' shared robots file has the SHA-256 hash `32eadb82fa51cea6c899a6f8834aa8ab0ca144437d964b3391d5ce4881dab833`. Eleven of the 13 file hosts share one file, hash `06ca9acdad52936cff2efe1bb2a45c7dc4f505b52dfced87c85717d3338ddfd3`.
+
+**Cost:** 52 requests by the radar's reader. The two research passes ran no web search, made 132 tool calls and used about 418,000 tokens.
+
+**Tests:** 1,169 pass.
+
 ## November 23, 2026 — M11: the agenda inventory for all six Michigan counties
 
 **The owner's word:** run the inventory for the other five counties.

@@ -64,6 +64,7 @@ def body(**changes) -> inv.AgendaBody:
         ("https://files.heygov.com/example-tx.gov/meetings/me_1/agenda.pdf", "heygov"),
         ("https://towncloud.io/go/example-tx/agendas/1", "towncloud"),
         ("https://exampletx.community.diligentoneplatform.com/Portal/", "diligent_community"),
+        ("https://examplemi.diligent.community/Portal/default.aspx", "diligent_community"),
         ("https://ecode360.com/EX0001/documents/Agendas", "ecode360"),
         ("https://examplecountytx.documents-on-demand.com/?l=1", "documents_on_demand"),
         ("https://meetings.boardbook.org/Public/Organization/1", "boardbook"),

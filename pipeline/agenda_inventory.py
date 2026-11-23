@@ -90,7 +90,11 @@ _BY_ADDRESS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("google_drive", re.compile(r"^(?:drive|docs)\.google\.com", re.I)),
     ("heygov", re.compile(r"^(?:[^/]*\.)?heygov\.com", re.I)),
     ("towncloud", re.compile(r"^(?:[^/]*\.)?towncloud\.io", re.I)),
-    ("diligent_community", re.compile(r"^[^/]*\.diligentoneplatform\.com", re.I)),
+    # A portal on the older diligent.community name sends its robots request to the newer one.
+    (
+        "diligent_community",
+        re.compile(r"^[^/]*\.(?:diligentoneplatform\.com|diligent\.community)", re.I),
+    ),
     ("ecode360", re.compile(r"^(?:www\.)?ecode360\.com", re.I)),
     ("documents_on_demand", re.compile(r"^[^/]*\.documents-on-demand\.com", re.I)),
     ("boardbook", re.compile(r"^(?:[^/]*\.)?boardbook\.org", re.I)),
