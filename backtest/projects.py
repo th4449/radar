@@ -53,10 +53,11 @@ COLUMNS = (
 )
 
 Status = Literal["proposed", "approved", "under_construction", "operating", "cancelled", "unclear"]
-# How far a cited page was checked. `second_read` was opened twice, the second time by the
-# session that owns the list. `first_read` was opened by a research pass only. `not_opened`
+# How far a cited page was checked. `second_read` was opened twice, the second time by a check
+# that did not do the research, and the date, the words data center and the place all held.
+# `first_read` was opened by a research pass only, or the second read found a gap. `not_opened`
 # is known from a headline, an excerpt or another source. `set_aside` was read against a block
-# and is not used. `none_found` means there is none.
+# or on a site since treated as closed, and is not used. `none_found` means there is none.
 Read = Literal["second_read", "first_read", "not_opened", "set_aside", "none_found"]
 
 # Records a government made or posted. Each is a kind of record the radar could read.
@@ -69,6 +70,7 @@ GOVERNMENT_KINDS = frozenset(
         "county_hearing",
         "city_agenda",
         "city_minutes",
+        "city_meeting",
         "zoning_case",
         "state_air_permit_review",
         "state_filing",

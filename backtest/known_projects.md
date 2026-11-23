@@ -1,50 +1,141 @@
 # Known projects: how the list is made
 
-`known_projects_tx.csv` is the backtest's list of known data center projects in the Texas test counties. It is built from news reports and public records only, with no use of FracTracker. `backtest/projects.py` loads it and refuses a row that breaks a rule.
+`known_projects_tx.csv` is the backtest's list of known data center projects in the 30 Texas test counties. It is built from news reports and public records only, with no use of FracTracker. `backtest/projects.py` loads it and refuses a row that breaks a rule.
 
-The first three counties were a trial on November 22, 2026: Hood, Hill and Milam, 23 projects. The owner then said to carry on with the other 27 the same way.
+It holds **126 projects in 25 counties**. All of it was researched on November 22, 2026.
 
 **The date a project became public is its `news_date`:** the first news report or company announcement. The owner settled that on November 22, 2026. A government record is a signal, never the public date.
 
+**Nothing here is a finding about a company or a place.** A row says what a dated source says. A date is the earliest found, not the earliest that exists.
+
 ## How it was made
 
-- One research pass per county searched news sites, trade press, company releases and government pages, and looked for the earliest dated report that calls each project a data center.
-- A second read then opened nine of the cited sources again. Every date held.
+- **One research pass per county,** two for Dallas County. Each searched news sites, trade press, company releases and government pages for the earliest dated report that calls each project a data center, and for the earliest dated government record.
+- The first three counties were a trial: Hood, Hill and Milam, 23 projects. The owner then said to carry on with the other 27 the same way.
+- **Every pass carried the collectors' rules in its brief:** a plain connection only, robots files honored, a list of barred hosts, stop at a refusal, no reprint of a closed paper, no private individuals.
+- **A second read by a separate pass** then opened the cited pages again and reported what each page itself shows: the date, whether it calls the project a data center and whether it names the place. It ran no searches.
+- **One row per site.** The backtest matches a signal to a project by place and company, and gives a signal that fits two projects to neither. A later phase or a second developer on the same site is in the row's notes.
 - Bitcoin mines are listed only where a source calls them a data center. The `crypto` column marks them.
+- In Dallas, Bexar, Travis and Harris counties only new builds, campuses and expansions first made public since January 1, 2023 are listed. About 130 older operating buildings were seen there and left out.
 - No private individual is named. Companies, their LLCs and officials acting in office are.
 
 ## The columns that carry the dates
 
 | Column | Meaning |
 |---|---|
-| `record_date` | The earliest dated public record or report found that calls the project a data center, of any kind |
-| `record_kind` | What that is: a county notice, a state permit review, a company release, a news story, a petition |
-| `news_date` | The earliest news report or company announcement found |
-| `record_read`, `news_read` | `second_read` opened twice. `first_read` opened by the research pass only. `not_opened` known from a headline, an excerpt or a secondary source. `set_aside` see below. `none_found` |
+| `record_date` | The earliest dated record found that calls the project a data center. Where no government record was found it is the earliest report of any kind |
+| `record_kind` | What that is. `county_meeting`, `county_hearing` and `city_meeting` mean a government action known only from a news report. `county_minutes`, `city_minutes`, `county_agenda`, `county_notice`, `zoning_case` and `state_filing` mean the address is the record itself |
+| `news_date` | The earliest news report or company announcement found. The public date |
+| `record_read`, `news_read` | How far the cited page was checked. See below |
+| `confidence` | `high` both dates read and nothing older found. `medium` one read. `low` otherwise, and whenever the second read found a gap |
 
-## What it shows, and what it does not
+How far a page was checked:
 
-- **For 10 of the 23, a government record or a petition names the data center before the first news report found.** Two are county notices of tax abatement hearings in Milam County, 4 and 39 days ahead. One is a state air permit review for a site in Hill County, 162 days ahead.
-- **This is not a measured lead time.** A news date here is the earliest report found, not the earliest that exists. Two local papers post little online and one refused requests.
-- It bears on what "the date it became public" should mean. If a county's own notice counts as public, the radar can at best tie it, because that notice is one of the records the radar reads.
+- `second_read`: opened twice, the second time by a check that did not do the research. The date held, the page calls the project a data center and it names the place.
+- `first_read`: opened by the research pass only, or the second read found a gap. The gap is in the notes after the words SECOND READ.
+- `not_opened`: known from a headline, a search excerpt or another source.
+- `set_aside`: read against a block, or on a site since treated as closed. The date is removed and a person needs to date the row.
+- `none_found`.
 
-## What was read against a block, and is set aside
+## What it holds
 
-The first pass was not told to stay off restricted hosts. Two things followed.
+| County | Projects | County | Projects |
+|---|---|---|---|
+| Dallas | 28 | Travis | 3 |
+| Bexar | 15 | Austin | 2 |
+| Ellis | 10 | Carson | 2 |
+| Hood | 10 | Henderson | 2 |
+| Harris | 9 | Somervell | 2 |
+| Milam | 7 | Taylor | 2 |
+| Hill | 6 | Archer | 1 |
+| Lubbock | 5 | Bosque | 1 |
+| Potter | 4 | Callahan | 1 |
+| Tom Green | 4 | Freestone | 1 |
+| Bowie | 3 | Hopkins | 1 |
+| Johnson | 3 | Parker | 1 |
+| Matagorda | 3 | | |
 
-- Three Hood County minutes files were fetched through a tool that switched to a stealth proxy by itself. That county's document host bars every program in its robots file.
-- Three pages of one newspaper were read before the pass learned the site blocks the crawler it was using.
+**No known project was found in five counties:** Burnet, Erath, Falls, San Saba and Wise. In each, the county's agendas or the local papers were closed to the pass, so "none found" is weak.
 
-Nothing that rests on those six pages is used here. Two Hood County projects have no usable first record for that reason, and a person needs to date them. Later passes must use a plain connection, stay off the hosts in `config/tx_agenda_platforms.csv` marked restricted, and stop at a refusal.
+- **79 of the 126 have a public date.** 73 of those fall in 2023 or later, inside the years the radar's records can cover.
+- **47 have none.** No news report was found, or the only one sits on a site closed to the reader.
+- 75 have a dated government record. 45 of those were read on the page.
+- **34 records are state building registrations** at the Texas Department of Licensing and Regulation. No other kind is as common. The plan does not list that source.
+
+## What it shows about records and news, and what it does not
+
+For 18 projects both a government record and the first report were read on the page.
+
+- In **9** the record came first, by 5 to 918 days.
+- In **9** the record came after the first report, by 3 to 416 days.
+- The median is a record one day ahead.
+
+**This is not a measured lead time, and it is not the backtest.**
+
+- A news date is the earliest report found. Several local papers bar the reader, and an older story there would shorten or erase a lead.
+- A state registration is filed when a building is designed, which can be long after a campus is announced. Six of the nine late records are registrations.
+- The two longest leads are doubtful. The pass that found the 918-day one says the registration may not be the same work as the announcement.
+- It counts records a person found by searching. The backtest asks what the radar's own collectors would have seen.
+
+## Left out, and why
+
+- **Rumors.** Erath County: land on two county roads, no developer and no record. Marlin in Falls County: the mayor says the city was approached, nothing in writing.
+- **Land with no data center announced.** A power company's tracts near Red Lick in Bowie County and on State Highway 16 in Bexar County.
+- **Marketed sites.** A broker's 190 acres at Glen Rose and about 212 acres for sale in the city of Burnet.
+- **A designation, not a project.** Land at the former army depot in Bowie County named a data center park in 2023.
+- **Sites no source calls a data center.** A 20 MW crypto mining site in Wise County that only trackers file as one.
+- **One undated tracker listing** in Travis County, with no address.
+- **County unclear or outside the 30.** A tracker places one project in Richland Springs and three other sources place it elsewhere. Projects in Hale, Jack, Tarrant, Randall, Shackelford, Medina, Bastrop and Brazoria counties were reported near the test counties and left out.
+
+## Sites treated as closed
+
+`known_projects_hosts.csv` holds the robots result for every site a read in the list rests on. Each file was read once on November 22, 2026 with the project's own user agent. A test refuses a read that rests on a closed site.
+
+A site is closed when its robots file:
+
+- bars every program on the path, or
+- bars an AI reader that acts for a user, under any name, or
+- does not answer. A 404 means there is no file and the site is open.
+
+A file that names only training crawlers does not close a site.
+
+**What that rule set aside: 22 cited lines in 17 projects.** Each lost its date and needs a person to read the page.
+
+- Some research passes read sites whose files bar AI readers under names other than the reader they used. Four television stations fall here. Six first reports rested on them: two in Henderson County, two in Ellis, one in Lubbock and one in Carson.
+- **The trial did not check robots files at all.** The audit closed six of its sites: a trade paper, a television station, two newspapers, a property data site and a company's investor site. Thirteen cited lines in eight Hill, Hood and Milam projects are set aside, among them the first reports behind two of the trial's longest leads.
+- Six pages in Hood County were read against a block in the trial and were set aside then. Two Hood County projects have no usable first record for that reason.
+- One Bexar County row is set aside because the page read turned out to carry a story from a paper behind a subscriber wall.
+
+**A reprint is the paper's page.** Passes did not open a Yahoo, AOL or MSN copy of a story from a paper that is barred, refuses or sits behind a subscriber wall.
+
+## Slips the passes reported
+
+No date in the list rests on any of them.
+
+- Two requests to one host in the same batch, three times.
+- A robots file fetched after the page it covers, four times. Each turned out to allow the read.
+- Three pages opened before the pass knew they carried a closed paper's story.
+- Waits between requests to one host were not timed. They rest on the time between steps.
+- One pass ran 31 searches against a ration of 30.
 
 ## Not verified
 
-- Whether any list is complete. Hill County's judge told a reporter in May 2026 that at least eight projects were in the works. Six were found.
-- The first report for seven Hood County projects. The local paper could not be searched.
-- The day a government record could first be seen online. Minutes and permit reviews carry the day they were made.
+- **Whether any county's list is complete.** Officials in Hill, Freestone, Parker, Tom Green and Lubbock counties spoke of more projects than were found. A newspaper counts 23 planned in Bexar County and 15 are listed.
+- **The first report for 47 projects.**
+- The day a government record could first be seen online. Minutes carry the day of the meeting, and in Archer County a file was made eight weeks after it.
+- Whether a state registration covers the whole campus. Many are for one building.
+- Street addresses and coordinates. 41 rows have a point, most from the Census geocoder for a street address.
+- **The second read, for the 27 later counties:** 85 cited lines held, 11 showed a gap in wording or place, 2 could not be opened and 6 state registrations in Harris County were not sent. No date differed. In the trial, the session itself re-opened nine sources and every date held. Some of those nine are now set aside, because the site is closed.
 - Whether two Hill County entries, Project Aquila and the C.R. 3106 project, are one project.
-- Street addresses and coordinates for most projects. Two have coordinates, both of a power plant.
+
+## Leads for a person
+
+- **Parker County.** A state air registration for gas turbines, said to describe bridge power for a data center, from about April 2025. That would be about 13 months before the first news. The state site is barred to programs. Identifiers are in the row's notes and are unverified.
+- **Hopkins County.** Council minutes are said to put a city letter of intent on December 19, 2024, six months before the company's release.
+- **Archer County.** The code name alone is on a county agenda posted September 16, 2025.
+- **Dallas County.** Seagoville rezoned 138 acres for a data center on November 18, 2024. No news report was found.
+- Code-named abatement items with no use stated, on a Hopkins County agenda of September 22, 2026 and in Taylor County minutes of November 18, 2025.
 
 ## Cost
 
-Each county took one research pass of 95 to 113 tool calls and 11 to 16 minutes.
+28 research passes, one pass to finish searches a shared limit cut short, and four second-read passes. About 8 million tokens and about 850 web searches in all. Each county took 5 to 19 minutes.

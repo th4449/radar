@@ -2,6 +2,64 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M9: the list of known projects, all 30 counties
+
+The owner said to carry on with news research for the other 27 counties. The list is built. **No backtest has been run.**
+
+**Built**
+
+- `backtest/known_projects_tx.csv`: **126 projects in 25 of the 30 counties**, one row per site, each with the earliest news report found and the earliest record found. Dallas 28, Bexar 15, Ellis 10, Hood 10, Harris 9.
+- `backtest/projects.py` loads it and refuses a row that breaks a rule. **The public date is the first news report or company announcement,** as the owner settled. A government record is a signal.
+- `backtest/known_projects_hosts.csv`: the robots result for each of the 62 sites checked. A test refuses a read that rests on a closed site.
+- `backtest/known_projects.md`: the method, what was left out, and what is not verified.
+- 33 tests on the loader and the list. 974 pass in all.
+
+**How it was researched**
+
+- One pass per county, two for Dallas, each with the collectors' rules in its brief. Then a second read by separate passes, which opened the cited pages again and ran no searches.
+- **Second read of the 27 later counties:** 85 cited lines held. 11 showed a gap in wording or place and dropped to low. 2 could not be opened. No date differed.
+- All 28 state building registrations sent for a second read held.
+
+**What it holds**
+
+- **79 projects have a public date,** 73 of them in 2023 or later. **47 have none.**
+- No known project was found in Burnet, Erath, Falls, San Saba or Wise. In each, the county's agendas or the local papers were closed to the pass.
+- For 18 projects both a government record and the first report were read on the page. The record came first in 9 and after in 9. That is not a lead time: see the method file.
+- **34 records are state building registrations** at the Texas Department of Licensing and Regulation. The plan does not list that source.
+
+**A rule tightened, and reads set aside**
+
+- **A robots file that bars an AI reader acting for a user, under any name, closes the site.** Some passes read such sites because the file did not name their reader. I first said that was allowed, then changed my view: a file that bars every AI reader it knew by name is saying no.
+- I then read the robots file of every site a read rests on, once each, with the project's user agent.
+- **22 cited lines in 17 projects are set aside.** Thirteen are from the three-county trial, which never checked robots files. Two of the trial's longest leads lose their first report.
+- Rows left out: two rumors, two tracts with no data center announced, two marketed sites, one designation, one crypto site no source calls a data center and one undated tracker listing.
+
+**The owner's decisions, November 22**
+
+- The public date is the first news report or company announcement.
+- The owner agreed to FracTracker's terms. Nothing has been taken. A letter is drafted for `info@fractracker.org`, not sent.
+
+**Not verified**
+
+- Whether any county's list is complete. Officials in five counties spoke of more projects than were found.
+- The first report for 47 projects.
+- The day a government record could first be seen online.
+- The terms of the state registration site. A second-read pass saw its robots file and one policy page. I have not read them.
+
+**Leads for a person**
+
+- Parker County: a state air registration from about April 2025, said to name a data center, about 13 months before the first news.
+- Hopkins County: a city letter of intent of December 19, 2024, six months before the company's release.
+- Seagoville rezoned 138 acres for a data center on November 18, 2024, with no news report found.
+
+**Still needed for the backtest**
+
+- Control counties. The five test counties with no known project are close to controls, and are weak ones.
+- History: one-time runs back to 2023 for each collector, with request counts brought to the owner first.
+- A loader for historical signals and the report writer.
+
+**Cost.** About 8 million tokens and about 850 web searches. Firecrawl credits spent: under 10.
+
 ## November 22, 2026 — M9 started: the backtest harness, and what the backtest still needs
 
 The owner said to start M9. The harness is built and tested on made-up signals. **No backtest has been run.** It needs three things the plan does not give, each the owner's call.

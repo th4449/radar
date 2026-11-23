@@ -1,0 +1,66 @@
+# The robots file of every site a read in known_projects_tx.csv rests on, read once on 2026-11-22
+# with the project's own user agent. closed: the file bars every program on the path, bars an AI
+# reader that acts for a user (by any name), or did not answer 200 or 404. See backtest/known_projects.md.
+host,robots_http,result,why
+baxtel.com,200,open,robots file allows the path
+bitcoinmagazine.com,200,open,robots file allows the path
+candysdirt.com,200,open,robots file allows the path
+communityimpact.com,200,open,robots file allows the path
+comptroller.texas.gov,403,open,"robots file allows /taxes/, read 2026-11-19 (docs/sources/tx_comptroller_data_centers.md); it answered 403 on 2026-11-22"
+dallasinnovates.com,200,open,robots file allows the path
+developabilene.com,200,open,robots file allows the path
+energycapitalhtx.com,200,open,robots file allows the path
+freestonecountytimesonline.com,200,open,robots file allows the path
+hillsbororeporter.com,200,closed,bars every program on this path
+hillsborotx.org,404,open,no robots file
+ir.bitdeer.com,403,closed,robots file answered 403
+ir.mara.com,200,open,robots file allows the path
+lakelander.com,200,open,robots file allows the path
+lpc.com,200,open,robots file allows the path
+msbglobalservices.com,200,open,robots file allows the path
+newtools.cira.state.tx.us,404,open,no robots file
+records.tceq.texas.gov,404,open,no robots file
+safanad.com,200,open,robots file allows the path
+sanangelolive.com,200,open,robots file allows the path
+sanantonioreport.org,200,open,robots file allows the path
+stateofthedivision.blogspot.com,200,open,robots file allows the path
+txktoday.com,200,open,robots file allows the path
+www.audacy.com,200,open,robots file allows the path
+www.austincounty.com,404,open,no robots file
+www.bisnow.com,200,open,robots file allows the path
+www.calpine.com,200,open,robots file allows the path
+www.cbsnews.com,200,open,robots file allows the path
+www.change.org,200,open,robots file allows the path
+www.click2houston.com,200,open,robots file allows the path
+www.co.archer.tx.us,404,open,no robots file
+www.co.hill.tx.us,404,open,no robots file
+www.costar.com,403,closed,robots file answered 403
+www.crowholdings.com,200,open,robots file allows the path
+www.dallasnews.com,200,closed,"bars Claude-User, Claude-Web, ChatGPT-User, Perplexity-User"
+www.datacenterdynamics.com,200,closed,bars Claude-Web
+www.einpresswire.com,200,open,robots file allows the path
+www.focusdailynews.com,200,open,robots file allows the path
+www.fourstatesliving.com,200,open,robots file allows the path
+www.kcbd.com,200,closed,"bars Claude-Web, ChatGPT-User"
+www.kltv.com,200,closed,"bars Claude-Web, ChatGPT-User"
+www.kmil.com,200,open,robots file allows the path
+www.kwtx.com,200,closed,"bars Claude-Web, ChatGPT-User"
+www.milamcounty.net,404,open,no robots file
+www.nbcdfw.com,200,closed,"bars Claude-Web, ChatGPT-User"
+www.newschannel10.com,200,closed,"bars Claude-Web, ChatGPT-User"
+www.prnewswire.com,200,open,robots file allows the path
+www.riotplatforms.com,200,open,robots file allows the path
+www.sec.gov,200,open,robots file allows the path
+www.stackinfra.com,200,open,robots file allows the path
+www.star-telegram.com,0,closed,robots file answered no connection
+www.stocktitan.net,200,open,robots file allows the path
+www.streamdatacenters.com,200,open,robots file allows the path
+www.tceq.texas.gov,200,open,robots file allows the path
+www.tdlr.texas.gov,200,open,robots file allows the path
+www.teslarati.com,200,open,robots file allows the path
+www.texastribune.org,200,open,robots file allows the path
+www.theblock.co,200,open,robots file allows the path
+www.tract.com,200,open,robots file allows the path
+www.trgdatacenters.com,200,open,robots file allows the path
+www.weatherfordtx.gov,200,open,robots file allows the path
+www.wfaa.com,200,open,robots file allows the path

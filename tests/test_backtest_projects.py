@@ -158,7 +158,38 @@ def test_the_real_list_loads_and_every_project_is_in_a_test_county() -> None:
     from backtest.projects import KNOWN_PROJECTS_TX
 
     projects = load_known_projects(KNOWN_PROJECTS_TX)
-    assert len(projects) >= 23
-    assert {"Hood", "Hill", "Milam"} <= {p.county for p in projects}
+    assert len(projects) == 126
+    assert len({p.county for p in projects}) == 25
     # A page read against a block is never the source of a date.
     assert not [p.key for p in projects if p.record_read == "set_aside" and p.record_date]
+    assert not [p.key for p in projects if p.news_read == "set_aside" and p.news_date]
+
+
+def test_no_read_in_the_real_list_rests_on_a_site_its_robots_file_closes() -> None:
+    # known_projects_hosts.csv holds the robots result for every site a read rests on.
+    import csv
+    from urllib.parse import urlsplit
+
+    from backtest.projects import KNOWN_PROJECTS_TX
+
+    path = KNOWN_PROJECTS_TX.with_name("known_projects_hosts.csv")
+    with path.open(encoding="utf-8", newline="") as lines:
+        hosts = {
+            row["host"]: row["result"]
+            for row in csv.DictReader(line for line in lines if not line.startswith("#"))
+        }
+    assert set(hosts.values()) == {"open", "closed"}
+    for project in load_known_projects():
+        for url, read in (
+            (project.news_url, project.news_read),
+            (project.record_url, project.record_read),
+        ):
+            if read in ("first_read", "second_read"):
+                host = urlsplit(url).netloc.lower()
+                assert hosts.get(host) == "open", (project.key, host)
+
+
+def test_the_real_list_keeps_one_row_for_one_site() -> None:
+    projects = load_known_projects()
+    points = [(p.county, p.lat, p.lon) for p in projects if p.lat is not None]
+    assert len(points) == len(set(points))
