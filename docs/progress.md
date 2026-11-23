@@ -2,9 +2,22 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — A rule on data centers is an alert, and a watch on the mailboxes
+
+**The owner's decisions**
+
+- **A moratorium or a zoning rule on data centers is an alert.** A reviewer confirms it when the record says so. The reviewer's choice on the desk, the reviewer terms and the methodology page now say so. A government buying data center services for its own computers is not an alert.
+- **Watch the email for replies to the letters.**
+
+**The watch**
+
+- A scheduled task on the owner's computer checks two mailboxes at 10 and 4 on weekdays and reports any reply. It reads only: it sends nothing, changes nothing and does not say what an answer allows. It runs while the desktop app is open.
+- **What the mailboxes show today:** five letters went out on November 23 from the Anti-Corruption Action address, to the Texas Press Association, the PUC, EGLE twice and the Comptroller. No reply to any yet. CivicPlus sent only an automatic acknowledgment on November 21.
+- **No sent copy of the TDLR letter was found in any connected mailbox.** The owner says it was sent. Where its answer will arrive is not known.
+
 ## November 23, 2026 — Every drafted letter has been sent
 
-The owner said on November 23, 2026 that all the letters have been sent. The day each went out is not recorded here.
+The owner said on November 23, 2026 that all the letters have been sent. The mailbox shows five of them went out that day.
 
 | To | About | Answer |
 |---|---|---|

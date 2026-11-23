@@ -3,7 +3,7 @@
 - Source id: `tx_comptroller_local_agreements`
 - Page: https://comptroller.texas.gov/economy/development/search-tools/sb1340/
 - Checked: November 20, 2026
-- Result: **held. Manual for now.** The search pages are open. The data behind them sits on two other hosts whose robots files cannot be read, so our fetcher refuses them. No collector is written. **The owner has sent the request to the Comptroller, and said so on November 23, 2026. No answer yet.**
+- Result: **held. Manual for now.** The search pages are open. The data behind them sits on two other hosts whose robots files cannot be read, so our fetcher refuses them. No collector is written. **The owner sent the request to the Comptroller on November 23, 2026. No answer yet.**
 
 ## What was verified
 

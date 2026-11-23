@@ -75,6 +75,8 @@ The owner approved all of this on November 23, 2026. It is done, and the second 
 
 **5. The backtest is run again after any held feed is settled.** It is one command.
 
+**6. A moratorium or a zoning rule on data centers is an alert.** The owner decided this on November 23, 2026, after reading what the sites at the new bar are. Of the 58 that fit no known project, 20 are a government weighing such a rule or discussing data centers, with no project named. A reviewer confirms one when the record says so. The 28 that are a government's own computers are not alerts.
+
 ## Not verified
 
 - **The public dates.** Each is the earliest news report found. An older report would shorten or erase the one lead. 49 projects have no public date and are not judged.

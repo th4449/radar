@@ -46,6 +46,7 @@ A public tool that names companies and tells communities a data center may be co
 - Only `confirm_subscription()` sets `confirmed_at`. It checks that the sign-in service proved the address.
 - The email job sends only through a `Sender` given to it. The command gives it none. Do not add a way to send without the owner's decision (BUILD_PLAN.md section 11).
 - After changing `config/counties_*.yaml` or `config/sources.yaml`, run `uv run python scripts/export_web_data.py`.
+- **A rule on data centers that a government is weighing is an alert too:** a moratorium, a zoning change. The owner decided this on November 23, 2026. A reviewer confirms it when the record says so. A government buying data center services for its own computers is not an alert.
 - Public copy follows the standing rules: the language of signals, short sentences, no boxes and chips.
 
 ## Processing

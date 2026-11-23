@@ -218,7 +218,10 @@ function ReviewForm({ site, account, done }: { site: Site; account: Account; don
         <legend style="font-weight: 600">Your decision</legend>
         {(
           [
-            ["confirm", "Confirm. The records say what the signals say, and they point to this place."],
+            [
+              "confirm",
+              "Confirm. The records say what the signals say. They point to this place, or to a rule on data centers a government is weighing, such as a moratorium or a zoning change.",
+            ],
             ["reject", "Reject. The records do not support this, or it is something else."],
             ["unsure", "Unsure. Leave it for another reviewer."],
           ] as [Decision, string][]

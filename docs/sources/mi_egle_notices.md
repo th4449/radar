@@ -21,7 +21,7 @@ From EGLE's MiEnviro Portal contact page:
 - Water: EGLE-WRD-MiEnviro@Michigan.gov
 - General questions: Environmental Assistance Center, EGLE-Assist@Michigan.gov, 800-662-9278
 
-**Status:** the owner has sent the request for a written agreement, and said so on November 23, 2026. No answer yet. On November 20, 2026 the Public Service Commission refused the same request for its docket site and said the State has not historically granted this permission. Expect the same answer here. The feed stays manual. See [mi_state_of_michigan_terms.md](mi_state_of_michigan_terms.md).
+**Status:** the owner sent the request for a written agreement on November 23, 2026. No answer yet. On November 20, 2026 the Public Service Commission refused the same request for its docket site and said the State has not historically granted this permission. Expect the same answer here. The feed stays manual. See [mi_state_of_michigan_terms.md](mi_state_of_michigan_terms.md).
 
 ## What a person can do by hand
 
