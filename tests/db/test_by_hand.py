@@ -61,3 +61,19 @@ def test_the_backtest_reads_the_newest_list_the_history_holds(db, tmp_path):
             now=SAVED_AT + dt.timedelta(minutes=5),
         )
         assert stored_listing(db, store) == PAGE.read_bytes()
+
+
+def test_the_archive_bucket_is_private_and_only_the_service_reaches_it(db):
+    """The hosted archive's bucket, made by a migration. See collectors/hosted_archive.py."""
+    if db.execute("select to_regclass('storage.buckets')").fetchone()[0] is None:
+        pytest.skip("this database was started without the storage service")
+    assert db.execute("select public from storage.buckets where id = 'archive'").fetchone() == (
+        False,
+    )
+    # Row level security is on for stored files and no policy opens them to anyone.
+    assert db.execute(
+        "select relrowsecurity from pg_class where oid = 'storage.objects'::regclass"
+    ).fetchone() == (True,)
+    assert db.execute(
+        "select count(*) from pg_policies where schemaname = 'storage' and tablename = 'objects'"
+    ).fetchone() == (0,)

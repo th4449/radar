@@ -6,8 +6,10 @@
 A dry run fetches the source and reports what it found. It keeps nothing: the run log lives in
 memory and the files go to a temporary folder.
 
-A real run needs DATABASE_URL and RADAR_ARCHIVE_DIR. It writes the run log and the documents
-to the database and the original files to the archive folder.
+A real run needs DATABASE_URL and an archive. It writes the run log and the documents to the
+database and the original files to the archive: a folder named by RADAR_ARCHIVE_DIR, or the
+hosted project's storage named by RADAR_ARCHIVE_URL and RADAR_ARCHIVE_KEY. See
+collectors/hosted_archive.py.
 
 A one-time run over older records, for the backtest, takes the day to start from:
 
@@ -33,6 +35,7 @@ import httpx
 import psycopg
 
 from collectors.base import Collector, Fetcher, LocalArchive, NotPermitted, RunSummary
+from collectors.hosted_archive import NotConfigured, archive_from_env
 from collectors.tx.agenda_pages import AgendaPages
 from collectors.tx.comptroller_data_centers import ComptrollerDataCenters
 from collectors.tx.ercot_large_load import ErcotLargeLoad
@@ -98,11 +101,14 @@ def run_source(
             return go(LocalArchive(Path(tmp)), MemorySink())
 
     database_url = os.environ.get("DATABASE_URL")
-    archive_dir = os.environ.get("RADAR_ARCHIVE_DIR")
-    if not database_url or not archive_dir:
-        raise CannotStart("a real run needs DATABASE_URL and RADAR_ARCHIVE_DIR. Or pass --dry-run.")
+    if not database_url:
+        raise CannotStart("a real run needs DATABASE_URL and an archive. Or pass --dry-run.")
+    try:
+        store = archive_from_env()
+    except NotConfigured as exc:
+        raise CannotStart(f"a real run needs an archive: {exc}. Or pass --dry-run.") from exc
     with psycopg.connect(database_url, autocommit=True) as conn:
-        return go(LocalArchive(Path(archive_dir)), PostgresSink(conn))
+        return go(store, PostgresSink(conn))
 
 
 def main(argv: list[str] | None = None) -> int:

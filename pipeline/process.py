@@ -2,7 +2,7 @@
 
     uv run python -m pipeline.process
 
-needs DATABASE_URL and RADAR_ARCHIVE_DIR, the same two settings a real collector run needs.
+needs DATABASE_URL and an archive, the same settings a real collector run needs.
 
 Each run reads every document its rules have not read yet, oldest first, so a fact belongs to
 the first document that showed it. A list is collected again every week, and the same row in a
@@ -28,11 +28,12 @@ import os
 import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from pathlib import Path
 
 import psycopg
 
-from collectors.base import ArchiveStore, Fetcher, LayoutChanged, LocalArchive, NotPermitted
+from collectors.base import ArchiveStore, Fetcher, LayoutChanged, NotPermitted
+from collectors.hosted_archive import NotConfigured as ArchiveNotConfigured
+from collectors.hosted_archive import archive_from_env
 from pipeline import tceq_applications
 from pipeline.config import CONFIG_DIR, ScoringFile, load_sources
 from pipeline.entities import canonical_name, match_key
@@ -234,9 +235,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     database_url = os.environ.get("DATABASE_URL")
-    archive_dir = os.environ.get("RADAR_ARCHIVE_DIR")
-    if not database_url or not archive_dir:
-        print("not started: set DATABASE_URL and RADAR_ARCHIVE_DIR", file=sys.stderr)
+    if not database_url:
+        print("not started: set DATABASE_URL and an archive", file=sys.stderr)
+        return 2
+    try:
+        store = archive_from_env()
+    except ArchiveNotConfigured as exc:
+        print(f"not started: {exc}", file=sys.stderr)
         return 2
     with psycopg.connect(database_url, autocommit=True) as conn:
         try:
@@ -244,7 +249,6 @@ def main(argv: list[str] | None = None) -> int:
         except NotConfigured as exc:
             print(f"not started: {exc}", file=sys.stderr)
             return 2
-        store = LocalArchive(Path(archive_dir))
         if not args.fetch_applications:
             summary = run(conn, store, runner=args.runner, limit=args.limit, triager=triager)
         else:

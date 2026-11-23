@@ -19,7 +19,7 @@ What is stored is what a run stores: the file, the page's address, a time and th
 The record says a person saved it. The time is the file's own time unless `--saved-at` gives
 another, such as `2026-11-24T15:30:00-06:00`. The name of the file is not kept.
 
-It needs DATABASE_URL and RADAR_ARCHIVE_DIR, as a real run does. The exit code is 0 when the
+It needs DATABASE_URL and an archive, as a real run does. The exit code is 0 when the
 page is stored or was stored before, 1 when the file is refused and 2 when the command could
 not start.
 """
@@ -40,11 +40,11 @@ from collectors.base import (
     ArchiveStore,
     FetchResult,
     LayoutChanged,
-    LocalArchive,
     RunSummary,
     Sink,
     archive,
 )
+from collectors.hosted_archive import NotConfigured, archive_from_env
 from collectors.run import REGISTRY
 from pipeline.config import Source, load_sources
 from pipeline.store import PostgresSink
@@ -135,9 +135,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     database_url = os.environ.get("DATABASE_URL")
-    archive_dir = os.environ.get("RADAR_ARCHIVE_DIR")
-    if not database_url or not archive_dir:
-        print("not started: set DATABASE_URL and RADAR_ARCHIVE_DIR", file=sys.stderr)
+    if not database_url:
+        print("not started: set DATABASE_URL and an archive", file=sys.stderr)
+        return 2
+    try:
+        store = archive_from_env()
+    except NotConfigured as exc:
+        print(f"not started: {exc}", file=sys.stderr)
         return 2
     try:
         source = load_sources().by_id(args.source_id)
@@ -155,7 +159,7 @@ def main(argv: list[str] | None = None) -> int:
                 source=source,
                 path=args.file,
                 saved_at=saved_at,
-                store=LocalArchive(Path(archive_dir)),
+                store=store,
                 sink=PostgresSink(conn),
             )
     except NotStored as exc:
