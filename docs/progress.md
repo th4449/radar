@@ -2,6 +2,60 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: the agenda inventory for all six Michigan counties
+
+**The owner's word:** run the inventory for the other five counties.
+
+**What was done:** eight research passes read the websites of the 191 governments in Allegan, Kalamazoo, Monroe, Oakland and Wayne counties, under a tighter brief than the Washtenaw trial's. `config/mi_agenda_inventory.csv` now holds **478 bodies of 220 governments**. Every government has one governing body. **The rows are research. No independent check has been made and no collector may take a row.**
+
+**Where the 220 governing bodies post agendas**
+
+| Where | Governments |
+|---|---|
+| Files on the government's own site | 70 |
+| Legistar | 1, Ann Arbor |
+| CivicPlus products, held until CivicPlus answers the letter | 27: AgendaCenter 15, CivicClerk 7, Municode Meetings 5 |
+| Documents On Demand, closed by its robots file | 16 |
+| Other outside platforms that are closed | 4: CivicWeb 2, Diligent 1, eCode360 1 |
+| Outside platforms not read yet | 5: IQM2, BoardDocs, a Laserfiche portal, a shared folder, a file service |
+| Own site on Revize hosting, treated as closed | 42 |
+| Own site answered 403 | 9 |
+| Own site's robots file names the reader | 8 |
+| A script draws the list and it was not read | 9 |
+| No agendas online | 24 |
+| Minutes only on a closed host, so not known | 1, Lima Township |
+| Site did not answer or no site | 4 |
+
+- **At most 71 of 220 could be read by a collector,** before any second read or reading of each site's terms.
+- Among them: Wayne County, Dearborn, Novi, Farmington Hills, Auburn Hills, Highland Park and the city of Allegan.
+- Detroit's council agendas were not found: a script draws the list. Its planning commission and development authorities were.
+- Of the six county boards, one posts on its own site: Wayne. Three use CivicClerk: Washtenaw, Oakland and Monroe. Two sites refused: Allegan and Kalamazoo.
+
+**The Revize question, open for the owner.** On a Revize site the robots file redirects to another host. The research treated that as closed and read nothing: 39 governments. Three more were followed to the file itself and are closed by it: Dexter, Saline and Lyon Township. The robots standard, RFC 9309 section 2.3.1.2, says a reader follows such a redirect and obeys the file it reaches, and the radar's own fetcher does. No Revize robots file has been re-read since.
+
+**Corrected before the rows went in:** 13 rows. Three Livonia rows and three White Lake rows were given the platform their address shows. Six Municode rows were marked inferred. One row that rested on a researcher's memory was dropped.
+
+**Slips, as the passes reported them**
+
+- **Two Municode Meetings hosts were opened and read,** for Lathrup Village and Madison Heights. Another pass read the same vendor's robots file as barring an AI reader. Their rows are marked inferred.
+- Three Revize robots redirects were followed to an answer of 404, and those sites were then read: Ortonville, Independence Township and Ecorse. That is what the standard says and not what the brief said.
+- One Comstock Township page may have been served from the bare address before that address's robots file was read. It was read next and is open.
+- After Allegan County's site refused, later searches for townships carried the county's name. None was about the county's agendas.
+- Five hosts got seven requests, counting the robots file, against a limit of about six pages.
+- Gaps between requests were not timed in most passes. Some pages were asked a second question from the reader's cache.
+
+**Checked by me and not verified:** I asked for the robots files of the two Municode hosts, once each, to settle which reading is right. Both dropped the connection. I did not retry.
+
+**Cost:** 84 web searches, 917 tool calls and about 1.9 million tokens across the eight passes.
+
+**Not verified**
+
+- Every page was read through a summarizing reader, not as raw HTML.
+- No evidence file was opened.
+- Body names on closed sites are not confirmed.
+- Whether any of the 24 governments that post no agendas post them somewhere the research did not look.
+- 1,168 tests pass.
+
 ## November 23, 2026 — M11: the Washtenaw County inventory, a one-county trial
 
 **What was done:** a research pass read the websites of the 29 governments in Washtenaw County and recorded where each body posts its agendas. 68 rows are in `config/mi_agenda_inventory.csv`. **They are research. No independent check has been made and no collector may take a row.**

@@ -156,3 +156,21 @@ def test_washtenaw_has_every_government_and_one_governing_body_for_each():
     assert governing == dict.fromkeys(["Washtenaw County", *places], 1)
     # Research only. No row is a collector's until an independent check confirms it.
     assert ac.load_checks(state="MI") == []
+
+
+def test_every_government_in_the_six_counties_has_one_governing_body():
+    bodies = inv.load_inventory(state="MI")
+    places = [name for name, _ in inv.load_places(state="MI")]
+    counties = [f"{name} County" for name in sorted(SIX)]
+    governing = collections.Counter(b.government for b in bodies if b.body_type in inv.GOVERNING)
+    assert governing == dict.fromkeys([*counties, *places], 1)
+    assert len(governing) == 220
+
+
+def test_a_county_board_governs_a_county_and_nothing_else():
+    for body in inv.load_inventory(state="MI"):
+        if body.body_type == "county_board":
+            assert body.government.endswith(" County"), body.body
+        if body.government.endswith(" County") and body.body_type in inv.GOVERNING:
+            assert body.body_type == "county_board", body.body
+        assert body.body_type != "commissioners_court", body.body
