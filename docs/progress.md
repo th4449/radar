@@ -2,6 +2,29 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M9: a name added, the Comptroller refused again, TDLR proposed
+
+**The owner's instructions**
+
+- Add the name Orion Data Center to the list of known projects.
+- Give the Comptroller's site a run.
+- Propose TDLR building registrations as a source.
+
+**Done**
+
+- **The name is on the SB Energy row in Milam County,** with a note that no source read says in words that the two are one project. The backtest ran a third time. **Two of 73 judged projects now reach the bar before they were public, 77 and 39 days ahead.** Both are Milam County agendas. 58 sites that fit no known project reach the bar. The report and the findings are the third run's.
+- **The Comptroller's site refused again,** at 11:46 UTC. One request, for the robots file. Nothing was stored and nothing else was tried. Three refusals that day, about six hours apart. The owner decides whether to mark the source manual.
+- **TDLR building registrations are proposed.** [tx_tdlr_building_registrations.md](sources/tx_tdlr_building_registrations.md) is the proposal, and the source is in `config/sources.yaml` as `manual`. Nothing collects it and the site was asked nothing today.
+  - 34 of the 128 known projects have a registration as their earliest record, 31 of them in Dallas, Bexar and Harris counties, where agendas showed nothing.
+  - For 21 with both dates, the registration came before the first news report in 13 and the same day or after in 8. The median is two days ahead.
+  - **The open question:** the search answers only through the page's own script call. I recommend a letter to the agency first.
+
+**Not verified**
+
+- That the Orion Data Center is the SB Energy project.
+- Whether the Comptroller's refusal is lasting.
+- Whether the TDLR search answers a program at all. It has not been asked anything.
+
 ## November 23, 2026 — M9: the owner approved three changes, and the backtest ran again
 
 **The owner's decisions,** after reading the findings of the first run

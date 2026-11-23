@@ -77,6 +77,10 @@ For 18 projects both a government record and the first report were read on the p
 - The two longest leads are doubtful. The pass that found the 918-day one says the registration may not be the same work as the announcement.
 - It counts records a person found by searching. The backtest asks what the radar's own collectors would have seen.
 
+## A name added from the backtest
+
+The owner added the code name Orion Data Center to the SB Energy row in Milam County on November 23, 2026. Milam County's agenda for February 24, 2025 has an item on a grading plan for the Orion Data Center in Burlington, 77 days before the row's first news report, and the address of that news story carries the word orion. **No source read says in words that the two are one project.** The row's notes say so. See [findings_tx.md](findings_tx.md).
+
 ## Checked against FracTracker Alliance's dataset
 
 The owner said on November 23, 2026 to use FracTracker's data. Its spreadsheet was downloaded once that day. The file is kept outside this repository. Data provided by FracTracker Alliance (2026). Accessed via https://www.fractracker.org/data-centers/
@@ -146,7 +150,6 @@ No date in the list rests on any of them.
 
 ## Leads for a person
 
-- **Milam County, from the backtest.** The county's agenda for February 24, 2025 has an item on a grading plan for what it calls the Orion Data Center in Burlington, 77 days before the SB Energy row's first news report. The address of that news story carries the word orion. The row does not have the name. The owner decides whether to add it. See [findings_tx.md](findings_tx.md).
 - **Parker County.** A state air registration for gas turbines, said to describe bridge power for a data center, from about April 2025. That would be about 13 months before the first news. The state site is barred to programs. Identifiers are in the row's notes and are unverified.
 - **Hopkins County.** Council minutes are said to put a city letter of intent on December 19, 2024, six months before the company's release.
 - **Archer County.** The code name alone is on a county agenda posted September 16, 2025.

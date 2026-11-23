@@ -1,11 +1,21 @@
 # Texas backtest: what it shows and what is proposed
 
-BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest ran twice that day.
+BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest ran three times that day.
 
 - **The first run** used the radar as it was built, with a review threshold of 40. Its numbers are under "The first run" and "Why so little". Its report is in this repository's history, at commit `7d163cf`.
-- **The owner then approved three changes,** listed under "Decided". **The second run** has them, and [report_tx.md](report_tx.md), which a program writes, is the second run's.
+- **The owner then approved three changes,** listed under "Decided". **The second run** has them.
+- **The owner then added one name to the list of known projects. The third run** has it, and [report_tx.md](report_tx.md), which a program writes, is the third run's.
 
 **Nothing here is a finding about a company or a place.**
+
+## The third run, with the name the owner added
+
+- **Two of 73 judged projects reach the review threshold of 3 before they were public,** 77 and 39 days ahead. The median is 58 days.
+- **The second is the SB Energy project in Milam County.** The county's agenda for February 24, 2025 has an item on a grading plan for what it calls the Orion Data Center in Burlington. The list did not carry that name, so the first two runs did not count the record. The owner added it on November 23, 2026.
+- **No source read says in words that the Orion Data Center and the SB Energy project are one.** The tie rests on the place, the timing and the address of the project's first news story, which carries the word orion.
+- Both early records are Milam County agendas. Both sit on a site a reviewer would see.
+- 58 sites that fit no known project reach the bar, one fewer than in the second run.
+- 71 of 73 judged projects still have no signal before their public date.
 
 ## The second run, with the three changes
 
@@ -38,9 +48,9 @@ BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest r
 
 ## Records a person should read
 
-The report lists 42 records tied to no project that say "data center" or are a planning file naming the county, each seen in the year before a judged project in that county became public. Many are a government's own computer rooms or a zoning ordinance. Three are not:
+After the first run the report listed 42 records tied to no project that say "data center" or are a planning file naming the county, each seen in the year before a judged project in that county became public. Many are a government's own computer rooms or a zoning ordinance. Three were not:
 
-- **Milam County, February 24, 2025.** An item on a grading plan for what the county calls the Orion Data Center in Burlington. That is 77 days before the SB Energy project's public date, and the address of that project's first news story carries the word orion. The list of known projects does not have the name, so the program does not count the record. **If the owner adds the name, two of 73 had an early signal.**
+- **Milam County, February 24, 2025.** An item on a grading plan for what the county calls the Orion Data Center in Burlington, 77 days before the SB Energy project's public date. **The owner added the name and the third run counts the record.** The report now lists 41.
 - **Milam County, November 18, 2025.** A town hall on a proposed data center near Burlington. The unnamed project east of Burlington has a public date of November 16, 2026, and its row already says the true first report is earlier.
 - **Hillsboro, May 5, 2026.** An update on a data center project, a month before the public date of the Hill County project near Abbott. The agenda does not say which project.
 

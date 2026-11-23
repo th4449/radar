@@ -120,7 +120,20 @@ sources:
     cadence: monthly
     robots_status: allowed
     verified_at: 2026-11-19
-    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt and the fetcher stored nothing. The owner said that day to ask once more on a later day. See docs/sources/tx_comptroller_data_centers.md.
+    notes: One page with two tables. No county or address field. Robots rules allow /taxes/ and the site says its information is public domain. Fixture saved November 19, 2026. On November 23, 2026 the site answered 403 for robots.txt and the fetcher stored nothing, on two runs about six hours apart. The owner decides whether to mark the source manual. See docs/sources/tx_comptroller_data_centers.md.
+
+  - id: tx_tdlr_building_registrations
+    state: TX
+    name: TDLR building project registrations
+    url: https://www.tdlr.texas.gov/TABS/Search
+    layer: signal
+    method: manual
+    intended_method: unknown
+    cadence: weekly
+    robots_status: allowed
+    verified_at: null
+    personal_rows: true
+    notes: Proposed on November 23, 2026 at the owner's request. Not in the build plan's table and nothing collects it. The robots file leaves /TABS/ open and bars every .csv address, and the terms say nothing on automated access. The search answers only through the page's own script call, which has not been asked anything. The owner decides how to go on. See docs/sources/tx_tdlr_building_registrations.md.
 
   - id: tx_comptroller_local_agreements
     state: TX

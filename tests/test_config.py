@@ -152,11 +152,13 @@ def test_confidence_names_every_rule_and_a_direct_term_is_the_surest():
 def test_the_lists_that_name_people_are_marked():
     marked = {s.id for s in config.load_sources().sources if s.personal_rows}
     # Two lists of applicants and owners, and meeting agendas, which name staff and applicants.
+    # Building registrations name an owner and an architect. That source is proposed, not read.
     assert marked == {
         "tx_tceq_air_pending_legacy",
         "tx_twdb_well_reports",
         "tx_agendas_legistar",
         "tx_agendas_own_sites",
+        "tx_tdlr_building_registrations",
     }
 
 

@@ -645,6 +645,13 @@
       "use": "baseline"
     },
     {
+      "name": "TDLR building project registrations",
+      "state": "TX",
+      "url": "https://www.tdlr.texas.gov/TABS/Search",
+      "read": false,
+      "use": "signal"
+    },
+    {
       "name": "Comptroller local development agreements",
       "state": "TX",
       "url": "https://comptroller.texas.gov/economy/development/search-tools/sb1340/",

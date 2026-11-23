@@ -6,12 +6,12 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 ## In short
 
-- **1 of 73 judged projects reached the review threshold of 3 before they were public.**
-- **1 of 73 had any signal before the public date.** 0 of those could have been tied to the project by the everyday radar. The rest were tied here by the project's name in the record's words, which only the backtest can do.
-- 1 of those 1 rest on a record that sits on a site under the everyday rules, where a reviewer can see it. A record with no company, coordinates, project name or meeting sits on no site.
-- 4 more had a signal only on or after the public date.
+- **2 of 73 judged projects reached the review threshold of 3 before they were public.**
+- **2 of 73 had any signal before the public date.** 0 of those could have been tied to the project by the everyday radar. The rest were tied here by the project's name in the record's words, which only the backtest can do.
+- 2 of those 2 rest on a record that sits on a site under the everyday rules, where a reviewer can see it. A record with no company, coordinates, project name or meeting sits on no site.
+- 3 more had a signal only on or after the public date.
 - The highest score any known project reached on any day is 7.5.
-- Median lead time over hits: 39 days.
+- Median lead time over hits: 58 days.
 - False alarms in the 11 control counties: 0. The history holds 0 signals there.
 
 ## What was judged
@@ -20,8 +20,8 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 | Verdict | Projects | Meaning |
 |---|---|---|
-| hit | 1 | reached the review threshold before the public date |
-| late | 4 | reached it on or after the public date |
+| hit | 2 | reached the review threshold before the public date |
+| late | 3 | reached it on or after the public date |
 | below_threshold | 0 | had a signal before the public date and never reached it |
 | no_signal | 68 | had no signal before the public date |
 | undated | 49 | not judged: no public date was found |
@@ -45,9 +45,9 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 | Project | County | Public | First signal seen | Days ahead | Signals | Peak score before public | Verdict | Tied by |
 |---|---|---|---|---|---|---|---|---|
+| `milam-sb-energy` | Milam | May 12, 2025 | Feb 24, 2025 | +77 | 5 agenda item or file | 4.5 | hit | the record names the project's company or code name |
 | `dallas-garland-digital-realty` | Dallas | Dec 2, 2022 | Jul 18, 2025 | -959 | 1 agenda item or file | 0 | before_history | the record names the project's company or code name |
 | `archer-project-raptor` | Archer | none | Sep 22, 2025 | not judged | 3 agenda item or file | 1.5 | undated | the same project name or number |
-| `milam-sb-energy` | Milam | May 12, 2025 | Oct 20, 2025 | -161 | 4 agenda item or file | 0 | late | the record names the project's company or code name |
 | `milam-riot-rockdale` | Milam | Jan 16, 2026 | Dec 8, 2025 | +39 | 7 agenda item or file | 4.5 | hit | the record names the project's company or code name |
 | `travis-tesla-giga-texas` | Travis | Oct 10, 2023 | May 4, 2026 | -937 | 13 well report | 0 | late | the same company |
 | `austin-cleanspark` | Austin | Oct 29, 2025 | May 11, 2026 | -194 | 1 agenda item or file | 0 | late | the record names the project's company or code name |
@@ -63,7 +63,7 @@ For each judged project: the agendas the radar held from its county, dated in th
 |---|---|---|
 | the county's and the city's | 3 | 0 |
 | the city's | 2 | 0 |
-| the county's only | 7 | 1 |
+| the county's only | 7 | 2 |
 | another government's only | 31 | 0 |
 | none | 30 | 0 |
 
@@ -87,7 +87,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 | Johnson | 2 | 0 | 1 | 21 | Feb 6, 2025 |
 | Lubbock | 2 | 0 | 0 | 0 | none |
 | Matagorda | 3 | 0 | 0 | 0 | none |
-| Milam | 3 | 1 | 3 | 365 | Jan 3, 2023 |
+| Milam | 3 | 2 | 3 | 365 | Jan 3, 2023 |
 | Potter | 2 | 0 | 0 | 0 | none |
 | Somervell | 2 | 0 | 0 | 0 | none |
 | Taylor | 1 | 0 | 2 | 36 | Jun 5, 2023 |
@@ -98,7 +98,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 
 | Kind | Signals | Tied to a known project | Projects with one before public | Median days ahead |
 |---|---|---|---|---|
-| agenda item or file | 1076 | 16 | 1 | 39 |
+| agenda item or file | 1076 | 17 | 2 | 58 |
 | ERCOT planning file | 78 | 0 | 0 | none |
 | well report | 49 | 14 | 0 | none |
 | pending air permit | 12 | 0 | 0 | none |
@@ -107,7 +107,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 
 | Strongest reason | Signals | Tied to a known project |
 |---|---|---|
-| says "data center" | 109 | 13 |
+| says "data center" | 109 | 14 |
 | company on the Comptroller's list | 33 | 13 |
 | company named like one on the list | 1 | 1 |
 | "Project" and a code name | 93 | 3 |
@@ -117,7 +117,7 @@ A signal tied to no known project is not shown to be wrong. The list of known pr
 
 ## Records tied to no project that a person should read
 
-42 records that say "data center", or are a planning file that names the county, were seen in the year before a judged project in the same county became public. The program ties a record to a project only by a name the list of known projects carries, and a county calls a project by names the list does not have. **Any of these may be an early record of a known project. None is counted as one.** Many are a government's own computer rooms.
+41 records that say "data center", or are a planning file that names the county, were seen in the year before a judged project in the same county became public. The program ties a record to a project only by a name the list of known projects carries, and a county calls a project by names the list does not have. **Any of these may be an early record of a known project. None is counted as one.** Many are a government's own computer rooms.
 
 | County | Seen | Kind | Record |
 |---|---|---|---|
@@ -154,7 +154,6 @@ A signal tied to no known project is not shown to be wrong. The list of known pr
 | Harris | 2025-12-04 | agenda item or file | Harris County Commissioners Court, meeting of December 11, 2025, item 334, file 25-7630 |
 | Harris | 2026-01-27 | agenda item or file | Houston, agenda for the meeting of January 27, 2026 |
 | Hill | 2026-05-05 | agenda item or file | Hillsboro, agenda for the meeting of May 5, 2026 |
-| Milam | 2025-02-24 | agenda item or file | Milam County, agenda for the meeting of February 24, 2025 |
 | Milam | 2025-11-18 | agenda item or file | Milam County, agenda for the meeting of November 18, 2025 |
 | Milam | 2025-11-18 | agenda item or file | Milam County, agenda for the meeting of November 18, 2025 |
 | Milam | 2026-01-27 | agenda item or file | Milam County, agenda for the meeting of January 27, 2026 |
@@ -179,11 +178,11 @@ Lamb, Comanche, Eastland, Lampasas, Mills, Wood, Titus, Colorado, Lavaca, Runnel
 
 ## Sites that fit no known project
 
-In the test counties, signals that fit no known project make 94 sites under the everyday rules. None is named here: none has been reviewed.
+In the test counties, signals that fit no known project make 93 sites under the everyday rules. None is named here: none has been reviewed.
 
 | Held together by | Sites | Highest score | At or over the threshold |
 |---|---|---|---|
-| one meeting's agenda that says "data center" | 54 | 4.5 | 54 |
+| one meeting's agenda that says "data center" | 53 | 4.5 | 53 |
 | a "Project" code name | 35 | 1.5 | 0 |
 | a company or coordinates | 3 | 13.5 | 3 |
 | a project number | 2 | 9 | 2 |
@@ -204,10 +203,10 @@ The same signals, with only the bar moved.
 
 | Threshold | Hits | Reached it only after public | Judged | Hit rate | Median lead, days | False alarms in control counties | Sites that fit no known project, at or over |
 |---|---|---|---|---|---|---|---|
-| 1 | 1 | 4 | 73 | 1% | 39 | 0 | 94 |
-| 2 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
-| 3 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
-| 4 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
+| 1 | 2 | 3 | 73 | 3% | 58 | 0 | 93 |
+| 2 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
+| 3 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
+| 4 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
 | 5 | 0 | 1 | 73 | 0% | none | 0 | 4 |
 | 10 | 0 | 0 | 73 | 0% | none | 0 | 1 |
 | 20 | 0 | 0 | 73 | 0% | none | 0 | 0 |
@@ -219,6 +218,7 @@ A site that fits no known project is not a false alarm. Nobody has shown what it
 
 | Seen | Project | Kind | Strongest reason | Record | Tied by | Name found |
 |---|---|---|---|---|---|---|
+| 2025-02-24 | `milam-sb-energy` | agenda item or file | says "data center" | Milam County, agenda for the meeting of February 24, 2025 | the record names the project's company or code name | code name Orion Data Center |
 | 2025-07-18 | `dallas-garland-digital-realty` | agenda item or file | says "data center" | Carrollton City Council, meeting of July 22, 2025, item *16, file 7287 | the record names the project's company or code name | company Digital Realty |
 | 2025-09-22 | `archer-project-raptor` | agenda item or file | "Project" and a code name | Archer County, agenda for the meeting of September 22, 2025 | the same project name or number | code name Project Raptor |
 | 2025-10-20 | `milam-sb-energy` | agenda item or file | says "data center" | Milam County, agenda for the meeting of October 20, 2025 | the record names the project's company or code name | company SB Energy |
