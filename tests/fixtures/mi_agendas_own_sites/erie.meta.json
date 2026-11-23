@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://erietownshipmi.gov/board-meetings-2/",
+  "final_url": "https://erietownshipmi.gov/board-meetings-2/",
+  "retrieved_at": "2026-11-23T23:19:56+00:00",
+  "sha256": "46b525c4e1a5dc43c3bb682966e0280b7c6ce206d1ce5ebfa489347881ad4f7c",
+  "bytes": 2617,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "21d0c8f5d19a6f044d0f4f612ca99aef08511aa52421959f08d92b858a5442ff",
+  "original_bytes": 136911,
+  "note": "The real page, cut down to its fold for 2026. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

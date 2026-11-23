@@ -3,8 +3,9 @@
 - Source id: `mi_agendas_own_sites`
 - Interface: each government's own website. The list is `config/mi_agenda_inventory.csv`
 - Checked: November 23, 2026
-- Result: **77 of 220 governments have a row a collector could take. No job reads any of them.** The source is still marked `manual`, and only the owner changes that.
-- Collector: none yet
+- Result: **77 of 220 governments have a row a collector could take. A collector is written. No job reads any of them.** The source is still marked `manual`, and only the owner changes that.
+- Collector: `collectors/mi/agenda_pages.py`, which is Texas' `collectors/tx/agenda_pages.py` pointed at Michigan's inventory
+- Tests: `tests/test_mi_agendas_own_sites.py`, on ten saved pages
 - Counties: Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne
 
 ## The four conditions
@@ -61,17 +62,39 @@ The eight held for the owner:
 
 **Ann Arbor's** policies page says information on its site "is considered public information and may be distributed or copied", but for logos and for material marked with a copyright.
 
+## The collector
+
+The owner said on November 23, 2026 that the clearing of own sites given for Texas holds for Michigan. The same day ten cleared pages were fetched once each by the radar's fetcher, which read each host's robots file first. All ten loaded. Each is a governing body's page, and they cover the six counties: Allegan, Auburn Hills, Chelsea, Comstock Township, Erie Township, Luna Pier, Novi, Oshtemo Township, River Rouge and Superior Township. Each was cut down to its agenda list and saved as a fixture.
+
+- **On nine of the ten the collector finds the agendas.** Its newest agenda matches the second read's on all nine.
+- **One fault was found and fixed.** Oshtemo Township lists a report of receipts and disbursements between its packets, in a file named for the meeting's day. Read as an agenda, the report took the place of that day's packet. Such a report is now left, for both states.
+- **Novi's agendas are not read.** Its list links each meeting to a page of its own, not to a file. The collector reads files only. The run log names such a page.
+
+**Governments the collector would not read as it stands,** by the second read's notes. Only Novi's page was fetched.
+
+| Government | Why |
+|---|---|
+| Novi | Each agenda link leads to a page for the meeting |
+| Otsego city | Each agenda link leads to a document page |
+| Lyndon Township | Each agenda is a post on the site |
+| Heath Township | The agenda is a post linked from the home page |
+| Plainwell | Agenda files have addresses that end in `.aspx` |
+
+**Seven governments' pages carry the year in their address:** Novi, Commerce Township, Farmington, Farmington Hills, Highland Park, Holly and Plainwell, 21 pages. Each needs a new inventory row in January.
+
 ## Not verified
 
+- **The collector has read ten of the 145 cleared pages.** What it finds on the other 135 is not known.
+- **No agenda file has been fetched.** Whether the files are text or scans, and which host a file's address leads to, is not known.
 - **Most terms were read through a page-reading tool that gives a summary.** It cut long sentences short. The nine pages that mattered were read again in full by the radar's reader. The other 81 hosts rest on the summary's word that no terms page exists or that a page says nothing.
 - **The terms of site builders other than CivicPlus, Revize and Granicus were not read.** Fifteen other builders are credited across the sites. A builder's terms could cover the sites it hosts, as CivicPlus' do. Each row's note names its site's credit.
 - **Which host an agenda file is on,** where a page gives a relative link. A PDF on a Revize file host is open to the collector. The fetcher checks the robots file of every host before every request, so a file on a closed host is not fetched.
 - **No page was opened in a real browser.** A list a script draws shows nothing to a plain read: Belleville, the city of Plymouth and two development authorities.
 - That any of this is still so on the day a collector first runs.
 
-## Before a collector is written
+## Before a job reads it
 
-1. The owner decides the eight held sites.
-2. The owner says whether the collector built for Texas' own sites may read Michigan's. The platforms file clears "own_site_files" on the owner's word of November 21, 2026, which was given for Texas.
-3. A collector class for Michigan, with fixtures saved from real pages and tests that run on the fixtures.
-4. The source's method changes from `manual` only on the owner's word.
+1. The owner decides the eight held sites. Until then they stay held.
+2. The owner says to run it.
+3. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
+4. A first run by hand, with nothing written to a database, and its report read. It shows what the collector finds on the other 135 pages.

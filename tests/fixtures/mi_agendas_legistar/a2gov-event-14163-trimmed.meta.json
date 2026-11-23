@@ -1,0 +1,18 @@
+{
+  "source_id": "mi_agendas_legistar",
+  "url": "https://webapi.legistar.com/v1/a2gov/events/14163?EventItems=1&AgendaNote=1",
+  "final_url": "https://webapi.legistar.com/v1/a2gov/events/14163?EventItems=1&AgendaNote=1",
+  "retrieved_at": "2026-11-23T23:18:42+00:00",
+  "sha256": "676168a1721ec5e6a653e709e15f1d91052fdddb897c0e6fd27af8c1d52795fb",
+  "bytes": 53269,
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text",
+  "original_sha256": "ff15b91816f582bd5a07d7e89d35602aafc028c6885041fed5d5eebed5fca7d7",
+  "original_bytes": 56035,
+  "trimmed": true,
+  "original_items": 49,
+  "items_kept": 47,
+  "note": "The real answer holds 49 agenda items. Two of them name people who signed up to speak at public commentary. This fixture leaves those two out and keeps the other 47. Movers, seconders, action texts and attachments are emptied."
+}

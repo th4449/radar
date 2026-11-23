@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://superiortownship.org/boards-commissions/board-of-trustees/",
+  "final_url": "https://superiortownship.org/boards-commissions/board-of-trustees/",
+  "retrieved_at": "2026-11-23T23:20:30+00:00",
+  "sha256": "26b421ad591bddaeea797ca23d44ae1398242bdb92ec0213021e9d0271ff6e86",
+  "bytes": 2374,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "fbb01dc26d1cec4cf39a0eeec97c65f54c7364f5521a9d1afc4d592f2899297a",
+  "original_bytes": 258051,
+  "note": "The real page, cut down to its grid of 2026 board agendas. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

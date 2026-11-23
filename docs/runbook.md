@@ -161,4 +161,4 @@ uv run python scripts/backup.py trial <the dump file>
 ## Not written yet
 
 - Restoring the sign-in accounts. They belong to the hosted service.
-- Michigan. No Michigan source is read. The agenda inventory, its second reads and each site's terms are on file. No Michigan collector is written.
+- Michigan. No Michigan source is read. The agenda inventory, its second reads and each site's terms are on file. Two agenda collectors are written and tested on saved pages, `collectors/mi/legistar.py` and `collectors/mi/agenda_pages.py`. Neither is on the list a job can run. To start one on the owner's word: change the source's method to `http`, add the collector to the list in `collectors/run.py` and add its workflow file.

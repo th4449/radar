@@ -3,9 +3,10 @@
 - Source id: `mi_agendas_legistar`
 - Interface: the Legistar Web API, https://webapi.legistar.com/
 - Vendor: Granicus
-- Checked: November 23, 2026, in part
-- Result: **one government, Ann Arbor. Not read by any job.** The source is marked `manual`.
-- Collector: none yet. Texas' is `collectors/tx/legistar.py`
+- Checked: November 23, 2026
+- Result: **one government, Ann Arbor. A collector is written. Not read by any job.** The source is marked `manual`.
+- Collector: `collectors/mi/legistar.py`, which is Texas' `collectors/tx/legistar.py` pointed at Michigan's inventory
+- Tests: `tests/test_mi_agendas_legistar.py`, on two saved answers
 
 Of 220 governments in the six counties, one posts its agendas on Legistar: Ann Arbor. Its council, planning commission, downtown authority and finance authority share one calendar at `a2gov.legistar.com`.
 
@@ -16,15 +17,25 @@ Of 220 governments in the six counties, one posts its agendas on Legistar: Ann A
 - **The city's own terms:** its policies page says information on the site "is considered public information and may be distributed or copied", but for logos and for material marked with a copyright. Nothing on automated access. Read in full by the radar's reader.
 - **Granicus' terms and the Legistar Web API** were read for Texas on November 21, 2026. See [tx_agendas_legistar.md](tx_agendas_legistar.md). The API is published for programs and a read returns only public items.
 
+- **The owner said on November 23, 2026 that the clearing of Legistar given for Texas holds for Michigan.**
+- **The API answers for Ann Arbor without a token.** Two identified requests on November 23, 2026: the list of meetings from November 9 on, and one council meeting. The list held eight meetings, six with a published agenda. Both answers are saved as fixtures.
+
+## What a run would take
+
+- One request for the list of meetings from 14 days back, then one for each meeting whose agenda is published and is new or changed.
+- **Every body on the calendar, not the four in the inventory.** The list held the council, three council committees, the housing commission, two retirement boards and a fund committee. Texas' collector reads a government's whole calendar the same way.
+- Each item's number, file number, type, title and note. Who moved, seconded or voted is dropped. No agenda file is fetched.
+- **An agenda can name people who signed up to speak.** The council meeting of November 16 listed two speakers by name as agenda items. A stored agenda would hold such names. The source is marked as holding personal rows, and the fixture leaves those two items out.
+
 ## Not verified
 
-- **Whether Ann Arbor's Legistar answers the API without a token.** Some governments require one. No request has been made to the API for `a2gov`.
 - The calendar page came back cut off before its foot, so any terms linked there were not seen.
-- The Texas collector never fetches an agenda file, because the hosts that store them bar robots. Where Ann Arbor's files sit was not checked.
+- Where Ann Arbor's agenda files sit was read from the API's answer: `a2gov.legistar1.com`. Its robots file was not read, and the collector never asks that host.
+- No run has been made. The collector has read two saved answers and nothing live.
+- The code-name signal rule is untried on Michigan agendas.
 
-## Before a collector reads it
+## Before a job reads it
 
-1. The owner says whether the clearing of Legistar, given for Texas on November 21, 2026, holds for Michigan.
-2. One identified request to the API for Ann Arbor's three newest meetings, saved as a fixture.
-3. A Michigan collector as a thin subclass of the Texas one, with tests on the fixture.
-4. The source's method changes from `manual` only on the owner's word.
+1. The owner says to run it.
+2. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
+3. A first run by hand, with nothing written to a database, and its report read.

@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.city-chelsea.org/government/city_council/agendas___minutes.php",
+  "final_url": "https://www.city-chelsea.org/government/city_council/agendas___minutes.php",
+  "retrieved_at": "2026-11-23T23:19:37+00:00",
+  "sha256": "235ece428e24ba59331eea99ec4d9814f83362fb85345c9c567d02897c13a44b",
+  "bytes": 4859,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "9ab8d8e43061ba2d587ac1c3b393407c20e0b6905e5093f8591766cc90e81e0a",
+  "original_bytes": 450846,
+  "note": "The real page, cut down to its six newest council meetings. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

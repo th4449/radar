@@ -58,7 +58,7 @@ _MEETINGS = re.compile(r"agenda|meeting", re.IGNORECASE)
 # What a link says it is when it is not the agenda.
 _NOT_AGENDA = re.compile(
     r"minutes|video|audio|recording|handout|action taken|presentation|quorum|cancel"
-    r"|treasurer|financial",
+    r"|treasurer|financial|disbursement",
     re.IGNORECASE,
 )
 # A packet is the agenda with its attachments, often hundreds of pages.
@@ -533,6 +533,9 @@ class AgendaPages(Collector):
     """
 
     source_id = "tx_agendas_own_sites"
+    # The state whose agenda inventory says which pages are read. Another state's collector is
+    # this one with its own source and state: see collectors/mi/agenda_pages.py.
+    state: ClassVar[str] = "TX"
     refusal_closes_host_only = True
     back_days: ClassVar[int] = 21
     ahead_days: ClassVar[int] = 60
@@ -543,7 +546,9 @@ class AgendaPages(Collector):
 
     def __init__(self, pages: Iterable[Page] | None = None, today: dt.date | None = None) -> None:
         self.today = today or dt.datetime.now(dt.UTC).date()
-        self.pages = {p.url: p for p in (cleared_pages(self.today) if pages is None else pages)}
+        if pages is None:
+            pages = cleared_pages(self.today, state=self.state)
+        self.pages = {p.url: p for p in pages}
         self._known: dict[str, dict] = {}
         self._links: dict[str, list[AgendaLink]] = {}
         self._feeds: dict[str, Page] = {}  # a calendar feed -> the page that named it

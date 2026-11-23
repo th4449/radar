@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://cityofriverrouge.net/pages/departments/city-clerk-archives.php",
+  "final_url": "https://cityofriverrouge.net/pages/departments/city-clerk-archives.php",
+  "retrieved_at": "2026-11-23T23:20:06+00:00",
+  "sha256": "d01e66f7029c09c9e94f1fff1e5068783cdf11d71fd3070e4b4a5566c7050616",
+  "bytes": 1425,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "1c5058121b4462486eaf3d11bf285666e17d2e4e7b47396866ad9a2b069a2869",
+  "original_bytes": 35847,
+  "note": "The real page, cut down to the three newest months of its two columns, agendas and minutes. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

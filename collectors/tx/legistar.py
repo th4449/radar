@@ -172,6 +172,9 @@ class LegistarAgendas(Collector):
     """The list of meetings for each cleared government, then each new or changed agenda."""
 
     source_id = "tx_agendas_legistar"
+    # The state whose agenda inventory says which governments are read. Another state's
+    # collector is this one with its own source and state: see collectors/mi/legistar.py.
+    state: ClassVar[str] = "TX"
     back_days: ClassVar[int] = 14
     # A first run on a large city meets many meetings at once. The rest wait for the next run.
     max_events_per_client: ClassVar[int] = 40
@@ -186,9 +189,9 @@ class LegistarAgendas(Collector):
         back_days: int | None = None,
     ) -> None:
         self.today = today or dt.datetime.now(dt.UTC).date()
-        self.clients = {
-            c.name: c for c in (cleared_clients(self.today) if clients is None else clients)
-        }
+        if clients is None:
+            clients = cleared_clients(self.today, state=self.state)
+        self.clients = {c.name: c for c in clients}
         if back_days is not None:
             self.back_days = back_days
         self._known: dict[str, dict] = {}

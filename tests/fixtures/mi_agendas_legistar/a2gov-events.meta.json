@@ -1,0 +1,16 @@
+{
+  "source_id": "mi_agendas_legistar",
+  "url": "https://webapi.legistar.com/v1/a2gov/events?$filter=EventDate+ge+datetime%272026-11-09%27&$orderby=EventDate",
+  "final_url": "https://webapi.legistar.com/v1/a2gov/events?$filter=EventDate+ge+datetime%272026-11-09%27&$orderby=EventDate",
+  "retrieved_at": "2026-11-23T23:18:25+00:00",
+  "sha256": "4f792ce2558a83954c3a63a683e8abdeb025946ab4f081bb290b55dbe29ae311",
+  "bytes": 7630,
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "last_modified": null,
+  "kind": "text",
+  "original_sha256": "9b7ba89b5649c5d7f0d58a95059edaedef75412202e75c8f48ab4dcae4e5e4b4",
+  "original_bytes": 8689,
+  "trimmed": true,
+  "note": "The real answer, with each meeting's comment emptied. The comments gave call-in numbers and passcodes for the meetings. Nothing else is changed."
+}

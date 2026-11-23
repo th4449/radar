@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.cityofnovi.org/agendas-minutes/city-council/2026/",
+  "final_url": "https://www.cityofnovi.org/agendas-minutes/city-council/2026/",
+  "retrieved_at": "2026-11-23T23:20:01+00:00",
+  "sha256": "a3abf629c848e05c32980b8883863b4245492aa547715201d84b04c175700015",
+  "bytes": 2903,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "3b1969d3311547a475b02db902670706d55e5e258e5d21bc1586a5aca59503c5",
+  "original_bytes": 423481,
+  "note": "The real page, cut down to the block that holds its newest council meetings. Each meeting's agenda link leads to a page for that meeting, not to a file. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

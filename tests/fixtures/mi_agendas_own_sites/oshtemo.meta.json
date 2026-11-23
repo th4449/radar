@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.oshtemo.org/Boards-Committees/Township-Board/Township-Board-Agenda-Packets",
+  "final_url": "https://www.oshtemo.org/Boards-Committees/Township-Board/Township-Board-Agenda-Packets",
+  "retrieved_at": "2026-11-23T23:20:19+00:00",
+  "sha256": "f7bca85a961ccc55b707c400a9da26c07108350a3115e98bd4ec1b25028e7108",
+  "bytes": 4477,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "d5b76bdca02f743fe8308ba80a865c623b4506e7b4b428b69c4a39514f61f30b",
+  "original_bytes": 285090,
+  "note": "The real page, cut down to the first nine entries of its list for 2026. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

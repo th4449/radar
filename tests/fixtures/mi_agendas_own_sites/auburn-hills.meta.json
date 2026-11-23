@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.auburnhills.org/government/mayor-city-council/meeting-minutes-agendas/",
+  "final_url": "https://www.auburnhills.org/government/mayor-city-council/meeting-minutes-agendas/",
+  "retrieved_at": "2026-11-23T23:20:12+00:00",
+  "sha256": "c4496a231cee47a165e2fb8a37598e73a6e1ade43260cbcd1d5d4b02eb18e980",
+  "bytes": 6377,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "9ed33ab3ddb76bfe9e6e7dd86fb4861e8a4cd552abf83e78c68056139a2d00c7",
+  "original_bytes": 470925,
+  "note": "The real page, cut down to the first six rows of its table of council meetings. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

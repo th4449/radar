@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.cityoflunapier.com/city-council/",
+  "final_url": "https://www.cityoflunapier.com/city-council/",
+  "retrieved_at": "2026-11-23T23:20:25+00:00",
+  "sha256": "0bfee33d2fae936d1a9efaf26485b976c591ee470771d4c1044d9293e38ce532",
+  "bytes": 1338,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "f3ba79160191928700574adbc81b1eab7c3aa8f447d38272fd178faf43e82a59",
+  "original_bytes": 139833,
+  "note": "The real page, cut down to the last ten entries of its list of 2026 agendas, which runs oldest first. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

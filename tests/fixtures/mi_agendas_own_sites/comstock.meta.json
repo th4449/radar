@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://comstockmi.gov/agendas-minutes/",
+  "final_url": "https://comstockmi.gov/agendas-minutes/",
+  "retrieved_at": "2026-11-23T23:19:48+00:00",
+  "sha256": "bec776c8dec58875ce198598544a92d8848572b9acc6ebdd6bc6c9950db6cb25",
+  "bytes": 934,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "0f90c6fdbf51351730a6c883cf2e3b0cbddf2ecb75e4a35653c76fa031604c22",
+  "original_bytes": 150885,
+  "note": "The real page, cut down to the block that lists its five board agendas. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

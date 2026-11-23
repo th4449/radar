@@ -2,6 +2,40 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M11: Michigan collectors written on the owner's word
+
+**The owner said the Texas clearing of own sites and Legistar holds for Michigan.** The platforms file records it for both. The eight sites whose terms are held stay held.
+
+**What was built**
+
+- `collectors/mi/legistar.py` and `collectors/mi/agenda_pages.py`. Each is the Texas collector pointed at Michigan's inventory: its own source id and its own state, nothing else. The Texas collectors gained a `state` setting so the two share one body of code.
+- `tests/test_mi_agendas_legistar.py` and `tests/test_mi_agendas_own_sites.py`, 28 tests on saved fixtures.
+- **No job can run either.** Both sources stay `manual`. The collectors are not on the list in `collectors/run.py` and have no workflow file. Tests hold that.
+- Both sources now carry `verified_at: 2026-11-23`. That is what lets a person save a fixture by hand. It does not let a job run.
+
+**Verified live, with the radar's fetcher**
+
+- **Ann Arbor's Legistar answers the API without a token.** Two requests: the list of meetings from November 9 on, and one council meeting. Eight meetings, six with a published agenda.
+- **Ten cleared own-site pages, one request each, robots read first.** All ten loaded. One for each of ten governing bodies across the six counties.
+- **On nine of the ten the collector finds the agendas,** and its newest agenda matches the second read's.
+
+**What the pages showed**
+
+- **A fault, fixed.** Oshtemo Township lists a report of receipts and disbursements between its packets, in a file named for the meeting's day. Read as an agenda, it took the place of that day's packet. Such a report is now left. Texas' fixtures read as before.
+- **Novi is not read.** Its list links each meeting to a page of its own, not to a file. By the second read's notes four more governments are the same or close: Otsego city, Lyndon Township, Heath Township and Plainwell. Following a meeting's page is one more request a meeting and a change to the collector. It is not built.
+- **Seven governments' pages carry the year in their address,** 21 pages. Each needs a new inventory row in January.
+- **Ann Arbor's calendar holds every board, not the four in the inventory.** A run would take them all, as Texas' does.
+- **An Ann Arbor agenda named two people who signed up to speak.** The fixture leaves those two items out. A stored agenda would hold such names. The source is marked as holding personal rows.
+
+**Not verified**
+
+- What the collector finds on the other 135 cleared pages.
+- Any agenda file. None was fetched, so text or scan is not known.
+- The code-name signal rule on Michigan agendas.
+- The four governments named beside Novi rest on the second read's notes, not on a page the collector read.
+
+**Cost:** 12 pages and answers fetched by the radar's fetcher, and 12 robots requests before them, across 11 hosts. No subagent and no web search.
+
 ## November 23, 2026 — M11: each confirmed site's own terms read
 
 **Pushed** on the owner's word, as `e6b3546`. CI passed.
