@@ -2,6 +2,57 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 22, 2026 — M9: what a history run would ask for, and control counties proposed
+
+The owner said to push. The six commits are on `main` and the checks passed. **No backtest has run and no history has been collected.** This entry is a proposal for the owner.
+
+**What a history run back to January 1, 2023 would ask for**
+
+| Feed | Requests | Basis | How far back it reaches |
+|---|---|---|---|
+| Legistar agendas, 9 governments | about 3,630 | Counted: 10 list requests on November 22 | All of 2023 on. 3,619 meetings have a published agenda |
+| ERCOT planning group | about 630 | Counted: 57 meetings on four index pages. Files estimated at 10 a meeting, from four meetings read: 3, 9, 17 and 12 | All of 2023 on |
+| Agendas on governments' own sites, 60 pages | about 490 | **Estimated** from 11 saved pages: 7 older dated files a page | **Under a year on most pages.** The oldest link on the saved pages runs from October 2025 to September 2026 |
+| Well reports | 1 | One 145 MB file, as now | All of 2023 on, by the day a report was submitted |
+| Pending air permit lists | 2 | The two pages, as now | Only applications still pending today. A decided one is gone |
+
+About 4,750 requests, one every 5 seconds to a host. Legistar is about five hours and the rest under two.
+
+**What the history cannot give, whatever is run**
+
+- **54 of the 73 projects made public since 2023 sit where the radar may read no agenda at all.** Eight more have only their county's page. Seven have a city page with under a year on it. Four have Legistar's full history: two in Dallas and two under Harris County.
+- No abatement notices, no transmission filings, no stormwater notices and no local agreements. Each of those sources is held or closed.
+- Air permits decided before today are gone from the lists.
+- **So the hit rate will mostly measure what the radar is allowed to read,** not how well it scores. The report has to say which misses are misses of coverage.
+
+**Control counties proposed: eleven**
+
+Lamb, Comanche, Eastland, Lampasas, Mills, Wood, Titus, Colorado, Lavaca, Runnels and Coleman.
+
+- Twenty candidates were screened by one pass with two or three web searches each: `backtest/control_counties_screen.csv`. A sign of a project was found in five: Gray, Deaf Smith, Young, Leon and Jackson. Four were unclear: Hockley, Montague, Lee and Cass. Nothing was found for the eleven.
+- **"Nothing found" is weak.** It means two or three searches returned nothing. It rests on search excerpts.
+- Two carry a note. A Lampasas paper reports farm groups' worry about data centers, with the county judge saying he knew of no interest in the county. Colorado County's paper shows the county watching Austin County's moratorium. No project turned up in either. Neither page was opened.
+- **They are all small.** Their 2024 populations run from 4,563 to 48,742, by the Census estimates. None mirrors Lubbock, Potter, Tom Green or the five urban counties.
+- **They would be judged on the three statewide feeds only:** air permits, well reports and planning group files. No agenda inventory exists for them. A false alarm rate from them says nothing about agenda signals.
+
+**The state building registrations, read by me**
+
+- The robots file leaves the registration pages open and closes every `.csv` address, which closes the search's spreadsheet export to a program. The policy page says nothing about automated access and lets state information be copied if it does not mislead. See [tx_tdlr_building_registrations.md](sources/tx_tdlr_building_registrations.md).
+- It is a proposal only. Nothing collects it. Six of the nine records that came after the news are registrations, so it is likely a late signal.
+
+**Verified live**
+
+- Legistar's meeting lists, 10 requests, none refused. ERCOT's index and its 2023, 2024 and 2025 pages and four meeting pages, 8 requests. Nothing was stored.
+- The Census population estimates file, one request after its robots file. The Census API now asks for a key, so it was not used.
+- The registration site: three requests.
+
+**Not verified**
+
+- The count for governments' own sites. It is known only after the 60 pages are read.
+- How many ERCOT files there are, and how large.
+- Whether any control county is clean.
+- The day each older record could first be seen. Legistar gives the day an agenda was published. For a file on a government's own site the meeting day is the safe choice.
+
 ## November 22, 2026 — M9: the list of known projects, all 30 counties
 
 The owner said to carry on with news research for the other 27 counties. The list is built. **No backtest has been run.**
