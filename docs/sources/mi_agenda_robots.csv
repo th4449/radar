@@ -1,0 +1,147 @@
+# Robots files of Michigan agenda sites, as the radar's own reader was answered. BUILD_PLAN.md M11.
+# One request for each host on the day shown, redirects followed (RFC 9309 section 2.3.1.2), no retry.
+# kind       site        a government's or a development authority's own host
+#            file_host   a Revize host that keeps sites' files
+# read_at    where the answer came from, when the request was redirected to another host
+# collector  yes: the file lets the collector read the site's pages, or there is no file
+#            no: it bars the collector, was refused or could not be read
+#            files only: document files may be fetched and pages may not
+# The answer is judged at the site's home page. Each agenda page in the inventory on a yes host was
+# judged too, and none is barred.
+# A yes here is one condition of several. See config/mi_agenda_checks.csv and the site's own terms.
+host,kind,asked_on,answer,read_at,collector,crawl_delay,note
+cms1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms2.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms3.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms4files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms4files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms5.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms6.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms7files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms7files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms8.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+cms9files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+webgen1files.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+webgen1files1.revize.com,file_host,2026-11-23,200,,files only,,Bars every program from everything but document files such as PDFs.
+a2gov.legistar.com,site,2026-11-23,404,,yes,,No robots file.
+augustatownship.org,site,2026-11-23,200,,yes,,
+bellevilleonthelake.com,site,2026-11-23,200,,yes,,
+berlinchartertwp.com,site,2026-11-23,200,,yes,,
+carletonmi.us,site,2026-11-23,200,,yes,,
+cheshiretownshipmi.gov,site,2026-11-23,404,,yes,,No robots file.
+cityofriverrouge.net,site,2026-11-23,200,,yes,,
+comstockmi.gov,site,2026-11-23,200,,yes,,
+dearborn.gov,site,2026-11-23,200,,yes,,
+detroitmi.gov,site,2026-11-23,403,,no,,A refusal on the robots file itself. Not asked again.
+dorrtownshipmi.gov,site,2026-11-23,200,,yes,,
+downtownoxford.info,site,2026-11-23,200,,yes,20,
+erietownshipmi.gov,site,2026-11-23,200,,yes,,
+exetertwp.com,site,2026-11-23,200,,yes,,
+gangestownship.gov,site,2026-11-23,200,,yes,,
+hamtramckcity.gov,site,2026-11-23,200,,yes,,
+harperwoodscity.org,site,2026-11-23,200,,yes,,
+heathtownship.net,site,2026-11-23,200,,yes,,
+idatownshipmi.gov,site,2026-11-23,200,,yes,,
+laketowntwp.org,site,2026-11-23,200,,yes,,
+lasalletwpmi.com,site,2026-11-23,200,,yes,,
+leightontownship.org,site,2026-11-23,200,,yes,,
+loditownshipmi.org,site,2026-11-23,200,,yes,20,
+lyndontownshipmi.gov,site,2026-11-23,200,,yes,3,
+milantownship.org,site,2026-11-23,200,,yes,,
+montereytownship.org,site,2026-11-23,200,,yes,,
+oxfordtwpmi.gov,site,2026-11-23,200,,yes,,
+prairierondetwp.net,site,2026-11-23,200,,yes,,
+rosstownshipmi.gov,site,2026-11-23,200,,yes,3,
+salinetownship.org,site,2026-11-23,200,,yes,,
+saugatucktownshipmi.gov,site,2026-11-23,200,,yes,,
+schoolcrafttownshipmi.gov,site,2026-11-23,200,,yes,,
+southfieldtownshipmi.gov,site,2026-11-23,200,,yes,,
+sumptertwp.org,site,2026-11-23,404,https://webgen1files1.revize.com/sumptertwpmi/robots.txt,yes,,No robots file.
+superiortownship.org,site,2026-11-23,200,,yes,,
+twp-bridgewater.org,site,2026-11-23,200,,yes,,
+twp-freedom.org,site,2026-11-23,404,http://cms6.revize.com/revize/freedomtownship/robots.txt,yes,,No robots file.
+twp-manchester.org,site,2026-11-23,200,,yes,,
+vanburen-mi.org,site,2026-11-23,404,https://cms9files.revize.com/vanburentwp/robots.txt,yes,,No robots file.
+vbtmi.gov,site,2026-11-23,404,https://cms9files.revize.com/vanburentwp/robots.txt,yes,,No robots file.
+villageofrichland.org,site,2026-11-23,200,https://webgen1files.revize.com/villageofrichlandmi/robots.txt,no,,Bars every program but five named search and social crawlers.
+villageofschoolcraft.com,site,2026-11-23,200,,yes,,
+wakeshmatownship.com,site,2026-11-23,404,https://webgen1files1.revize.com/wakeshmatwpmi/robots.txt,yes,,No robots file.
+whitefordtownshipmi.gov,site,2026-11-23,200,,yes,,
+www.auburnhills.org,site,2026-11-23,200,,yes,,
+www.bedfordmi.org,site,2026-11-23,200,https://cms7files1.revize.com/bedfordtownshipmi/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.bhamgov.org,site,2026-11-23,404,https://cms7files1.revize.com/birmingham/robots.txt,yes,,No robots file.
+www.binghamfarms.org,site,2026-11-23,404,https://cms7files.revize.com/binghamfarms/robots.txt,yes,,No robots file.
+www.brownstown-mi.org,site,2026-11-23,404,https://cms8.revize.com/revize/chartertownshipofbrownstown/robots.txt,yes,,No robots file.
+www.charlestontownship.org,site,2026-11-23,404,https://cms8.revize.com/revize/charlestonmi/robots.txt,yes,,No robots file.
+www.city-chelsea.org,site,2026-11-23,404,https://cms3.revize.com/revize/chelseami/robots.txt,yes,,No robots file.
+www.cityofallegan.org,site,2026-11-23,404,,yes,,No robots file.
+www.cityofallenpark.org,site,2026-11-23,404,https://cms3.revize.com/revize/allenparkmi/robots.txt,yes,,No robots file.
+www.cityoflunapier.com,site,2026-11-23,200,,yes,,
+www.cityofnovi.org,site,2026-11-23,404,,yes,,No robots file.
+www.cityoforchardlake.com,site,2026-11-23,404,https://webgen1files1.revize.com/orchardlakevillagemi/robots.txt,yes,,No robots file.
+www.cityofotsego.org,site,2026-11-23,200,,yes,,
+www.cityofriverview.com,site,2026-11-23,404,https://cms6.revize.com/revize/riverview/robots.txt,yes,,No robots file.
+www.commercetwp.com,site,2026-11-23,404,,yes,,No robots file.
+www.dearbornheightsmi.gov,site,2026-11-23,200,,yes,10,
+www.dextertownshipmi.gov,site,2026-11-23,no answer,,no,,The request failed. Not asked again.
+www.downtownrochestermi.com,site,2026-11-23,200,,yes,,
+www.downtownsouthlyon.com,site,2026-11-23,200,,yes,,
+www.ecorsemi.gov,site,2026-11-23,404,https://cms2.revize.com/revize/ecorsemi/robots.txt,yes,,No robots file.
+www.farmgov.com,site,2026-11-23,404,,yes,,No robots file.
+www.fhgov.com,site,2026-11-23,404,,yes,,No robots file.
+www.flatrockmi.org,site,2026-11-23,404,https://cms3.revize.com/revize/flatrock/robots.txt,yes,,No robots file.
+www.franklin.mi.us,site,2026-11-23,404,https://cms7files.revize.com/franklinmi/robots.txt,yes,,No robots file.
+www.galesburgcity.org,site,2026-11-23,404,https://webgen1files.revize.com/citygalesburg_mi/robots.txt,yes,,No robots file.
+www.gpshoresmi.gov,site,2026-11-23,404,https://cms8.revize.com/revize/gpointeshoresmi/robots.txt,yes,,No robots file.
+www.grosseile.com,site,2026-11-23,200,https://cms4files1.revize.com/grosseilemi/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.grossepointecity.org,site,2026-11-23,404,https://cms8.revize.com/revize/grossepointemi/robots.txt,yes,,No robots file.
+www.gunplain.org,site,2026-11-23,200,,yes,,
+www.hazelpark.org,site,2026-11-23,404,https://cms4files1.revize.com/hazelpark/robots.txt,yes,,No robots file.
+www.highlanddda.com,site,2026-11-23,200,,yes,,
+www.highlandparkmi.gov,site,2026-11-23,404,,yes,,No robots file.
+www.highlandtwp.net,site,2026-11-23,404,,yes,,No robots file.
+www.hollyvillage.org,site,2026-11-23,200,,yes,,
+www.hurontownship-mi.gov,site,2026-11-23,200,https://cms9files.revize.com/huroncc/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.hwmi.org,site,2026-11-23,404,https://cms9files.revize.com/huntingtonmi/robots.txt,yes,,No robots file.
+www.keegoharbor.org,site,2026-11-23,404,,yes,,No robots file.
+www.melvindale.org,site,2026-11-23,200,https://melvindale.org/robots.txt,yes,,
+www.milanmi.gov,site,2026-11-23,404,https://cms7files.revize.com/milan/robots.txt,yes,,No robots file.
+www.milfordtownship.com,site,2026-11-23,404,https://cms4files1.revize.com/milfordtownship/robots.txt,yes,,No robots file.
+www.milfordtwpmi.gov,site,2026-11-23,404,https://cms4files1.revize.com/milfordtownship/robots.txt,yes,,No robots file.
+www.monroechartertownship.org,site,2026-11-23,200,,yes,,
+www.oriontownship.org,site,2026-11-23,404,https://cms9files.revize.com/oriontwp/robots.txt,yes,,No robots file.
+www.oshtemo.org,site,2026-11-23,200,,yes,,
+www.otsegotownship.org,site,2026-11-23,200,,yes,,
+www.paviliontwpmi.gov,site,2026-11-23,200,,yes,,
+www.plainwell.org,site,2026-11-23,"200, a web page",,yes,,A page-not-found page served with a 200. No robots file.
+www.plymouthmi.gov,site,2026-11-23,200,,yes,,
+www.plymouthtownshipmi.gov,site,2026-11-23,404,https://cms5.revize.com/revize/plymouthtownshipmi/robots.txt,yes,,No robots file.
+www.plymouthtwp.org,site,2026-11-23,404,https://cms5.revize.com/revize/plymouthtownshipmi/robots.txt,yes,,No robots file.
+www.pontiac.mi.us,site,2026-11-23,404,https://cms3.revize.com/revize/pontiacminew/robots.txt,yes,,No robots file.
+www.pontiacmi.gov,site,2026-11-23,404,https://cms3.revize.com/revize/pontiacminew/robots.txt,yes,,No robots file.
+www.richlandtwp.net,site,2026-11-23,404,https://cms2.revize.com/revize/richlandtwpkc/robots.txt,yes,,No robots file.
+www.rochesterhills.org,site,2026-11-23,200,https://cms9files.revize.com/rochesterhillsmi/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.rochestermi.org,site,2026-11-23,200,,yes,10,
+www.rockwoodmi.org,site,2026-11-23,200,,yes,,
+www.rosetownship.com,site,2026-11-23,200,,yes,,
+www.royaloaktwp.com,site,2026-11-23,200,,yes,,
+www.saugatuckcity.com,site,2026-11-23,200,,yes,,
+www.southgatemi.gov,site,2026-11-23,404,,yes,,No robots file.
+www.southhavenmi.gov,site,2026-11-23,200,https://cms3.revize.com/revize/southhavenmi/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.southlyonmi.org,site,2026-11-23,404,https://cms5.revize.com/revize/southlyon/robots.txt,yes,,No robots file.
+www.springfield-twp.us,site,2026-11-23,404,https://cms1files.revize.com/springfieldtwp/robots.txt,yes,,No robots file.
+www.sylvanlake.org,site,2026-11-23,404,https://webgen1files1.revize.com/cityofsylvanlakemi/robots.txt,yes,,No robots file.
+www.thevillageofoxford.org,site,2026-11-23,404,https://cms7files.revize.com/oxfordmi/robots.txt,yes,,No robots file.
+www.twp-york.org,site,2026-11-23,404,https://cms2.revize.com/revize/yorktwp/robots.txt,yes,,No robots file.
+www.valleytownshipmi.gov,site,2026-11-23,404,,yes,,No robots file.
+www.villagebeverlyhills.com,site,2026-11-23,404,https://cms7files.revize.com/beverlyhillsmi/robots.txt,yes,,No robots file.
+www.villageofclarkston.org,site,2026-11-23,404,https://cms3.revize.com/revize/clarkston/robots.txt,yes,,No robots file.
+www.villageofmilford.org,site,2026-11-23,200,https://cms4files.revize.com/villageofmilfordnw/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.villageofsouthrockwoodmi.com,site,2026-11-23,404,https://cms1files.revize.com/southrockwood/robots.txt,yes,,No robots file.
+www.walledlake.us,site,2026-11-23,200,,yes,,
+www.waynecountymi.gov,site,2026-11-23,200,,yes,,
+www.wbtownship.org,site,2026-11-23,200,https://cms4files1.revize.com/westbloomfieldtwp/robots.txt,no,,Bars every program but five named search and social crawlers.
+www.webstermi.us,site,2026-11-23,404,https://cms9files.revize.com/webstertwpmi/robots.txt,yes,,No robots file.
+www.wolverinelake.com,site,2026-11-23,404,https://cms8.revize.com/revize/wolverinelakemi/robots.txt,yes,,No robots file.
+www.woodhavenmi.org,site,2026-11-23,404,http://cms5.revize.com/revize/woodhavenmi/robots.txt,yes,,No robots file.
+ypsitownship.org,site,2026-11-23,404,https://files.ypsitownship.org/robots.txt,yes,,No robots file.
