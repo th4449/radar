@@ -510,7 +510,8 @@ def write(
         add_all(_table(("County", "Kind", "Signals", "First seen", "Highest score"), rows))
         add("")
     add(
-        f"{len(result.ambiguous)} signals fit two known projects equally and were given to neither."
+        "Signals that fit two known projects equally and were given to neither: "
+        f"{len(result.ambiguous)}."
     )
     add("")
 

@@ -2,6 +2,58 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M9: the backtest ran. No hit, one early signal, thresholds proposed
+
+**The result.** See [report_tx.md](../backtest/report_tx.md), written by a program, and [findings_tx.md](../backtest/findings_tx.md), written by hand.
+
+- **No known project reaches the review threshold of 40,** before or after it was public. 73 were judged. The highest score any of the 128 reaches is 7.5.
+- **One of 73 had a signal before its public date:** Milam County files for the meeting of December 8, 2025, 39 days before the first news report found, or 70 days by one file's own date.
+- **The radar as built would not have sent that record to a reviewer.** An agenda signal carries no company, so it sits on no site. The backtest tied it by the project's name in the record's words.
+- False alarms in the eleven control counties: none. The history holds no signal there, so this says little.
+- **Proposed to the owner, nothing changed:** keep the scoring file marked as a placeholder, lower the review threshold from 40 to 3, give an agenda record a way onto a site, and tighten the "Project" code-name rule on Legistar. The reasons are in the findings.
+
+**The history runs, all ended**
+
+| Source | Stored | Note |
+|---|---|---|
+| Legistar | 3,625 agendas from 9 governments | No error. I estimated 3,619 |
+| Governments' own sites | 1,784 agenda files, dated for 33 governments | **About 1,900 requests against my estimate of 490.** Many pages reach back further than my sample showed. One request a site every five seconds held, 189 files at most from one site |
+| ERCOT planning group | 372 files and 61 pages | No error |
+| Well reports | 15,986 rows kept | One download |
+| Pending air permits | Both lists as they stand | |
+
+- **Two sites refused and were left alone:** Grey Forest and Meadowlakes keep files on a host whose robots file bars them. Eight files failed to download. 22 governments' pages gave no dated file.
+- The history database was dumped to the store outside the repository after the last run.
+
+**Built**
+
+- `backtest/history.py`: stored documents read as dated signals. A signal counts from the day its record could be seen, the later bound where that day is not kept. A company counts as listed only from the day its registration took effect.
+- It ties a record to a known project by the project's company beside the words "data center", or by a "Project" code name. **This is the backtest's own reason.** The everyday pipeline cannot do it, and the report counts it apart.
+- `backtest/report.py` and `backtest/run.py`: the report, written from the harness result. The harness now keeps each project's highest score on any day, and a sweep row says how many sites a reviewer would be sent at each bar.
+- **A signal that fits no known project is unreviewed, so the report never names it.** The full listing is written outside the repository.
+- 36 tests. 1,024 pass.
+
+**The Comptroller's site refused the collector**
+
+- I ran the everyday collector once to give the history a copy of the registered data center list. The robots file answered 403, twice. Nothing was stored and nothing else was tried.
+- The backtest uses the copy saved with the tests on November 19, 2026.
+- **The owner said to ask once more on a later day.** See [tx_comptroller_data_centers.md](sources/tx_comptroller_data_centers.md).
+
+**Leads for a person,** from the report's list of 42 records tied to no project
+
+- Milam County, February 24, 2025: an item on a data center at Burlington under a name the list of known projects lacks, 77 days before the SB Energy project's public date. If the owner adds the name, two of 73 had an early signal.
+- Milam County, November 18, 2025: a town hall on a proposed data center near Burlington.
+- Hillsboro, May 5, 2026: an update on a data center project.
+- Three sites that fit no known project carry a company and coordinates, from well reports in Travis and Carson counties. Their names were given to the owner and are not in the repository.
+
+**Not verified**
+
+- The public dates, each the earliest news report found.
+- **What the sites held in the past.** A history run reads what a page holds today. Milam County's page holds no agenda dated from mid May through July 2025, the weeks in which the county posted its notice on the SB Energy project. A running collector could have read it. The backtest understates what a running radar would have seen, by an amount it cannot measure.
+- The ties a program made between records and projects. One is known to be wrong and is named in the findings.
+- Whether the Comptroller's list showed a registration on the day it took effect.
+- Abatement notices, commission dockets, stormwater notices and decided air permits: none could be judged.
+
 ## November 23, 2026 — M9: history runs started, FracTracker's file taken, two decisions by the owner
 
 **The owner's decisions**

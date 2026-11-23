@@ -146,6 +146,7 @@ No date in the list rests on any of them.
 
 ## Leads for a person
 
+- **Milam County, from the backtest.** The county's agenda for February 24, 2025 has an item on a grading plan for what it calls the Orion Data Center in Burlington, 77 days before the SB Energy row's first news report. The address of that news story carries the word orion. The row does not have the name. The owner decides whether to add it. See [findings_tx.md](findings_tx.md).
 - **Parker County.** A state air registration for gas turbines, said to describe bridge power for a data center, from about April 2025. That would be about 13 months before the first news. The state site is barred to programs. Identifiers are in the row's notes and are unverified.
 - **Hopkins County.** Council minutes are said to put a city letter of intent on December 19, 2024, six months before the company's release.
 - **Archer County.** The code name alone is on a county agenda posted September 16, 2025.
