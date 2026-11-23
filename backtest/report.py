@@ -139,6 +139,16 @@ def _own_way(outcome: Outcome, result: Result) -> list:
     return [s for s in plain if match(s, outcome.project, result.scoring.clustering)]
 
 
+def _on_a_site(signal) -> bool:
+    """Whether the everyday rules would put the signal on a site. See pipeline/cluster.py."""
+    return (
+        signal.entity_id is not None
+        or signal.point is not None
+        or bool(signal.names)
+        or signal.meeting is not None
+    )
+
+
 def _held(site: SiteReplay, by_id: dict[int, Record]) -> str:
     """What holds a site that fits no known project together. Never a name."""
     members = [by_id[i].signal for i in site.signal_ids]
@@ -146,7 +156,9 @@ def _held(site: SiteReplay, by_id: dict[int, Record]) -> str:
         return "a company or coordinates"
     if any(n.startswith("Project ") for s in members for n in s.names):
         return 'a "Project" code name'
-    return "a project number"
+    if any(s.names for s in members):
+        return "a project number"
+    return 'one meeting\'s agenda that says "data center"'
 
 
 def _loose_direct(history: History, result: Result, tied: dict[int, str]) -> list[Record]:
@@ -189,6 +201,11 @@ def write(
     own_way_early = [
         o for o in early if any(s.available_on < o.project.public_date for s in _own_way(o, result))
     ]
+    on_a_site_early = [
+        o
+        for o in early
+        if any(s.available_on < o.project.public_date and _on_a_site(s) for s in o.signals)
+    ]
     unplaced = sum(1 for r in history.records if not r.signal.county_fips)
     control_fips = {f for f, n in counties.items() if n in set(control_names)}
     control_signals = [r for r in history.records if r.signal.county_fips in control_fips]
@@ -221,6 +238,11 @@ def write(
         f"{len(own_way_early)} of those could have been tied to the project by the everyday "
         "radar. The rest were tied here by the project's name in the record's words, which "
         "only the backtest can do."
+    )
+    add(
+        f"- {len(on_a_site_early)} of those {len(early)} rest on a record that sits on a site "
+        "under the everyday rules, where a reviewer can see it. A record with no company, "
+        "coordinates, project name or meeting sits on no site."
     )
     add(f"- {len(after)} more had a signal only on or after the public date.")
     top = max(outcomes, key=lambda o: o.peak, default=None)

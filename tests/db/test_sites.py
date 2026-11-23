@@ -8,7 +8,7 @@ import json
 import pytest
 
 from pipeline import process
-from pipeline.config import load_scoring
+from pipeline.config import Thresholds, load_scoring
 from pipeline.sites import update_sites
 
 from .conftest import as_service, as_user, make_reviewer
@@ -17,13 +17,27 @@ from .test_process import Stored
 pytestmark = pytest.mark.db
 
 AS_OF = dt.date(2026, 11, 20)
-THRESHOLD = load_scoring().thresholds.review_threshold
+# These tests pin how a site is made, scored and queued, not the scoring file's number. They
+# were written against a bar of 40 and keep it. The file's own bar is tested at the end.
+THRESHOLD = 40.0
+SCORING = load_scoring().model_copy(update={"thresholds": Thresholds(review_threshold=THRESHOLD)})
 
 
 class Radar(Stored):
-    def run(self, as_of: dt.date = AS_OF, **kwargs) -> process.ProcessSummary:
+    def run(self, as_of: dt.date = AS_OF, scoring=SCORING, **kwargs) -> process.ProcessSummary:
         with as_service(self.conn):
-            return process.run(self.conn, self.store, as_of=as_of, **kwargs)
+            return process.run(self.conn, self.store, as_of=as_of, scoring=scoring, **kwargs)
+
+    def add_agenda_signal(self, meeting: str | None, confidence: float, county: str) -> int:
+        """A signal of an agenda record, as pipeline/signals.py stores one. Not yet on a site."""
+        document_id = self.conn.execute("select id from public.documents limit 1").fetchone()[0]
+        return self.conn.execute(
+            """insert into public.signals (document_id, signal_type, event_date, summary,
+                                           confidence, county_fips, extracted)
+               values (%s, 'agenda_keyword', %s, 'An agenda uses a term.', %s, %s, %s::jsonb)
+               returning id""",
+            [document_id, AS_OF, confidence, county, json.dumps({"meeting": meeting})],
+        ).fetchone()[0]
 
     def sites(self) -> list[tuple]:
         return self.conn.execute(
@@ -246,3 +260,43 @@ def test_the_run_log_carries_the_site_summary(radar):
         "select detail from public.processing_runs order by id desc limit 1"
     ).fetchone()[0]
     assert detail["sites"]["sites_new"] == 2 and detail["sites"]["unplaced"] == 6
+
+
+# --- the scoring file's own bar, and agenda records ----------------------------------------------
+
+
+def test_an_agenda_that_says_data_center_opens_a_site_and_reaches_a_reviewer(radar):
+    """The owner's decisions of November 23, 2026, after the backtest: an agenda record that
+    says "data center" is held to its meeting, and the review bar is 3."""
+    radar.run(scoring=None)
+    court = "Example County, meeting of November 20, 2026"
+    first = radar.add_agenda_signal(court, 0.9, "48331")
+    second = radar.add_agenda_signal(court, 0.9, "48331")
+    weak = radar.add_agenda_signal(None, 0.3, "48331")  # a code word: nothing holds it
+    summary = radar.run(scoring=None)
+
+    assert summary.detail["sites"]["sites_new"] == 1
+    label, status, score = radar.conn.execute(
+        "select label, status, score from public.sites where label like 'Agenda of%'"
+    ).fetchone()
+    assert label == "Agenda of Example County, meeting of November 20, 2026 (Milam County)"
+    assert status == "in_review"
+    assert float(score) == pytest.approx(5 * 0.9)  # one kind of signal counts once
+    on_site = dict(
+        radar.conn.execute(
+            "select id, extracted->>'site_link' from public.signals where id = any(%s)",
+            [[first, second, weak]],
+        ).fetchall()
+    )
+    assert on_site == {
+        first: "the first signal of this site",
+        second: "the same meeting's agenda",
+        weak: None,
+    }
+
+
+def test_at_the_files_bar_one_well_of_a_named_company_reaches_a_reviewer(radar):
+    summary = radar.run(scoring=None)
+    assert load_scoring().thresholds.review_threshold == 3
+    assert summary.detail["sites"]["moved_to_review"] == 2
+    assert {status for _, _, _, status, _, _ in radar.sites()} == {"in_review"}

@@ -196,3 +196,10 @@ def test_a_signal_from_a_scan_says_a_machine_read_it():
     # The same fact is the same signal, read by machine or not.
     source = "tx_agendas_own_sites"
     assert draft.fingerprint(source) == plain.fingerprint(source)
+
+
+def test_a_file_that_says_data_center_is_held_to_its_government_and_meeting():
+    (direct,) = agenda_file(doc(HEAD, ROUTINE, CENTER), RULES).drafts
+    assert direct.extracted["meeting"] == "Sealy, meeting of November 17, 2026"
+    (weak,) = agenda_file(doc(HEAD, ROUTINE, ZONE), RULES).drafts
+    assert weak.extracted["meeting"] is None

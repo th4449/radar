@@ -4,11 +4,18 @@ A site is a place or a project in one county. Signals join only inside a county,
 reason that can be said in a few words:
 
 - they name the same company, unless both have coordinates that are far apart,
-- they have coordinates close to each other, whoever they name, or
-- they carry the same project name or number.
+- they have coordinates close to each other, whoever they name,
+- they carry the same project name or number, or
+- they come from the agenda of one meeting, and that agenda says "data center".
 
-A signal with no company, no coordinates and no project name has nothing to hold it to a place.
-It makes no site.
+A signal with no company, no coordinates, no project name and no such meeting has nothing to
+hold it to a place. It makes no site.
+
+The last reason was added on November 23, 2026, with the owner's approval. An agenda names
+people, so an agenda signal carries no company. The backtest found that the one record that
+came before a project was public was an agenda, and it sat on no site. A meeting is not a
+place: a site held by a meeting says where the record is, and a reviewer reads it for where
+the project is.
 
 Sites are never rearranged. A signal already on a site stays there, because a reviewer may have
 acted on that site. A new signal joins the site it fits. If it fits two, it joins the older one
@@ -41,10 +48,17 @@ class Item:
     point: Point | None
     names: frozenset[str]  # project code names and project numbers
     event_date: dt.date
+    # The government and meeting, for a record of an agenda that says "data center".
+    meeting: str | None = None
 
     @property
     def anchored(self) -> bool:
-        return self.entity_id is not None or self.point is not None or bool(self.names)
+        return (
+            self.entity_id is not None
+            or self.point is not None
+            or bool(self.names)
+            or self.meeting is not None
+        )
 
 
 @dataclass
@@ -88,6 +102,8 @@ def _link(item: Item, group: Group, rules: Clustering) -> str | None:
         return None
     if item.names and any(item.names & m.names for m in group.members):
         return "the same project name or number"
+    if item.meeting is not None and any(m.meeting == item.meeting for m in group.members):
+        return "the same meeting's agenda"
     nearest = _nearest(item, group)
     same_company = item.entity_id is not None and any(
         m.entity_id == item.entity_id for m in group.members

@@ -38,7 +38,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-21.4"
+RULES_VERSION = "2026-11-23.1"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -569,6 +569,22 @@ Processor = Callable[[Doc, Rules], Outcome]
 # --- meeting agendas from Legistar ---------------------------------------------------------------
 
 _PLACE_KIND = re.compile(r"\s+(city|town|village)$")
+# An agenda calls every road job "Project" something. A code name is a reason only where the
+# agenda speaks of economic development negotiations, the closed session Texas law allows for
+# them under Government Code 551.087.
+_NEGOTIATIONS = re.compile(r"economic\s+development|551\.087", re.IGNORECASE)
+
+
+def _meeting(government: str, day: dt.date, reasons: list[dict]) -> str | None:
+    """What holds an agenda record to a site: its government and meeting.
+
+    Only for a record that says "data center". An agenda signal carries no company, so
+    without this it sits on no site and no reviewer sees it. A code word alone is too weak
+    to open a site. Approved by the owner on November 23, 2026, after the backtest.
+    """
+    if not any(r["rule"] == "direct_term" for r in reasons):
+        return None
+    return f"{_PLACE_KIND.sub('', government)}, meeting of {_long_date(day)}"
 
 
 def _body_name(government: str, body: str) -> str:
@@ -601,7 +617,14 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         if not text:
             continue
         out.records += 1
-        reasons = rules.reasons(fields, None)
+        # Every public works item is a "Project" something. As in an agenda file, a code name
+        # is a reason only where the item speaks of economic development negotiations.
+        negotiations = bool(_NEGOTIATIONS.search(text))
+        reasons = [
+            r
+            for r in rules.reasons(fields, None)
+            if r["rule"] != "project_code_name" or negotiations
+        ]
         if not reasons:
             out.no_reason += 1
             continue
@@ -614,7 +637,9 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         number = (item.get("number") or "").rstrip(".") or f"in position {item.get('sequence')}"
         file = f", file {item['file']}" if item.get("file") else ""
         terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
-        hits = rules.keywords.find(text)
+        hits = [
+            h for h in rules.keywords.find(text) if h.kind != "project_code_name" or negotiations
+        ]
         out.drafts.append(
             Draft(
                 signal_type="agenda_keyword",
@@ -640,6 +665,7 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
                     },
                     "snippets": _narrow_snippets(text, hits),
                     "counties": named,
+                    "meeting": _meeting(str(agenda["government"]), day, reasons),
                 },
             )
         )
@@ -653,10 +679,6 @@ _AGENDA_WORD = re.compile(r"agenda", re.IGNORECASE)
 _TOP = 3000  # an agenda names itself and its meeting's date near the top
 
 
-# A long file calls every road job "Project" something. A code name is a reason here only where
-# the agenda speaks of economic development negotiations, the closed session Texas law allows
-# for them under Government Code 551.087.
-_NEGOTIATIONS = re.compile(r"economic\s+development|551\.087", re.IGNORECASE)
 _BEFORE = 400
 
 
@@ -746,6 +768,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 "pages_with_terms": [number for number, _, _ in found][:MAX_EVIDENCE],
                 "snippets": snippets[:MAX_EVIDENCE],
                 "counties": named,
+                "meeting": _meeting(str(meta["government"]), day, reasons),
             },
         )
     )

@@ -86,7 +86,13 @@ For each government, one run makes:
 - The words around the match are kept beside the signal for the reviewer.
 - The reviewer opens the meeting's own page, whose address is kept with the signal.
 
-**Many matches are not about a development.** A county buys "data center" services for its own computers. A board appointment names a "reinvestment zone". The radar cannot tell these apart. A reviewer can, and one agenda signal alone never reaches the review threshold.
+**Many matches are not about a development.** A county buys "data center" services for its own computers. A board appointment names a "reinvestment zone". The radar cannot tell these apart. A reviewer can.
+
+**Changed on November 23, 2026, after the backtest and with the owner's approval.**
+
+- An item that says "data center" is held to its government and meeting, so it sits on a site, and at the review threshold of 3 it reaches a reviewer by itself. Before, an agenda signal sat on no site. In four years of stored agendas this sends a reviewer 54 such sites that fit no known project, many of them a government's own computer rooms.
+- An item that uses a code word alone still opens no site.
+- "Project" and a code name is a reason only where the item itself speaks of economic development negotiations or cites Government Code 551.087. In the backtest 399 signals rested on a code name and three were tied to a known project. **An item whose heading sits in an earlier item is missed.**
 
 ## Verified live
 

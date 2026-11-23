@@ -333,6 +333,19 @@ def test_false_alarms_are_counted_with_the_rules_that_make_sites():
     assert [len(s.signal_ids) for s in false_alarms(signals, RULES, 40)] == [2]
 
 
+def test_agenda_records_of_one_meeting_make_one_site_as_they_do_on_the_radar():
+    court = "Example County, meeting of March 9, 2026"
+    signals = [
+        signal("agenda_keyword", "2026-03-09", county=CONTROL, meeting=court, confidence=0.9),
+        signal("agenda_keyword", "2026-03-09", county=CONTROL, meeting=court, confidence=0.9),
+        signal("agenda_keyword", "2026-03-09", county=CONTROL),  # a code word: on no site
+    ]
+    (site,) = false_alarms(signals, RULES, 3)
+    assert len(site.signal_ids) == 2
+    assert site.peak == pytest.approx(4.5)  # one kind of signal counts once
+    assert false_alarms(signals, RULES, 5) == []
+
+
 def test_a_sweep_shows_what_each_threshold_would_have_caught_and_what_it_would_have_cost():
     rows = sweep(a_run(), [20, 40, 90])
     assert [(r.threshold, r.hits, r.judged, r.false_alarms) for r in rows] == [

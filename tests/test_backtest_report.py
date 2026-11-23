@@ -7,7 +7,7 @@ import datetime as dt
 from backtest.harness import run, sweep
 from backtest.history import History, Meeting, harness_projects, history_rules, read
 from backtest.report import coverage, write
-from pipeline.config import load_scoring
+from pipeline.config import Thresholds, load_scoring
 
 from .test_backtest_history import agenda_file, known, legistar, wells
 
@@ -41,12 +41,15 @@ def made() -> History:
     )  # fmt: skip
 
 
-def report() -> str:
+def report(threshold: float = 40) -> str:
     history = made()
+    scoring = load_scoring().model_copy(
+        update={"thresholds": Thresholds(review_threshold=threshold)}
+    )
     result = run(
         harness_projects(KNOWN, history),
         [s for s in history.signals if s.county_fips],
-        load_scoring(),
+        scoring,
         control_fips={"48279"},
         history_starts=dt.date(2023, 1, 1),
     )
@@ -63,8 +66,19 @@ def test_the_report_gives_the_hit_rate_the_misses_the_false_alarms_and_the_lead_
     assert "| no_signal | 1 |" in text and "| below_threshold | 1 |" in text
 
 
+def test_at_a_bar_the_record_reaches_the_report_gives_the_hit_and_its_lead():
+    text = report(threshold=3)
+    assert "**1 of 2 judged projects reached the review threshold of 3" in text
+    assert "Median lead time over hits: 88 days." in text
+    assert "| hit | 1 |" in text
+
+
 def test_a_project_tied_only_by_its_name_is_not_counted_as_the_radars_own_catch():
-    assert "0 of those could have been tied to the project by the everyday radar" in report()
+    text = report()
+    assert "0 of those could have been tied to the project by the everyday radar" in text
+    # The record says "data center", so it is held to its meeting and sits on a site.
+    assert "1 of those 1 rest on a record that sits on a site under the everyday rules" in text
+    assert '| one meeting\'s agenda that says "data center" | 1 |' in text
 
 
 def test_the_report_lists_each_tied_signal_by_its_reference_and_the_name_found():

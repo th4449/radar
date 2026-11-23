@@ -36,6 +36,12 @@ def _names(extracted: dict) -> frozenset[str]:
     return frozenset(names)
 
 
+def _meeting(extracted: dict) -> str | None:
+    """The government and meeting, kept with a record of an agenda that says "data center"."""
+    meeting = extracted.get("meeting")
+    return meeting if isinstance(meeting, str) and meeting else None
+
+
 def _point(extracted: dict) -> tuple[float, float] | None:
     point = extracted.get("point")
     if not isinstance(point, dict):
@@ -56,6 +62,9 @@ def _label(group: Group, entity_names: dict[int, str]) -> str:
     for member in group.members:
         if member.names:
             return f"{sorted(member.names)[0]}, {county} County"
+    for member in group.members:
+        if member.meeting:
+            return f"Agenda of {member.meeting} ({county} County)"
     return f"Unnamed site, {county} County"
 
 
@@ -104,7 +113,10 @@ def update_sites(
         if county[:2] not in STATES:
             summary["outside_states"] += 1
             continue
-        item = Item(signal_id, county, entity_id, _point(extracted), _names(extracted), day)
+        item = Item(
+            signal_id, county, entity_id, _point(extracted), _names(extracted), day,
+            _meeting(extracted),
+        )  # fmt: skip
         if site_id is None:
             waiting.append(item)
         else:

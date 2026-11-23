@@ -25,8 +25,10 @@ def item(
     point: tuple[float, float] | None = None,
     names: tuple[str, ...] = (),
     day: int = 0,
+    meeting: str | None = None,
 ) -> Item:
-    return Item(signal_id, county, entity, point, frozenset(names), DAY + dt.timedelta(days=day))
+    when = DAY + dt.timedelta(days=day)
+    return Item(signal_id, county, entity, point, frozenset(names), when, meeting)
 
 
 def sites_of(plan) -> list[list[int]]:
@@ -140,6 +142,42 @@ def test_a_signal_with_no_company_place_or_name_makes_no_site():
     plan = assign([item(1), item(2, entity=7)], [], RULES)
     assert plan.unanchored == [1]
     assert sites_of(plan) == [[2]]
+
+
+# --- an agenda that says "data center" -----------------------------------------------------------
+
+COURT = "Example County, meeting of June 8, 2026"
+
+
+def test_an_agenda_record_held_to_its_meeting_makes_a_site():
+    """The backtest of November 23, 2026 found one record that came before a project was
+    public: a county agenda. It named no company the radar could keep, so it sat on no site
+    and no reviewer would have seen it. The owner approved this way onto a site."""
+    plan = assign([item(1, meeting=COURT)], [], RULES)
+    assert plan.unanchored == []
+    assert sites_of(plan) == [[1]]
+
+
+def test_records_of_one_meeting_are_one_site_and_another_meeting_is_another():
+    later = "Example County, meeting of June 22, 2026"
+    plan = assign(
+        [item(1, meeting=COURT), item(2, meeting=COURT), item(3, meeting=later, day=14)],
+        [],
+        RULES,
+    )
+    assert sites_of(plan) == [[1, 2], [3]]
+    assert plan.reasons[2] == "the same meeting's agenda"
+
+
+def test_the_same_words_for_a_meeting_in_another_county_are_another_site():
+    plan = assign([item(1, HOOD, meeting=COURT), item(2, BOSQUE, meeting=COURT)], [], RULES)
+    assert sites_of(plan) == [[1], [2]]
+
+
+def test_a_meeting_does_not_pull_in_a_signal_with_nothing_to_hold_it():
+    plan = assign([item(1, meeting=COURT), item(2)], [], RULES)
+    assert plan.unanchored == [2]
+    assert sites_of(plan) == [[1]]
 
 
 # --- sites that already exist -------------------------------------------------------------------

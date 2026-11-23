@@ -41,6 +41,7 @@ from pipeline.config import CountiesFile, load_all_counties, load_control_counti
 from pipeline.counties import CountyIndex
 from pipeline.entities import canonical_name, classify_party, match_key
 from pipeline.signals import PROCESSORS, Doc, Draft, Listing, Rules, process, read_listings
+from pipeline.sites import _meeting as _held_to_meeting
 from pipeline.sites import _names, _point
 
 # The words on each side of a matched term that are searched for a known project's name. An
@@ -368,6 +369,7 @@ def read(
                 entity_id=entity_id,
                 names=_names(draft.extracted),
                 point=_point(draft.extracted),
+                meeting=_held_to_meeting(draft.extracted),
                 names_projects=frozenset(named),
             )
             out.records.append(

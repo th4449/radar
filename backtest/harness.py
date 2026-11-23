@@ -80,6 +80,7 @@ class Signal:
     entity_id: int | None = None
     names: frozenset[str] = frozenset()
     point: Point | None = None
+    meeting: str | None = None  # for a record of an agenda that says "data center"
     # Keys of the known projects whose company or code name the record's words carry. Set by
     # backtest/history.py. The everyday pipeline has no such thing: see match().
     names_projects: frozenset[str] = frozenset()
@@ -204,7 +205,7 @@ def _sites(signals: list[Signal], scoring: ScoringFile, threshold: float) -> lis
     """The sites the production rules would make of these signals, each replayed."""
     by_id = {s.signal_id: s for s in signals}
     items = [
-        Item(s.signal_id, s.county_fips, s.entity_id, s.point, s.names, s.event_date)
+        Item(s.signal_id, s.county_fips, s.entity_id, s.point, s.names, s.event_date, s.meeting)
         for s in signals
     ]
     out = []

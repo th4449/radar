@@ -34,7 +34,7 @@ import psycopg
 
 from collectors.base import ArchiveStore, Fetcher, LayoutChanged, LocalArchive, NotPermitted
 from pipeline import tceq_applications
-from pipeline.config import CONFIG_DIR, load_sources
+from pipeline.config import CONFIG_DIR, ScoringFile, load_sources
 from pipeline.entities import canonical_name, match_key
 from pipeline.geocode import ArchivedLookup
 from pipeline.signals import (
@@ -133,6 +133,7 @@ def run(
     triager: Triager | None = None,
     as_of: dt.date | None = None,
     enrich: Callable[[], dict] | None = None,
+    scoring: ScoringFile | None = None,
 ) -> ProcessSummary:
     rules = rules or load_rules(conn, store)
     version = rules_version(rules)
@@ -193,7 +194,7 @@ def run(
                 summary.detail["tceq_applications"] = enrich()
         # Sites are grouped and scored on every run, new documents or not: scores decay.
         with conn.transaction():
-            summary.detail["sites"] = update_sites(conn, as_of=as_of)
+            summary.detail["sites"] = update_sites(conn, as_of=as_of, scoring=scoring)
         if triager is not None:
             summary.detail["triage"] = {
                 "calls": triager.calls,

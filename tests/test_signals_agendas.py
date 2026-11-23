@@ -149,7 +149,54 @@ def test_project_followed_by_an_ordinary_word_is_not_a_code_name():
     ]  # fmt: skip
     out = legistar_agenda(agenda_doc(agenda), RULES)
     assert out.drafts == [] and out.no_reason == 3
-    # A real code name still counts.
-    agenda["items"][0]["title"] = "Public hearing on a performance agreement for Project Charge."
+
+
+def test_a_code_name_counts_only_where_the_item_speaks_of_economic_development_negotiations():
+    """The backtest of November 23, 2026: 399 signals rested on "Project" and a code name and
+    three were tied to a known project. The rest were phrases such as a project specific
+    agreement or a flood control project number. The owner approved the rule agenda files
+    already had. A real closed-session item reads as the first title here."""
+    agenda = harris()
+    titles = [
+        "Council may convene into closed Executive Session pursuant to Section 551.087 of the "
+        "Texas Government Code to discuss economic development incentives for Project Charge.",
+        "Authorize a Project Specific Agreement for the mill and overlay of various streets.",
+        "Approve an interlocal agreement for Project Brays, flood control unit D100-00-00.",
+    ]
+    agenda["items"] = [
+        {"id": n, "sequence": n, "number": f"{n}.", "file": "", "type": "", "name": "",
+         "note": "", "title": title}
+        for n, title in enumerate(titles, start=1)
+    ]  # fmt: skip
+    out = legistar_agenda(agenda_doc(agenda), RULES)
+    (draft,) = out.drafts
+    assert [r["term"] for r in draft.extracted["reasons"]] == ["Project Charge"]
+    assert out.no_reason == 2
+
+
+def test_a_code_name_beside_another_term_does_not_ride_along():
+    agenda = harris()
+    agenda["items"] = [
+        {"id": 1, "sequence": 1, "number": "1.", "file": "", "type": "", "name": "", "note": "",
+         "title": "Development agreement for the Project Specific paving of Main Street."}
+    ]  # fmt: skip
     (draft,) = legistar_agenda(agenda_doc(agenda), RULES).drafts
-    assert draft.extracted["reasons"][0]["term"] == "Project Charge"
+    assert [r["rule"] for r in draft.extracted["reasons"]] == ["code_word"]
+    assert draft.confidence == RULES.confidence["code_word"]
+
+
+def test_an_item_that_says_data_center_is_held_to_its_government_and_meeting():
+    """So it can sit on a site and reach a reviewer. A code word alone opens no site."""
+    agenda = harris()
+    agenda["items"] = [
+        {"id": 1, "sequence": 1, "number": "1.", "file": "", "type": "", "name": "", "note": "",
+         "title": "Discussion of data center development in the county."},
+        {"id": 2, "sequence": 2, "number": "2.", "file": "", "type": "", "name": "", "note": "",
+         "title": "Appointment to the board of a reinvestment zone."},
+    ]  # fmt: skip
+    direct, weak = legistar_agenda(agenda_doc(agenda), RULES).drafts
+    day = dt.date.fromisoformat(agenda["date"])
+    assert (
+        direct.extracted["meeting"] == f"Harris County, meeting of {day:%B} {day.day}, {day.year}"
+    )
+    assert weak.extracted["meeting"] is None

@@ -6,11 +6,12 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 ## In short
 
-- **0 of 73 judged projects reached the review threshold of 40 before they were public.**
+- **1 of 73 judged projects reached the review threshold of 3 before they were public.**
 - **1 of 73 had any signal before the public date.** 0 of those could have been tied to the project by the everyday radar. The rest were tied here by the project's name in the record's words, which only the backtest can do.
+- 1 of those 1 rest on a record that sits on a site under the everyday rules, where a reviewer can see it. A record with no company, coordinates, project name or meeting sits on no site.
 - 4 more had a signal only on or after the public date.
-- **The highest score any known project reached on any day is 7.5.** At 40, the radar would have sent none of them to a reviewer, before or after it was public.
-- Median lead time over hits: none. There is no hit to measure.
+- The highest score any known project reached on any day is 7.5.
+- Median lead time over hits: 39 days.
 - False alarms in the 11 control counties: 0. The history holds 0 signals there.
 
 ## What was judged
@@ -19,10 +20,10 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 | Verdict | Projects | Meaning |
 |---|---|---|
-| hit | 0 | reached the review threshold before the public date |
-| late | 0 | reached it on or after the public date |
-| below_threshold | 1 | had a signal before the public date and never reached it |
-| no_signal | 72 | had no signal before the public date |
+| hit | 1 | reached the review threshold before the public date |
+| late | 4 | reached it on or after the public date |
+| below_threshold | 0 | had a signal before the public date and never reached it |
+| no_signal | 68 | had no signal before the public date |
 | undated | 49 | not judged: no public date was found |
 | before_history | 6 | not judged: public before the records begin |
 
@@ -30,14 +31,14 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 | Source | Documents | Records read | Signals | Held back |
 |---|---|---|---|---|
-| Agendas on Legistar | 3635 | 107102 | 1151 | 0 |
+| Agendas on Legistar | 3635 | 107102 | 845 | 0 |
 | Agenda files on governments' own sites | 1847 | 1784 | 231 | 0 |
 | ERCOT planning group files | 433 | 372 | 78 | 0 |
 | State well reports | 1 | 15986 | 49 | 17 |
 | TCEQ pending air permits | 2 | 627 | 12 | 0 |
 
 - 5316 dated agendas from 39 governments were read. A record is an agenda item, an agenda file, a well report, a planning file or a row of a permit list.
-- 1521 signals in all. 77 carry no county and can sit on no site: the planning files that name no test county and every pending air permit.
+- 1215 signals in all. 77 carry no county and can sit on no site: the planning files that name no test county and every pending air permit.
 - A record is held back when its named party may be a person. It makes no signal and is counted by its number.
 
 ## Projects that had a signal
@@ -46,11 +47,11 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 |---|---|---|---|---|---|---|---|---|
 | `dallas-garland-digital-realty` | Dallas | Dec 2, 2022 | Jul 18, 2025 | -959 | 1 agenda item or file | 0 | before_history | the record names the project's company or code name |
 | `archer-project-raptor` | Archer | none | Sep 22, 2025 | not judged | 3 agenda item or file | 1.5 | undated | the same project name or number |
-| `milam-sb-energy` | Milam | May 12, 2025 | Oct 20, 2025 | -161 | 4 agenda item or file | 0 | no_signal | the record names the project's company or code name |
-| `milam-riot-rockdale` | Milam | Jan 16, 2026 | Dec 8, 2025 | +39 | 7 agenda item or file | 4.5 | below_threshold | the record names the project's company or code name |
-| `travis-tesla-giga-texas` | Travis | Oct 10, 2023 | May 4, 2026 | -937 | 13 well report | 0 | no_signal | the same company |
-| `austin-cleanspark` | Austin | Oct 29, 2025 | May 11, 2026 | -194 | 1 agenda item or file | 0 | no_signal | the record names the project's company or code name |
-| `bosque-cyrusone-thad-hill` | Bosque | Jul 30, 2025 | Jul 16, 2026 | -351 | 1 well report | 0 | no_signal | the same company |
+| `milam-sb-energy` | Milam | May 12, 2025 | Oct 20, 2025 | -161 | 4 agenda item or file | 0 | late | the record names the project's company or code name |
+| `milam-riot-rockdale` | Milam | Jan 16, 2026 | Dec 8, 2025 | +39 | 7 agenda item or file | 4.5 | hit | the record names the project's company or code name |
+| `travis-tesla-giga-texas` | Travis | Oct 10, 2023 | May 4, 2026 | -937 | 13 well report | 0 | late | the same company |
+| `austin-cleanspark` | Austin | Oct 29, 2025 | May 11, 2026 | -194 | 1 agenda item or file | 0 | late | the record names the project's company or code name |
+| `bosque-cyrusone-thad-hill` | Bosque | Jul 30, 2025 | Jul 16, 2026 | -351 | 1 well report | 0 | late | the same company |
 
 Days ahead is the public date less the day the first signal could be seen. A minus sign means the signal came after the project was public.
 
@@ -97,7 +98,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 
 | Kind | Signals | Tied to a known project | Projects with one before public | Median days ahead |
 |---|---|---|---|---|
-| agenda item or file | 1382 | 16 | 1 | 39 |
+| agenda item or file | 1076 | 16 | 1 | 39 |
 | ERCOT planning file | 78 | 0 | 0 | none |
 | well report | 49 | 14 | 0 | none |
 | pending air permit | 12 | 0 | 0 | none |
@@ -109,7 +110,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 | says "data center" | 109 | 13 |
 | company on the Comptroller's list | 33 | 13 |
 | company named like one on the list | 1 | 1 |
-| "Project" and a code name | 399 | 3 |
+| "Project" and a code name | 93 | 3 |
 | a code word | 979 | 0 |
 
 A signal tied to no known project is not shown to be wrong. The list of known projects is not complete.
@@ -178,13 +179,14 @@ Lamb, Comanche, Eastland, Lampasas, Mills, Wood, Titus, Colorado, Lavaca, Runnel
 
 ## Sites that fit no known project
 
-In the test counties, signals that fit no known project make 128 sites under the everyday rules. None is named here: none has been reviewed.
+In the test counties, signals that fit no known project make 94 sites under the everyday rules. None is named here: none has been reviewed.
 
 | Held together by | Sites | Highest score | At or over the threshold |
 |---|---|---|---|
-| a "Project" code name | 123 | 1.5 | 0 |
-| a company or coordinates | 3 | 13.5 | 0 |
-| a project number | 2 | 9 | 0 |
+| one meeting's agenda that says "data center" | 54 | 4.5 | 54 |
+| a "Project" code name | 35 | 1.5 | 0 |
+| a company or coordinates | 3 | 13.5 | 3 |
+| a project number | 2 | 9 | 2 |
 
 The sites held by a company or coordinates:
 
@@ -202,10 +204,10 @@ The same signals, with only the bar moved.
 
 | Threshold | Hits | Reached it only after public | Judged | Hit rate | Median lead, days | False alarms in control counties | Sites that fit no known project, at or over |
 |---|---|---|---|---|---|---|---|
-| 1 | 1 | 4 | 73 | 1% | 39 | 0 | 128 |
-| 2 | 1 | 4 | 73 | 1% | 39 | 0 | 5 |
-| 3 | 1 | 4 | 73 | 1% | 39 | 0 | 5 |
-| 4 | 1 | 4 | 73 | 1% | 39 | 0 | 5 |
+| 1 | 1 | 4 | 73 | 1% | 39 | 0 | 94 |
+| 2 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
+| 3 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
+| 4 | 1 | 4 | 73 | 1% | 39 | 0 | 59 |
 | 5 | 0 | 1 | 73 | 0% | none | 0 | 4 |
 | 10 | 0 | 0 | 73 | 0% | none | 0 | 1 |
 | 20 | 0 | 0 | 73 | 0% | none | 0 | 0 |
@@ -252,9 +254,9 @@ A site that fits no known project is not a false alarm. Nobody has shown what it
 
 | A signal counts from | Signals |
 |---|---|
-| the day Legistar says the agenda was last published | 960 |
+| the day Legistar says the agenda was last published | 687 |
 | the day of the meeting: the day the file was posted is not kept | 231 |
-| the day of the meeting: no earlier publishing day is recorded | 191 |
+| the day of the meeting: no earlier publishing day is recorded | 158 |
 | the day in the file's address, the day ERCOT posted it | 78 |
 | the day the report was submitted to the state | 49 |
 | the day the radar first held the list | 12 |

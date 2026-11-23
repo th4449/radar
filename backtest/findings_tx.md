@@ -1,16 +1,28 @@
 # Texas backtest: what it shows and what is proposed
 
-BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026, from [report_tx.md](report_tx.md), which a program writes. Every number here is in that report. The owner decides everything under "Proposed".
+BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest ran twice that day.
+
+- **The first run** used the radar as it was built, with a review threshold of 40. Its numbers are under "The first run" and "Why so little". Its report is in this repository's history, at commit `7d163cf`.
+- **The owner then approved three changes,** listed under "Decided". **The second run** has them, and [report_tx.md](report_tx.md), which a program writes, is the second run's.
 
 **Nothing here is a finding about a company or a place.**
 
-## The result
+## The second run, with the three changes
 
-- **No known project reaches the review threshold of 40,** before or after it was public. 73 projects were judged. The highest score any of the 128 ever reaches is 7.5.
+- **One of 73 judged projects reaches the review threshold of 3 before it was public,** 39 days ahead. It is the same record as in the first run: Milam County files for the meeting of December 8, 2025.
+- **That record now sits on a site a reviewer would see.** It is held by its meeting's agenda.
+- **The cost: 59 sites that fit no known project reach the bar in four years of records,** about 15 a year. 54 are one meeting's agenda that says "data center", 3 are held by a company or coordinates and 2 by a project number. Before the changes the count at this bar was 5. Many of the 54 are a government's own computer rooms. Nobody has reviewed any of them.
+- Signals that rest on "Project" and a code name fell from 399 to 93, and the sites they make from 123 to 35. The three tied to a known project are kept.
+- False alarms in the eleven control counties: still none, and still a weak test.
+- **Nothing else moved.** 72 of 73 judged projects have no signal before their public date. The reasons under "Why so little" stand.
+
+## The first run
+
+- **No known project reached the review threshold of 40,** before or after it was public. 73 projects were judged. The highest score any of the 128 ever reaches is 7.5.
 - **One of 73 had a signal before its public date.** Two Milam County files for the meeting of December 8, 2025 name Riot Rockdale and a data center, 39 days before the first news report found.
   - **The lead may be 70 days.** One of the two is a notice whose own date and address stamp are November 7, 2025. The backtest counts an agenda file from the day of its meeting, because the day a file was posted is not kept. Whether the notice could be seen on November 7 is not verified.
   - The research for the list of known projects found a later notice of the same county by hand, posted December 8. The collector holds that one too.
-- **The radar as built would not have sent that record to a reviewer.** An agenda names people, so an agenda signal carries no company. It has no company, no coordinates and no project name, and a signal with none of those sits on no site. The backtest tied it to the project by finding the project's company in the record's words.
+- **The radar as first built would not have sent that record to a reviewer.** An agenda names people, so an agenda signal carries no company. It has no company, no coordinates and no project name, and a signal with none of those sits on no site. The backtest tied it to the project by finding the project's company in the record's words.
 - Four more judged projects had a signal only after they were public, 161 to 937 days after.
 - **False alarms in the eleven control counties: none.** The history holds no signal there at all, so this says little.
 
@@ -22,7 +34,7 @@ BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026, from [report_t
 4. **Well reports came late.** Fourteen well reports are tied to a known project. Every one was submitted after the project was public.
 5. **The feeds the plan weights highest could not be judged.** Abatement notices, commission dockets and stormwater notices are held or closed. The pending air permit lists show only today's rows: ten name a company of a known project, and none was received before that project's public date.
 6. **The planning group files are hard to place.** 78 signals, 65 with no county, none tied to a known project.
-7. **Two keyword rules make noise.** 399 signals rest on "Project" and a code name. Three are tied to a known project, all for one name. Most of the rest are ordinary phrases, such as a project's contract or a flood control project number. They make 123 sites. 979 signals rest on a code word alone and none is tied to a known project.
+7. **Two keyword rules made noise.** In the first run 399 signals rest on "Project" and a code name. Three are tied to a known project, all for one name. Most of the rest are ordinary phrases, such as a project's contract or a flood control project number. They make 123 sites. 979 signals rest on a code word alone and none is tied to a known project.
 
 ## Records a person should read
 
@@ -34,29 +46,30 @@ The report lists 42 records tied to no project that say "data center" or are a p
 
 Three sites that fit no known project carry a company and coordinates, all from well reports: two in Travis County and one in Carson County. They are unreviewed and are not named in this repository.
 
-## Proposed
+## Decided
 
-**1. Do not treat the thresholds as validated.** One early record and no hit cannot tell a good bar from a bad one. Keep `placeholder: true` in `config/scoring.yaml` whatever the number is.
+The owner approved all of this on November 23, 2026. It is done, and the second run above has it.
 
-**2. Lower `review_threshold` from 40 to 3 as a working number.** The reasons, all from this history:
+**1. The thresholds are not validated.** One early record cannot tell a good bar from a bad one. `placeholder: true` stays in `config/scoring.yaml`.
+
+**2. `review_threshold` is 3, down from 40, as a working number.** The reasons, all from the first run:
 
 - 40 is out of reach. Nothing the radar holds on any known project passes 7.5.
 - The scores do sort the records. Records tied to a known project score 4.5 to 13.5. The 123 code-name sites score 1.5.
-- Any bar from 2 to 4 gives the same result: the one early record crosses, and a reviewer is sent 5 sites that fit no known project in four years of records. At 1 a reviewer is sent 128.
+- Any bar from 2 to 4 gives the same result: the one early record crosses. On the first run's rules a reviewer was sent 5 sites that fit no known project in four years of records, and 128 at a bar of 1. **With the third change below it is 59,** because every agenda that says "data center" now makes a site.
 - In words, a bar of 3 means: a record that says "data center", a well owned by a company on the Comptroller's list or a planning file that names the county goes to a reviewer by itself. A bare code word or code name does not.
 
-**3. Give an agenda record a way onto a site.** Without it the bar does not matter for agendas, and agendas gave the only early record. One way: an agenda record that says "data center" opens a site held by its government and meeting. This changes what milestone M5 built, so it waits for the owner.
+**3. An agenda record that says "data center" opens a site held by its government and meeting.** Records of one meeting share a site. A code word alone opens none. Without this the bar did not matter for agendas, and agendas gave the only early record. A meeting is not a place: the site says where the record is, and a reviewer reads it for where the project is. Two projects on one agenda share a site.
 
-**4. Hold the "Project" code-name rule on Legistar to the rule agenda files already have:** a code name counts only where the item speaks of economic development negotiations.
+**4. On Legistar a "Project" code name counts only where the item speaks of economic development negotiations,** the rule agenda files already had. An item whose heading sits in an earlier item is missed.
 
-**5. Run the backtest again after each of these and after any held feed is settled.** It is one command.
-
-The other choice is to leave 40 in place until more feeds exist. The radar would then send no known kind of record to a reviewer.
+**5. The backtest is run again after any held feed is settled.** It is one command.
 
 ## Not verified
 
 - **The public dates.** Each is the earliest news report found. An older report would shorten or erase the one lead. 49 projects have no public date and are not judged.
 - **The day an agenda file was posted.** It is not kept, so a file counts from the day of its meeting. The one lead is 39 days on that rule and 70 days by the file's own date.
+- **How many of the 59 sites a reviewer would call noise.** None has been read as a reviewer would.
 - **The ties.** A program tied each record to a project, and nobody has checked them. One is known to be wrong: a Carrollton item on the city's own computing contract is tied to a Garland project by the vendor's name. That project is not judged.
 - **The Comptroller's list as it stood in the past.** A company counts as listed from the day its registration took effect. Whether the list showed it that day is not known.
 - **Whether a control county has a project.** The screen behind the list rests on two or three searches a county.

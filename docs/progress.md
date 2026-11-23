@@ -2,6 +2,36 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — M9: the owner approved three changes, and the backtest ran again
+
+**The owner's decisions,** after reading the findings of the first run
+
+- **The review threshold is 3, down from 40.** A working number. The scoring file stays marked as a placeholder.
+- **An agenda record that says "data center" opens a site,** held by its government and meeting.
+- **On Legistar a "Project" code name counts only where the item speaks of economic development negotiations,** as in an agenda file.
+- The Comptroller's site is asked once more on a later day.
+
+**Built, tests first**
+
+- `pipeline/cluster.py`: a fourth reason signals are one site, the same meeting's agenda. `pipeline/signals.py` keeps the meeting with an agenda signal that says "data center" and with no other. `pipeline/sites.py` names such a site "Agenda of" its government and meeting.
+- The Legistar code-name rule. `RULES_VERSION` is `2026-11-23.1`.
+- `config/scoring.yaml`: 3, with what the number means written beside it.
+- The database tests that pin how a site is made and queued keep their own bar of 40. Two new ones run at the file's bar.
+- 12 tests. 1,036 pass.
+
+**The second run.** [report_tx.md](../backtest/report_tx.md) is now this run's.
+
+- **One of 73 judged projects reaches the bar before it was public, 39 days ahead.** The same Milam County record as before. It now sits on a site a reviewer would see.
+- **59 sites that fit no known project reach the bar in four years of records, about 15 a year.** 54 are one meeting's agenda that says "data center". On the first run's rules the count at this bar was 5, which is the number I gave the owner before the change. Nobody has read the 59 as a reviewer would.
+- Code-name signals fell from 399 to 93 and their sites from 123 to 35.
+- Nothing else moved: 72 of 73 have no signal before their public date.
+
+**Not verified**
+
+- How many of the 59 sites are noise.
+- Whether a real closed-session item is missed because its heading sits in an earlier item. In four governments' stored agendas, 66 of 179 code-name items carry the heading themselves.
+- No stored signal in any real database carries a meeting yet. Reading documents again only adds signals, so a signal made before today stays off a site.
+
 ## November 23, 2026 — M9: the backtest ran. No hit, one early signal, thresholds proposed
 
 **The result.** See [report_tx.md](../backtest/report_tx.md), written by a program, and [findings_tx.md](../backtest/findings_tx.md), written by hand.

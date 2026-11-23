@@ -1,6 +1,7 @@
 # Points, decay and thresholds. See BUILD_PLAN.md section 8.
 #
-# Every number here is a placeholder until the backtest in milestone M9 sets the real ones.
+# Every number here is still a placeholder. The backtest in milestone M9 ran on November 23,
+# 2026 and could not validate any of them: see backtest/findings_tx.md.
 # Changing thresholds after the backtest needs the owner's approval (section 11).
 #
 # Settings that database policies depend on, such as confirmations_required and the admin
@@ -74,5 +75,12 @@ clustering:
   same_company_m: 5000
 
 # A site at or above review_threshold goes to the reviewer queue.
+#
+# 3 is a working number, set by the owner on November 23, 2026 after the Texas backtest. It is
+# not validated: the backtest had no hit and one early record. See backtest/findings_tx.md.
+# What it means with the points above: a record that says "data center" (4.5 and up), a well
+# of a company on the Comptroller's list (7.5) or a planning file that names the county
+# (9 and up) reaches a reviewer by itself. A bare code word or code name (1.5) does not.
+# At 40, the number before, no known project in the backtest ever reached a reviewer.
 thresholds:
-  review_threshold: 40
+  review_threshold: 3
