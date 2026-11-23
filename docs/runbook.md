@@ -64,6 +64,27 @@ uv run python -m collectors.by_hand tx_comptroller_data_centers "<the saved file
 
 The command makes no request. It refuses a file that is not the page and stores nothing then. **Never use it on a file a program fetched.**
 
+## Entering a record by hand
+
+For a source a program may not read and a person may. **Only a source the owner has marked `hand_entered` takes a record.** None is marked yet.
+
+1. Open the record at its source and save it as a PDF or a web page.
+2. Run the command on the saved file:
+
+```
+uv run python -m pipeline.hand_entry <source-id> "<the saved file>" \
+    --url "<the record's own address>" --date 2026-11-28 --county Hood \
+    --type abatement_notice --reference "Notice 4471" \
+    --summary "Hood County published a notice of a hearing on ..." \
+    --party "Example Hosting LLC"
+```
+
+- **The summary restates the record.** It may not say planned, approved or coming unless the file says so.
+- **`--party` is a company or a public body.** A name that may be a person is refused. Leave a person out.
+- `--reference` is the record's own number or title, never a party's name. It is what the public sees beside the link.
+- If the file uses none of the radar's terms, add `--reason` with one sentence on why the record is a signal.
+- The command checks all of this before it stores anything. It keeps the file with its hash and makes one signal. A reviewer still confirms it before anything is public.
+
 ## Reviewers
 
 - **Applications** are on the administrator's desk. Approve only a person the organization knows. An administrator cannot approve themselves, and the database refuses it.

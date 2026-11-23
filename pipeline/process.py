@@ -124,6 +124,16 @@ def _save(conn: psycopg.Connection, document_id: int, doc: Doc, draft: Draft, ve
     return row is not None
 
 
+def store_draft(
+    conn: psycopg.Connection, document_id: int, doc: Doc, draft: Draft, version: str
+) -> bool:
+    """Store one signal for a stored document. False when the same fact is already stored.
+
+    For a record entered by hand. See pipeline/hand_entry.py.
+    """
+    return _save(conn, document_id, doc, draft, version)
+
+
 def run(
     conn: psycopg.Connection,
     store: ArchiveStore,

@@ -28,10 +28,17 @@ The owner said on November 23, 2026 to build everything before putting anything 
 - [x] **A sender for real email,** behind three locks: the variable `RADAR_EMAIL_LIVE`, the secret `RESEND_API_KEY`, and the site's address and the from address in `config/email.yaml`. `pipeline/email_sender.py`. Not run against the provider.
 - [x] **A backup command and a restore trial.** `scripts/backup.py`. Tried on the history database on November 23, 2026: 5,919 documents were dumped, restored into a scratch database and counted back whole. Not tried on a hosted database.
 
+- [x] **A way to enter a record a person read by hand.** `python -m pipeline.hand_entry` takes the record's saved file and its facts, keeps the file with its hash and makes one signal. **No source is marked for it.** See part 2b.
+
 ## 2a. Not built yet
 
 - [ ] **Hosting for the site.** The build is static and passes in CI. It is deployed nowhere.
-- [ ] **A way to enter a record a person read by hand,** for the sources that stay manual. Only a whole saved page can be stored today, for one source.
+
+## 2b. Sources a person may enter by hand
+
+- [ ] **Owner.** Mark each source a person may read and enter, with `hand_entered: true` in `config/sources.yaml`. None is marked.
+- Entering by hand is not a way around a site's terms. **A source whose terms bar storing its content stays unmarked.** The Texas public notice site's terms bar putting its content in any database or archive.
+- The State of Michigan's reply of November 20, 2026 said no agreement is needed to use its pages when a person reads them. Its three feeds are the likeliest to mark: the commission's dockets and the two EGLE feeds. The owner decides.
 
 ## 3. Secrets and settings
 

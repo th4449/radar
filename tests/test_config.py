@@ -107,6 +107,28 @@ def test_only_a_manual_source_can_be_saved_by_hand():
     assert marked == {"tx_comptroller_data_centers"}
 
 
+def test_only_a_manual_source_can_take_records_entered_by_hand():
+    base = dict(
+        id="tx_example",
+        state="TX",
+        name="Example",
+        url="https://example.gov/x",
+        layer="signal",
+        intended_method="http",
+        cadence="weekly",
+        notes="",
+        verified_at=dt.date(2026, 11, 19),
+    )
+    with pytest.raises(ValidationError, match="hand_entered"):
+        config.Source(**base, method="http", robots_status="allowed", hand_entered=True)
+    with pytest.raises(ValidationError, match="not both"):
+        config.Source(
+            **base, method="manual", robots_status="blocked", hand_entered=True, hand_saved=True
+        )
+    kept = config.Source(**base, method="manual", robots_status="restricted", hand_entered=True)
+    assert kept.hand_entered and not kept.may_fetch_automatically
+
+
 def test_source_rejects_unknown_keys():
     with pytest.raises(ValidationError):
         config.SourcesFile.model_validate({"sources": [], "extra": 1})

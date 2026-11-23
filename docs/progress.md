@@ -2,6 +2,30 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — Entering a record by hand
+
+**The owner's decision:** build hand entry as a command that keeps a saved copy and works only for sources the owner marks.
+
+**Built, tests first**
+
+- `python -m pipeline.hand_entry`: a person saves a record as a PDF or a web page and gives its facts. The command checks the facts against the file before anything is stored, then keeps the file with its address, time and hash and makes one signal.
+- **It holds a hand-read record to the rules every record meets.** A reason, read from the words of the file with the radar's own terms, or stated in a sentence. A party that shows a company or a public body. A summary that does not say planned, approved or coming unless the file does. A reference that names no party.
+- A new setting, `hand_entered`, which only a manual source may carry. **No source is marked.**
+- 25 tests. 1,142 pass.
+
+**Verified**
+
+- In the test database: a made-up tax abatement notice that says "data center" was stored with its hash, made one signal on a site named for its company and went to the reviewers' queue at a score of 27. Entered twice, it is one signal.
+
+**Not verified**
+
+- The command against a real record from a real source. None is marked.
+- Which sources may be marked. The Texas public notice site's terms bar storing its content at all. Michigan's reply said no agreement is needed when a person reads its pages.
+
+**Not built yet**
+
+- Hosting for the site.
+
 ## November 23, 2026 — Built before going online: archive, real runs, email, backups
 
 **The owner's decision:** build everything before putting anything online. Nothing here is switched on.
@@ -26,9 +50,9 @@ Newest first. Each entry says what was built, what was verified live and what is
 - That the storage service of a hosted project answers as its local copy does.
 - Whether the bucket's default size limit takes the largest file a collector keeps.
 
-**Not built yet**
+**Not built yet,** when this was written
 
-- A way to enter a record a person read by hand. It needs the owner's word on which sources and on keeping a copy: the public notice site's terms bar storing its content at all.
+- A way to enter a record a person read by hand. Built later that day: see the entry above.
 - Hosting for the site.
 
 ## November 23, 2026 — M10: monitoring, the launch checklist and the runbook
