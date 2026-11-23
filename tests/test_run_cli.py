@@ -78,3 +78,30 @@ def test_every_collector_has_a_workflow_file_that_is_not_scheduled():
         assert "schedule:" not in text and "cron" not in text
     shared = (workflows / "collect.yml").read_text()
     assert "--dry-run" in shared
+
+
+# --- a one-time history run, for the backtest ----------------------------------------------------
+
+
+def test_a_history_run_is_refused_for_a_collector_that_has_no_history_setting():
+    import datetime as dt
+
+    lists = load_sources().by_id("tx_comptroller_data_centers")
+    with pytest.raises(runner.CannotStart, match="no history"):
+        runner.run_source(lists, dry_run=True, contact=CONTACT, history_since=dt.date(2023, 1, 1))
+
+
+def test_the_command_reads_the_first_day_of_a_history_run(monkeypatch):
+    import datetime as dt
+
+    seen = {}
+
+    def stand_in(source, **kwargs):
+        seen.update(kwargs, source=source.id)
+        return runner.RunSummary(source.id, status="ok")
+
+    monkeypatch.setattr(runner, "run_source", stand_in)
+    assert runner.main(["tx_ercot_rpg", "--dry-run", "--history-since", "2023-01-01"]) == 0
+    assert seen["history_since"] == dt.date(2023, 1, 1) and seen["dry_run"] is True
+    assert runner.main(["tx_ercot_rpg", "--dry-run"]) == 0
+    assert seen["history_since"] is None

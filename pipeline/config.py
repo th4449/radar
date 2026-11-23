@@ -290,6 +290,11 @@ def load_counties(state: Literal["TX", "MI"], config_dir: Path | None = None) ->
     return CountiesFile.model_validate(_read(f"counties_{state.lower()}.yaml", config_dir))
 
 
+def load_control_counties(state: Literal["TX"], config_dir: Path | None = None) -> CountiesFile:
+    """The backtest's control counties: outside the radar's scope, with no known project."""
+    return CountiesFile.model_validate(_read(f"counties_{state.lower()}_control.yaml", config_dir))
+
+
 def load_all_counties(state: Literal["TX", "MI"], config_dir: Path | None = None) -> CountiesFile:
     """Every county in the state. Michigan's scope file already holds all of them."""
     name = "counties_tx_all.yaml" if state == "TX" else "counties_mi.yaml"

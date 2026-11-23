@@ -1,0 +1,32 @@
+# The backtest's control counties. BUILD_PLAN.md milestone M9.
+# Texas counties outside the 30 where no data center project was found. The owner approved
+# this list on November 22, 2026. Do not change it without the owner's approval.
+# "None found" is weak: two or three web searches each, on November 22, 2026. The screen of
+# twenty candidates is in backtest/control_counties_screen.csv.
+# The radar does not watch these counties. Only the backtest reads them, and only on the
+# statewide feeds: no agenda inventory exists for them.
+# FIPS codes are those of counties_tx_all.yaml.
+state: TX
+counties:
+  - name: Lamb
+    fips: "48279"
+  - name: Comanche
+    fips: "48093"
+  - name: Eastland
+    fips: "48133"
+  - name: Lampasas
+    fips: "48281"
+  - name: Mills
+    fips: "48333"
+  - name: Wood
+    fips: "48499"
+  - name: Titus
+    fips: "48449"
+  - name: Colorado
+    fips: "48089"
+  - name: Lavaca
+    fips: "48285"
+  - name: Runnels
+    fips: "48399"
+  - name: Coleman
+    fips: "48083"

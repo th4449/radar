@@ -299,3 +299,29 @@ def test_the_run_stops_if_robots_closes_the_data_folder(tmp_path):
     summary = run(tmp_path, sink, web)
     assert summary.status == "blocked"
     assert web.page_urls() == [] and sink.documents == {}
+
+
+# --- a one-time history run, for the backtest ----------------------------------------------------
+
+
+def test_a_history_run_keeps_rows_since_its_first_day_and_adds_the_control_counties(tmp_path):
+    from pipeline.config import load_control_counties
+
+    history = TwdbWellReports.history(dt.date(2023, 1, 1), today=TODAY)
+    controls = {c.name for c in load_control_counties("TX").counties}
+    assert history.counties == COUNTIES | controls
+    web = Site({URL: zip_route(board_zip())}, robots=ROBOTS)
+    clock = FakeClock()
+    src, sink = source(), MemorySink()
+    with Fetcher(
+        src, contact=CONTACT, transport=web.transport, clock=clock, sleep=clock.sleep
+    ) as fetcher:
+        history.run(source=src, fetcher=fetcher, store=LocalArchive(tmp_path), sink=sink)
+    (doc,) = sink.documents.values()
+    # 9000009 was submitted on November 19, 2024, a day outside the everyday two years.
+    assert "9000009" in doc.text and "9000008" in doc.text
+
+
+def test_an_everyday_run_keeps_its_two_years_and_its_thirty_counties():
+    daily = TwdbWellReports(today=TODAY)
+    assert daily.since == SINCE and daily.counties == COUNTIES

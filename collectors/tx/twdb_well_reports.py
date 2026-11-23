@@ -32,7 +32,7 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 
 from collectors.base import Collector, FetchResult, LayoutChanged, Reduced
-from pipeline.config import load_counties
+from pipeline.config import load_control_counties, load_counties
 
 URL = "https://www.twdb.texas.gov/groundwater/data/SDRDownload.zip"
 TABLE = "SDRDownload/WellData.txt"
@@ -185,15 +185,29 @@ class TwdbWellReports(Collector):
         self.counties = frozenset(
             counties if counties is not None else (c.name for c in load_counties("TX").counties)
         )
+        # Rows submitted before this day are left out.
+        self.since = self.today - dt.timedelta(days=WINDOW_DAYS)
         self._made: dict[str, Reduced] = {}
+
+    @classmethod
+    def history(cls, since: dt.date, today: dt.date | None = None) -> TwdbWellReports:
+        """Reports submitted from a day on, in the test and the control counties. For the backtest.
+
+        Still one download, and the same rows are left out: household wells, the mailing
+        address and the driller.
+        """
+        names = [c.name for c in load_counties("TX").counties]
+        names += [c.name for c in load_control_counties("TX").counties]
+        collector = cls(today=today, counties=names)
+        collector.since = since
+        return collector
 
     def urls(self) -> list[str]:
         return [URL]
 
     def reduce(self, result: FetchResult) -> Reduced:
         if result.url not in self._made:
-            since = self.today - dt.timedelta(days=WINDOW_DAYS)
-            extract = reduce_zip(result.body, self.counties, since)
+            extract = reduce_zip(result.body, self.counties, self.since)
             meta = {**extract.counts(), "table": TABLE, "columns": list(KEEP)}
             self._made[result.url] = Reduced(extract.body(), "text/plain; charset=utf-8", meta)
         return self._made[result.url]

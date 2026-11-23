@@ -9,6 +9,10 @@ memory and the files go to a temporary folder.
 A real run needs DATABASE_URL and RADAR_ARCHIVE_DIR. It writes the run log and the documents
 to the database and the original files to the archive folder.
 
+A one-time run over older records, for the backtest, takes the day to start from:
+
+    uv run python -m collectors.run tx_ercot_rpg --history-since 2023-01-01
+
 A source runs only if config/sources.yaml clears it for automatic fetching. The exit code is 0
 for a clean run, 1 for a run that was partial, failed or blocked, and 2 for a run that could
 not start.
@@ -18,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
+import datetime as dt
 import json
 import os
 import sys
@@ -63,13 +68,20 @@ def run_source(
     runner: str | None = None,
     contact: str | None = None,
     transport: httpx.BaseTransport | None = None,
+    history_since: dt.date | None = None,
     **fetcher_kwargs,
 ) -> RunSummary:
     if source.id not in REGISTRY:
         raise CannotStart(f"no collector is written for {source.id}")
     if not source.may_fetch_automatically:
         raise CannotStart(f"{source.id} is marked manual in config/sources.yaml")
-    collector = REGISTRY[source.id]()
+    if history_since is None:
+        collector = REGISTRY[source.id]()
+    else:
+        try:
+            collector = REGISTRY[source.id].history(history_since)
+        except NotImplementedError as exc:
+            raise CannotStart(str(exc)) from exc
 
     def go(store, sink) -> RunSummary:
         with Fetcher(source, contact=contact, transport=transport, **fetcher_kwargs) as fetcher:
@@ -94,6 +106,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("source_id", help="the id in config/sources.yaml")
     parser.add_argument("--dry-run", action="store_true", help="fetch and report, keep nothing")
     parser.add_argument("--runner", default=os.environ.get("RADAR_RUNNER", "manual"))
+    parser.add_argument(
+        "--history-since",
+        type=dt.date.fromisoformat,
+        default=None,
+        metavar="YYYY-MM-DD",
+        help="a one-time run over older records, from this day on. For the backtest",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -102,7 +121,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no source with id {args.source_id} in config/sources.yaml", file=sys.stderr)
         return 2
     try:
-        summary = run_source(source, dry_run=args.dry_run, runner=args.runner)
+        summary = run_source(
+            source, dry_run=args.dry_run, runner=args.runner, history_since=args.history_since
+        )
     except (CannotStart, NotPermitted) as exc:
         print(f"not started: {exc}", file=sys.stderr)
         return 2

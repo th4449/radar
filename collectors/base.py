@@ -455,6 +455,14 @@ class Collector:
     # of the run and the other sites go on. The refusal is still final: nothing is retried.
     refusal_closes_host_only: ClassVar[bool] = False
 
+    @classmethod
+    def history(cls, since: dt.date, **kwargs) -> Collector:
+        """This collector set for a one-time run over older records, for the backtest.
+
+        A collector whose source keeps no older records has no such setting.
+        """
+        raise NotImplementedError(f"{cls.source_id} has no history setting")
+
     def urls(self) -> Iterable[str]:
         raise NotImplementedError
 

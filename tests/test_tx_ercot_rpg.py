@@ -280,3 +280,71 @@ def test_the_run_stops_if_robots_closes_the_committee_pages(tmp_path):
     summary, _ = run(tmp_path, sink, web)
     assert summary.status == "blocked"
     assert web.page_urls() == [] and sink.documents == {}
+
+
+# --- a one-time history run, for the backtest ----------------------------------------------------
+
+YEAR_2025 = f"{INDEX}/2025"
+JULY_2025 = "https://www.ercot.com/calendar/07292025-RPG-Meeting"
+YEAR_BODY = (
+    b"<html><body><main><ul>"
+    b'<li><a href="/calendar/07292025-RPG-Meeting">July 29, 2025</a></li>'
+    b'<li><a href="/calendar/12162024-RPG-Meeting">December 16, 2024</a></li>'
+    b"</ul></main></body></html>"
+)
+
+
+def history_run(tmp_path, sink, web: Site, since: dt.date):
+    clock = FakeClock()
+    src = source()
+    with Fetcher(
+        src, contact=CONTACT, transport=web.transport, clock=clock, sleep=clock.sleep
+    ) as fetcher:
+        return ErcotRpg.history(since, today=TODAY).run(
+            source=src, fetcher=fetcher, store=LocalArchive(tmp_path), sink=sink, runner="test"
+        )
+
+
+def history_site() -> Site:
+    # Every other meeting on the saved index answers as one with nothing posted.
+    others = {
+        link.url: html(DEC_BODY, DEC_META)
+        for link in parse_index(INDEX_BODY)
+        if link.url not in (NOV, DEC)
+    }
+    return site(
+        routes={
+            **others,
+            YEAR_2025: html(YEAR_BODY, INDEX_META),
+            # The older meeting lists the same three files as November's. Each is asked once.
+            JULY_2025: html(NOV_BODY, NOV_META),
+        }
+    )
+
+
+def test_a_history_run_reads_the_older_years_pages_and_every_meeting_since_its_first_day(tmp_path):
+    web = history_site()
+    summary = history_run(tmp_path, MemorySink(), web, dt.date(2025, 1, 1))
+    asked = web.page_urls()
+    # The index holds this year. Each earlier year has a page of its own.
+    assert asked[:2] == [INDEX, YEAR_2025]
+    assert JULY_2025 in asked and NOV in asked
+    # A meeting before the first day is left alone, and so is a year before it.
+    assert "https://www.ercot.com/calendar/12162024-RPG-Meeting" not in asked
+    assert f"{INDEX}/2024" not in asked
+    assert sorted(u for u in asked if "/files/docs/" in u) == sorted(FILES)
+    assert summary.errors == 0
+
+
+def test_a_history_run_that_is_started_again_does_not_ask_for_a_stored_file(tmp_path):
+    sink = MemorySink()
+    history_run(tmp_path, sink, history_site(), dt.date(2025, 1, 1))
+    again = history_site()
+    history_run(tmp_path, sink, again, dt.date(2025, 1, 1))
+    assert not [u for u in again.page_urls() if "/files/docs/" in u]
+
+
+def test_an_everyday_run_reads_no_older_years_page(tmp_path):
+    web = history_site()
+    run(tmp_path, MemorySink(), web)
+    assert YEAR_2025 not in web.page_urls()

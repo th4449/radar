@@ -73,3 +73,27 @@ def test_headings_and_ordinary_words_before_county_are_not_a_county():
 def test_a_longer_county_name_is_not_cut_short():
     assert [m.name for m in TX.mentions("San Saba County")] == ["San Saba"]
     assert [m.name for m in TX.mentions("Jim Wells County and Wells Fargo")] == ["Jim Wells"]
+
+
+# --- the backtest's control counties -------------------------------------------------------------
+
+
+def test_the_control_counties_are_eleven_real_counties_outside_the_thirty():
+    from pipeline.config import load_all_counties, load_control_counties, load_counties
+
+    controls = load_control_counties("TX").counties
+    assert [c.name for c in controls] == [
+        "Lamb", "Comanche", "Eastland", "Lampasas", "Mills", "Wood", "Titus", "Colorado",
+        "Lavaca", "Runnels", "Coleman",
+    ]  # fmt: skip
+    every = {c.name: c.fips for c in load_all_counties("TX").counties}
+    assert all(every[c.name] == c.fips for c in controls)
+    assert not {c.fips for c in controls} & load_counties("TX").fips_set
+
+
+def test_no_known_project_sits_in_a_control_county():
+    from backtest.projects import load_known_projects
+    from pipeline.config import load_control_counties
+
+    controls = {c.name for c in load_control_counties("TX").counties}
+    assert not [p.key for p in load_known_projects() if p.county in controls]

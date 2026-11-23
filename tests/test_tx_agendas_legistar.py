@@ -332,3 +332,60 @@ def test_the_governments_read_are_the_ones_the_inventory_clears():
 
 def test_a_check_that_has_gone_stale_clears_no_one():
     assert cleared_clients(dt.date(2027, 11, 21)) == []
+
+
+# --- a one-time history run, for the backtest ----------------------------------------------------
+
+
+def history_run(site: Site, sink: MemorySink, tmp_path, since: dt.date, page_size: int = 2):
+    clock = FakeClock()
+    collector = LegistarAgendas.history(since, today=TODAY, clients=(ROUND_ROCK,))
+    collector.page_size = page_size
+    with Fetcher(
+        source(), contact=CONTACT, transport=site.transport, clock=clock, sleep=clock.sleep
+    ) as fetcher:
+        return collector.run(
+            source=source(), fetcher=fetcher, store=LocalArchive(tmp_path), sink=sink
+        )
+
+
+def test_a_history_run_asks_from_its_first_day_and_reads_the_list_page_by_page(tmp_path):
+    since = dt.date(2023, 1, 1)
+    first, second = events_url("roundrock", since), events_url("roundrock", since, skip=2)
+    assert "2023-01-01" in first and "$skip=2" in second and "$skip" not in first
+    meetings = [m for m in MEETINGS if m.get("EventAgendaLastPublishedUTC")][:3]
+    assert len(meetings) == 3
+    routes = {
+        first: httpx.Response(200, json=meetings[:2]),  # a full page: there may be more
+        second: httpx.Response(200, json=meetings[2:]),  # a short page: the end
+        **{event_url("roundrock", m["EventId"]): stand_in(m) for m in meetings},
+    }
+    site, sink = Site(routes, robots=404), MemorySink()
+    summary = history_run(site, sink, tmp_path, since)
+    assert summary.status == "ok", summary.error
+    asked = site.page_urls()
+    assert asked[0] == first and second in asked
+    assert {event_url("roundrock", m["EventId"]) for m in meetings} <= set(asked)
+    assert len(asked) == 5
+
+
+def test_a_history_run_holds_nothing_over_and_a_second_one_asks_only_for_the_lists(tmp_path):
+    since = dt.date(2023, 1, 1)
+    meetings = [m for m in MEETINGS if m.get("EventAgendaLastPublishedUTC")]
+    assert len(meetings) > 2
+    routes = {
+        events_url("roundrock", since): httpx.Response(200, json=meetings),
+        **{event_url("roundrock", m["EventId"]): stand_in(m) for m in meetings},
+    }
+    sink = MemorySink()
+    summary = history_run(Site(routes, robots=404), sink, tmp_path, since, page_size=1000)
+    assert summary.status == "ok" and "held_over" not in summary.detail
+    again = Site(routes, robots=404)
+    history_run(again, sink, tmp_path, since, page_size=1000)
+    assert again.page_urls() == [events_url("roundrock", since)]
+
+
+def test_an_everyday_run_is_as_it_was():
+    daily = LegistarAgendas(clients=(ROUND_ROCK,), today=TODAY)
+    assert daily.urls() == [LIST_URL]
+    assert (daily.max_events_per_client, daily.max_urls) == (40, 600)

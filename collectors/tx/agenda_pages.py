@@ -549,6 +549,26 @@ class AgendaPages(Collector):
         self._feeds: dict[str, Page] = {}  # a calendar feed -> the page that named it
         self._files: dict[str, tuple[Page, AgendaLink]] = {}
         self._elsewhere: dict[str, list[str]] = {}
+        # Set by history(): the first day of a one-time run over the older files a page lists.
+        self.since: dt.date | None = None
+
+    @classmethod
+    def history(
+        cls,
+        since: dt.date,
+        today: dt.date | None = None,
+        pages: Iterable[Page] | None = None,
+    ) -> AgendaPages:
+        """Every dated agenda file a page lists from a day on. For the backtest.
+
+        It reads the same pages as an everyday run and no others, so it reaches only as far
+        back as each page lists. A stored file is not asked for again.
+        """
+        collector = cls(pages=pages, today=today)
+        collector.since = since
+        collector.max_files_per_page = 100_000
+        collector.max_urls = 20_000
+        return collector
 
     def urls(self) -> list[str]:
         return list(self.pages)
@@ -568,7 +588,7 @@ class AgendaPages(Collector):
         if page is None:
             return ()
         links = self._page_links(result)
-        first = self.today - dt.timedelta(days=self.back_days)
+        first = self.since or self.today - dt.timedelta(days=self.back_days)
         last = self.today + dt.timedelta(days=self.ahead_days)
         dated = sorted(
             (link for link in links if link.date and first <= link.date <= last),
@@ -576,13 +596,13 @@ class AgendaPages(Collector):
             reverse=True,
         )[: self.max_files_per_page]
         # A link that names a month and no day: last month's, this month's and those to come.
-        oldest = (self.today - dt.timedelta(days=31)).strftime("%Y-%m")
+        oldest = (self.since or self.today - dt.timedelta(days=31)).strftime("%Y-%m")
         newest = last.strftime("%Y-%m")
         by_month = sorted(
             (link for link in links if link.month and oldest <= link.month <= newest),
             key=lambda link: link.month,
             reverse=True,
-        )[: self.max_undated_per_page]
+        )[: self.max_files_per_page if self.since else self.max_undated_per_page]
         # A page that dates nothing: its first links are its newest, by the usual layout.
         undated = [link for link in links if link.date is None][: self.max_undated_per_page]
         told = any(link.date or link.month for link in links)

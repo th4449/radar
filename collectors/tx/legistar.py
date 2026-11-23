@@ -37,6 +37,7 @@ API = "https://webapi.legistar.com/v1"
 _CLIENT = re.compile(r"^[a-z0-9]+$")
 _LIST = re.compile(r"^/v1/([a-z0-9]+)/events$")
 _EVENT = re.compile(r"^/v1/([a-z0-9]+)/events/(\d+)$")
+_SKIP = re.compile(r"[?&]\$skip=(\d+)")
 
 # The fields kept from each agenda item. Movers, seconders and votes are left behind.
 _ITEM_FIELDS = {
@@ -106,10 +107,11 @@ def cleared_clients(today: dt.date | None = None) -> list[Client]:
     return [clients[name] for name in sorted(clients)]
 
 
-def events_url(client: str, since: dt.date) -> str:
+def events_url(client: str, since: dt.date, skip: int = 0) -> str:
+    """The list of meetings from a day on. The API answers a thousand at a time."""
     return (
         f"{API}/{client}/events?$filter=EventDate+ge+datetime%27{since.isoformat()}%27"
-        "&$orderby=EventDate"
+        "&$orderby=EventDate" + (f"&$skip={skip}" if skip else "")
     )
 
 
@@ -174,6 +176,8 @@ class LegistarAgendas(Collector):
     # A first run on a large city meets many meetings at once. The rest wait for the next run.
     max_events_per_client: ClassVar[int] = 40
     max_urls: ClassVar[int] = 600
+    # The API's own limit on one answer. A list that long has a next page.
+    page_size: ClassVar[int] = 1000
 
     def __init__(
         self,
@@ -190,6 +194,25 @@ class LegistarAgendas(Collector):
         self._known: dict[str, dict] = {}
         self._parsed: dict[str, object] = {}
         self.held_over: dict[str, int] = {}
+        self._wanted: dict[str, int] = {}  # meetings asked for so far, by government
+
+    @classmethod
+    def history(
+        cls,
+        since: dt.date,
+        today: dt.date | None = None,
+        clients: Iterable[Client] | None = None,
+    ) -> LegistarAgendas:
+        """Every published agenda from a day on. One request a meeting, none held over.
+
+        A stored meeting that has not changed is not asked for again, so a run that stops
+        can be started again.
+        """
+        today = today or dt.datetime.now(dt.UTC).date()
+        collector = cls(clients=clients, today=today, back_days=(today - since).days)
+        collector.max_events_per_client = 1_000_000
+        collector.max_urls = 20_000
+        return collector
 
     # --- which addresses ---------------------------------------------------------------------
 
@@ -232,9 +255,18 @@ class LegistarAgendas(Collector):
             if self._known.get(url, {}).get("event_modified") == event.get("EventLastModifiedUtc"):
                 continue
             wanted.append(url)
-        if len(wanted) > self.max_events_per_client:
-            self.held_over[client.name] = len(wanted) - self.max_events_per_client
-            wanted = wanted[: self.max_events_per_client]
+        # The cap is for the whole government, across the pages of its list.
+        room = max(0, self.max_events_per_client - self._wanted.get(client.name, 0))
+        if len(wanted) > room:
+            self.held_over[client.name] = self.held_over.get(client.name, 0) + len(wanted) - room
+            wanted = wanted[:room]
+        self._wanted[client.name] = self._wanted.get(client.name, 0) + len(wanted)
+        if len(events) >= self.page_size:
+            # A full answer. The next page is asked for after this page's meetings.
+            skip = _SKIP.search(result.url)
+            since = self.today - dt.timedelta(days=self.back_days)
+            start = (int(skip.group(1)) if skip else 0) + len(events)
+            wanted.append(events_url(client.name, since, skip=start))
         return wanted
 
     # --- what is stored ----------------------------------------------------------------------

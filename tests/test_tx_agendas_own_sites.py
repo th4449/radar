@@ -861,3 +861,61 @@ def test_a_feed_that_changed_stops_the_run_for_a_person_to_look(tmp_path):
     summary = run(site, sink, tmp_path, pages=HILL_PAGE)
     assert summary.status == "failed" and "calendar feed" in summary.error
     assert site.page_urls() == [HILL, HILL_FEED]
+
+
+# --- a one-time history run, for the backtest ----------------------------------------------------
+
+OLD_PAGE = "https://www.example.gov/government/agendas"
+OLD_FILES = {
+    "2026-11-17": "https://www.example.gov/files/agenda-2026-11-17.pdf",
+    "2026-03-10": "https://www.example.gov/files/agenda-2026-03-10.pdf",
+    "2025-06-03": "https://www.example.gov/files/agenda-2025-06-03.pdf",
+    "2024-02-06": "https://www.example.gov/files/agenda-2024-02-06.pdf",
+    "2023-01-10": "https://www.example.gov/files/agenda-2023-01-10.pdf",
+    "2022-12-13": "https://www.example.gov/files/agenda-2022-12-13.pdf",
+}
+OLD_BODY = page(
+    "<h1>City Council Agendas</h1><ul>"
+    + "".join(f'<li><a href="{url}">Agenda {day}</a></li>' for day, url in OLD_FILES.items())
+    + "</ul>"
+)
+
+
+def old_site() -> Site:
+    routes = {
+        OLD_PAGE: httpx.Response(200, content=OLD_BODY, headers={"Content-Type": "text/html"})
+    }
+    for n, url in enumerate(OLD_FILES.values()):
+        routes[url] = httpx.Response(200, content=agenda(n), headers=PDF)
+    return Site(routes)
+
+
+def history_run(site: Site, sink: MemorySink, tmp_path, since: dt.date):
+    clock = FakeClock()
+    pages = (Page(OLD_PAGE, "Example city", ("Hood",), ("Example City Council",)),)
+    collector = AgendaPages.history(since, today=TODAY, pages=pages)
+    with Fetcher(
+        source(), contact=CONTACT, transport=site.transport, clock=clock, sleep=clock.sleep
+    ) as fetcher:
+        return collector.run(
+            source=source(), fetcher=fetcher, store=LocalArchive(tmp_path), sink=sink
+        )
+
+
+def test_a_history_run_takes_every_dated_file_since_its_first_day_and_none_before(tmp_path):
+    site, sink = old_site(), MemorySink()
+    summary = history_run(site, sink, tmp_path, dt.date(2023, 1, 1))
+    assert summary.status == "ok", summary.error
+    asked = set(site.page_urls()) - {OLD_PAGE}
+    assert asked == {url for day, url in OLD_FILES.items() if day >= "2023-01-01"}
+    # Started again, it asks for the page and for no file it holds.
+    again = old_site()
+    history_run(again, sink, tmp_path, dt.date(2023, 1, 1))
+    assert again.page_urls() == [OLD_PAGE]
+
+
+def test_an_everyday_run_takes_only_the_recent_files(tmp_path):
+    site = old_site()
+    pages = (Page(OLD_PAGE, "Example city", ("Hood",), ("Example City Council",)),)
+    run(site, MemorySink(), tmp_path, pages=pages)
+    assert site.page_urls() == [OLD_PAGE, OLD_FILES["2026-11-17"]]

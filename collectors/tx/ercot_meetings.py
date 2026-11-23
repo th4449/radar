@@ -204,15 +204,42 @@ class ErcotMeetings(Collector):
         if ahead_days is not None:
             self.ahead_days = ahead_days
         self._parsed: dict[str, list[MeetingLink] | Meeting] = {}
+        # Set by history(): the earlier years whose own index pages are read too.
+        self.years: tuple[int, ...] = ()
+        self.skip_stored = False
+        self._known: dict[str, dict] = {}
+
+    @classmethod
+    def history(cls, since: dt.date, today: dt.date | None = None) -> ErcotMeetings:
+        """Every meeting from a day on, and its files. For the backtest.
+
+        The index holds this year's meetings. Each earlier year has a page of its own, at the
+        index's address followed by the year. A file that is stored is not asked for again, so
+        a run that stops can be started again.
+        """
+        today = today or dt.datetime.now(dt.UTC).date()
+        collector = cls(today=today, back_days=(today - since).days)
+        collector.years = tuple(range(today.year - 1, since.year - 1, -1))
+        collector.skip_stored = True
+        collector.max_urls = 3000
+        return collector
 
     def urls(self) -> list[str]:
-        return [committee.index for committee in self.committees]
+        return [
+            *(committee.index for committee in self.committees),
+            *(f"{c.index}/{year}" for c in self.committees for year in self.years),
+        ]
+
+    def run(self, *, source, sink, **kwargs):
+        # follow() needs to know which files earlier runs stored.
+        self._known = sink.known(source) if self.skip_stored else {}
+        return super().run(source=source, sink=sink, **kwargs)
 
     def _committee(self, url: str) -> tuple[Committee, bool] | None:
         """The committee a page belongs to, and whether the page is its index."""
         path = urlsplit(url).path
         for committee in self.committees:
-            if url == committee.index:
+            if url == committee.index or url in {f"{committee.index}/{y}" for y in self.years}:
                 return committee, True
             if committee.meeting_path.match(path):
                 return committee, False
@@ -250,5 +277,6 @@ class ErcotMeetings(Collector):
         if isinstance(parsed, Meeting):
             committee, _ = self._committee(result.url)
             wanted = committee.files
-            return [f.url for f in parsed.files if wanted is None or wanted.search(f.title)]
+            files = [f.url for f in parsed.files if wanted is None or wanted.search(f.title)]
+            return [url for url in files if url not in self._known]
         return ()
