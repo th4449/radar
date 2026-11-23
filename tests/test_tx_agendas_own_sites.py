@@ -501,7 +501,10 @@ def test_a_feed_that_is_no_longer_a_feed_is_a_changed_layout():
 def test_the_pages_read_are_the_ones_the_inventory_clears():
     pages = cleared_pages(TODAY)
     governments = {p.government for p in pages}
-    assert (len(pages), len(governments)) == (60, 59)
+    # 60 pages of 59 governments until November 23, 2026, when two were closed: their agenda
+    # files sit on a host whose robots file bars them.
+    assert (len(pages), len(governments)) == (58, 57)
+    assert not governments & {"Grey Forest city", "Meadowlakes city"}
     assert "Austin County" in governments and "Houston city" in governments
     assert "Milam County" in governments
     # Two cities whose files HeyGov keeps, cleared on November 22, 2026. Their pages hold their

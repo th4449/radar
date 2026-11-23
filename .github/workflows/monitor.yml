@@ -1,0 +1,40 @@
+name: Monitor
+
+# Says which sources need a person: a run that failed, a site that refused, a source nobody
+# has read for too long, a page a person is due to save by hand. BUILD_PLAN.md milestone M10.
+#
+# It reads the run log and sends nothing. When a source needs a person the job fails, and
+# GitHub emails the account that set the schedule. See docs/runbook.md.
+#
+# Started by hand only. A schedule is a launch decision and needs the owner's go-ahead. It
+# also needs the hosted database, which does not exist yet, and its address as the secret
+# RADAR_DATABASE_URL. Without that the job says it could not start.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Which sources need a person
+        env:
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+        run: uv run python -m pipeline.health

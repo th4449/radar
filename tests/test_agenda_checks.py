@@ -429,7 +429,10 @@ def test_what_is_collectable_today_is_legistar_own_sites_and_the_county_associat
     # draw their lists from HeyGov's API, whose robots file bars every program.
     assert by_platform["heygov"] == {"Sandy Oaks city", "Shallowater city"}
     assert len(by_platform["legistar"]) == 9
-    assert len(by_platform["own_site_files"]) == 52
+    # 52 until November 23, 2026. A history run then found that Grey Forest and Meadowlakes
+    # keep their agenda files on a host whose robots file bars them.
+    assert len(by_platform["own_site_files"]) == 50
+    assert not by_platform["own_site_files"] & {"Grey Forest city", "Meadowlakes city"}
     # Four of these five were confirmed in a real browser: their agendas are in a calendar or
     # a list that a research pass could not see.
     assert by_platform["cira_county_site"] == {
