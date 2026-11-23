@@ -17,10 +17,16 @@ Newest first. Each entry says what was built, what was verified live and what is
 - The methodology page lists the source as read and says a person saves it.
 - 18 tests. 1,054 pass. The site's type check, tests and build pass in a copy outside iCloud.
 
+**The first page saved by hand**
+
+- The owner saved the page on November 23 and it was stored in the backtest's history database with the new command. The parser read it: 189 registrations, six more large projects than on November 19.
+- `backtest/run.py` now reads the newest copy the history holds and falls back on the test copy only when there is none. The backtest's result did not change: two of 73. One record gives no signal because its company was registered after the record's date.
+- 1 more test. 1,055 pass.
+
 **Not verified**
 
-- **That a browser's "HTML only" save is a file the parser reads.** No page saved from a browser has been tried. The test file is the copy a job fetched on November 19.
-- No real database holds a copy of the list yet. The first hand-saved page will be the first.
+- Which browser and save format the owner used. One browser-saved page has been read. Another browser's save may differ.
+- No hosted database exists yet. The copy is in the history database on the owner's laptop.
 
 ## November 23, 2026 — M9: a name added, the Comptroller refused again, TDLR proposed
 

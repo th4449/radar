@@ -69,7 +69,13 @@ The owner's decision of November 23, 2026. In `config/sources.yaml` the source i
 - It stores the file with the page's address, the time and the file's hash, as a run does, and the record says a person saved it. The time is the file's own unless `--saved-at` gives another. The file's name is not kept.
 - The rules then use the newest stored copy, whoever stored it.
 
+**The first page saved by hand, November 23, 2026**
+
+- The owner saved the page at 13:10 UTC and it was stored the same hour in the backtest's history database, the only store that exists so far. 148,721 bytes, SHA-256 `87bec5f3cd0fd313de98a8c71efe264cdc38971065f0b3ef3ce0b4b38e8b156a`.
+- **The parser read it:** 70 registered qualifying data centers and 119 large projects, 189 in all. That is six more large projects than on November 19, with effective dates from November 6 to November 16, 2026. None is gone.
+- The backtest now reads this copy. Its result did not change.
+
 **Not verified**
 
-- **That a browser's "HTML only" save is a file the parser reads.** The command was tested on the copy a job fetched on November 19, 2026. No page saved from a browser has been tried. If the parser refuses one, nothing is stored and the command says so.
+- Which browser and which save format the owner used on November 23. One page saved from a browser has been read. Another browser's save may differ. If the parser refuses one, nothing is stored and the command says so.
 - Whether the site would answer a job again. To find out, the owner sets the source back and one run asks.

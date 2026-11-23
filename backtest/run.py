@@ -6,9 +6,9 @@ needs DATABASE_URL and RADAR_ARCHIVE_DIR, set to the history database and its ar
 CLAUDE.md for where history is kept. It reads only: no table is written and no site is asked
 for anything.
 
-The Comptroller's list is read from the copy saved with the tests on November 19, 2026, the
-real page of that day. On November 23, 2026 the Comptroller's site refused the collector, so
-the history holds no copy of its own.
+The Comptroller's list is the newest copy the history holds. A person saves that page by hand
+since November 23, 2026, when the site refused the collector. A history with no copy falls
+back on the one saved with the tests on November 19, 2026, the real page of that day.
 
 `--listing` writes every signal to a CSV, with the company each names. **That file is not for
 the repository.** A signal that fits no known project is unreviewed, and the public site
@@ -32,6 +32,7 @@ from backtest.projects import load_known_projects
 from backtest.report import write
 from collectors.base import LocalArchive
 from pipeline.config import load_all_counties, load_control_counties, load_scoring
+from pipeline.signals import LISTING_SOURCE
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 REPORT = REPOSITORY / "backtest" / "report_tx.md"
@@ -40,6 +41,19 @@ COMPTROLLER_LIST = (
 )
 HISTORY_STARTS = dt.date(2023, 1, 1)
 THRESHOLDS = (1.0, 2.0, 3.0, 4.0, 5.0, 10.0, 20.0, 40.0)
+
+
+def stored_listing(conn: psycopg.Connection, store: LocalArchive) -> bytes | None:
+    """The newest copy of the Comptroller's list the database holds, or None."""
+    row = conn.execute(
+        """select d.storage_path
+           from public.documents d join public.sources s on s.id = d.source_id
+           where s.slug = %s
+           order by d.retrieved_at desc, d.id desc
+           limit 1""",
+        [LISTING_SOURCE],
+    ).fetchone()
+    return store.get(row[0]) if row else None
 
 
 def judge(history: History, starts: dt.date = HISTORY_STARTS) -> Result:
@@ -89,14 +103,12 @@ def main(argv: list[str] | None = None) -> int:
               "repository.", file=sys.stderr)  # fmt: skip
         return 2
 
-    listing = COMPTROLLER_LIST.read_bytes()
     known = load_known_projects()
+    store = LocalArchive(Path(archive_dir))
     with psycopg.connect(database_url) as conn:
         conn.read_only = True
-        history = load(
-            conn, LocalArchive(Path(archive_dir)), history_rules(listing), known,
-            listed_since(listing),
-        )  # fmt: skip
+        listing = stored_listing(conn, store) or COMPTROLLER_LIST.read_bytes()
+        history = load(conn, store, history_rules(listing), known, listed_since(listing))
     result = judge(history)
     control = [c.name for c in load_control_counties("TX").counties]
     report = write(result, history, known, sweep(result, THRESHOLDS), control_names=control)

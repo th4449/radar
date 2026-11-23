@@ -308,8 +308,8 @@ def write(
     )
     if history.listed_later:
         add(
-            f"- {history.listed_later} records gave no signal because the company was "
-            "registered on the Comptroller's list only after the record's date."
+            "- Records that gave no signal because the company was registered on the "
+            f"Comptroller's list only after the record's date: {history.listed_later}."
         )
     if history.errors:
         add(f"- **{len(history.errors)} documents could not be read.**")

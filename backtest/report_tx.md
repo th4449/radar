@@ -40,6 +40,7 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 - 5316 dated agendas from 39 governments were read. A record is an agenda item, an agenda file, a well report, a planning file or a row of a permit list.
 - 1215 signals in all. 77 carry no county and can sit on no site: the planning files that name no test county and every pending air permit.
 - A record is held back when its named party may be a person. It makes no signal and is counted by its number.
+- Records that gave no signal because the company was registered on the Comptroller's list only after the record's date: 1.
 
 ## Projects that had a signal
 
