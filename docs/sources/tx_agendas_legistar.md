@@ -92,6 +92,7 @@ For each government, one run makes:
 
 - An item that says "data center" is held to its government and meeting, so it sits on a site, and at the review threshold of 3 it reaches a reviewer by itself. Before, an agenda signal sat on no site. In four years of stored agendas this sends a reviewer 54 such sites that fit no known project, many of them a government's own computer rooms.
 - An item that uses a code word alone still opens no site.
+- **An item about the government's own computers is set aside.** The words "data center" make no signal where the item also says, for example, co-location, network services or information technology, and says nothing of land or a project. See `own_computers` in `config/keywords.yaml`. In four years of stored agendas this takes out 26 of the 28 sites the owner rejected as a government's own computers, and none the owner confirmed.
 - "Project" and a code name is a reason only where the item itself speaks of economic development negotiations or cites Government Code 551.087. In the backtest 399 signals rested on a code name and three were tied to a known project. **An item whose heading sits in an earlier item is missed.**
 
 ## Verified live

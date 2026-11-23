@@ -306,6 +306,12 @@ def write(
         "- A record is held back when its named party may be a person. It makes no signal and "
         "is counted by its number."
     )
+    own = sum(c.get("own_computers", 0) for c in history.counts.values())
+    if own:
+        add(
+            '- Agenda items and files where the words "data center" were set aside, because '
+            f"the item is about a government's own computers: {own}."
+        )
     if history.listed_later:
         add(
             "- Records that gave no signal because the company was registered on the "

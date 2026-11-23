@@ -110,6 +110,21 @@ def test_the_report_says_what_the_pending_permit_lists_can_and_cannot_show():
     assert "this feed cannot be judged on history" in text
 
 
+def test_the_report_counts_what_was_set_aside_as_a_governments_own_computers():
+    history = read(
+        enumerate([legistar("Renewal of data center co-location services for the county")], 1),
+        RULES,
+        KNOWN,
+        {},
+    )
+    assert history.records == []
+    result = run(
+        harness_projects(KNOWN, history), [], load_scoring(), history_starts=dt.date(2023, 1, 1)
+    )
+    text = write(result, history, KNOWN, sweep(result, [3.0]), control_names=["Lamb"])
+    assert "because the item is about a government's own computers: 1." in text
+
+
 def test_the_report_never_carries_the_words_of_an_agenda():
     assert "Orion" not in report() and "Tax abatement" not in report()
 

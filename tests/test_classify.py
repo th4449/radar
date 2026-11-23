@@ -99,3 +99,35 @@ def test_snippet_is_one_line():
     text = "the proposed\n\n  data\ncenter   site"
     start = text.index("data")
     assert snippet(text, start, start + 11) == "the proposed data center site"
+
+
+# --- a government's own computers ----------------------------------------------------------------
+
+
+def test_words_about_a_governments_own_computers_are_recognized():
+    """The owner's review of November 23, 2026: 28 of the 58 sites that reached a reviewer were
+    a county or a city buying data center services for itself. These are their wordings."""
+    own = [
+        "Renewal with Example LLC for data center co-location and network services for the county",
+        "Purchase of Data Center Services for the Information Technology Department",
+        "Appropriating $850,000 for the planned Data Center Refresh Project",
+        "Maintenance and support services for critical data center cooling systems",
+        "Next generation data center solution for the Technology Department",
+        "Replacement of air conditioning units at the Data Center",
+        "The vendor has dedicated servers in two physical data centers in other states",
+    ]
+    for text in own:
+        assert RULES.own_computers(text), text
+
+
+def test_words_about_land_or_a_project_are_never_taken_for_a_governments_own_computers():
+    kept = [
+        "Discuss a proposed data center on County Road 12",
+        "Tax abatement agreement for a data center, with information technology jobs",
+        "Moratorium on data centers and battery energy storage systems",
+        "Rezoning for a data center campus with on-site cooling systems",
+        "Public hearing on a reinvestment zone for a data center and network services hub",
+        "Town hall on the data center near Example",
+    ]
+    for text in kept:
+        assert RULES.own_computers(text) is None, text

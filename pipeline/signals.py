@@ -38,7 +38,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-23.1"
+RULES_VERSION = "2026-11-23.2"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -92,6 +92,7 @@ class Outcome:
     out_of_scope: int = 0  # the record is in a county outside the test set
     undated: int = 0  # a reason, but no date that can be read
     no_text: int = 0  # a file with no text in it, such as a scan. Nobody has read it
+    own_computers: int = 0  # "data center" used of a government's own computers. Set aside
     county_fips: str | None = None  # set when the whole document is about one county
 
     def counts(self) -> dict[str, int]:
@@ -105,6 +106,8 @@ class Outcome:
         }
         if self.no_text:
             counts["no_text"] = self.no_text
+        if self.own_computers:
+            counts["own_computers"] = self.own_computers
         return counts
 
 
@@ -587,6 +590,30 @@ def _meeting(government: str, day: dt.date, reasons: list[dict]) -> str | None:
     return f"{_PLACE_KIND.sub('', government)}, meeting of {_long_date(day)}"
 
 
+def _set_aside(own: str | None) -> dict:
+    """What is kept with a signal when the words "data center" in its record were set aside."""
+    return {"set_aside": {"rule": "own_computers", "shows": own}} if own else {}
+
+
+# Where an agenda item starts: "12.", "(b)", "iv." at the head of a line.
+_ITEM_START = re.compile(r"(?m)^[ \t]*(?:\(?\d{1,3}[.)]|\(?[A-Za-z][.)]|[ivxIVX]{1,4}[.)])[ \t]")
+_ITEM_REACH = 700  # an item longer than this is cut to the words near the term
+_NEAR = 250
+
+
+def _agenda_item(passage: str, start: int, end: int) -> str:
+    """The agenda item that holds a term: from the item's own start to the next item's.
+
+    A file has no items to tell apart for certain. Where no item start is near, the words
+    close to the term stand in for the item.
+    """
+    before = [m.start() for m in _ITEM_START.finditer(passage, max(0, start - _ITEM_REACH), start)]
+    after = _ITEM_START.search(passage, end, min(len(passage), end + _ITEM_REACH))
+    first = before[-1] if before else max(0, start - _NEAR)
+    last = after.start() if after else min(len(passage), end + _NEAR)
+    return passage[first:last]
+
+
 def _body_name(government: str, body: str) -> str:
     """ "Round Rock City Council", "Harris County Commissioners Court"."""
     place = _PLACE_KIND.sub("", government)
@@ -625,6 +652,16 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
             for r in rules.reasons(fields, None)
             if r["rule"] != "project_code_name" or negotiations
         ]
+        # A county renewing its hosting contract says "data center" too. Those words are set
+        # aside in an item about the government's own computers. Another term still counts.
+        own = None
+        if any(r["rule"] == "direct_term" for r in reasons):
+            own = rules.keywords.own_computers(text)
+        if own:
+            out.own_computers += 1
+            reasons = [r for r in reasons if r["rule"] != "direct_term"]
+            if not reasons:
+                continue
         if not reasons:
             out.no_reason += 1
             continue
@@ -638,7 +675,10 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         file = f", file {item['file']}" if item.get("file") else ""
         terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
         hits = [
-            h for h in rules.keywords.find(text) if h.kind != "project_code_name" or negotiations
+            h
+            for h in rules.keywords.find(text)
+            if (h.kind != "project_code_name" or negotiations)
+            and not (own and h.kind == "direct_term")
         ]
         out.drafts.append(
             Draft(
@@ -666,6 +706,7 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
                     "snippets": _narrow_snippets(text, hits),
                     "counties": named,
                     "meeting": _meeting(str(agenda["government"]), day, reasons),
+                    **_set_aside(own),
                 },
             )
         )
@@ -712,12 +753,24 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
         out.no_reason = 1  # the minutes of a meeting, posted where agendas are
         return out
     found: list[tuple[int, str, list[Hit]]] = []
+    own = None  # the word that showed an item to be about the government's own computers
     for number, (_, passage) in enumerate(_passages(text), 1):
-        hits = [h for h in rules.keywords.find(passage) if _counts_in_a_file(h, passage)]
+        hits = []
+        for hit in rules.keywords.find(passage):
+            if not _counts_in_a_file(hit, passage):
+                continue
+            if hit.kind == "direct_term":
+                shows = rules.keywords.own_computers(_agenda_item(passage, hit.start, hit.end))
+                if shows:
+                    own = own or shows
+                    continue
+            hits.append(hit)
         if hits:
             found.append((number, passage, hits))
+    if own:
+        out.own_computers = 1
     if not found:
-        out.no_reason = 1
+        out.no_reason = 0 if own else 1
         return out
     day, date_from = _iso_date(str(meta.get("meeting_date") or "")), meta.get("date_from")
     if day is None:
@@ -769,6 +822,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 "snippets": snippets[:MAX_EVIDENCE],
                 "counties": named,
                 "meeting": _meeting(str(meta["government"]), day, reasons),
+                **_set_aside(own),
             },
         )
     )

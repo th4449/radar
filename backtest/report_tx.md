@@ -31,15 +31,16 @@ BUILD_PLAN.md milestone M9. Written by `python -m backtest.run` from the history
 
 | Source | Documents | Records read | Signals | Held back |
 |---|---|---|---|---|
-| Agendas on Legistar | 3635 | 107102 | 845 | 0 |
-| Agenda files on governments' own sites | 1847 | 1784 | 231 | 0 |
+| Agendas on Legistar | 3635 | 107102 | 824 | 0 |
+| Agenda files on governments' own sites | 1847 | 1784 | 228 | 0 |
 | ERCOT planning group files | 433 | 372 | 78 | 0 |
 | State well reports | 1 | 15986 | 49 | 17 |
 | TCEQ pending air permits | 2 | 627 | 12 | 0 |
 
 - 5316 dated agendas from 39 governments were read. A record is an agenda item, an agenda file, a well report, a planning file or a row of a permit list.
-- 1215 signals in all. 77 carry no county and can sit on no site: the planning files that name no test county and every pending air permit.
+- 1191 signals in all. 77 carry no county and can sit on no site: the planning files that name no test county and every pending air permit.
 - A record is held back when its named party may be a person. It makes no signal and is counted by its number.
+- Agenda items and files where the words "data center" were set aside, because the item is about a government's own computers: 31.
 - Records that gave no signal because the company was registered on the Comptroller's list only after the record's date: 1.
 
 ## Projects that had a signal
@@ -99,7 +100,7 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 
 | Kind | Signals | Tied to a known project | Projects with one before public | Median days ahead |
 |---|---|---|---|---|
-| agenda item or file | 1076 | 17 | 2 | 58 |
+| agenda item or file | 1052 | 17 | 2 | 58 |
 | ERCOT planning file | 78 | 0 | 0 | none |
 | well report | 49 | 14 | 0 | none |
 | pending air permit | 12 | 0 | 0 | none |
@@ -108,17 +109,17 @@ The well reports and the ERCOT planning files cover every county from Jan 1, 202
 
 | Strongest reason | Signals | Tied to a known project |
 |---|---|---|
-| says "data center" | 109 | 14 |
+| says "data center" | 79 | 14 |
 | company on the Comptroller's list | 33 | 13 |
 | company named like one on the list | 1 | 1 |
 | "Project" and a code name | 93 | 3 |
-| a code word | 979 | 0 |
+| a code word | 985 | 0 |
 
 A signal tied to no known project is not shown to be wrong. The list of known projects is not complete.
 
 ## Records tied to no project that a person should read
 
-41 records that say "data center", or are a planning file that names the county, were seen in the year before a judged project in the same county became public. The program ties a record to a project only by a name the list of known projects carries, and a county calls a project by names the list does not have. **Any of these may be an early record of a known project. None is counted as one.** Many are a government's own computer rooms.
+18 records that say "data center", or are a planning file that names the county, were seen in the year before a judged project in the same county became public. The program ties a record to a project only by a name the list of known projects carries, and a county calls a project by names the list does not have. **Any of these may be an early record of a known project. None is counted as one.** Many are a government's own computer rooms.
 
 | County | Seen | Kind | Record |
 |---|---|---|---|
@@ -127,33 +128,10 @@ A signal tied to no known project is not shown to be wrong. The list of known pr
 | Dallas | 2024-09-20 | ERCOT planning file | ERCOT Regional Planning Group file "Oncor_Wilmer345-138 kV Switch_Project_RPG_09252024.pdf" |
 | Dallas | 2025-01-28 | ERCOT planning file | ERCOT Regional Planning Group file "2024_RTP_Final_Update_January_2025_RPG.pdf" |
 | Dallas | 2025-04-28 | ERCOT planning file | ERCOT Regional Planning Group file "Oncor_Southern-DFW-Load-Interconnection_Project_RPG_04292025.pdf" |
-| Dallas | 2026-04-22 | agenda item or file | Dallas City Council, meeting of April 22, 2026, item 51, file 26-1360A |
-| Dallas | 2026-05-12 | agenda item or file | Farmers Branch City Council, meeting of May 19, 2026, item L.2, file R2026-060 |
 | Dallas | 2026-05-19 | agenda item or file | Lewisville Planning and Zoning Commission, meeting of May 19, 2026, item 2, file 26-4594 |
 | Freestone | 2025-04-28 | ERCOT planning file | ERCOT Regional Planning Group file "Oncor_Southern-DFW-Load-Interconnection_Project_RPG_04292025.pdf" |
-| Harris | 2023-01-30 | agenda item or file | Harris County Commissioners Court, meeting of January 31, 2023, item in position 263 |
-| Harris | 2023-02-21 | agenda item or file | Harris County Commissioners Court, meeting of February 21, 2023, item 278, file 23-0871 |
-| Harris | 2023-03-21 | agenda item or file | Houston, agenda for the meeting of March 21, 2023 |
 | Harris | 2023-04-21 | agenda item or file | Harris County Commissioners Court, meeting of April 25, 2023, item 294, file 23-2262 |
 | Harris | 2023-04-21 | agenda item or file | Harris County Commissioners Court, meeting of April 25, 2023, item 295, file 23-2263 |
-| Harris | 2023-09-19 | agenda item or file | Houston, agenda for the meeting of September 19, 2023 |
-| Harris | 2023-10-06 | agenda item or file | Harris County Commissioners Court, meeting of October 10, 2023, item 31, file 23-5833 |
-| Harris | 2023-10-31 | agenda item or file | Harris County Commissioners Court, meeting of October 31, 2023, item 260, file 23-6207 |
-| Harris | 2024-01-05 | agenda item or file | Harris County Commissioners Court, meeting of January 9, 2024, item 203, file 24-0205 |
-| Harris | 2024-02-23 | agenda item or file | Harris County Commissioners Court, meeting of February 27, 2024, item 491, file 24-1271 |
-| Harris | 2024-03-22 | agenda item or file | Harris County Commissioners Court, meeting of March 26, 2024, item 435, file 24-1777 |
-| Harris | 2024-03-22 | agenda item or file | Harris County Commissioners Court, meeting of March 26, 2024, item 454, file 24-1894 |
-| Harris | 2024-05-30 | agenda item or file | Harris County Commissioners Court, meeting of June 4, 2024, item 350, file 24-3041 |
-| Harris | 2024-12-10 | agenda item or file | Houston, agenda for the meeting of December 10, 2024 |
-| Harris | 2025-02-21 | agenda item or file | Harris County Commissioners Court, meeting of February 27, 2025, item 117, file 25-1237 |
-| Harris | 2025-05-15 | agenda item or file | Harris County Commissioners Court, meeting of May 22, 2025, item 126, file 25-3255 |
-| Harris | 2025-05-15 | agenda item or file | Harris County Commissioners Court, meeting of May 22, 2025, item 206, file 25-3164 |
-| Harris | 2025-08-23 | agenda item or file | Harris County Commissioners Court, meeting of August 26, 2025, item 11, file 25-5079 |
-| Harris | 2025-08-23 | agenda item or file | Harris County Commissioners Court, meeting of August 26, 2025, item 134, file 25-5193 |
-| Harris | 2025-08-23 | agenda item or file | Harris County Commissioners Court, meeting of August 26, 2025, item 325, file 25-5359 |
-| Harris | 2025-12-02 | agenda item or file | Houston, agenda for the meeting of December 2, 2025 |
-| Harris | 2025-12-04 | agenda item or file | Harris County Commissioners Court, meeting of December 11, 2025, item 334, file 25-7630 |
-| Harris | 2026-01-27 | agenda item or file | Houston, agenda for the meeting of January 27, 2026 |
 | Hill | 2026-05-05 | agenda item or file | Hillsboro, agenda for the meeting of May 5, 2026 |
 | Milam | 2025-11-18 | agenda item or file | Milam County, agenda for the meeting of November 18, 2025 |
 | Milam | 2025-11-18 | agenda item or file | Milam County, agenda for the meeting of November 18, 2025 |
@@ -179,12 +157,12 @@ Lamb, Comanche, Eastland, Lampasas, Mills, Wood, Titus, Colorado, Lavaca, Runnel
 
 ## Sites that fit no known project
 
-In the test counties, signals that fit no known project make 93 sites under the everyday rules. None is named here: none has been reviewed.
+In the test counties, signals that fit no known project make 67 sites under the everyday rules. None is named here: none has been reviewed.
 
 | Held together by | Sites | Highest score | At or over the threshold |
 |---|---|---|---|
-| one meeting's agenda that says "data center" | 53 | 4.5 | 53 |
 | a "Project" code name | 35 | 1.5 | 0 |
+| one meeting's agenda that says "data center" | 27 | 4.5 | 27 |
 | a company or coordinates | 3 | 13.5 | 3 |
 | a project number | 2 | 9 | 2 |
 
@@ -204,10 +182,10 @@ The same signals, with only the bar moved.
 
 | Threshold | Hits | Reached it only after public | Judged | Hit rate | Median lead, days | False alarms in control counties | Sites that fit no known project, at or over |
 |---|---|---|---|---|---|---|---|
-| 1 | 2 | 3 | 73 | 3% | 58 | 0 | 93 |
-| 2 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
-| 3 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
-| 4 | 2 | 3 | 73 | 3% | 58 | 0 | 58 |
+| 1 | 2 | 3 | 73 | 3% | 58 | 0 | 67 |
+| 2 | 2 | 3 | 73 | 3% | 58 | 0 | 32 |
+| 3 | 2 | 3 | 73 | 3% | 58 | 0 | 32 |
+| 4 | 2 | 3 | 73 | 3% | 58 | 0 | 32 |
 | 5 | 0 | 1 | 73 | 0% | none | 0 | 4 |
 | 10 | 0 | 0 | 73 | 0% | none | 0 | 1 |
 | 20 | 0 | 0 | 73 | 0% | none | 0 | 0 |
@@ -255,9 +233,9 @@ A site that fits no known project is not a false alarm. Nobody has shown what it
 
 | A signal counts from | Signals |
 |---|---|
-| the day Legistar says the agenda was last published | 687 |
-| the day of the meeting: the day the file was posted is not kept | 231 |
-| the day of the meeting: no earlier publishing day is recorded | 158 |
+| the day Legistar says the agenda was last published | 668 |
+| the day of the meeting: the day the file was posted is not kept | 228 |
+| the day of the meeting: no earlier publishing day is recorded | 156 |
 | the day in the file's address, the day ERCOT posted it | 78 |
 | the day the report was submitted to the state | 49 |
 | the day the radar first held the list | 12 |

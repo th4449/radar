@@ -293,6 +293,11 @@ Left alone: minutes, recordings, handouts, presentations, action summaries, quor
 - A scan that still gives no text is counted as unread, not as clean. Nobody has read it.
 - A file the page did not date takes the date written at its own head. With none there, it is held as undated.
 
+**Changed on November 23, 2026, after the backtest and with the owner's approval.**
+
+- A file that says "data center" is held to its government and meeting, so it sits on a site and reaches a reviewer at the review threshold of 3.
+- **An item about the government's own computers is set aside.** The words "data center" make no signal where the item around them also says, for example, information technology or servers, and says nothing of land or a project. A file has no items marked, so the item is taken from one numbered line to the next, or the words close to the term where no number is near. See `own_computers` in `config/keywords.yaml`.
+
 ## Verified live
 
 On November 21, 2026:

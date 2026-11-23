@@ -130,10 +130,27 @@ class ProjectCodeName(_Strict):
         return v
 
 
+class OwnComputers(_Strict):
+    """Words that show an agenda item is about a government's own computers."""
+
+    shows: list[str] = Field(min_length=1)
+    unless: list[str] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _lowercase_and_apart(self) -> OwnComputers:
+        words = self.shows + self.unless
+        if any(w != w.lower().strip() or not w for w in words):
+            raise ValueError("words must be lowercase with no surrounding spaces")
+        if len(set(words)) != len(words):
+            raise ValueError("a word appears twice, or in both lists")
+        return self
+
+
 class KeywordsFile(_Strict):
     direct_terms: list[str] = Field(min_length=1)
     code_words: list[str] = Field(min_length=1)
     project_code_name: ProjectCodeName
+    own_computers: OwnComputers
 
     @model_validator(mode="after")
     def _lowercase_and_distinct(self) -> KeywordsFile:

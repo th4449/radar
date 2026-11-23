@@ -200,3 +200,57 @@ def test_an_item_that_says_data_center_is_held_to_its_government_and_meeting():
         direct.extracted["meeting"] == f"Harris County, meeting of {day:%B} {day.day}, {day.year}"
     )
     assert weak.extracted["meeting"] is None
+
+
+# --- a government's own computers ----------------------------------------------------------------
+
+
+def _items(*titles: str) -> list[dict]:
+    return [
+        {"id": n, "sequence": n, "number": f"{n}.", "file": "", "type": "", "name": "",
+         "note": "", "title": title}
+        for n, title in enumerate(titles, start=1)
+    ]  # fmt: skip
+
+
+def test_an_item_about_the_governments_own_computers_is_set_aside():
+    """The owner's decision of November 23, 2026. A county renewing its hosting contract uses
+    the words "data center" and is not a signal."""
+    agenda = harris()
+    agenda["items"] = _items(
+        "Request for approval of a renewal option with Example Hosting, LLC for data center "
+        "co-location and network services for the county, at a cost of $1,500,000.",
+        "Discussion of data center development in the county and the county's authority.",
+    )
+    out = legistar_agenda(agenda_doc(agenda), RULES)
+    (kept,) = out.drafts
+    assert kept.extracted["item"]["number"] == "2."
+    assert out.own_computers == 1 and out.no_reason == 0
+    assert out.counts()["own_computers"] == 1
+
+
+def test_an_item_set_aside_still_counts_for_another_term_it_uses_and_opens_no_site():
+    agenda = harris()
+    agenda["items"] = _items(
+        "Purchase of data center services and data processing equipment for the Information "
+        "Technology Department."
+    )
+    (draft,) = legistar_agenda(agenda_doc(agenda), RULES).drafts
+    assert [r["rule"] for r in draft.extracted["reasons"]] == ["code_word"]
+    assert draft.confidence == RULES.confidence["code_word"]
+    assert draft.extracted["meeting"] is None
+    assert draft.extracted["set_aside"] == {
+        "rule": "own_computers",
+        "shows": "information technology",
+    }
+
+
+def test_an_item_about_a_project_is_kept_even_when_it_names_computing_services():
+    agenda = harris()
+    agenda["items"] = _items(
+        "Tax abatement agreement with Example LLC for a data center offering co-location."
+    )
+    out = legistar_agenda(agenda_doc(agenda), RULES)
+    (draft,) = out.drafts
+    assert draft.confidence == RULES.confidence["direct_term"]
+    assert out.own_computers == 0

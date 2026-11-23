@@ -43,6 +43,8 @@ class KeywordRules:
         self._terms: list[tuple[Kind, str, re.Pattern[str]]] = [
             ("direct_term", term, _term_pattern(term)) for term in keywords.direct_terms
         ] + [("code_word", term, _term_pattern(term)) for term in keywords.code_words]
+        self._own = [(w, _term_pattern(w)) for w in keywords.own_computers.shows]
+        self._not_own = [_term_pattern(w) for w in keywords.own_computers.unless]
         self._project = re.compile(keywords.project_code_name.pattern)
         self._stoplist = frozenset(
             word.lower() for word in keywords.project_code_name.project_stoplist
@@ -61,6 +63,16 @@ class KeywordRules:
                 continue
             hits.append(Hit("project_code_name", f"Project {name}", m.start(), m.end(), m.group(0)))
         return sorted(hits, key=lambda h: (h.start, h.end, h.kind))
+
+    def own_computers(self, text: str) -> str | None:
+        """The word that shows the text is about a government's own computers, or None.
+
+        None whenever the text also carries a word that shows land or a project. See
+        `own_computers` in config/keywords.yaml.
+        """
+        if any(pattern.search(text) for pattern in self._not_own):
+            return None
+        return next((word for word, pattern in self._own if pattern.search(text)), None)
 
 
 def strongest(hits: list[Hit]) -> Kind | None:

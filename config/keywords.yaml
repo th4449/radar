@@ -116,3 +116,59 @@ project_code_name:
     - Board
     - Fees
     - Total
+
+# A government's own computers. An agenda item can use the words "data center" for the county's
+# own server room or its hosting contract. On November 23, 2026 the owner reviewed the 58 sites
+# that reached a reviewer in four years of stored agendas: 28 were this, and the owner said to
+# set such an item aside.
+#
+# An item is set aside when it uses one of the words under `shows` and none of the words under
+# `unless`. The words under `unless` show land or a project, and they always win: an abatement
+# for a data center that offers hosting is a project. Only the words "data center" are set
+# aside. Another term in the same item still counts.
+#
+# Every word here came from a real agenda item. Add one only from a record somebody has read.
+own_computers:
+  shows:
+    - information technology
+    - information and technology services
+    - technology department
+    - co-location
+    - colocation
+    - network services
+    - network technologies
+    - network refresh
+    - network upgrades
+    - data center services
+    - data center solution
+    - data center refresh
+    - data center repair
+    - data center ups
+    - data center relocation
+    - data center cooling
+    - data center optimization
+    - data center installation
+    - air conditioning units
+    - managed services
+    - cloud services
+    - servers
+    - data backup
+  unless:
+    - abatement
+    - reinvestment zone
+    - rezoning
+    - rezone
+    - zoning
+    - moratorium
+    - proposed
+    - development agreement
+    - special use permit
+    - specific use permit
+    - site plan
+    - annexation
+    - megawatt
+    - campus
+    - economic development
+    - incentive
+    - town hall
+    - townhall

@@ -112,6 +112,18 @@ def test_source_rejects_unknown_keys():
         config.SourcesFile.model_validate({"sources": [], "extra": 1})
 
 
+def test_the_words_for_a_governments_own_computers_do_not_overlap_the_words_for_a_project():
+    own = config.load_keywords().own_computers
+    assert own.shows and own.unless
+    assert not set(own.shows) & set(own.unless)
+    for word in (*own.shows, *own.unless):
+        assert word == word.lower().strip()
+    with pytest.raises(ValidationError):
+        config.OwnComputers(shows=["Servers"], unless=["abatement"])
+    with pytest.raises(ValidationError):
+        config.OwnComputers(shows=["servers"], unless=["servers"])
+
+
 def test_keywords_cover_the_plan_list():
     kw = config.load_keywords()
     assert "data center" in kw.direct_terms

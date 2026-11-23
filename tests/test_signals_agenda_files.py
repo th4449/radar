@@ -203,3 +203,33 @@ def test_a_file_that_says_data_center_is_held_to_its_government_and_meeting():
     assert direct.extracted["meeting"] == "Sealy, meeting of November 17, 2026"
     (weak,) = agenda_file(doc(HEAD, ROUTINE, ZONE), RULES).drafts
     assert weak.extracted["meeting"] is None
+
+
+# --- a government's own computers ----------------------------------------------------------------
+
+REFRESH = (
+    "19. Ordinance appropriating $850,000 out of the Equipment Fund for the planned Data Center "
+    "Refresh Project for Information Technology Services."
+)
+BOARD = "20. Ordinance appointing a member to the board of Reinvestment Zone Number Seven."
+
+
+def test_a_file_whose_only_use_of_the_words_is_the_governments_own_computers_is_no_signal():
+    out = agenda_file(doc(HEAD, ROUTINE + "\n" + REFRESH), RULES)
+    assert out.drafts == []
+    assert out.own_computers == 1 and out.no_reason == 0
+
+
+def test_only_the_item_itself_decides_and_not_the_item_beside_it():
+    # The next item names a reinvestment zone. That is another matter and does not make the
+    # hosting item a project. The file still gives its weaker signal for the zone.
+    (draft,) = agenda_file(doc(HEAD, REFRESH + "\n" + BOARD), RULES).drafts
+    assert [r["term"] for r in draft.extracted["reasons"]] == ["reinvestment zone"]
+    assert draft.extracted["meeting"] is None
+    assert draft.extracted["set_aside"]["rule"] == "own_computers"
+
+
+def test_a_file_with_a_project_item_and_a_hosting_item_keeps_the_project():
+    (draft,) = agenda_file(doc(HEAD, REFRESH + "\n" + CENTER), RULES).drafts
+    assert [r["rule"] for r in draft.extracted["reasons"]] == ["direct_term"]
+    assert draft.extracted["meeting"] == "Sealy, meeting of November 17, 2026"

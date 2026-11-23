@@ -1,12 +1,21 @@
 # Texas backtest: what it shows and what is proposed
 
-BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest ran three times that day.
+BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest ran four times that day.
 
 - **The first run** used the radar as it was built, with a review threshold of 40. Its numbers are under "The first run" and "Why so little". Its report is in this repository's history, at commit `7d163cf`.
 - **The owner then approved three changes,** listed under "Decided". **The second run** has them.
-- **The owner then added one name to the list of known projects. The third run** has it, and [report_tx.md](report_tx.md), which a program writes, is the third run's.
+- **The owner then added one name to the list of known projects. The third run** has it.
+- **The owner then reviewed the sites that reach a reviewer and said to set aside a government's own computers. The fourth run** has that rule, and [report_tx.md](report_tx.md), which a program writes, is the fourth run's.
 
 **Nothing here is a finding about a company or a place.**
+
+## The fourth run, with a government's own computers set aside
+
+- **32 sites that fit no known project reach the bar, down from 58.** That is about eight a year in these records.
+- **The rule took out 26 of the 28 sites the owner had rejected as a government's own computers, and none the owner confirmed.** No signal tied to a known project was lost.
+- Of the 32 that remain, the owner's review confirmed 28 and rejected 4: the two own-computer items the rule does not catch and two passing mentions of data centers.
+- The two hits stand: 77 and 39 days ahead.
+- **The rule was written from the same 58 sites it is measured on.** How it does on agendas it has not seen is not known.
 
 ## The third run, with the name the owner added
 
@@ -15,7 +24,7 @@ BUILD_PLAN.md milestone M9. Written by hand on November 23, 2026. The backtest r
 - **No source read says in words that the Orion Data Center and the SB Energy project are one.** The tie rests on the place, the timing and the address of the project's first news story, which carries the word orion.
 - Both early records are Milam County agendas. Both sit on a site a reviewer would see.
 - 58 sites that fit no known project reach the bar, one fewer than in the second run.
-- **The owner reviewed those 58 on November 23, 2026: 30 confirmed and 28 rejected.** See "The owner's review of the 58 sites".
+- **The owner reviewed those 58 on November 23, 2026: 28 confirmed and 30 rejected.** See "The owner's review of the 58 sites".
 - 71 of 73 judged projects still have no signal before their public date.
 
 ## The second run, with the three changes
@@ -64,16 +73,17 @@ On November 23, 2026 the owner read a list of the 58 sites that fit no known pro
 | What the record is | Sites | Verdict |
 |---|---|---|
 | A government's own computers: a hosting contract, equipment, a vendor's paper | 28 | Rejected |
-| A rule or a discussion on data centers, with no project named | 20 | Confirmed |
+| A rule or a discussion on data centers, with no project named | 18 | Confirmed |
+| A passing mention of data centers, not a rule | 2 | Rejected. The owner changed these two after the first pass |
 | An agenda about a specific project | 5 | Confirmed |
 | Well reports with a company and coordinates | 3 | Confirmed |
 | ERCOT planning files with a project number | 2 | Confirmed |
 
-- **About half of what reaches a reviewer at this bar is noise:** 28 of 58, seven a year. All 28 are a county or a city buying data center services for itself, and 22 of them are Harris County and Houston.
-- **30 of 58 are worth an alert by the owner's reading,** 20 of them because the owner decided that a moratorium or a zoning rule is an alert.
+- **About half of what reached a reviewer at this bar was noise:** 30 of 58. 28 are a county or a city buying data center services for itself, and 22 of those are Harris County and Houston.
+- **28 of 58 are worth an alert by the owner's reading,** 18 of them because the owner decided that a moratorium or a zoning rule is an alert.
 - **A verdict on this list publishes nothing.** No alert exists until a site is confirmed on the reviewer desk, and the desk has no database yet.
 - The list names companies and is not in this repository.
-- **A rule could take most of the 28 out before a reviewer sees them:** an agenda item about a government's own information technology. That is a proposal. Nothing is changed.
+- **The owner then said to set aside an agenda item about a government's own information technology.** That rule is built: see the fourth run. It takes out 26 of the 28.
 
 ## Decided
 
@@ -94,13 +104,16 @@ The owner approved all of this on November 23, 2026. It is done, and the second 
 
 **5. The backtest is run again after any held feed is settled.** It is one command.
 
-**6. A moratorium or a zoning rule on data centers is an alert.** The owner decided this on November 23, 2026, after reading what the sites at the new bar are. Of the 58 that fit no known project, 20 are a government weighing such a rule or discussing data centers, with no project named. A reviewer confirms one when the record says so. The 28 that are a government's own computers are not alerts.
+**6. A moratorium or a zoning rule on data centers is an alert.** The owner decided this on November 23, 2026, after reading what the sites at the new bar are. Of the 58 that fit no known project, 18 are a government weighing such a rule or discussing data centers, with no project named. A reviewer confirms one when the record says so. A passing mention is not a rule.
+
+**7. In an agenda, the words "data center" are set aside when the item is about the government's own computers.** The words that show it are in `config/keywords.yaml`, with the words for land or a project that always win over them. Another term in the same item still counts.
 
 ## Not verified
 
 - **The public dates.** Each is the earliest news report found. An older report would shorten or erase the one lead. 49 projects have no public date and are not judged.
 - **The day an agenda file was posted.** It is not kept, so a file counts from the day of its meeting. The one lead is 39 days on that rule and 70 days by the file's own date.
-- **Each of the 58 sites one at a time.** The owner gave the verdicts by group, not site by site. Two of the 20 policy items are passing mentions of data centers and not a rule.
+- **Each of the 58 sites one at a time.** The owner gave the verdicts by group, then changed two.
+- **The own-computers rule on agendas it was not written from.** Its words came from these 58 sites. A real project item that uses one of them and none of the words for land or a project would be set aside.
 - **The ties.** A program tied each record to a project, and nobody has checked them. One is known to be wrong: a Carrollton item on the city's own computing contract is tied to a Garland project by the vendor's name. That project is not judged.
 - **The Comptroller's list as it stood in the past.** A company counts as listed from the day its registration took effect. Whether the list showed it that day is not known.
 - **Whether a control county has a project.** The screen behind the list rests on two or three searches a county.

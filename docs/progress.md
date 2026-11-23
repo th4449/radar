@@ -2,6 +2,30 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 23, 2026 — A government's own computers are set aside, and two verdicts changed
+
+**The owner's instructions**
+
+- Change the two passing mentions in the policy group to rejected. The review now stands at **28 confirmed and 30 rejected.**
+- Set aside an agenda item about a government's own information technology.
+
+**Built, tests first**
+
+- `config/keywords.yaml`: `own_computers`, two lists. Words that show an item is about a government's own computers, such as co-location, network services and information technology. And words for land or a project, such as abatement, zoning, moratorium and proposed, which always win.
+- In both agenda readers the words "data center" make no signal in such an item. Another term in the item still counts, and the signal then opens no site. In a file, the item is taken from one numbered line to the next.
+- `RULES_VERSION` is `2026-11-23.2`. The report counts what was set aside.
+- 10 tests. 1,065 pass.
+
+**The fourth run of the backtest**
+
+- **32 sites that fit no known project reach the bar, down from 58:** about eight a year.
+- **The rule took out 26 of the 28 the owner rejected as a government's own computers, and none the owner confirmed.** No signal tied to a known project was lost. The two hits stand.
+- Of the 32 left, the owner's review confirmed 28 and rejected 4.
+
+**Not verified**
+
+- **The rule on agendas it was not written from.** Its words came from the same 58 sites it is measured on. A real project item that uses one of those words and none of the words for land or a project would be set aside, and nobody would see it.
+
 ## November 23, 2026 — The owner reviewed the 58 sites: 30 confirmed, 28 rejected
 
 - The owner read a list of the 58 sites that fit no known project and reach the bar of 3, with a link to each record, and gave a verdict for each group.
