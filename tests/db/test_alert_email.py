@@ -19,11 +19,14 @@ SETTINGS = load_email().model_copy(
     update={
         "site_url": "https://radar.example.org",
         "postal_address": "1 Example Street, Austin, TX 78701",
+        "from_address": "alerts@radar.example.org",
     }
 )
 HOOD, HILL, WASHTENAW = "48221", "48217", "26161"
 # The settings file with nothing filled in by the owner.
-BLANK = load_email().model_copy(update={"site_url": None, "postal_address": None})
+BLANK = load_email().model_copy(
+    update={"site_url": None, "postal_address": None, "from_address": None}
+)
 
 
 def scalar(conn: psycopg.Connection, sql: str, params: list | None = None):
@@ -236,7 +239,7 @@ def test_a_dry_run_never_shows_an_address_or_a_working_unsubscribe_link(db):
 def test_a_dry_run_says_what_the_owner_has_not_set(db):
     World(db)
     report = alert_email.run(db, kind="each", settings=BLANK)
-    assert report.not_set == ["postal_address", "site_url"]
+    assert report.not_set == ["postal_address", "site_url", "from_address"]
     assert "postal_address" in alert_email.describe(report)
 
 

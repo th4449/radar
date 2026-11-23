@@ -105,7 +105,10 @@ def test_a_workflow_keeps_nothing_unless_the_owner_has_switched_real_runs_on():
     assert "--dry-run" not in live and "--dry-run" in dry
     process = (workflows / "process.yml").read_text()
     assert 'if [ "$RADAR_LIVE" != "true" ]; then' in process and "exit 0" in process
-    for name in ("collect.yml", "process.yml", "monitor.yml"):
+    email = (workflows / "email.yml").read_text()
+    live, dry = email.split('if [ "$RADAR_EMAIL_LIVE" = "true" ]; then')[1].split("else")
+    assert "--send" in live and "--send" not in dry
+    for name in ("collect.yml", "process.yml", "monitor.yml", "email.yml"):
         text = (workflows / name).read_text()
         assert "schedule:" not in text and "cron:" not in text, name
         # Addresses and keys come from the repository's settings, never from the file.

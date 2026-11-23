@@ -38,8 +38,9 @@ def test_the_settings_file_loads_and_sending_is_not_ready():
     settings = load_email()
     # The postal address is set. The site has no address until it is hosted.
     assert settings.postal_address.splitlines()[-1] == "Arlington VA 22206-9998"
-    assert settings.missing() == ["site_url"]
-    assert BLANK.missing() == ["postal_address", "site_url"]
+    # Nor an address to send from, until the owner proves a domain to the provider.
+    assert settings.missing() == ["site_url", "from_address"]
+    assert BLANK.missing() == ["postal_address", "site_url", "from_address"]
     assert settings.batch_size <= settings.daily_limit
 
 

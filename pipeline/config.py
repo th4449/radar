@@ -211,6 +211,9 @@ class EmailFile(_Strict):
     organization: str = Field(min_length=1)
     postal_address: str | None
     site_url: str | None = Field(pattern=r"^https?://\S*[^\s/]$")
+    # The address every email is from. The provider sends only from a domain the owner has
+    # proved is theirs, so the owner sets this.
+    from_address: str | None = Field(default=None, pattern=r"^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$")
     limits_checked: dt.date
     daily_limit: int = Field(ge=1)
     batch_size: int = Field(ge=1, le=100)
@@ -219,7 +222,7 @@ class EmailFile(_Strict):
         """What the owner still has to set before any email could be sent."""
         return [
             name
-            for name in ("postal_address", "site_url")
+            for name in ("postal_address", "site_url", "from_address")
             if not (getattr(self, name) or "").strip()
         ]
 

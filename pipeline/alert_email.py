@@ -3,10 +3,11 @@
     uv run python -m pipeline.alert_email --kind weekly
     uv run python -m pipeline.alert_email --kind each --state TX
 
-The command only does dry runs. Sending real email is the owner's decision (section 11), and
-no sender for a real provider is written yet. A dry run works out exactly what would be sent
-and reports it in counts, with one sample of each message. It prints no address and no
-unsubscribe token, and it records nothing as sent.
+The command does a dry run unless it is given --send. Sending real email is the owner's
+decision (section 11): --send is refused unless the owner has set a switch, the provider's key
+and the settings in config/email.yaml. See pipeline/email_sender.py. A dry run works out
+exactly what would be sent and reports it in counts, with one sample of each message. It
+prints no address and no unsubscribe token, and it records nothing as sent.
 
 Who gets what:
 
@@ -441,18 +442,34 @@ def describe(report: Report) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Work out the alert emails that are due. Dry run only: nothing is sent."
+        description="Work out the alert emails that are due. A dry run unless --send is given."
     )
     parser.add_argument("--kind", choices=["each", "weekly"], required=True)
     parser.add_argument("--state", choices=sorted(STATE_NAMES), help="only this state")
+    parser.add_argument(
+        "--send",
+        action="store_true",
+        help="send for real. Refused unless the owner has set every lock: see "
+        "pipeline/email_sender.py",
+    )
     args = parser.parse_args(argv)
 
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
         print("not started: set DATABASE_URL", file=sys.stderr)
         return 2
+    sender = None
+    if args.send:
+        # Imported here: the sender imports this module's Message.
+        from pipeline.email_sender import NotSent, sender_from_env
+
+        try:
+            sender = sender_from_env(load_email())
+        except NotSent as exc:
+            print(f"not sent: {exc}", file=sys.stderr)
+            return 2
     with psycopg.connect(database_url, autocommit=True) as conn:
-        report = run(conn, kind=args.kind, state=args.state)
+        report = run(conn, kind=args.kind, state=args.state, sender=sender)
     print(describe(report))
     return 0 if report.status == "ok" else 1
 

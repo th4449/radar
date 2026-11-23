@@ -17,6 +17,10 @@ postal_address: |-
 # Not set yet: the site is not hosted.
 site_url: null
 
+# The address every email is from, such as alerts@ a domain the organization owns. The email
+# provider sends only from a domain whose owner has proved it. Not set yet.
+from_address: null
+
 # Limits of the email provider's free tier, from https://resend.com/pricing on the date below:
 # 100 emails a day and 3,000 a month. The 20 dollar tier has no daily limit and allows 50,000
 # a month. Check them again before sending.

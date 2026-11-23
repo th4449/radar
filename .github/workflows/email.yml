@@ -1,0 +1,64 @@
+name: Email
+
+# Works out the alert emails that are due. See pipeline/alert_email.py and BUILD_PLAN.md
+# sections 7 and 11.
+#
+# **Sending real email is the owner's decision.** This is a dry run, which sends nothing and
+# prints no address, unless the owner has set all of these in the repository's settings:
+#   - the variable RADAR_EMAIL_LIVE to the word true,
+#   - the secret RESEND_API_KEY,
+# and config/email.yaml gives the site's address and the address the emails are from.
+# No commit can switch sending on.
+#
+# Started by hand only. A schedule is a launch decision and needs the owner's go-ahead.
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: Each alert as it is published, or the weekly digest
+        required: true
+        type: choice
+        options:
+          - weekly
+          - each
+
+permissions:
+  contents: read
+
+concurrency:
+  group: email
+  cancel-in-progress: false
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --no-dev
+
+      - name: Work out the emails that are due
+        env:
+          KIND: ${{ inputs.kind }}
+          RADAR_LIVE: ${{ vars.RADAR_LIVE }}
+          RADAR_EMAIL_LIVE: ${{ vars.RADAR_EMAIL_LIVE }}
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          if [ "$RADAR_LIVE" != "true" ]; then
+            echo "Not launched: RADAR_LIVE is not set to true. Nothing was read."
+            exit 0
+          fi
+          if [ "$RADAR_EMAIL_LIVE" = "true" ]; then
+            uv run python -m pipeline.alert_email --kind "$KIND" --send
+          else
+            echo "Dry run: RADAR_EMAIL_LIVE is not set to true. Nothing is sent."
+            uv run python -m pipeline.alert_email --kind "$KIND"
+          fi
