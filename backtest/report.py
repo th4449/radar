@@ -28,6 +28,7 @@ BY_NAME = "the record names the project's company or code name"
 YEAR = 365
 
 _PLACE_KIND = re.compile(r"\s+(city|town|village)$")
+_A_COUNTY = re.compile(r"[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\s+County")
 
 VERDICTS = {
     "hit": "reached the review threshold before the public date",
@@ -104,8 +105,9 @@ def coverage(
         {m.government for m in meetings if county_fips in m.counties and first <= m.day < public}
     )
     county = any(g.endswith(" County") for g in governments)
+    place = _A_COUNTY.sub(" ", known.place)  # "northwest Harris County" names no city
     city = any(
-        re.search(rf"(?<![A-Za-z]){re.escape(_PLACE_KIND.sub('', g))}(?![A-Za-z])", known.place)
+        re.search(rf"(?<![A-Za-z]){re.escape(_PLACE_KIND.sub('', g))}(?![A-Za-z])", place)
         for g in governments
         if not g.endswith(" County")
     )
@@ -148,8 +150,8 @@ def _held(site: SiteReplay, by_id: dict[int, Record]) -> str:
 
 
 def _loose_direct(history: History, result: Result, tied: dict[int, str]) -> list[Record]:
-    """Records that say "data center", tied to no project, seen in the year before a judged
-    project in the same county became public."""
+    """Records tied to no project that say "data center", or are a planning file that names
+    the county, seen in the year before a judged project in the same county became public."""
     public: dict[str, list[dt.date]] = {}
     for o in result.outcomes:
         if o.verdict in JUDGED:
@@ -157,7 +159,8 @@ def _loose_direct(history: History, result: Result, tied: dict[int, str]) -> lis
     out = []
     for r in history.records:
         s = r.signal
-        if r.rule != "direct_term" or s.signal_id in tied or s.signal_id in result.ambiguous:
+        wanted = r.rule == "direct_term" or s.signal_type == "transmission_filing"
+        if not wanted or s.signal_id in tied or s.signal_id in result.ambiguous:
             continue
         if any(0 < (day - s.available_on).days <= YEAR for day in public.get(s.county_fips, [])):
             out.append(r)
@@ -220,6 +223,14 @@ def write(
         "only the backtest can do."
     )
     add(f"- {len(after)} more had a signal only on or after the public date.")
+    top = max(outcomes, key=lambda o: o.peak, default=None)
+    add(
+        f"- **The highest score any known project reached on any day is "
+        f"{_number(top.peak if top else 0.0)}.** At {_number(result.threshold)}, the radar "
+        "would have sent none of them to a reviewer, before or after it was public."
+        if top is None or top.peak < result.threshold
+        else f"- The highest score any known project reached on any day is {_number(top.peak)}."
+    )
     lead = [o.alert_lead_days for o in judged if o.verdict == "hit"]
     add(
         f"- Median lead time over hits: {_number(median(lead) if lead else None)}"
@@ -322,8 +333,8 @@ def write(
     add("")
     add(
         "For each judged project: the agendas the radar held from its county, dated in the "
-        "year before its public date. The city is the one the project's row names as its "
-        "place."
+        "year before its public date. The city is one the project's row names in its place, "
+        "which for a site outside any city is the nearest one."
     )
     add("")
     cover = {o.project.key: coverage(by_key[o.project.key], o.project.county_fips,
@@ -404,26 +415,49 @@ def write(
     )
     add("")
 
-    add('## Records that say "data center" and are tied to no project')
+    add("## Records tied to no project that a person should read")
     add("")
     loose = _loose_direct(history, result, tied)
     add(
-        f"{len(loose)} such records were seen in the year before a judged project in the same "
-        "county became public. **A person should read them.** The program ties a record to a "
-        "project only by a name the list of known projects carries, and a county calls a "
-        "project by names the list does not have. Many of these are a government's own "
-        "computer rooms."
+        f'{len(loose)} records that say "data center", or are a planning file that names the '
+        "county, were seen in the year before a judged project in the same county became "
+        "public. The program ties a record to a project only by a name the list of known "
+        "projects carries, and a county calls a project by names the list does not have. "
+        "**Any of these may be an early record of a known project. None is counted as one.** "
+        "Many are a government's own computer rooms."
     )
     add("")
     if loose:
         add_all(
             _table(
-                ("County", "Seen", "Record"),
-                [(counties[r.signal.county_fips], r.signal.available_on.isoformat(), r.reference)
-                 for r in loose],
+                ("County", "Seen", "Kind", "Record"),
+                [(counties[r.signal.county_fips], r.signal.available_on.isoformat(),
+                  TYPE_NAMES[r.signal.signal_type], r.reference) for r in loose],
             )
         )  # fmt: skip
         add("")
+
+    add("## Pending air permits")
+    add("")
+    permits = [r for r in history.records if r.signal.signal_type == "air_permit"]
+    named, ahead = 0, 0
+    for r in permits:
+        mine = [o.project for o in outcomes if r.signal.entity_id in o.project.entity_ids]
+        named += bool(mine)
+        ahead += any(p.public_date and r.signal.event_date < p.public_date for p in mine)
+    add(
+        f"- The two lists give {len(permits)} signals. They give no county, so none can sit "
+        "on a site or be tied to a project by the rules above."
+    )
+    add(
+        f"- By the applicant's name alone, in any county, {named} name a company of a known "
+        f"project. **{ahead} of those were received before that project's public date.**"
+    )
+    add(
+        "- The lists show what is pending today. A permit decided before November 2026 is "
+        "gone from them, so this feed cannot be judged on history."
+    )
+    add("")
 
     add("## Control counties")
     add("")
@@ -486,21 +520,29 @@ def write(
     add("")
     add_all(
         _table(
-            ("Threshold", "Hits", "Judged", "Hit rate", "Median lead, days",
-             "False alarms in control counties"),
+            ("Threshold", "Hits", "Reached it only after public", "Judged", "Hit rate",
+             "Median lead, days", "False alarms in control counties",
+             "Sites that fit no known project, at or over"),
             [
                 (
                     _number(r.threshold),
                     r.hits,
+                    r.late,
                     r.judged,
                     "none" if r.hit_rate is None else f"{r.hit_rate:.0%}",
                     _number(r.median_alert_lead_days),
                     r.false_alarms,
+                    r.other_sites,
                 )
                 for r in sweep_rows
             ],
         )
     )  # fmt: skip
+    add("")
+    add(
+        "A site that fits no known project is not a false alarm. Nobody has shown what it is. "
+        "The count says how many sites a reviewer would be sent."
+    )
     add("")
 
     add("## Every signal tied to a known project")

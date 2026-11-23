@@ -83,9 +83,17 @@ def test_a_site_that_fits_no_known_project_is_never_named():
 def test_a_record_that_says_data_center_and_is_tied_to_no_project_is_listed_for_a_person():
     text = report()
     # The agenda item, and the well report of a company the list of known projects lacks.
-    assert "2 such records were seen in the year before a judged project" in text
-    assert "| Milam | 2026-03-01 | Texas well report tracking number 9100001 |" in text
-    assert "| Milam | 2026-04-02 | Example City Council, meeting of April 6, 2026, item 1 |" in text
+    assert '2 records that say "data center"' in text
+    assert (
+        "| Milam | 2026-03-01 | well report | Texas well report tracking number 9100001 |" in text
+    )
+    assert "| 2026-04-02 | agenda item or file | Example City Council, meeting of April 6" in text
+
+
+def test_the_report_says_what_the_pending_permit_lists_can_and_cannot_show():
+    text = report()
+    assert "The two lists give 0 signals." in text
+    assert "this feed cannot be judged on history" in text
 
 
 def test_the_report_never_carries_the_words_of_an_agenda():
@@ -116,6 +124,13 @@ def test_coverage_knows_the_projects_own_city_from_its_place():
     assert coverage(QUIET, MILAM, cameron).kind == "another government's only"
     both = [*cameron, meeting("Milam County", "2026-02-01")]
     assert coverage(RIVER, MILAM, both).kind == "the county's and the city's"
+
+
+def test_a_county_named_in_a_projects_place_is_not_taken_for_a_city_of_that_name():
+    rural = known("milam-example-rural", "Milam", place="northwest Cameron County line")
+    assert coverage(rural, MILAM, [meeting("Cameron city", "2026-03-01")]).kind == (
+        "another government's only"
+    )
 
 
 def test_a_project_with_no_public_date_has_no_coverage_to_speak_of():

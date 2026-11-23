@@ -39,7 +39,7 @@ COMPTROLLER_LIST = (
     REPOSITORY / "tests" / "fixtures" / "tx_comptroller_data_centers" / "data-center-lists.html"
 )
 HISTORY_STARTS = dt.date(2023, 1, 1)
-THRESHOLDS = (5.0, 10.0, 15.0, 20.0, 30.0, 40.0)
+THRESHOLDS = (1.0, 2.0, 3.0, 4.0, 5.0, 10.0, 20.0, 40.0)
 
 
 def judge(history: History, starts: dt.date = HISTORY_STARTS) -> Result:

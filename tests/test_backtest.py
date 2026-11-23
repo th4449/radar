@@ -345,6 +345,16 @@ def test_a_sweep_shows_what_each_threshold_would_have_caught_and_what_it_would_h
     assert rows[1].median_alert_lead_days == 101
     assert rows[2].median_alert_lead_days is None
     assert rows[1].hit_rate == 0.25
+    # At 40 one project reaches the bar only after it is public. At 20 it reaches it before.
+    assert [r.late for r in rows] == [0, 1, 0]
+    # The site in a test county that fits no known project peaks at 30.
+    assert [r.other_sites for r in rows] == [1, 0, 0]
+
+
+def test_an_outcome_keeps_the_highest_score_before_the_public_date_and_on_any_day():
+    late = next(o for o in a_run().outcomes if o.verdict == "late")
+    assert late.peak_before_public == pytest.approx(30)
+    assert late.peak == pytest.approx(79.1, abs=0.1)
 
 
 def test_each_signal_type_is_counted_by_how_often_it_came_first_and_how_early():

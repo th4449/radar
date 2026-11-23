@@ -141,6 +141,7 @@ class Outcome:
     first_by_type: dict[str, dt.date]
     crossed_on: dt.date | None
     peak_before_public: float  # the highest score reached before the public date
+    peak: float = 0.0  # the highest score reached on any day
 
     @property
     def first_signal_lead_days(self) -> int | None:
@@ -184,7 +185,8 @@ def _outcome(
         verdict = "below_threshold"
     else:
         verdict = "no_signal"
-    return Outcome(project, tuple(signals), verdict, first, first_by_type, crossed, peak)
+    ever = max((score for _, score in replay), default=0.0)
+    return Outcome(project, tuple(signals), verdict, first, first_by_type, crossed, peak, ever)
 
 
 @dataclass(frozen=True)
@@ -383,6 +385,8 @@ class SweepRow:
     hit_rate: float | None
     median_alert_lead_days: float | None
     false_alarms: int
+    late: int = 0  # judged projects that reached the bar only on or after the public date
+    other_sites: int = 0  # sites in test counties that fit no known project and reached it
 
 
 def sweep(result: Result, thresholds: Iterable[float]) -> list[SweepRow]:
@@ -402,7 +406,8 @@ def sweep(result: Result, thresholds: Iterable[float]) -> list[SweepRow]:
         rows.append(
             SweepRow(
                 bar, made.judged, made.hits, made.hit_rate, made.median_alert_lead_days,
-                made.false_alarms,
+                made.false_alarms, made.verdicts.get("late", 0),
+                sum(1 for site in result.unmatched if site.peak >= bar),
             )
         )  # fmt: skip
     return rows
