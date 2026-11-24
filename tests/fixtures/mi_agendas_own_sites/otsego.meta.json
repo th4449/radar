@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.cityofotsego.org/agenda-meeting-minutes/city-commission/",
+  "final_url": "https://www.cityofotsego.org/agenda-meeting-minutes/city-commission/",
+  "retrieved_at": "2026-11-24T03:26:36+00:00",
+  "sha256": "3f396438cd2be679fbdcfaf23cc97070b168c763432b30facf04067c6fa7a0f8",
+  "bytes": 4091,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "aa0c1745fe7b739a779dea1b3d27c65425ce57bb21843acda15242680943ba2f",
+  "original_bytes": 298680,
+  "note": "The real page, cut down to the first entries of its list of commission agendas. Each leads to a page for the document. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

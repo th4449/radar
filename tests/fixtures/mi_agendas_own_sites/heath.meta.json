@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://heathtownship.net/",
+  "final_url": "https://heathtownship.net/",
+  "retrieved_at": "2026-11-24T03:27:00+00:00",
+  "sha256": "7009486a66adae0649f4c9228d4f364dad7623a7c8e81c87018addbbe391ecb2",
+  "bytes": 1522,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "3fa88e2384fdf42c85d9f8964a3f2428abce3d5a2a181df7be0479e3255ef581",
+  "original_bytes": 172604,
+  "note": "The real home page, cut down to the block that holds its announcements and coming meetings. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

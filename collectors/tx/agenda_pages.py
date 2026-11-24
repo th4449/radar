@@ -36,7 +36,7 @@ import hashlib
 import json
 import re
 from collections.abc import Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from email.utils import parsedate_to_datetime
 from typing import ClassVar
 from urllib.parse import unquote, urljoin, urlsplit
@@ -480,6 +480,73 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
     return [c.link for c in found if not (c.packet and (c.link.date in plain or not c.link.date))]
 
 
+@dataclass(frozen=True)
+class MeetingLink:
+    """A link, on a list that links no agenda file, to the page of one meeting."""
+
+    url: str
+    text: str  # the link's own words
+    date: dt.date  # the meeting's day, as the link gives it
+    date_from: str  # link_text or address
+
+
+# What a link leads to when it is not a page: a file, a picture or a recording.
+_NOT_A_PAGE = re.compile(r"\.(pdf|docx?|xlsx?|pptx?|zip|jpe?g|png|gif|mp3|mp4|ics)$", re.IGNORECASE)
+
+
+def find_meeting_links(body: bytes, page_url: str, today: dt.date) -> list[MeetingLink]:
+    """Links to a page for one meeting, newest first, each once.
+
+    Some sites list their meetings and give each a page of its own, where the agenda is written
+    out or linked. A link is taken when it stays on the page's own site, leads to a page and
+    not to a file, says agenda or meeting in its words or its address, and gives the meeting's
+    day there too. A link that says it is the minutes or a cancellation is left.
+    """
+    tree = LexborHTMLParser(body)
+    found: dict[str, MeetingLink] = {}
+    for a in tree.css("a[href]"):
+        href = (a.attributes.get("href") or "").strip()
+        if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
+            continue
+        url = _address(page_url, href)
+        parts = urlsplit(url)
+        if parts.scheme not in ("http", "https") or _in_chrome(a) or url in found:
+            continue
+        if _site(url) != _site(page_url) or url.rstrip("/") == page_url.rstrip("/"):
+            continue
+        path = unquote(parts.path)
+        if _NOT_A_PAGE.search(path) or _FILE_VIEW.search(path):
+            continue
+        text = _link_words(a)
+        name = path.rstrip("/").rsplit("/", 1)[-1]
+        own = f"{text} {name}"
+        if not _MEETINGS.search(own) or _NOT_AGENDA.search(own):
+            continue
+        day, date_from = find_date(text, today), "link_text"
+        if day is None:
+            day, date_from = find_date(name, today), "address"
+        if day is None:
+            continue
+        found[url] = MeetingLink(url, text[:160], day, date_from)
+    return sorted(found.values(), key=lambda m: m.date, reverse=True)
+
+
+def page_text(body: bytes) -> str:
+    """The words of a page's main part, a line to each block, without the site's menus."""
+    tree = LexborHTMLParser(body)
+    main = tree.css_first("main") or tree.css_first("article") or tree.body
+    if main is None:
+        return ""
+    for chrome in main.css("script, style, noscript, nav, header, footer, form, iframe"):
+        chrome.decompose()
+    lines = (" ".join(line.split()) for line in main.text(separator="\n").splitlines())
+    return "\n".join(line for line in lines if line)
+
+
+# A meeting's page is itself the agenda when its main part says so and runs to some length.
+_AGENDA_PAGE_CHARS = 800
+
+
 # The calendar on the sites the Texas Association of Counties provides. It publishes a feed of
 # the meetings to come, and a county attaches each agenda to its meeting there. The feed and
 # the files sit on the association's own host.
@@ -601,6 +668,11 @@ class AgendaPages(Collector):
     # A page can list years of agendas. A run takes the recent ones, a few at a time.
     max_files_per_page: ClassVar[int] = 4
     max_undated_per_page: ClassVar[int] = 2
+    # Where a list links no file and gives each meeting a page of its own.
+    # It is tried on Michigan's sites only. Texas' collector does not follow such a list.
+    follow_meeting_pages: ClassVar[bool] = False
+    max_meeting_pages_per_page: ClassVar[int] = 4
+    max_files_per_meeting: ClassVar[int] = 2
     max_urls: ClassVar[int] = 800
 
     def __init__(self, pages: Iterable[Page] | None = None, today: dt.date | None = None) -> None:
@@ -613,6 +685,12 @@ class AgendaPages(Collector):
         self._feeds: dict[str, Page] = {}  # a calendar feed -> the page that named it
         self._files: dict[str, tuple[Page, AgendaLink]] = {}
         self._elsewhere: dict[str, list[str]] = {}
+        # A meeting's own page -> the list that led to it, and the link.
+        self._meetings: dict[str, tuple[Page, MeetingLink]] = {}
+        self._meeting_read: dict[str, tuple[str, list[AgendaLink]]] = {}
+        self._via: dict[str, str] = {}  # an agenda file -> the meeting's page that linked it
+        self._no_agenda: list[str] = []
+        self._lists_of_meetings: set[str] = set()
         # Set by history(): the first day of a one-time run over the older files a page lists.
         self.since: dt.date | None = None
 
@@ -646,7 +724,71 @@ class AgendaPages(Collector):
             self._links[result.url] = found
         return self._links[result.url]
 
+    def _meeting(self, result: FetchResult) -> tuple[str, list[AgendaLink]]:
+        """What a meeting's own page holds: "files" it links, the agenda as the "page", or "none".
+
+        A file counts only when its own words or its name say agenda: a page that is itself the
+        agenda links each packet item, and those are not the agenda.
+        """
+        if result.url not in self._meeting_read:
+            links = [
+                link
+                for link in find_agenda_links(result.body, result.final_url, self.today)
+                if _AGENDA.search(
+                    f"{link.text} {unquote(urlsplit(link.url).path.rsplit('/', 1)[-1])}"
+                )
+            ]
+            kind = "files"
+            if not links:
+                text = page_text(result.body)
+                wrote_out = _AGENDA.search(text) and len(text) >= _AGENDA_PAGE_CHARS
+                kind = "page" if wrote_out else "none"
+            self._meeting_read[result.url] = (kind, links)
+        return self._meeting_read[result.url]
+
+    def _follow_meeting(self, result: FetchResult) -> list[str]:
+        page, meeting = self._meetings[result.url]
+        kind, links = self._meeting(result)
+        if kind == "none":
+            self._no_agenda.append(result.url)
+        out = []
+        for link in links[: self.max_files_per_meeting]:
+            if not (on_the_site(link.url, result.final_url) or on_the_site(link.url, page.url)):
+                elsewhere = self._elsewhere.setdefault(page.url, [])
+                if link.url not in elsewhere:
+                    elsewhere.append(link.url)
+                continue
+            stored = self._known.get(link.url)
+            if stored is not None and not (stored.get("etag") or stored.get("last_modified")):
+                continue
+            if link.date is None:  # the meeting's page gave the day
+                link = replace(link, date=meeting.date, date_from="meeting_page")
+            self._files[link.url] = (page, link)
+            self._via[link.url] = result.url
+            out.append(link.url)
+        return out
+
+    def _meeting_pages(
+        self, result: FetchResult, page: Page, first: dt.date, last: dt.date
+    ) -> list[str]:
+        """The pages of the recent meetings on a list that links no agenda file."""
+        found = find_meeting_links(result.body, result.final_url, self.today)
+        if found:
+            self._lists_of_meetings.add(result.url)
+        cap = 100_000 if self.since else self.max_meeting_pages_per_page
+        out = []
+        for meeting in [m for m in found if first <= m.date <= last][:cap]:
+            # A past meeting's page that is stored is not asked for again. One for a meeting
+            # still to come is: its agenda may not have been posted yet.
+            if meeting.url in self._known and meeting.date < self.today:
+                continue
+            self._meetings[meeting.url] = (page, meeting)
+            out.append(meeting.url)
+        return out
+
     def follow(self, result: FetchResult) -> Iterable[str]:
+        if result.url in self._meetings:
+            return self._follow_meeting(result)
         listed = self.pages.get(result.url)
         page = listed or self._feeds.get(result.url)
         if page is None:
@@ -687,9 +829,49 @@ class AgendaPages(Collector):
                 continue
             self._files[link.url] = (page, link)
             out.append(link.url)
+        if self.follow_meeting_pages and listed and not links and not feed:
+            out += self._meeting_pages(result, page, first, last)
         return out
 
+    def _reduce_meeting(self, result: FetchResult) -> Reduced:
+        page, meeting = self._meetings[result.url]
+        kind, links = self._meeting(result)
+        if kind == "page":
+            # The agenda is written on the page. Its words are kept, as a file's would be.
+            meta = {
+                "record": "agenda_file",
+                "government": page.government,
+                "counties": list(page.counties),
+                "bodies": list(page.bodies),
+                "page": page.url,
+                "link_text": meeting.text,
+                "meeting_date": meeting.date.isoformat(),
+                "date_from": meeting.date_from,
+                "agenda_is": "the meeting's own page",
+            }
+            return Reduced(page_text(result.body).encode(), "text/plain; charset=utf-8", meta)
+        listing = {
+            "government": page.government,
+            "page": page.url,
+            "meeting_page": result.url,
+            "meeting_date": meeting.date.isoformat(),
+            "agendas": [
+                {
+                    "url": link.url,
+                    "text": link.text,
+                    "date": link.date.isoformat() if link.date else None,
+                    "date_from": link.date_from,
+                }
+                for link in links
+            ],
+        }
+        body = json.dumps(listing, ensure_ascii=False, sort_keys=True, indent=1).encode()
+        meta = {"record": "meeting_page", "government": page.government, "agendas": len(links)}
+        return Reduced(body, "application/json", meta)
+
     def reduce(self, result: FetchResult) -> Reduced | None:
+        if result.url in self._meetings:
+            return self._reduce_meeting(result)
         page = self.pages.get(result.url) or self._feeds.get(result.url)
         if page is None:
             if result.url not in self._files:
@@ -716,7 +898,7 @@ class AgendaPages(Collector):
         return Reduced(body, "application/json", meta)
 
     def content_key(self, result: FetchResult) -> str | None:
-        if result.url in self.pages or result.url in self._feeds:
+        if result.url in self.pages or result.url in self._feeds or result.url in self._meetings:
             # The list of agenda links. The rest of a page changes without meaning anything.
             return hashlib.sha256(self.reduce(result).body).hexdigest()
         return None
@@ -733,6 +915,7 @@ class AgendaPages(Collector):
             "meeting_date": link.date.isoformat() if link.date else None,
             "date_from": link.date_from,
             **({"meeting_month": link.month} if link.month else {}),
+            **({"meeting_page": self._via[result.url]} if result.url in self._via else {}),
         }
 
     def run(self, *, source, sink, **kwargs):
@@ -746,9 +929,12 @@ class AgendaPages(Collector):
         # A page whose agendas are in its calendar feed lists none itself. That is not a change.
         fed = {page.url for feed, page in self._feeds.items() if self._links.get(feed)}
         empty = sorted(u for u, links in self._links.items() if not links and u in self.pages)
-        empty = [url for url in empty if url not in fed]
+        # Nor is a list that gives each meeting a page of its own.
+        empty = [url for url in empty if url not in fed and url not in self._lists_of_meetings]
         if empty:
             detail["pages_with_no_agenda_links"] = empty
+        if self._no_agenda:
+            detail["meeting_pages_with_no_agenda"] = sorted(self._no_agenda)
         if self._elsewhere:
             detail["agenda_links_on_other_hosts"] = self._elsewhere
         return detail

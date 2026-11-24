@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.cityofotsego.org/document/november-16-2026-city-commission-agenda/",
+  "final_url": "https://www.cityofotsego.org/document/november-16-2026-city-commission-agenda/",
+  "retrieved_at": "2026-11-24T03:26:41+00:00",
+  "sha256": "97ae1fb8efbda481f4381846a8470549e6e44b962de803789b51f0795c424843",
+  "bytes": 419,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "dedc2a1e15d1a3960b7d21bd0b8446789ec95b13b46c2a7d953995e265b0ff7d",
+  "original_bytes": 117761,
+  "note": "The real page for one agenda, cut down to its main part: one link, to a file on another host. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

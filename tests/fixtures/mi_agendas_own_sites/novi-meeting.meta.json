@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://www.cityofnovi.org/agendas-minutes/city-council/2026/nov-9-2026/",
+  "final_url": "https://www.cityofnovi.org/agendas-minutes/city-council/2026/nov-9-2026/",
+  "retrieved_at": "2026-11-24T03:27:08+00:00",
+  "sha256": "c486ea8f4e7ea5f7eb4a04491251baeaa040c9157ef14ff14de8e822b49cc457",
+  "bytes": 5558,
+  "content_type": "text/html; charset=utf-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "c46d1e5dd38976258a15a11c65aacfae9dc4921f370a9a6d1d90070a16708c88",
+  "original_bytes": 394197,
+  "note": "The real page for one council meeting, cut down to its main part: the agenda itself, written on the page, with a link to each packet item. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

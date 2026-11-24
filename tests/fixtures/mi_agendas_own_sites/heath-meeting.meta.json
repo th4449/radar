@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://heathtownship.net/november-9-2026-township-board-meeting/",
+  "final_url": "https://heathtownship.net/november-9-2026-township-board-meeting/",
+  "retrieved_at": "2026-11-24T03:27:03+00:00",
+  "sha256": "1e5ab472b561ba97c528331aface59a88c994e1d5b7f9b1bd41e2d93f14c6904",
+  "bytes": 651,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "84f34262a7893211cd6c100b48f9f1d96cf7a25745ac6914bb76a6341e5c81c0",
+  "original_bytes": 117149,
+  "note": "The real page of one announcement, cut down to its heading and its one link, to the agenda file. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

@@ -28,6 +28,8 @@ from collectors.tx.agenda_pages import (
     cleared_pages,
     find_agenda_links,
     find_date,
+    find_meeting_links,
+    page_text,
 )
 from pipeline.config import load_sources
 from pipeline.store import MemorySink
@@ -37,9 +39,11 @@ from .helpers import CONTACT, FakeClock, Site, make_pdf
 FIXTURES = Path(__file__).parent / "fixtures" / "mi_agendas_own_sites"
 TODAY = dt.date(2026, 11, 23)
 NAMES = (
-    "allegan", "auburn-hills", "chelsea", "comstock", "erie",
-    "luna-pier", "novi", "oshtemo", "river-rouge", "superior",
+    "allegan", "auburn-hills", "chelsea", "comstock", "erie", "heath", "luna-pier", "lyndon",
+    "novi", "oshtemo", "otsego", "river-rouge", "superior",
 )  # fmt: skip
+# One page for a single meeting, on four of the sites above. Saved on November 24, 2026.
+MEETING_PAGES = ("heath-meeting", "lyndon-meeting", "novi-meeting", "otsego-meeting")
 CLEARED = {p.url: p for p in cleared_pages(TODAY, state="MI")}
 
 
@@ -73,15 +77,19 @@ def cleared_to_run():
 
 
 def test_each_saved_page_is_one_the_inventory_clears_and_was_cut_down():
-    assert sorted(p.name.removesuffix(".meta.json") for p in FIXTURES.glob("*.meta.json")) == list(
-        NAMES
+    assert sorted(p.name.removesuffix(".meta.json") for p in FIXTURES.glob("*.meta.json")) == (
+        sorted(NAMES + MEETING_PAGES)
     )
+    hosts = {httpx.URL(url).host for url in CLEARED}
+    for name in MEETING_PAGES:
+        m = meta(name)
+        assert m["trimmed"] is True and httpx.URL(m["url"]).host in hosts
     counties = set()
     for name in NAMES:
         m = meta(name)
         assert m["source_id"] == "mi_agendas_own_sites"
         assert m["trimmed"] is True and m["bytes"] < m["original_bytes"]
-        assert m["url"] == m["final_url"]  # none of the ten redirected
+        assert m["url"] == m["final_url"]  # none of them redirected
         if name == "chelsea":
             # Cleared when it was saved. Closed the same day: its files sit on a host whose
             # robots rule bars them, and the owner said to leave them closed.
@@ -194,9 +202,9 @@ def test_two_meetings_on_one_day_are_both_taken():
 
 
 def test_a_page_that_leads_to_a_page_for_each_meeting_gives_no_file():
-    """Novi's list links each agenda to a page of its own. The collector reads files only.
+    """Novi's list links each agenda to a page of its own, so the list holds no file.
 
-    So Novi's agendas are not read as the collector stands. The run log names the page.
+    The collector then follows the list to each meeting's page. See the tests of that below.
     """
     body, url = saved("novi")
     assert body.count(b'href="/agendas-minutes/city-council/2026/') == 6
@@ -308,7 +316,11 @@ COMSTOCK_BODY, COMSTOCK = saved("comstock")
 ERIE_BODY, ERIE = saved("erie")
 NOVI_BODY, NOVI = saved("novi")
 CHELSEA_BODY, CHELSEA = saved("chelsea")
-PAGES = (CLEARED[COMSTOCK], CLEARED[ERIE], CLEARED[NOVI])
+# A made-up page that lists no agenda and leads to none.
+EMPTY = "https://www.example-twp.org/agendas"
+EMPTY_BODY = b"<html><head><title>Agendas</title></head><body><p>Moved.</p></body></html>"
+EMPTY_PAGE = Page(EMPTY, "Example township", ("Washtenaw",), ("Example Township Board",))
+PAGES = (CLEARED[COMSTOCK], CLEARED[ERIE], EMPTY_PAGE)
 COMSTOCK_FILES = [
     "https://comstockmi.gov/wp-content/uploads/2026/11/Board_Meeting_Agenda-11.16.26.pdf"
 ]
@@ -329,7 +341,7 @@ def web() -> Site:
     routes = {
         COMSTOCK: httpx.Response(200, content=COMSTOCK_BODY, headers=html),
         ERIE: httpx.Response(200, content=ERIE_BODY, headers=html),
-        NOVI: httpx.Response(200, content=NOVI_BODY, headers=html),
+        EMPTY: httpx.Response(200, content=EMPTY_BODY, headers=html),
     }
     for n, url in enumerate(COMSTOCK_FILES + ERIE_FILES):
         routes[url] = httpx.Response(200, content=agenda(n), headers=PDF)
@@ -352,7 +364,7 @@ def test_a_run_reads_each_page_then_its_recent_agenda_files(tmp_path):
     summary = run(site, sink, tmp_path)
     assert summary.status == "ok", summary.error
     # The three pages first, then the files from the last three weeks, newest first.
-    assert site.page_urls() == [COMSTOCK, ERIE, NOVI, *COMSTOCK_FILES, *ERIE_FILES]
+    assert site.page_urls() == [COMSTOCK, ERIE, EMPTY, *COMSTOCK_FILES, *ERIE_FILES]
     assert (summary.documents_seen, summary.documents_new) == (6, 6)
     assert all(r.headers["user-agent"].startswith("DataCenterRadar/") for r in site.requests)
     assert {d.source_id for d in sink.documents.values()} == {"mi_agendas_own_sites"}
@@ -361,7 +373,7 @@ def test_a_run_reads_each_page_then_its_recent_agenda_files(tmp_path):
 def test_a_page_that_gives_no_file_is_named_in_the_run_log(tmp_path):
     sink = MemorySink()
     run(web(), sink, tmp_path)
-    assert sink.runs[1]["detail"] == {"governments": 3, "pages_with_no_agenda_links": [NOVI]}
+    assert sink.runs[1]["detail"] == {"governments": 3, "pages_with_no_agenda_links": [EMPTY]}
 
 
 def test_a_file_is_stored_with_its_government_its_county_and_its_meetings_day(tmp_path):
@@ -391,7 +403,7 @@ def test_a_second_run_asks_only_for_the_pages(tmp_path):
     run(web(), sink, tmp_path)
     again = web()
     summary = run(again, sink, tmp_path)
-    assert again.page_urls() == [COMSTOCK, ERIE, NOVI]
+    assert again.page_urls() == [COMSTOCK, ERIE, EMPTY]
     assert (summary.status, summary.documents_new) == ("ok", 0)
 
 
@@ -435,6 +447,225 @@ def test_a_revize_sites_list_is_read_and_its_files_are_refused_as_the_site_write
     )
     # The list is still read and stored, and the other site's files are fetched.
     assert {d.url for d in sink.documents.values()} == {CHELSEA, ERIE, *ERIE_FILES}
+
+
+# --- a list that leads to a page for each meeting -----------------------------------------------
+#
+# Four sites, four shapes, each saved from the real site. Novi writes the agenda on the meeting's
+# page. Heath Township's page links the agenda file on its own site. Otsego's links a file on
+# another host. Lyndon Township's links download addresses with no file type.
+
+HTML = {"Content-Type": "text/html; charset=utf-8"}
+HEATH_BODY, HEATH = saved("heath")
+OTSEGO_BODY, OTSEGO = saved("otsego")
+LYNDON_BODY, LYNDON = saved("lyndon")
+NOVI_MEETING_BODY, NOVI_MEETING = saved("novi-meeting")
+HEATH_MEETING_BODY, HEATH_MEETING = saved("heath-meeting")
+OTSEGO_MEETING_BODY, OTSEGO_MEETING = saved("otsego-meeting")
+LYNDON_MEETING_BODY, LYNDON_MEETING = saved("lyndon-meeting")
+NOVI_COMING = "https://www.cityofnovi.org/agendas-minutes/city-council/2026/nov-23-2026/"
+COMING_BODY = (
+    b"<html><head><title>Nov 23, 2026</title></head><body><main>Coming Soon</main></body></html>"
+)
+HEATH_FILE = (
+    "https://heathtownship.net/wp-content/uploads/2026/11/"
+    "twp-Agenda-Updated-for-November-2026-meeting-1.pdf"
+)
+OTSEGO_FILE = (
+    "https://cdn-www-cityofotsego-org-g4w4.b-cdn.net/wp-content/uploads/2026/11/2.0-AGENDA.pdf"
+)
+
+
+def meetings(name: str):
+    body, url = saved(name)
+    return find_meeting_links(body, url, TODAY)
+
+
+def test_a_list_that_links_no_file_gives_the_page_of_each_meeting_and_its_day():
+    found = meetings("novi")
+    assert [m.url.removeprefix(NOVI) for m in found] == [
+        "nov-23-2026/", "nov-9-2026/", "oct-26-2026/", "oct-12-2026/", "sep-28-2026/",
+        "sep-14-2026/",
+    ]  # fmt: skip
+    # The link says "Agenda". The day is in its address.
+    assert {(m.text, m.date_from) for m in found} == {("Agenda", "address")}
+    assert found[1].date == dt.date(2026, 11, 9)
+    # The minutes on the same list are files, and are left.
+    assert not [m for m in found if m.url.endswith(".pdf")]
+
+
+def test_a_meetings_page_is_told_by_its_words_and_its_day_and_other_posts_are_left():
+    (only,) = meetings("heath")
+    assert (only.url, only.date, only.date_from) == (
+        HEATH_MEETING,
+        dt.date(2026, 11, 9),
+        "link_text",
+    )
+    # The same post is linked twice, and posts about voting hours are not meetings.
+    body, _ = saved("heath")
+    assert body.count(b"november-9-2026-township-board-meeting") == 2
+    assert body.count(b"early-voting-hours") == 2
+
+
+def test_a_list_of_document_pages_and_a_list_of_posts_read_the_same_way():
+    otsego = meetings("otsego")
+    assert len(otsego) == 8 and otsego[0].url == OTSEGO_MEETING
+    assert [m.date.isoformat() for m in otsego][:2] == ["2026-11-16", "2026-11-02"]
+    # Four posts. The one for the zoning board of appeals says neither agenda nor meeting.
+    lyndon = meetings("lyndon")
+    assert [m.date.isoformat() for m in lyndon] == ["2026-11-18", "2026-11-10", "2026-11-09"]
+    assert lyndon[1].url == LYNDON_MEETING
+
+
+def test_the_words_of_a_page_are_its_main_part_without_the_sites_menus():
+    text = page_text(NOVI_MEETING_BODY)
+    assert text.startswith("CITY COUNCIL AGENDA")
+    assert "MATTERS FOR COUNCIL ACTION" in text and text.rstrip().endswith("accommodations.")
+    assert "\n\n" not in text
+    assert page_text(OTSEGO_MEETING_BODY) == "Download"
+
+
+def meeting_web(**more) -> Site:
+    routes = {
+        NOVI: httpx.Response(200, content=NOVI_BODY, headers=HTML),
+        NOVI_COMING: httpx.Response(200, content=COMING_BODY, headers=HTML),
+        NOVI_MEETING: httpx.Response(200, content=NOVI_MEETING_BODY, headers=HTML),
+        HEATH: httpx.Response(200, content=HEATH_BODY, headers=HTML),
+        HEATH_MEETING: httpx.Response(200, content=HEATH_MEETING_BODY, headers=HTML),
+        HEATH_FILE: httpx.Response(200, content=agenda(7), headers=PDF),
+    }
+    routes.update(more)
+    return Site(routes)
+
+
+def test_novis_agenda_is_the_meetings_page_itself_and_no_packet_item_is_asked_for(tmp_path):
+    site, sink = meeting_web(), MemorySink()
+    summary = run(site, sink, tmp_path, pages=(CLEARED[NOVI],))
+    assert summary.status == "ok", summary.error
+    # The list, then the two meetings of the last three weeks, newest first. Nothing else.
+    assert site.page_urls() == [NOVI, NOVI_COMING, NOVI_MEETING]
+    assert not [u for u in site.page_urls() if "/media/" in u]
+    doc = next(d for d in sink.documents.values() if d.url == NOVI_MEETING)
+    assert doc.text.startswith("CITY COUNCIL AGENDA")
+    kept = {k: doc.raw_meta[k] for k in ("record", "government", "counties", "page", "agenda_is")}
+    assert kept == {
+        "record": "agenda_file",
+        "government": "Novi city",
+        "counties": ["Oakland"],
+        "page": NOVI,
+        "agenda_is": "the meeting's own page",
+    }
+    assert (doc.raw_meta["meeting_date"], doc.raw_meta["date_from"]) == ("2026-11-09", "address")
+    assert doc.raw_meta["original_kept"] is False
+    # The page for the meeting to come holds no agenda yet. The run log names it.
+    assert sink.runs[1]["detail"] == {
+        "governments": 1,
+        "meeting_pages_with_no_agenda": [NOVI_COMING],
+    }
+
+
+def test_an_agenda_written_on_a_page_is_read_for_signals_like_a_file(tmp_path):
+    from pipeline.signals import Doc, Rules, process
+
+    sink, rules = MemorySink(), Rules()
+    run(meeting_web(), sink, tmp_path, pages=(CLEARED[NOVI],))
+    stored = next(d for d in sink.documents.values() if d.url == NOVI_MEETING)
+
+    def read(text: str):
+        s = stored
+        return process(
+            Doc(s.source_id, s.url, s.retrieved_at, s.sha256, text, s.raw_meta, b""), rules
+        )
+
+    # The real agenda of November 9 uses none of the radar's terms.
+    assert read(stored.text).counts()["signals"] == 0
+    # The same page with one made-up item added.
+    (draft,) = read(
+        stored.text + "\nConsideration of a rezoning for a proposed data center."
+    ).drafts
+    assert draft.summary == (
+        'An agenda that Novi posted for a meeting of November 9, 2026 uses the words "data center".'
+    )
+    assert draft.county_fips == "26125"  # Oakland County
+
+
+def test_a_meetings_page_that_links_its_agenda_file_has_the_file_fetched(tmp_path):
+    site, sink = meeting_web(), MemorySink()
+    summary = run(site, sink, tmp_path, pages=(CLEARED[HEATH],))
+    assert summary.status == "ok", summary.error
+    assert site.page_urls() == [HEATH, HEATH_MEETING, HEATH_FILE]
+    docs = {d.url: d for d in sink.documents.values()}
+    file = docs[HEATH_FILE]
+    assert "rezoning" in file.text
+    assert (file.raw_meta["record"], file.raw_meta["page"]) == ("agenda_file", HEATH)
+    assert file.raw_meta["meeting_page"] == HEATH_MEETING
+    assert (file.raw_meta["meeting_date"], file.raw_meta["date_from"]) == (
+        "2026-11-09",
+        "link_text",
+    )
+    # The meeting's page is stored as the list of agenda links on it, not as an agenda.
+    listing = json.loads(LocalArchive(tmp_path).get(docs[HEATH_MEETING].storage_path))
+    assert docs[HEATH_MEETING].raw_meta["record"] == "meeting_page"
+    assert [a["url"] for a in listing["agendas"]] == [HEATH_FILE]
+    assert sink.runs[1]["detail"] == {"governments": 1}
+
+
+def test_an_agenda_file_on_another_host_is_named_and_not_asked_for(tmp_path):
+    older = "https://www.cityofotsego.org/document/november-2-2026-city-commission-agenda/"
+    site = Site(
+        {
+            OTSEGO: httpx.Response(200, content=OTSEGO_BODY, headers=HTML),
+            OTSEGO_MEETING: httpx.Response(200, content=OTSEGO_MEETING_BODY, headers=HTML),
+            older: httpx.Response(200, content=OTSEGO_MEETING_BODY, headers=HTML),
+        }
+    )
+    sink = MemorySink()
+    summary = run(site, sink, tmp_path, pages=(CLEARED[OTSEGO],))
+    assert summary.status == "ok", summary.error
+    assert site.page_urls() == [OTSEGO, OTSEGO_MEETING, older]
+    assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {OTSEGO: [OTSEGO_FILE]}
+
+
+def test_a_meetings_page_whose_links_name_no_file_gives_nothing_and_is_named(tmp_path):
+    site = Site(
+        {
+            LYNDON: httpx.Response(200, content=LYNDON_BODY, headers=HTML),
+            LYNDON_MEETING: httpx.Response(200, content=LYNDON_MEETING_BODY, headers=HTML),
+        }
+    )
+    collector_pages = (CLEARED[LYNDON],)
+    sink = MemorySink()
+    summary = run(site, sink, tmp_path, pages=collector_pages)
+    # Three posts are in the last three weeks. Two have no saved page here, and fail.
+    assert LYNDON_MEETING in site.page_urls() and summary.status == "partial"
+    assert not [u for u in site.page_urls() if "/download/" in u]
+    assert sink.runs[1]["detail"]["meeting_pages_with_no_agenda"] == [LYNDON_MEETING]
+
+
+def test_a_past_meetings_page_is_not_asked_for_again_and_a_meeting_to_come_is(tmp_path):
+    sink = MemorySink()
+    run(meeting_web(), sink, tmp_path, pages=(CLEARED[NOVI],))
+    again = meeting_web()
+    summary = run(again, sink, tmp_path, pages=(CLEARED[NOVI],))
+    # November 9 is past and stored. November 23 is the day of the run: its agenda may come.
+    assert again.page_urls() == [NOVI, NOVI_COMING]
+    assert (summary.status, summary.documents_new) == ("ok", 0)
+
+
+def test_at_most_four_meeting_pages_are_followed_from_one_list(tmp_path):
+    site = Site({OTSEGO: httpx.Response(200, content=OTSEGO_BODY, headers=HTML)})
+    collector = MichiganAgendaPages(pages=(CLEARED[OTSEGO],), today=TODAY)
+    assert collector.max_meeting_pages_per_page == 4
+    collector.back_days = 400
+    clock = FakeClock()
+    with Fetcher(
+        cleared_to_run(), contact=CONTACT, transport=site.transport, clock=clock, sleep=clock.sleep
+    ) as fetcher:
+        collector.run(
+            source=cleared_to_run(), fetcher=fetcher, store=LocalArchive(tmp_path),
+            sink=MemorySink(),
+        )  # fmt: skip
+    assert len(site.page_urls()) == 1 + 4
 
 
 # --- not yet ------------------------------------------------------------------------------------

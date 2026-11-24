@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://lyndontownshipmi.gov/lyndon-township-regular-board-meeting-november-10-2026-700-pm/",
+  "final_url": "https://lyndontownshipmi.gov/lyndon-township-regular-board-meeting-november-10-2026-700-pm/",
+  "retrieved_at": "2026-11-24T03:26:52+00:00",
+  "sha256": "f430b91aea4d741e4fbf36b4101d311c369fa782c770cd68373c5157449cc81b",
+  "bytes": 1147,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "dd1abff3d74248b75377092bc5220d8418384c10b4752e68c357ef0ac2f9dfd0",
+  "original_bytes": 182306,
+  "note": "The real page of one post, cut down to the block that links its files. Each link is a download address with no file type. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}

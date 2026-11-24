@@ -68,17 +68,17 @@ The owner said on November 23, 2026 that the clearing of own sites given for Tex
 
 - **On nine of the ten the collector finds the agendas.** Its newest agenda matches the second read's on all nine. Two of the ten, Chelsea and Allegan, are Revize sites. Their lists are read. On the run below Chelsea's files were refused and Allegan's failed.
 - **One fault was found and fixed.** Oshtemo Township lists a report of receipts and disbursements between its packets, in a file named for the meeting's day. Read as an agenda, the report took the place of that day's packet. Such a report is now left, for both states.
-- **Novi's agendas are not read.** Its list links each meeting to a page of its own, not to a file. The collector reads files only. The run log names such a page.
+- **Novi's list holds no file.** It links each meeting to a page of its own. The collector now follows such a list: see below.
 
-**Governments the collector would not read as it stands,** by the second read's notes. Only Novi's page was fetched.
+**A list that gives each meeting a page of its own.** Built on November 24, 2026, on the owner's word, for Michigan's collector only. Where a list links no agenda file, the collector follows it to the pages of the recent meetings: four at most, one more request a meeting. On such a page it takes the agenda file the page links, or the page itself where the agenda is written out on it. A list page and one meeting page were fetched once each on four sites, and each is a fixture.
 
-| Government | Why |
-|---|---|
-| Novi | Each agenda link leads to a page for the meeting |
-| Otsego city | Each agenda link leads to a document page |
-| Lyndon Township | Each agenda is a post on the site |
-| Heath Township | The agenda is a post linked from the home page |
-| Plainwell | Agenda files have addresses that end in `.aspx` |
+| Government | What its meeting page holds | Read |
+|---|---|---|
+| Novi | The agenda itself, written on the page, with a link to each packet item | Yes. The page's words are kept. No packet item is asked for |
+| Heath Township | A link to the agenda file on the township's own site | Yes. The file is fetched |
+| Otsego city | A link to the agenda file on another host, `cdn-www-cityofotsego-org-g4w4.b-cdn.net` | No. The run log names the file. That host's robots file is not read, and the terms read were the city's |
+| Lyndon Township | Links with download addresses and no file type | No. The run log names the page |
+| Plainwell | Not looked at. The fetcher's robots request did not come back open on November 23 | No |
 
 **Seven governments' pages carry the year in their address:** Novi, Commerce Township, Farmington, Farmington Hills, Highland Park, Holly and Plainwell, 21 pages. Each needs a new inventory row in January.
 

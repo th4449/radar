@@ -2,6 +2,41 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: a list that gives each meeting a page of its own is followed
+
+**Pushed** on the owner's word, as `35c53d8`. CI passed.
+
+**On the owner's word.** Both Michigan sources are still `manual`. Nothing here has run live but the seven requests below.
+
+**Seen first.** Seven identified requests by the radar's fetcher, robots read before each site: three list pages and one meeting page on each of four sites. Novi's list was saved on November 23. All seven loaded. Each is a fixture, cut down. One post author's name was taken out of a fixture.
+
+**Four sites, four shapes**
+
+| Government | What its meeting page holds | Read now |
+|---|---|---|
+| Novi | The agenda itself, written on the page, with a link to each packet item | Yes |
+| Heath Township | A link to the agenda file on the township's own site | Yes |
+| Otsego city | A link to the agenda file on another host | No. The run log names the file |
+| Lyndon Township | Links with download addresses and no file type | No. The run log names the page |
+
+**What was built,** in Michigan's collector only. Texas' does not follow such a list: it was not tried there.
+
+- Where a list links no agenda file, the collector finds the links that lead to a page on the same site, say agenda or meeting, and give a day in their words or their address. It follows the recent ones, four at most.
+- On a meeting's page it takes a file whose own words or name say agenda, two at most. A link to a packet item is not the agenda.
+- Where the page links no such file and its main part says agenda and runs to 800 characters, **the page itself is the agenda.** Its words are kept, without the site's menus, and read for signals as a file's are.
+- A past meeting's page that is stored is not asked for again. One for a meeting still to come is.
+- The run log names a meeting page that holds no agenda, and a file on another host.
+- Tests came first: 11 new, on the real pages. 1,256 pass.
+
+**Not verified**
+
+- **No run has followed a real list.** The tests run on the saved pages.
+- Novi's three other lists, for its planning commission and two authorities. They are taken to read as its council's does.
+- The 800-character line comes from one real page.
+- What Lyndon Township's download addresses serve. None was asked for.
+
+**The owner's, if wanted:** Otsego's agenda files sit on `cdn-www-cityofotsego-org-g4w4.b-cdn.net`. Reading them means reading that host's robots file and counting the host as the city's own. Neither is done.
+
 ## November 24, 2026 — M11: the pages with the terms are the file's own page numbers
 
 **Pushed** on the owner's word, as `1b005ae`. CI passed.

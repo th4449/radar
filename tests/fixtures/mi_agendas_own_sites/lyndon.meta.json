@@ -1,0 +1,14 @@
+{
+  "source_id": "mi_agendas_own_sites",
+  "url": "https://lyndontownshipmi.gov/category/agendas/",
+  "final_url": "https://lyndontownshipmi.gov/category/agendas/",
+  "retrieved_at": "2026-11-24T03:26:47+00:00",
+  "sha256": "fcef504b0000b734bb19aa4eb2f3669975f2b50be76aa53418cd6d228a253be0",
+  "bytes": 3822,
+  "content_type": "text/html; charset=UTF-8",
+  "kind": "html",
+  "trimmed": true,
+  "original_sha256": "1f5f21f82f87e35726a94f9a60d53f635e9e6f3dc84521e4979df2b445f4f48d",
+  "original_bytes": 190213,
+  "note": "The real page, cut down to its first four posts. Each leads to a page for the meeting. The name of each post's author is taken out. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+}
