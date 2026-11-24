@@ -197,3 +197,8 @@ own_computers:
     - incentive
     - town hall
     - townhall
+    # A zoning ordinance's definition of the land use: "Data Center: A facility used for
+    # centralized storage ... typically containing computer servers". Read on a Michigan
+    # township's moratorium ordinance, which the word "servers" had set aside. The owner said
+    # on November 24, 2026 to add it.
+    - facility used for

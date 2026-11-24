@@ -291,3 +291,22 @@ def test_the_label_looks_only_at_the_item_that_says_data_center():
         doc(HEAD, "4. An ordinance designating a reinvestment zone on County Road 12."), RULES
     ).drafts
     assert "rule_making" not in draft.extracted
+
+
+DEFINITION = (
+    "SECTION II DEFINITIONS\n"
+    "1. Data Center: A facility used for centralized storage, management, processing, and "
+    "transmission of digital information, typically containing computer servers and data "
+    "storage systems.\n"
+    "2. Applicant: A person who files a request under this section."
+)
+
+
+def test_a_file_that_holds_only_an_ordinances_definition_of_a_data_center_is_a_signal():
+    """Before November 24, 2026 the definition was set aside for its word "servers", and a file
+    that held nothing else about data centers gave no signal."""
+    out = agenda_file(doc(HEAD, ROUTINE, DEFINITION), RULES)
+    (draft,) = out.drafts
+    assert out.own_computers == 0
+    assert [r["term"] for r in draft.extracted["reasons"]] == ["data center"]
+    assert "set_aside" not in draft.extracted

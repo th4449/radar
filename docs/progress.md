@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: an ordinance's definition of a data center is no longer set aside
+
+**Pushed** on the owner's word, as `36460d6`. CI passed.
+
+**On the owner's word.** The set-aside for a government's own computers is the owner's rule of November 23. It read one real item wrongly: the definition of "Data Center" in a Michigan township's moratorium ordinance, which lists "computer servers".
+
+- `config/keywords.yaml`: the phrase "facility used for" is added to the rule's `unless` list. It comes from that item. The owner chose it over the single word "facility", which could bring back hosting items.
+- Adding a word to that list can only keep more records. It cannot lose one.
+- Tests came first: 2 new, one on the real item and one on a file that holds only such a definition. 1,226 pass.
+- **On the 56 Michigan agendas: nothing is set aside now, where one hit was.** The same 16 signals, the same 10 labelled.
+
+**Not verified:** the phrase against the 28 real Texas items the owner reviewed. They are in the hosted database and the local one is empty. The seven real hosting wordings kept in the tests are all still set aside. Another ordinance that words its definition differently would need its own word, from its own record.
+
 ## November 24, 2026 — M11: a label for the reviewer where "data center" sits beside the words of rule making
 
 **Pushed** on the owner's word, as `7af9565`. CI passed.

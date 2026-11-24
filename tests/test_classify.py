@@ -133,6 +133,23 @@ def test_words_about_land_or_a_project_are_never_taken_for_a_governments_own_com
         assert RULES.own_computers(text) is None, text
 
 
+def test_an_ordinances_definition_of_a_data_center_is_not_a_governments_own_computers():
+    """The owner's decision of November 24, 2026.
+
+    This is a real item, from the definitions of a Michigan township's moratorium ordinance. It
+    lists "servers", and it was set aside. A definition of the land use is not a purchase.
+    """
+    definition = (
+        "1. Data Center: A facility used for centralized storage, management, processing, and "
+        "transmission of digital information, typically containing computer servers, data "
+        "storage systems, telecommunications equipment, power distribution systems, cooling "
+        "and ventilation"
+    )
+    assert RULES.own_computers(definition) is None
+    # A purchase that lists servers is set aside as before.
+    assert RULES.own_computers("Purchase of servers for the county data center") == "servers"
+
+
 # --- a term that is not a reason by itself --------------------------------------------------------
 
 
