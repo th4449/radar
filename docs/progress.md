@@ -2,6 +2,30 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: the pages with the terms are the file's own page numbers
+
+**Pushed** on the owner's word, as `1b005ae`. CI passed.
+
+**On the owner's word.**
+
+**A correction first.** I told the owner a reviewer sees these page numbers. The review page did not show them. They were kept with the signal and never displayed. It shows them now, and only where they are sure.
+
+- **The fault:** the stored text holds nothing for a page with no words, such as a scanned insert in a packet. The pages were counted over the text, so the count ran behind the file. In one real 260-page packet a term on page 170 was given as page 148.
+- **The extractor notes which pages of a PDF have no words.** The archive step keeps the note with the document, as `pages_without_text`. No stored text changes.
+- **The agenda processor gives the file's own page numbers.** Text from a file attached inside a PDF has no page of the PDF and is given none.
+- **A document stored before the note was kept** gives its numbers as before. They are marked sure only when the text has a piece for every page.
+- **The review page says where the words are,** under "Why it is here": *The words are on page 28. The file has 31 pages.* Where the numbers are not sure it says nothing.
+- The wording for a long file still turns on the first page that has words. That is the agenda even behind a cover that is a picture.
+- Tests came first: 6 in Python and 1 for the page, then 1 more for a scan. 1,245 and 14 pass. The page type-checks and builds.
+
+**Checked against the real files.** The 56 Michigan agendas were read again from the scratch folder with the changed extractor. 2 of the 52 PDFs have pages with no words. One signal's pages moved, the 260-page packet's. **Each of the 37 pages the signals now name was opened in the file itself and holds one of the terms. None was wrong.**
+
+**Not verified**
+
+- Documents already in the hosted database carry no note. Their numbers can still run behind until each is read again. That would be a job over the stored files, and it is not built.
+- The page in a browser. It was built, not opened.
+- Scans read by character recognition: the note is made there too, and is tested only on a made-up scan.
+
 ## November 24, 2026 — M11: a long file with the words past its first page is not called an agenda
 
 **Pushed** on the owner's word, as `5cc8904`. CI passed.

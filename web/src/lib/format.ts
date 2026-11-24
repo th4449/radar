@@ -89,3 +89,21 @@ export function ruleMakingNote(words: unknown): string {
     "These are the words of a government writing its own rules. A project can use them too."
   );
 }
+
+/** Where in a file the words are, for a reviewer who opens it.
+ *
+ * Shown only where the numbers are the file's own. A page with no words adds nothing to the
+ * stored text, so for a document stored before such pages were noted the count can run behind
+ * the file. Then nothing is said. Empty for a file of one page. */
+export function pagesNote(pages: unknown, total: unknown, exact: unknown): string {
+  const on = Array.isArray(pages) ? pages.filter((n) => Number.isInteger(n) && n > 0) : [];
+  if (exact !== true || on.length === 0 || !Number.isInteger(total) || (total as number) < 2) {
+    return "";
+  }
+  const first = on.slice(0, 3).join(", ");
+  let where = `page ${on[0]}`;
+  if (on.length === 2) where = `pages ${on[0]} and ${on[1]}`;
+  if (on.length === 3) where = `pages ${on[0]}, ${on[1]} and ${on[2]}`;
+  if (on.length > 3) where = `pages ${first} and others`;
+  return `The words are on ${where}. The file has ${total} pages.`;
+}

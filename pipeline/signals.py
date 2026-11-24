@@ -775,6 +775,30 @@ _TOP = 3000  # an agenda names itself and its meeting's date near the top
 
 
 _BEFORE = 400
+
+
+def _file_pages(meta: dict, pieces: int) -> tuple[list[int | None], bool]:
+    """The file's own page number for each piece of its stored text, and whether it is sure.
+
+    The stored text holds a piece for each page that has words and none for a page that has
+    not, so the pieces are counted against the pages the file is known to have. A piece past
+    the file's own pages is the text of a file attached inside it, and has no page.
+
+    A document stored before the pages with no words were noted gives its numbers as they
+    were, and they are sure only when no page can have been dropped.
+    """
+    pages = meta.get("pages")
+    if not isinstance(pages, int) or isinstance(pages, bool):
+        return list(range(1, pieces + 1)), False
+    noted = meta.get("pages_without_text")
+    if isinstance(noted, list):
+        without = set(noted)
+        own = [number for number in range(1, pages + 1) if number not in without]
+        return [own[i] if i < len(own) else None for i in range(pieces)], True
+    numbers = [number if number <= pages else None for number in range(1, pieces + 1)]
+    return numbers, pieces == pages and not meta.get("members")
+
+
 # A file of one or two pages that a government posts as its agenda is its agenda.
 _AGENDA_PAGES = 2
 
@@ -820,7 +844,8 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
     found: list[tuple[int, str, list[Hit]]] = []
     own = None  # the word that showed an item to be about the government's own computers
     beside: list[str] = []  # the words of rule making in an item that says "data center"
-    for number, (_, passage) in enumerate(_passages(text), 1):
+    passages = _passages(text)
+    for number, (_, passage) in enumerate(passages, 1):
         hits = []
         for hit in rules.keywords.find(passage):
             if not _counts_in_a_file(hit, passage):
@@ -875,6 +900,10 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
     # owner approved this wording on November 24, 2026.
     pages = meta.get("pages")
     past = isinstance(pages, int) and pages > _AGENDA_PAGES and found[0][0] > 1
+    # Where the words are, by the file's own page numbers. The wording above turns on the
+    # first page that has words, which is the agenda even behind a cover that is a picture.
+    numbers, exact = _file_pages(meta, len(passages))
+    on_pages = [numbers[n - 1] for n, _, _ in found if numbers[n - 1] is not None]
     if past:
         summary = (
             f"{_a_or_an(pages)} {pages}-page file that {place} posted for a meeting of "
@@ -903,13 +932,15 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 "page": meta.get("page") or "",
                 "bodies_on_page": [str(b) for b in meta.get("bodies") or []],
                 "date_from": date_from,
-                "pages_with_terms": [number for number, _, _ in found][:MAX_EVIDENCE],
+                "pages_with_terms": on_pages[:MAX_EVIDENCE],
+                "pages_exact": exact,
+                **({"file_pages": pages} if isinstance(pages, int) else {}),
                 "snippets": snippets[:MAX_EVIDENCE],
                 "counties": named,
                 "meeting": _meeting(str(meta["government"]), day, reasons),
                 **_set_aside(own),
                 **_rule_making(beside),
-                **({"past_first_page": True, "file_pages": pages} if past else {}),
+                **({"past_first_page": True} if past else {}),
             },
         )
     )

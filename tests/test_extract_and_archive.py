@@ -103,3 +103,32 @@ def test_archiving_the_same_bytes_twice_keeps_one_file(tmp_path):
 def test_archive_refuses_a_hash_that_does_not_match(tmp_path):
     with pytest.raises(ValueError):
         LocalArchive(tmp_path).put(sha256_hex(b"other"), b"body", "bin")
+
+
+# --- pages with no words --------------------------------------------------------------------------
+
+
+def test_a_pdfs_pages_with_no_words_are_noted_so_its_text_can_be_matched_to_its_pages():
+    """A packet has scanned inserts. Their pages hold no words and add nothing to the text, so
+    the third piece of the text is not the third page. The note says which pages to skip."""
+    out = extract(make_pdf(["Agenda", "", "Minutes", "", "", "Bills"]), "application/pdf")
+    assert out.pages == 6
+    assert out.text == "Agenda\n\nMinutes\n\nBills"
+    assert out.blank_pages == (2, 4, 5)
+    # A file with words on every page says so with an empty note, not with none.
+    assert extract(make_pdf(["One", "Two"]), "application/pdf").blank_pages == ()
+
+
+def test_the_note_of_pages_with_no_words_is_stored_with_the_document(tmp_path):
+    store = LocalArchive(tmp_path)
+    doc = archive(
+        result_for(make_pdf(["Agenda", "", "Bills"]), "application/pdf"), make_source(), store
+    )
+    assert doc.raw_meta["pages"] == 3 and doc.raw_meta["pages_without_text"] == [2]
+    whole = archive(result_for(make_pdf(["One", "Two"]), "application/pdf"), make_source(), store)
+    assert whole.raw_meta["pages_without_text"] == []
+    # A page of a website has no pages to note.
+    page = archive(
+        result_for(b"<html><body><p>Notice</p></body></html>", "text/html"), make_source(), store
+    )
+    assert "pages_without_text" not in page.raw_meta

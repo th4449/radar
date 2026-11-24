@@ -3,6 +3,7 @@ import { Frame } from "./Frame";
 import {
   fieldName,
   longDate,
+  pagesNote,
   problem,
   ruleMakingNote,
   RULE_NAMES,
@@ -112,6 +113,9 @@ function SignalBlock({ signal, source }: { signal: Signal; source: DocumentRef |
       )}
       {ruleMakingNote(x.rule_making?.words) && (
         <p class="note">{ruleMakingNote(x.rule_making?.words)}</p>
+      )}
+      {pagesNote(x.pages_with_terms, x.file_pages, x.pages_exact) && (
+        <p class="note">{pagesNote(x.pages_with_terms, x.file_pages, x.pages_exact)}</p>
       )}
 
       {snippets.map((s) => (

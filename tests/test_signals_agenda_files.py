@@ -380,3 +380,49 @@ def test_a_long_scanned_file_still_says_a_machine_read_it():
         "A 31-page file that Sealy posted for a meeting of November 17, 2026 uses the words "
         '"data center" past its first page. The file is a scan, read by character recognition.'
     )
+
+
+# --- the file's own page numbers ------------------------------------------------------------------
+
+
+def test_the_pages_with_the_terms_are_the_files_own_page_numbers():
+    """A page with no words adds nothing to the stored text. Before November 24, 2026 the pages
+    were counted over the text, so the count ran behind the file: in one real 260-page packet
+    a term on page 170 was given as page 148."""
+    # Five pages. The first and the third hold no words: the text is pages 2, 4 and 5.
+    (draft,) = agenda_file(
+        doc(HEAD, ROUTINE, BILLS, pages=5, pages_without_text=[1, 3]), RULES
+    ).drafts
+    assert draft.extracted["pages_with_terms"] == [5]
+    assert draft.extracted["pages_exact"] is True
+    assert draft.extracted["file_pages"] == 5
+
+
+def test_a_file_stored_before_the_note_was_kept_gives_page_numbers_only_when_they_are_sure():
+    # Three pages and three pieces of text: no page was dropped, so the numbers are the file's.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, BILLS, pages=3), RULES).drafts
+    assert (draft.extracted["pages_with_terms"], draft.extracted["pages_exact"]) == ([3], True)
+    # Five pages and three pieces of text: some page held no words, and which is not known.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, BILLS, pages=5), RULES).drafts
+    assert (draft.extracted["pages_with_terms"], draft.extracted["pages_exact"]) == ([3], False)
+    # A file whose pages were never counted, such as a Word file.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, BILLS), RULES).drafts
+    assert draft.extracted["pages_exact"] is False and "file_pages" not in draft.extracted
+
+
+def test_words_in_a_file_attached_inside_the_pdf_have_no_page_of_the_pdf():
+    # Two pages of the file itself, then the text of a file attached inside it.
+    attached = "File: exhibit.pdf\n" + BILLS
+    (draft,) = agenda_file(
+        doc(HEAD, ROUTINE, attached, pages=2, pages_without_text=[]), RULES
+    ).drafts
+    assert draft.extracted["pages_with_terms"] == []
+    assert draft.extracted["pages_exact"] is True
+
+
+def test_the_wording_for_a_long_file_still_turns_on_the_first_page_that_has_words():
+    # The cover is a picture. The agenda is the first page with words, and it has the term.
+    first = HEAD + "\n10. First reading of a general moratorium ordinance on data centers."
+    (draft,) = agenda_file(doc(first, LONG, pages=6, pages_without_text=[1]), RULES).drafts
+    assert draft.summary.startswith("An agenda that Sealy posted for a meeting of ")
+    assert draft.extracted["pages_with_terms"] == [2]

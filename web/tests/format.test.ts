@@ -4,6 +4,7 @@ import {
   fieldName,
   localDay,
   longDate,
+  pagesNote,
   problem,
   ruleMakingNote,
   signalName,
@@ -51,4 +52,23 @@ test("a reviewer is told which words of rule making sit beside data center, and 
   assert.equal(ruleMakingNote([]), "");
   assert.equal(ruleMakingNote(undefined), "");
   assert.equal(ruleMakingNote("moratorium"), "");
+});
+
+test("a reviewer is told the file's own pages, and nothing where they are not sure", () => {
+  assert.equal(pagesNote([28], 31, true), "The words are on page 28. The file has 31 pages.");
+  assert.equal(pagesNote([4, 5], 26, true), "The words are on pages 4 and 5. The file has 26 pages.");
+  assert.equal(
+    pagesNote([4, 5, 24], 26, true),
+    "The words are on pages 4, 5 and 24. The file has 26 pages.",
+  );
+  assert.equal(
+    pagesNote([4, 171, 174, 176, 180], 260, true),
+    "The words are on pages 4, 171, 174 and others. The file has 260 pages.",
+  );
+  // Not sure, not counted, or a file of one page: nothing is said.
+  assert.equal(pagesNote([3], 5, false), "");
+  assert.equal(pagesNote([3], 5, undefined), "");
+  assert.equal(pagesNote([1], 1, true), "");
+  assert.equal(pagesNote([], 31, true), "");
+  assert.equal(pagesNote([3], undefined, true), "");
 });

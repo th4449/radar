@@ -385,6 +385,12 @@ def archive(
         **({"members": list(extracted.members)} if extracted.members else {}),
         # Text read from a scan by a machine is marked as such, with how sure the machine was.
         **({"ocr": extracted.ocr} if extracted.ocr else {}),
+        # Which pages of a PDF hold no words, so a place in its text can be given as a page.
+        **(
+            {"pages_without_text": list(extracted.blank_pages)}
+            if extracted.blank_pages is not None
+            else {}
+        ),
         **(extra_meta or {}),
     }
     return ArchivedDocument(

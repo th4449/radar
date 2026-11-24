@@ -77,6 +77,10 @@ class Extracted:
     members: tuple[dict, ...] = ()
     # Set when the text was read from a scan by character recognition. See pipeline/ocr.py.
     ocr: dict | None = None
+    # For a PDF with text: the numbers of its pages that hold no words. Such a page adds
+    # nothing to the text, so without this the third piece of the text is not known to be the
+    # third page. Empty when every page has words. None where pages were not noted.
+    blank_pages: tuple[int, ...] | None = None
 
 
 def _zip_kind(body: bytes) -> Kind:
@@ -166,6 +170,7 @@ def _pdf_attachments(body: bytes) -> list[tuple[str, bytes]]:
 
 def _pdf(body: bytes, inside: bool = False) -> Extracted:
     pages = _pdf_pages(body)
+    blank = tuple(number for number, page in enumerate(pages, 1) if not page)
     text = "\n\n".join(p for p in pages if p)
     if inside:  # an embedded file's own embedded files are not opened
         return Extracted("pdf", text, pages=len(pages), needs_ocr=bool(pages) and not text)
@@ -205,9 +210,16 @@ def _pdf(body: bytes, inside: bool = False) -> Extracted:
     read = _scan(body) if count and not text else None
     if read is not None:
         text = "\n\n".join(_tidy(page) for page in read.pages if page.strip())
+        # Only the first pages of a long scan are read. A page not read holds no words here.
+        blank = tuple(
+            number
+            for number in range(1, count + 1)
+            if number > len(read.pages) or not read.pages[number - 1].strip()
+        )
     return Extracted(
         "pdf", text, pages=count, needs_ocr=bool(count) and not text,
         members=tuple(members), ocr=read.facts() if read is not None and text else None,
+        blank_pages=blank if text else None,
     )  # fmt: skip
 
 

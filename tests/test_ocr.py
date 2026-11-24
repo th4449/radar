@@ -157,6 +157,17 @@ def test_a_scan_of_blank_pages_is_still_unread():
 
 
 @needs_tesseract
+def test_a_scans_pages_with_no_words_are_noted_too():
+    # The second page is blank. The text has two pieces, and they are pages 1 and 3.
+    out = extract(make_scan([HEAD, "", ITEMS]))
+    assert (out.pages, out.text.count("\n\n")) == (3, 1)
+    assert out.blank_pages == (2,)
+    assert extract(make_scan([HEAD, ITEMS])).blank_pages == ()
+    # A scan that could not be read has no text to match to pages, and no note.
+    assert extract(make_scan(["", ""])).blank_pages is None
+
+
+@needs_tesseract
 def test_what_is_stored_with_a_scan_says_where_its_text_came_from(tmp_path):
     body = make_scan([HEAD, ITEMS])
     result = FetchResult(
