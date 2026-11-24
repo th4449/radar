@@ -2,6 +2,43 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: the keyword rules tried on 56 Michigan agendas
+
+**Pushed** on the owner's word, as `3f9f2b3`. CI passed.
+
+**No request was made and nothing was changed.** The 56 agenda files of the run by hand were still in the scratch folder. Their text was rebuilt from the files and matched the run's, file for file: 819 pages, 36 governments, meetings of November 4 to December 2, 2026. I read the words around every kind of hit.
+
+| Rule | Hits | Files | What the files were about |
+|---|---|---|---|
+| "data center" | 86 | 15 | 11 a moratorium or a zoning amendment, 3 a named project, 1 unclear |
+| "special land use" | 62 | 11 | a drive-through, a campground, a repair shop, a market, a subdivision. One was a data center overlay, which the direct term had caught |
+| "development agreement" | 2 | 2 | a subdivision, and the data center overlay again |
+| "light industrial", "data processing" | 3 | 1 | the data center overlay again |
+| A project code name | 0 | 0 | none in the sample |
+| A government's own computers, set aside | 0 | 0 | none in the sample |
+
+**What it shows**
+
+- **The direct term missed nothing.** Every file that says "data center" in any form gave a signal: 15 of 15.
+- **"Special land use" alone is noise here.** It is Michigan's ordinary term for a use that needs a hearing. It gave 7 of the run's 23 signals by itself, and none of the 7 was about a data center or anything like one. "Development agreement" gave one more by itself, for a subdivision.
+- **Most Michigan mentions are a town writing its rules, not a project arriving.** 11 of the 15: a moratorium in three townships, a zoning amendment or ordinance in eight governments. The signal's summary says only that the agenda uses the words. It does not tell a reviewer which kind it is.
+- **Three were about a named project:** a line in a list of bills that names a company beside the words, the minutes of a township where one is being built, and a resolution about a university's.
+- **In three of the 15 files the words were not in the agenda itself.** They were in a packet: a list of bills, or the minutes of an earlier meeting. The summary still calls the file an agenda for the meeting of that day.
+- **One township's packet came out of extraction with its letters spaced apart.** The words still matched. The snippet a reviewer would see is hard to read.
+- **One item a person would want and no rule caught:** "Power plant moratorium", on a township board's agenda.
+
+**Not verified**
+
+- 56 files from two weeks is a small sample. The newest file of each page only, and none from the 24 Revize sites or from Ann Arbor's Legistar, whose six agendas gave no hit.
+- The code-name rule and the set-aside for a government's own computers met nothing to try them on.
+- I judged what each hit was about by reading the words around it, not the whole file.
+
+**Proposed, not done.** Each is the owner's: `config/keywords.yaml` came from the build plan.
+
+1. Stop a signal on "special land use" alone.
+2. Tell the reviewer when the words sit beside "moratorium" or "ordinance".
+3. Say "packet" where the words are past the agenda's own pages.
+
 ## November 23, 2026 — M11: the Revize files stay closed, on the owner's word
 
 **The owner said to leave the 24 Revize sites' files closed.** No address is built to pass the robots rule.
