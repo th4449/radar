@@ -107,3 +107,59 @@ export function pagesNote(pages: unknown, total: unknown, exact: unknown): strin
   if (on.length > 3) where = `pages ${first} and others`;
   return `The words are on ${where}. The file has ${total} pages.`;
 }
+
+/** A payer in the QPQ Tracker's data center study whose name a record's company has. */
+export interface StudyMatch {
+  basis: string;
+  study_payers: { name: string; payer_class: string; url: string; states: string[] } | null;
+}
+
+const STUDY_PAGE = /^https:\/\/www\.purchasingpolicy\.org\/entity\/[0-9a-f-]{36}$/;
+
+/** The payer's page in the study, or null. No other address is ever made into a link here. */
+export function studyUrl(url: unknown): string | null {
+  return typeof url === "string" && STUDY_PAGE.test(url) ? url : null;
+}
+
+function listOf(items: string[]): string {
+  if (items.length < 2) return items.join("");
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
+
+/** What a reviewer is told when a record's company has the name of a payer in the study.
+ *
+ * The match is by name and the note says so. It names the study's own label and class for the
+ * payer and decides nothing. Empty when there is no match. */
+export function studyNote(company: unknown, match: StudyMatch | null | undefined): string {
+  const payer = match?.study_payers;
+  if (typeof company !== "string" || !company || !payer) return "";
+  const states = (payer.states ?? []).filter((s) => typeof s === "string" && s);
+  const how =
+    match.basis === "same_name"
+      ? "The match is by name."
+      : "The match is by name, with the legal form set aside.";
+  return (
+    `${company} has the name of a payer in the QPQ Tracker's data center study: ` +
+    `${payer.name}, class "${payer.payer_class}". ` +
+    (states.length ? `The study counts its giving in the filings of ${listOf(states)}. ` : "") +
+    `${how} It is not proof that the two are one company. It says nothing about this site.`
+  );
+}
+
+/** What the public is told on an alert, before and after the payers' names.
+ *
+ * The names are the study's own labels, each linked to its page in the study. The name a
+ * record gave is never shown. */
+export function studyPublicLead(count: number): string {
+  return count === 1
+    ? "A record behind this alert names a company with the same name as a payer in the QPQ " +
+        "Tracker's study of who paid for the data centers:"
+    : "Records behind this alert name companies with the same names as payers in the QPQ " +
+        "Tracker's study of who paid for the data centers:";
+}
+
+export const STUDY_PUBLIC_REST =
+  "The study counts companies' political giving as state filings report it. The match is by " +
+  "name. It does not show that the two are one company, and it does not show that any giving " +
+  "had to do with this site.";
+

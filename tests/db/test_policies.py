@@ -39,6 +39,8 @@ TABLES = [
     "corrections",
     "alert_sends",
     "email_runs",
+    "study_payers",
+    "entity_study_payers",
 ]
 
 
@@ -142,7 +144,7 @@ def test_public_view_exposes_no_reviewer_or_subscriber_columns(db):
     }
     assert cols == {
         "alert_id", "site_id", "headline", "body", "published_at", "confirmed_by_count",
-        "status", "state", "county_fips", "label", "geometry", "sources",
+        "status", "state", "county_fips", "label", "geometry", "sources", "study_payers",
     }  # fmt: skip
 
 

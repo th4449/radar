@@ -34,7 +34,7 @@ import psycopg
 from collectors.base import ArchiveStore, Fetcher, LayoutChanged, NotPermitted
 from collectors.hosted_archive import NotConfigured as ArchiveNotConfigured
 from collectors.hosted_archive import archive_from_env
-from pipeline import tceq_applications
+from pipeline import study, tceq_applications
 from pipeline.config import CONFIG_DIR, ScoringFile, load_sources
 from pipeline.entities import canonical_name, match_key
 from pipeline.geocode import ArchivedLookup
@@ -206,6 +206,11 @@ def run(
         # Sites are grouped and scored on every run, new documents or not: scores decay.
         with conn.transaction():
             summary.detail["sites"] = update_sites(conn, as_of=as_of, scoring=scoring)
+        # Which companies on record have a payer's name. Rebuilt on every run, like the sites.
+        # A copy of the study's page that cannot be read leaves the list as it was. The
+        # collector's own run has already failed on that copy, which is what a person sees.
+        with conn.transaction():
+            summary.detail["study"] = study.update(conn, store)
         if triager is not None:
             summary.detail["triage"] = {
                 "calls": triager.calls,

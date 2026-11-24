@@ -2,7 +2,15 @@ import { useEffect, useState } from "preact/hooks";
 import { AlertMap } from "./AlertMap";
 import { fetchAlert, pointOf, recordCount, safeUrl, type PublicAlert } from "../lib/alerts";
 import { idFrom } from "../lib/choices";
-import { localDay, longDate, problem, signalName } from "../lib/format";
+import {
+  localDay,
+  longDate,
+  problem,
+  signalName,
+  STUDY_PUBLIC_REST,
+  studyPublicLead,
+  studyUrl,
+} from "../lib/format";
 import { countyPath, stateByCode, whereLine } from "../lib/places";
 import { configured } from "../lib/supabase";
 
@@ -35,6 +43,29 @@ function Records({ alert }: { alert: PublicAlert }) {
         );
       })}
     </ol>
+  );
+}
+
+/** Payers in the QPQ Tracker's study whose name a record's company has. Nothing when none. */
+function Study({ alert }: { alert: PublicAlert }) {
+  const payers = (alert.study_payers ?? []).filter((p) => p.name && studyUrl(p.url));
+  if (payers.length === 0) return null;
+  return (
+    <>
+      <h2>In the QPQ Tracker's study</h2>
+      <p>
+        {studyPublicLead(payers.length)}{" "}
+        {payers.map((payer, i) => (
+          <>
+            {i > 0 && (i === payers.length - 1 ? " and " : ", ")}
+            <a href={studyUrl(payer.url)!} rel="noopener noreferrer">
+              {payer.name}
+            </a>
+          </>
+        ))}
+        . {STUDY_PUBLIC_REST}
+      </p>
+    </>
   );
 }
 
@@ -96,6 +127,7 @@ export default function AlertPage() {
         goes to the agency that published the record.
       </p>
       <Records alert={alert} />
+      <Study alert={alert} />
 
       <h2>Where</h2>
       {pointOf(alert) ? (

@@ -299,6 +299,18 @@ sources:
     verified_at: 2026-11-22
     notes: Read again on 2026-11-22. FracTracker's terms now ask for agreement, limit use to what fits its mission and require citation. Esri's terms bar harvesting from the map's service. Nothing is taken by program. Counts taken earlier, no raw data in this repository. The owner agreed to its terms on 2026-11-22 and on 2026-11-23 said to use the data and gave the spreadsheet's address. One sheet was downloaded once that day and is kept outside this repository. It is used to check the backtest's list of known projects. Every public use cites FracTracker Alliance. See docs/sources/us_fractracker.md.
 
+  - id: us_qpq_data_center_payers
+    state: US
+    name: QPQ Tracker study of who paid for the data centers, its list of payers
+    url: https://www.purchasingpolicy.org/data-centers
+    layer: baseline
+    method: manual
+    intended_method: http
+    cadence: monthly
+    robots_status: allowed
+    verified_at: 2026-11-24
+    notes: Milestone M12. A list of companies, not of sites. One public page holds a table of the payers the study counts. The radar checks whether a company it has on record has the same name as a payer. The site's robots file allows the page and bars /api/, so the site's API is not called. No endpoint of that API returns the list in any case. The site has no terms of use page. The owner said on 2026-11-24 to build from the page. The method stays manual until the owner says to run it. See docs/sources/us_qpq_data_center_payers.md.
+
   - id: us_more_than_just_parks
     state: US
     name: More Than Just Parks data center tracker

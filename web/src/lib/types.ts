@@ -1,3 +1,5 @@
+import type { StudyMatch } from "./format";
+
 export type ReviewerStatus = "pending" | "approved" | "suspended";
 export type SiteStatus = "candidate" | "in_review" | "confirmed" | "rejected";
 export type Decision = "confirm" | "reject" | "unsure";
@@ -62,7 +64,7 @@ export interface Signal {
   confidence: number | null;
   county_fips: string | null;
   extracted: Record<string, unknown> & { reasons?: Reason[] };
-  entities: { name: string; kind: string } | null;
+  entities: { name: string; kind: string; entity_study_payers?: StudyMatch[] } | null;
 }
 
 export interface DocumentRef {

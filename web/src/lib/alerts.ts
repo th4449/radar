@@ -26,11 +26,13 @@ export interface PublicAlert {
   label: string;
   geometry: { type: string; coordinates: unknown } | null;
   sources: SourceRef[];
+  /** Payers in the QPQ Tracker's study whose name a record's company has. Often empty. */
+  study_payers: { name: string; url: string }[];
 }
 
 const COLUMNS =
   "alert_id, site_id, headline, body, published_at, confirmed_by_count, status, state, " +
-  "county_fips, label, geometry, sources";
+  "county_fips, label, geometry, sources, study_payers";
 
 export async function fetchAlerts(where: { state?: string; county?: string }): Promise<PublicAlert[]> {
   let query = supabase.from("public_alerts").select(COLUMNS);

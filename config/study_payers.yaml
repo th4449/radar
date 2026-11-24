@@ -1,0 +1,62 @@
+# Names for the payers in the QPQ Tracker's data center study. See pipeline/study.py and
+# docs/sources/us_qpq_data_center_payers.md.
+#
+# The radar checks whether a company on record has the same name as a payer. The study gives
+# each payer one label, and some labels join two names: "CMS / Consumers Energy". This file
+# lists the other names a payer goes by, so a record that says "Consumers Energy Company" meets
+# its payer.
+#
+# Matching is on the whole name after normalizing: capitals, no punctuation. A name never
+# matches a longer name that merely contains it. A legal form at the end is set aside, so
+# "Georgia Power" meets "Georgia Power Company".
+#
+# Rules for this file:
+#   - `payer` is the study's label, spelled as the study spells it.
+#   - Add a name only when the study's own page writes it for that payer: a part of the label
+#     or a filer the page lists under the payer. `where` says which.
+#   - No initials. "CMS" and "APS" are also other things.
+#   - Never a person's name and never a PAC's name.
+#   - A subsidiary the study's page does not name is not added here without the owner's word.
+other_names:
+  - payer: Southern Company / Georgia Power
+    names: [Southern Company, Georgia Power]
+    where: the two parts of the label
+  - payer: Exelon (ComEd, PECO)
+    names: [Exelon, ComEd, PECO]
+    where: the parts of the label
+  - payer: APS / Pinnacle West
+    names: [Pinnacle West]
+    where: a part of the label
+  - payer: CMS / Consumers Energy
+    names: [Consumers Energy]
+    where: a part of the label
+  - payer: NiSource / NIPSCO
+    names: [NiSource, NIPSCO]
+    where: the two parts of the label
+  - payer: ALLETE (Minnesota Power)
+    names: [ALLETE, Minnesota Power]
+    where: the parts of the label
+  - payer: PG&E
+    names: [Pacific Gas and Electric]
+    where: a filer the page lists under the payer
+  - payer: Google
+    names: [Google Client Services]
+    where: a filer the page lists under the payer
+  - payer: Meta
+    names: [Meta Platforms]
+    where: a filer the page lists under the payer
+  - payer: Amazon
+    names: [Amazon.com, Amazon.com Services]
+    where: filers the page lists under the payer
+  - payer: Oncor
+    names: [Oncor Electric Delivery]
+    where: a filer the page lists under the payer
+
+# Names that are also ordinary words. A record meets one of these only when it gives the name
+# alone, with no legal form: "Switch" meets the payer and "Switch LLC" does not, because any
+# company can be named Switch LLC. Look at this list again when the study gains a one-word name.
+whole_name_only:
+  - Switch
+  - Meta
+  - Oracle
+  - Amazon

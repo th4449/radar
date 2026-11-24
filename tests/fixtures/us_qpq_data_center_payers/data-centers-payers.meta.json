@@ -1,0 +1,17 @@
+{
+  "source_id": "us_qpq_data_center_payers",
+  "url": "https://www.purchasingpolicy.org/data-centers",
+  "final_url": "https://www.purchasingpolicy.org/data-centers",
+  "retrieved_at": "2026-11-24T16:16:24+00:00",
+  "sha256": "cc1d26cfa4be8ea25a5e6d43ee16dec480fea659d9101737d6c81c6c3e742cba",
+  "bytes": 26477,
+  "content_type": "text/html; charset=utf-8",
+  "etag": "W/\"d36rab2r1tuxf\"",
+  "last_modified": null,
+  "kind": "html",
+  "original_sha256": "a0d4c1a9f410f99346c4ed1f071118d7de7fa3a21ba18cdaa282ecb1d6f4ffb5",
+  "original_bytes": 1393885,
+  "trimmed": true,
+  "rows_kept": 61,
+  "note": "The real page is 1.4 MB and also lists officeholders, candidates, measures and votes. This fixture keeps the page's title and its table of payers, as the page writes them, and nothing else. Every row of that table is kept."
+}

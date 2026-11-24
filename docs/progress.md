@@ -2,6 +2,43 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M12: the money cross-reference, built and not switched on
+
+**Two departures from the plan, both put to the owner first.** The owner said to build it this way.
+
+- **The study's page, not its API.** The plan says to match through the QPQ Tracker's API. The site's robots file bars `/api/` to every agent, and no endpoint returns the list of payers. The study's page is allowed and holds the whole list.
+- **Names, not parent companies.** The plan says to match resolved parent companies. The radar has none: `entities.parent_entity_id` has been empty since M4. Matching is on a company's name as a record gives it.
+
+**Built**
+
+- **Source note** `docs/sources/us_qpq_data_center_payers.md`: the robots file, the API notes, the missing terms page and what the page holds.
+- **Collector** `collectors/us/qpq_data_center_payers.py`. One page. It reads the table of 61 payers: name, class, direct giving, contributions, states and the address of each payer's page. A new copy is stored only when the table says something new. A changed layout fails the run and keeps the page for a person.
+- **Matching** `pipeline/study.py`. A company meets a payer when the whole name is the same, with a legal form at the end set aside. A longer name never matches.
+- **Other names** `config/study_payers.yaml`. 11 payers have other names, 17 names in all. Each is a part of the payer's label or a filer the page lists under it. Four names that are ordinary words match only when they stand alone: Switch, Meta, Oracle and Amazon.
+- **Two tables** `study_payers` and `entity_study_payers`, rebuilt from the newest stored copy on every processing run. Policy tests were written first. Approved reviewers read them. No one writes through the app. The anonymous key reads neither.
+- **The review page** tells the reviewer a company has a payer's name, how the names met, the study's class for the payer and the states, with a link.
+- **The public alert** gets a short section when there is a match: the payer's name as the study writes it, a link to its page and three sentences on what a match does not show. The public view never gives the name a record gave.
+- **The methodology page** has a section on it.
+
+**Verified live**
+
+- One request for the study's page, through `collectors.capture`, on November 24. The radar's fetcher read the robots file and went on. The table was in the page as served, so no browser is needed.
+- The 61 rows add up to the page's own figures: $148,392,563 and 16,389 contributions.
+- On the local database's API: the review page's query answers, the public view gives the new column to the anonymous key and the payers table refuses it.
+
+**Tests.** 1,351 pass, 93 of them new. The web tests are 17, and the site builds.
+
+**Not verified, or not done**
+
+- **Nothing is matched yet.** No copy of the page is stored, the local database holds no company, and the hosted database was not read. The matching is tested on the real list with names I wrote.
+- **The migration is not on the hosted database.** The alert page now asks for the new column. Apply the migration before the site is built against that database.
+- **The wording on the review page, the alert and the methodology page is mine.** The owner has not approved it.
+- **Most real matches will be missed.** A project filed under a new LLC does not meet its parent. Subsidiaries the study's page does not name are not listed: CenterPoint Energy Houston Electric, AEP Texas, DTE Electric, Amazon Data Services and others. Adding them is the owner's call.
+- 35 of the 61 payers are utilities. A utility named in an interconnection record says little about who is building.
+- How often the study's list changes, and whether the site answers GitHub's servers.
+- Neither page was looked at in a browser with a real match.
+- No workflow file and no place in the registry, as with Michigan's agendas. Both come when the owner says to run it.
+
 ## November 24, 2026 — M11: a second run by hand, and three more faults fixed
 
 **Pushed** on the owner's word, as `552734f`. CI passed.

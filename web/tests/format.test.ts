@@ -8,6 +8,10 @@ import {
   problem,
   ruleMakingNote,
   signalName,
+  STUDY_PUBLIC_REST,
+  studyNote,
+  studyPublicLead,
+  studyUrl,
 } from "../src/lib/format.ts";
 
 test("a date is written out and never shifted by a time zone", () => {
@@ -72,3 +76,52 @@ test("a reviewer is told the file's own pages, and nothing where they are not su
   assert.equal(pagesNote([], 31, true), "");
   assert.equal(pagesNote([3], undefined, true), "");
 });
+
+const ONCOR = {
+  name: "Oncor",
+  payer_class: "Utility",
+  url: "https://www.purchasingpolicy.org/entity/139640b7-37f0-4bea-a87a-ab0d38580032",
+  states: ["TX"],
+};
+
+test("a reviewer is told a company has a payer's name, how the names met, and no more", () => {
+  assert.equal(
+    studyNote("Oncor Electric Delivery Company LLC", {
+      basis: "same_name_legal_form_aside",
+      study_payers: ONCOR,
+    }),
+    "Oncor Electric Delivery Company LLC has the name of a payer in the QPQ Tracker's data " +
+      'center study: Oncor, class "Utility". The study counts its giving in the filings of TX. ' +
+      "The match is by name, with the legal form set aside. It is not proof that the two are " +
+      "one company. It says nothing about this site.",
+  );
+  assert.equal(
+    studyNote("Google", {
+      basis: "same_name",
+      study_payers: { ...ONCOR, name: "Google", payer_class: "Hyperscaler", states: ["CA", "MI", "TX"] },
+    }),
+    "Google has the name of a payer in the QPQ Tracker's data center study: Google, class " +
+      '"Hyperscaler". The study counts its giving in the filings of CA, MI and TX. The match ' +
+      "is by name. It is not proof that the two are one company. It says nothing about this site.",
+  );
+  // No company, no match or a match whose payer could not be read: nothing is said.
+  assert.equal(studyNote("Google", null), "");
+  assert.equal(studyNote("Google", { basis: "same_name", study_payers: null }), "");
+  assert.equal(studyNote(undefined, { basis: "same_name", study_payers: ONCOR }), "");
+});
+
+test("only a payer's page in the study is ever linked", () => {
+  assert.equal(studyUrl(ONCOR.url), ONCOR.url);
+  assert.equal(studyUrl("https://example.org/entity/139640b7-37f0-4bea-a87a-ab0d38580032"), null);
+  assert.equal(studyUrl("https://www.purchasingpolicy.org/entity/oncor"), null);
+  assert.equal(studyUrl("javascript:alert(1)"), null);
+  assert.equal(studyUrl(undefined), null);
+});
+
+test("the public is told the match is by name and proves nothing about the site", () => {
+  assert.match(studyPublicLead(1), /^A record behind this alert names a company with the same name/);
+  assert.match(studyPublicLead(2), /^Records behind this alert name companies with the same names/);
+  assert.match(STUDY_PUBLIC_REST, /The match is by name\./);
+  assert.match(STUDY_PUBLIC_REST, /does not show that any giving had to do with this site\.$/);
+});
+

@@ -9,6 +9,8 @@ import {
   RULE_NAMES,
   signalName,
   STATUS_NAMES,
+  studyNote,
+  studyUrl,
 } from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -31,7 +33,8 @@ async function load(id: number): Promise<Loaded> {
     .from("signals")
     .select(
       "id, document_id, signal_type, event_date, summary, confidence, county_fips, extracted," +
-        " entities(name, kind)",
+        " entities(name, kind, entity_study_payers(basis," +
+        " study_payers(name, payer_class, url, states)))",
     )
     .eq("site_id", id)
     .order("event_date", { ascending: true })
@@ -117,6 +120,21 @@ function SignalBlock({ signal, source }: { signal: Signal; source: DocumentRef |
       {pagesNote(x.pages_with_terms, x.file_pages, x.pages_exact) && (
         <p class="note">{pagesNote(x.pages_with_terms, x.file_pages, x.pages_exact)}</p>
       )}
+      {(signal.entities?.entity_study_payers ?? []).map((match) => {
+        const note = studyNote(signal.entities?.name, match);
+        const page = studyUrl(match.study_payers?.url);
+        if (!note) return null;
+        return (
+          <p class="note">
+            {note}{" "}
+            {page && (
+              <a href={page} target="_blank" rel="noreferrer">
+                Open the payer's page in the study
+              </a>
+            )}
+          </p>
+        );
+      })}
 
       {snippets.map((s) => (
         <blockquote>{s}</blockquote>

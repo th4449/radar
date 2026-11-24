@@ -196,6 +196,34 @@ class EntitiesFile(_Strict):
         return v
 
 
+# --- study_payers.yaml ------------------------------------------------------------------------
+
+
+class OtherNames(_Strict):
+    payer: str = Field(min_length=1)
+    names: list[str] = Field(min_length=1)
+    where: str = Field(min_length=1)
+
+
+class StudyPayersFile(_Strict):
+    other_names: list[OtherNames]
+    whole_name_only: list[str]
+
+    @model_validator(mode="after")
+    def _distinct(self) -> StudyPayersFile:
+        payers = [entry.payer for entry in self.other_names]
+        if len(set(payers)) != len(payers):
+            raise ValueError("a payer is listed twice")
+        names = [name for entry in self.other_names for name in entry.names]
+        if any(not name.strip() for name in names + self.whole_name_only):
+            raise ValueError("an empty name")
+        if len({name.casefold() for name in names}) != len(names):
+            raise ValueError("a name is listed for two payers, or twice")
+        if len(set(self.whole_name_only)) != len(self.whole_name_only):
+            raise ValueError("a name appears twice in whole_name_only")
+        return self
+
+
 # --- triage.yaml ------------------------------------------------------------------------------
 
 
@@ -349,6 +377,10 @@ def load_keywords(config_dir: Path | None = None) -> KeywordsFile:
 
 def load_entities(config_dir: Path | None = None) -> EntitiesFile:
     return EntitiesFile.model_validate(_read("entities.yaml", config_dir))
+
+
+def load_study_payers(config_dir: Path | None = None) -> StudyPayersFile:
+    return StudyPayersFile.model_validate(_read("study_payers.yaml", config_dir))
 
 
 def load_triage(config_dir: Path | None = None) -> TriageFile:
