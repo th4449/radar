@@ -775,6 +775,17 @@ _TOP = 3000  # an agenda names itself and its meeting's date near the top
 
 
 _BEFORE = 400
+# A file of one or two pages that a government posts as its agenda is its agenda.
+_AGENDA_PAGES = 2
+
+
+def _a_or_an(number: int) -> str:
+    """ "A 31-page file", "An 8-page file", "An 11-page file": as the number is said aloud."""
+    digits = str(number)
+    said_with_a_vowel = digits.startswith("8") or (
+        len(digits) % 3 == 2 and digits[:2] in ("11", "18")
+    )
+    return "An" if said_with_a_vowel else "A"
 
 
 def _counts_in_a_file(hit: Hit, passage: str) -> bool:
@@ -859,22 +870,35 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 snippets.append(piece)
     place = place_name(str(meta["government"]))
     terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
+    # A packet binds the agenda to earlier minutes and to lists of bills. Where the words are
+    # past the first page of a long file, the summary does not call the file an agenda.
+    pages = meta.get("pages")
+    past = isinstance(pages, int) and pages > _AGENDA_PAGES and found[0][0] > 1
+    if past:
+        summary = (
+            f"{_a_or_an(pages)} {pages}-page file that {place} posted for a meeting of "
+            f"{_long_date(day)} uses the words {terms} past its first page."
+        )
+        reference = f"{place}, file posted for the meeting of {_long_date(day)}"
+    else:
+        summary = (
+            f"An agenda that {place} posted for a meeting of {_long_date(day)} uses "
+            f"the words {terms}."
+        )
+        reference = f"{place}, agenda for the meeting of {_long_date(day)}"
     out.drafts.append(
         Draft(
             signal_type="agenda_keyword",
             key=f"agenda_file:{doc.url.split('?')[0]}",
             event_date=day,
-            summary=(
-                f"An agenda that {place} posted for a meeting of {_long_date(day)} uses "
-                f"the words {terms}."
-            ),
+            summary=summary,
             confidence=rules.how_sure(reasons),
             county_fips=fips,
             party=None,
             party_kind=None,
             extracted={
                 "reasons": reasons,
-                "reference": f"{place}, agenda for the meeting of {_long_date(day)}",
+                "reference": reference,
                 "page": meta.get("page") or "",
                 "bodies_on_page": [str(b) for b in meta.get("bodies") or []],
                 "date_from": date_from,
@@ -884,6 +908,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 "meeting": _meeting(str(meta["government"]), day, reasons),
                 **_set_aside(own),
                 **_rule_making(beside),
+                **({"past_first_page": True, "file_pages": pages} if past else {}),
             },
         )
     )

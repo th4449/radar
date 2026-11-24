@@ -2,6 +2,24 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: a long file with the words past its first page is not called an agenda
+
+**Pushed** on the owner's word, as `5cc8904`. CI passed.
+
+**On the owner's word. The wording is proposed and waits for the owner.** It is in the summary a subscriber would read. Nothing uses it yet: both Michigan sources are `manual` and the site is not public.
+
+- A packet binds the agenda to the minutes of earlier meetings and to lists of bills. In three of the 15 Michigan files that said "data center", the words were there and nowhere on the agenda. The summary called each an agenda for that day's meeting.
+- **The rule:** where a file has more than two pages and the words are not on its first page, the summary does not call it an agenda. It says what the record shows.
+- **The proposed wording:** *A 31-page file that Augusta Charter Township posted for a meeting of November 24, 2026 uses the words "data center" past its first page.* The reference under it reads *Augusta Charter Township, file posted for the meeting of November 24, 2026.*
+- Everything else reads as before: a file of one or two pages, a long file with the words on its first page, and a file whose pages were not counted.
+- The same records are signals, as sure as before and held to the same meeting. A test holds that.
+- Tests came first: 12 new. 1,238 pass.
+- **On the 56 Michigan agendas: 3 of the 16 signals take the new wording,** the three that were found by reading: a list of bills, and two packets' minutes.
+
+**Why no page number.** The stored text drops a page that has no words, so the count of pages with words can run behind the file's own page numbers. In 2 of the 52 PDF files it does. "Past its first page" is true either way. The same count is what a reviewer sees as the pages with the terms. That is not fixed.
+
+**Not verified:** the rule on Texas agendas. A long Texas agenda that takes up a matter on its third page would read as a file, which is true and says less. How many do is not known: the stored documents are in the hosted database.
+
 ## November 24, 2026 — M11: an ordinance's definition of a data center is no longer set aside
 
 **Pushed** on the owner's word, as `36460d6`. CI passed.

@@ -10,6 +10,8 @@ import datetime as dt
 import hashlib
 from pathlib import Path
 
+import pytest
+
 from pipeline.signals import PROCESSORS, Doc, Rules, agenda_file, process, read_listings
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -310,3 +312,71 @@ def test_a_file_that_holds_only_an_ordinances_definition_of_a_data_center_is_a_s
     assert out.own_computers == 0
     assert [r["term"] for r in draft.extracted["reasons"]] == ["data center"]
     assert "set_aside" not in draft.extracted
+
+
+# --- a long file, with the words past its first page ----------------------------------------------
+
+BILLS = "CHECK REGISTER\n29853 EXAMPLE EQUITIES - DATA CENTER escrow refund 6,000.00"
+LONG = "\n\n".join(["Minutes of the last meeting, continued."] * 4)
+
+
+def test_a_long_file_with_the_words_past_its_first_page_is_not_called_an_agenda():
+    """A packet binds the agenda to the minutes of earlier meetings and to lists of bills.
+
+    On 56 real Michigan agendas, three of the 15 files that said "data center" said it there
+    and nowhere on the agenda. The summary called each an agenda for that day's meeting. Now it
+    says what the record shows: a file of so many pages, with the words past its first page.
+    """
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, LONG, BILLS, pages=31), RULES).drafts
+    assert draft.summary == (
+        "A 31-page file that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"data center" past its first page.'
+    )
+    assert draft.extracted["reference"] == "Sealy, file posted for the meeting of November 17, 2026"
+    assert draft.extracted["past_first_page"] is True
+    assert draft.extracted["file_pages"] == 31
+    # The same record is a signal, as sure as before and held to the same meeting.
+    (plain,) = agenda_file(doc(HEAD, ROUTINE, LONG, BILLS), RULES).drafts
+    assert (draft.confidence, draft.key, draft.event_date) == (
+        plain.confidence,
+        plain.key,
+        plain.event_date,
+    )
+    assert draft.extracted["meeting"] == plain.extracted["meeting"]
+
+
+def test_a_long_file_with_the_words_on_its_first_page_is_an_agenda_as_before():
+    first = HEAD + "\n10. First reading of a general moratorium ordinance on data centers."
+    (draft,) = agenda_file(doc(first, LONG, BILLS, pages=52), RULES).drafts
+    assert draft.summary.startswith("An agenda that Sealy posted for a meeting of ")
+    assert "past_first_page" not in draft.extracted
+    assert draft.extracted["reference"] == "Sealy, agenda for the meeting of November 17, 2026"
+
+
+def test_a_file_of_one_or_two_pages_is_an_agenda_wherever_the_words_are():
+    (draft,) = agenda_file(doc(HEAD + "\n" + ROUTINE, CENTER, pages=2), RULES).drafts
+    assert draft.summary.startswith("An agenda that Sealy posted for a meeting of ")
+    # A file whose pages were not counted reads as it did.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, CENTER), RULES).drafts
+    assert draft.summary.startswith("An agenda that Sealy posted for a meeting of ")
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, CENTER, pages=None), RULES).drafts
+    assert draft.summary.startswith("An agenda that Sealy posted for a meeting of ")
+
+
+@pytest.mark.parametrize(
+    ("pages", "start"),
+    [(3, "A 3-page"), (8, "An 8-page"), (11, "An 11-page"), (18, "An 18-page"),
+     (80, "An 80-page"), (110, "A 110-page"), (260, "A 260-page"), (800, "An 800-page")],
+)  # fmt: skip
+def test_the_count_of_pages_reads_as_a_person_would_say_it(pages, start):
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, LONG, BILLS, pages=pages), RULES).drafts
+    assert draft.summary.startswith(start + " file that Sealy posted for a meeting of ")
+
+
+def test_a_long_scanned_file_still_says_a_machine_read_it():
+    read = {"engine": "tesseract 5.5.4", "confidence": 94.2, "doubtful_words": 6, "words": 310}
+    (draft,) = process(doc(HEAD, ROUTINE, LONG, BILLS, pages=31, ocr=read), RULES).drafts
+    assert draft.summary == (
+        "A 31-page file that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"data center" past its first page. The file is a scan, read by character recognition.'
+    )
