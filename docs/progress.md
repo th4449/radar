@@ -2,6 +2,47 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: a second run by hand, and three more faults fixed
+
+**Pushed** on the owner's word, as `552734f`. CI passed.
+
+**On the owner's word, nothing stored.** The 101 pages cleared now, up to two meeting pages from a list and one agenda file from each. Ann Arbor's Legistar was left out: nothing in that collector changed.
+
+| | First run | Second run |
+|---|---|---|
+| Pages cleared | 145 | 101 |
+| Pages read | 142 | 101 |
+| Newest agenda matches the second read's | 111 | 79 |
+| Differs | 22 | 13 |
+| No agenda file on the list | 9 | 9, of which 7 are lists of meeting pages |
+| Sites that refused | 25 | 0 |
+| Files and agenda pages kept | 56 | 62 |
+| Draft signals | 23 | 16 |
+
+**What the run confirmed**
+
+- The date fixes, where their pages are still read: Ganges Township's agenda is dated, and Lodi Township's mistyped 2027 is no longer its newest.
+- **Novi is read.** Its two recent council agendas were kept from their own pages.
+- **Heath Township is read.** Its file was fetched through its meeting page.
+- **Plainwell is read:** three pages, three files. Its lists link PDFs. The second read's note that they end in `.aspx` was wrong, and so was my table that left it out.
+- Otsego's file on another host and Lyndon Township's pages were named in the run log and not asked for.
+- The 16 signals are the same 16 the keyword trial left. Three take the long-file wording.
+- No fetched file carried a meeting date outside October 2026 to January 2027.
+
+**Three more faults, fixed after the run, with tests. Not run again.**
+
+- **A page's base address was ignored.** Allegan's page names one in its head, so its links are at the site's root and not beside the page. Each of its files was a 404 on both runs. My fixture had cut the base address out and my test held the wrong address. Both are corrected.
+- **A link that leads to the file itself was kept as nothing.** Holly's list links a download address with no file type. The collector followed it as a meeting's page and kept an empty list. Such an answer is now kept as the agenda. It is tested on a made-up site, not on Holly's.
+- **The labels of buttons were kept as words of a page.** One of Novi's agendas began with three of them.
+
+**Not verified**
+
+- The three fixes above, live.
+- Nine of the first run's 22 differing pages. They are on Revize sites that are now closed.
+- The 13 pages that still differ are not fixed: packets that nothing calls an agenda, names with no day or no year, and Novi's corridor authority, whose list holds old packet files and so is not followed.
+
+**Cost:** about 230 requests by the radar's fetcher: 101 pages, 6 meeting pages, 62 files and pages kept, 4 that failed, and a robots request for each host. Worked out from the report.
+
 ## November 24, 2026 — M11: a list that gives each meeting a page of its own is followed
 
 **Pushed** on the owner's word, as `35c53d8`. CI passed.

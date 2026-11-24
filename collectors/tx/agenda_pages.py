@@ -48,6 +48,7 @@ from defusedxml.ElementTree import fromstring as parse_xml
 from selectolax.lexbor import LexborHTMLParser, LexborNode
 
 from collectors.base import Collector, FetchResult, LayoutChanged, Reduced
+from pipeline.extract import sniff
 
 # Files the pipeline can read. A .doc file is listed and not fetched.
 _FILE = re.compile(r"\.(pdf|docx)$", re.IGNORECASE)
@@ -291,6 +292,17 @@ def _address(base: str, href: str) -> str:
     return urljoin(base, href).split("#")[0].replace(" ", "%20")
 
 
+def _base(tree: LexborHTMLParser, page_url: str) -> str:
+    """What a page's links are written against: the base address its head names, or its own.
+
+    A site builder can set this to the site's root, so that a link with no folder is at the
+    root and not beside the page.
+    """
+    named = tree.css_first("base[href]")
+    href = (named.attributes.get("href") or "").strip() if named is not None else ""
+    return urljoin(page_url, href) if href else page_url
+
+
 def _words(node: LexborNode | None) -> str:
     return " ".join(node.text(separator=" ").split()) if node is not None else ""
 
@@ -413,13 +425,14 @@ def find_agenda_links(body: bytes, page_url: str, today: dt.date) -> list[Agenda
     tree = LexborHTMLParser(body)
     title = _words(tree.css_first("title"))
     about_meetings = bool(_MEETINGS.search(title + " " + unquote(urlsplit(page_url).path)))
+    base = _base(tree, page_url)
     found: list[_Candidate] = []
     seen: set[str] = set()
     for a in tree.css("a[href]"):
         href = (a.attributes.get("href") or "").strip()
         if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
             continue
-        url = _address(page_url, href)
+        url = _address(base, href)
         parts = urlsplit(url)
         if parts.scheme not in ("http", "https") or url in seen or _in_chrome(a):
             continue
@@ -503,12 +516,13 @@ def find_meeting_links(body: bytes, page_url: str, today: dt.date) -> list[Meeti
     day there too. A link that says it is the minutes or a cancellation is left.
     """
     tree = LexborHTMLParser(body)
+    base = _base(tree, page_url)
     found: dict[str, MeetingLink] = {}
     for a in tree.css("a[href]"):
         href = (a.attributes.get("href") or "").strip()
         if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
             continue
-        url = _address(page_url, href)
+        url = _address(base, href)
         parts = urlsplit(url)
         if parts.scheme not in ("http", "https") or _in_chrome(a) or url in found:
             continue
@@ -537,7 +551,7 @@ def page_text(body: bytes) -> str:
     main = tree.css_first("main") or tree.css_first("article") or tree.body
     if main is None:
         return ""
-    for chrome in main.css("script, style, noscript, nav, header, footer, form, iframe"):
+    for chrome in main.css("script, style, noscript, nav, header, footer, form, iframe, button"):
         chrome.decompose()
     lines = (" ".join(line.split()) for line in main.text(separator="\n").splitlines())
     return "\n".join(line for line in lines if line)
@@ -731,6 +745,10 @@ class AgendaPages(Collector):
         agenda links each packet item, and those are not the agenda.
         """
         if result.url not in self._meeting_read:
+            if sniff(result.body, result.content_type) in ("pdf", "docx"):
+                # The link led to the agenda file itself, by an address with no file type.
+                self._meeting_read[result.url] = ("file", [])
+                return self._meeting_read[result.url]
             links = [
                 link
                 for link in find_agenda_links(result.body, result.final_url, self.today)
@@ -871,6 +889,8 @@ class AgendaPages(Collector):
 
     def reduce(self, result: FetchResult) -> Reduced | None:
         if result.url in self._meetings:
+            if self._meeting(result)[0] == "file":
+                return None  # stored as it is, like any agenda file
             return self._reduce_meeting(result)
         page = self.pages.get(result.url) or self._feeds.get(result.url)
         if page is None:
@@ -898,12 +918,26 @@ class AgendaPages(Collector):
         return Reduced(body, "application/json", meta)
 
     def content_key(self, result: FetchResult) -> str | None:
+        if result.url in self._meetings and self._meeting(result)[0] == "file":
+            return None
         if result.url in self.pages or result.url in self._feeds or result.url in self._meetings:
             # The list of agenda links. The rest of a page changes without meaning anything.
             return hashlib.sha256(self.reduce(result).body).hexdigest()
         return None
 
     def facts(self, result: FetchResult) -> dict | None:
+        if result.url in self._meetings:  # a meeting's link that was the agenda file itself
+            page, meeting = self._meetings[result.url]
+            return {
+                "record": "agenda_file",
+                "government": page.government,
+                "counties": list(page.counties),
+                "bodies": list(page.bodies),
+                "page": page.url,
+                "link_text": meeting.text,
+                "meeting_date": meeting.date.isoformat(),
+                "date_from": meeting.date_from,
+            }
         page, link = self._files[result.url]
         return {
             "record": "agenda_file",

@@ -116,16 +116,31 @@ def test_a_page_revize_builds_gives_each_meetings_agenda_and_leaves_its_packet_a
     assert body.count(b">Packet<") == 6 and body.count(b">Minutes<") == 5
 
 
-def test_a_link_with_no_host_is_joined_to_the_pages_own_address():
+def test_a_link_with_no_host_is_joined_to_the_base_address_the_page_names():
+    """The page says in its head what its links are written against, and it is not the page's
+    own folder. Joined to the folder, each of Allegan's files was a 404 on two runs by hand."""
     found = links("allegan")
     assert days("allegan")[:2] == ["2026-11-23", "2026-11-09"]
     assert len(found) == 6
+    body, url = saved("allegan")
+    assert url.endswith("/government/city_council/agendas___minutes.php")
+    assert b'<base href="https://www.cityofallegan.org/"' in body
     assert found[0].url == (
-        "https://www.cityofallegan.org/government/city_council/"
-        "11-23-26%20Regular%20Meeting%20Agenda.pdf?t=202611191806150"
+        "https://www.cityofallegan.org/11-23-26%20Regular%20Meeting%20Agenda.pdf?t=202611191806150"
     )
     # A file's name can start with something else: "4A 11-09-26 Regular Meeting Agenda.pdf".
-    assert "/4A%2011-09-26%20Regular" in found[1].url
+    assert found[1].url.startswith("https://www.cityofallegan.org/4A%2011-09-26%20Regular")
+
+
+def test_a_page_with_no_base_address_joins_its_links_to_its_own_folder():
+    page = (
+        "<html><head><title>Agendas</title></head><body>"
+        '<p><a href="files/11-17-2026 Agenda.pdf">Agenda</a></p></body></html>'
+    )
+    (link,) = find_agenda_links(
+        page.encode(), "https://www.example-twp.org/board/agendas.php", TODAY
+    )
+    assert link.url == "https://www.example-twp.org/board/files/11-17-2026%20Agenda.pdf"
 
 
 def test_a_packet_is_taken_where_the_page_posts_nothing_else():
@@ -523,6 +538,10 @@ def test_the_words_of_a_page_are_its_main_part_without_the_sites_menus():
     assert "MATTERS FOR COUNCIL ACTION" in text and text.rstrip().endswith("accommodations.")
     assert "\n\n" not in text
     assert page_text(OTSEGO_MEETING_BODY) == "Download"
+    # The labels of a page's buttons are not its words. Novi's real page has three above the
+    # agenda, and the run by hand of November 24 kept them.
+    held = b"<html><body><main><button>ClipNotes</button><p>CITY COUNCIL AGENDA</p></main></body>"
+    assert page_text(held) == "CITY COUNCIL AGENDA"
 
 
 def meeting_web(**more) -> Site:
@@ -640,6 +659,48 @@ def test_a_meetings_page_whose_links_name_no_file_gives_nothing_and_is_named(tmp
     assert LYNDON_MEETING in site.page_urls() and summary.status == "partial"
     assert not [u for u in site.page_urls() if "/download/" in u]
     assert sink.runs[1]["detail"]["meeting_pages_with_no_agenda"] == [LYNDON_MEETING]
+
+
+def test_a_meetings_link_that_turns_out_to_be_the_file_is_kept_as_the_agenda(tmp_path):
+    """A made-up site. Some lists link a download address that has no file type and serves the
+    agenda itself. The run by hand of November 24, 2026 followed one, on Holly's site, and
+    kept nothing of what came back."""
+    listing = "https://www.example-village.org/council-agendas/2026-agendas"
+    download = (
+        "https://www.example-village.org/council-agendas/"
+        "november-10-2026-village-council-agenda/download"
+    )
+    page = (
+        "<html><head><title>2026 Agendas</title></head><body><table><tr><td>"
+        f'<a href="{download}">November 10, 2026 Village Council Agenda</a>'
+        "</td></tr></table></body></html>"
+    )
+    site = Site(
+        {
+            listing: httpx.Response(200, content=page.encode(), headers=HTML),
+            download: httpx.Response(200, content=agenda(3), headers=PDF),
+        }
+    )
+    sink = MemorySink()
+    village = Page(listing, "Example village", ("Oakland",), ("Example Village Council",))
+    summary = run(site, sink, tmp_path, pages=(village,))
+    assert summary.status == "ok", summary.error
+    assert site.page_urls() == [listing, download]
+    file = next(d for d in sink.documents.values() if d.url == download)
+    assert "rezoning" in file.text
+    kept = {k: file.raw_meta[k] for k in ("record", "government", "page", "meeting_date", "kind")}
+    assert kept == {
+        "record": "agenda_file",
+        "government": "Example village",
+        "page": listing,
+        "meeting_date": "2026-11-10",
+        "kind": "pdf",
+    }
+    assert sink.runs[1]["detail"] == {"governments": 1}
+    # It is not asked for again.
+    again = Site({listing: httpx.Response(200, content=page.encode(), headers=HTML)})
+    run(again, sink, tmp_path, pages=(village,))
+    assert again.page_urls() == [listing]
 
 
 def test_a_past_meetings_page_is_not_asked_for_again_and_a_meeting_to_come_is(tmp_path):

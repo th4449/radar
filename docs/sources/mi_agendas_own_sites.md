@@ -78,7 +78,8 @@ The owner said on November 23, 2026 that the clearing of own sites given for Tex
 | Heath Township | A link to the agenda file on the township's own site | Yes. The file is fetched |
 | Otsego city | A link to the agenda file on another host, `cdn-www-cityofotsego-org-g4w4.b-cdn.net` | No. The run log names the file. That host's robots file is not read, and the terms read were the city's |
 | Lyndon Township | Links with download addresses and no file type | No. The run log names the page |
-| Plainwell | Not looked at. The fetcher's robots request did not come back open on November 23 | No |
+| Plainwell | Nothing to follow: its lists link PDF files. The second read's note that they end in `.aspx` was wrong. The fetcher's robots request came back open on November 24 | Yes, as any list of files is |
+| Holly | A download address with no file type. A link that turns out to be the file is now kept as the agenda. Not tried on Holly's site since | Not known |
 
 **Seven governments' pages carry the year in their address:** Novi, Commerce Township, Farmington, Farmington Hills, Highland Park, Holly and Plainwell, 21 pages. Each needs a new inventory row in January.
 
@@ -118,9 +119,30 @@ The 24: Allen Park, Brownstown Township, Charleston Township, Chelsea, Clarkston
 
 Seven other sites Revize builds stay cleared. Four gave the run a file: Ecorse, Richland Township, York Township and Ypsilanti Township. Three were not settled by it: Allegan, whose files failed, and Birmingham and Sylvan Lake, which had no file in the run's window.
 
+## The second run by hand, November 24, 2026
+
+On the owner's word, after the fixes: each of the 101 pages cleared now, up to two meeting pages from a list and one agenda file from each. Nothing stored.
+
+| | |
+|---|---|
+| Pages asked for, and read | 101 and 101 |
+| Newest agenda matches the second read's | 79 |
+| Differs | 13 |
+| No agenda file on the list | 9, of which 7 are lists of meeting pages |
+| Sites that refused | 0 |
+| Agenda files and agenda pages kept | 62, of 38 governments |
+| Draft signals, stored nowhere | 16 |
+
+- **The fixes held where the run could see them.** Ganges Township's agenda is dated. Lodi Township's mistyped 2027 is no longer its newest. Novi's two recent council agendas were kept from their own pages. Heath Township's file was fetched through its meeting page. Otsego's file on another host and Lyndon Township's pages were named in the run log and not asked for.
+- **Plainwell was read:** three pages and three files. On November 23 the fetcher's robots request had not come back open.
+- **Nine of the first run's 22 differing pages are on Revize sites that are now closed,** so they were not read again.
+- **Three more faults, each fixed after the run and not run again.** A page can name a base address for its links: Allegan's does, and without it each of its files was a 404 on both runs. A link on Holly's list led to a download address, and what came back was kept as nothing. And the labels of three buttons were kept as the first words of one of Novi's agendas.
+- **Still differing, 13 pages,** for the reasons the first run showed: packets that nothing calls an agenda, names with no day or no year, and pages where the second read counted a notice or a file of minutes. Novi's corridor authority is one: old packet files on its list keep the collector from following it.
+
 ## Not verified
 
-- **The pages were not read again after the fixes.** The fixes are tested on the file names and addresses the run reported, not on the pages.
+- **The three fixes made after the second run.** Whether Allegan's files, at their right addresses, lead to a Revize host that refuses them is not known.
+- **The pages were not read again after the fixes of the second run.** The fixes are tested on the file names and addresses the run reported, not on the pages.
 - **Why Plainwell's robots request failed, and why three of Allegan's files failed.**
 - **The files of the 24 Revize sites.** None was fetched.
 - **Most terms were read through a page-reading tool that gives a summary.** It cut long sentences short. The nine pages that mattered were read again in full by the radar's reader. The other 81 hosts rest on the summary's word that no terms page exists or that a page says nothing.

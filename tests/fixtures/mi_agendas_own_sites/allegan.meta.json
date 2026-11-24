@@ -3,12 +3,12 @@
   "url": "https://www.cityofallegan.org/government/city_council/agendas___minutes.php",
   "final_url": "https://www.cityofallegan.org/government/city_council/agendas___minutes.php",
   "retrieved_at": "2026-11-23T23:19:42+00:00",
-  "sha256": "98dac9090c12f1f15702838ca2e0b4cbb5cb4a21c186747d03169eb4fd112dbf",
-  "bytes": 3962,
+  "sha256": "fbc8095a7154009712310e1a91fdee37457a5a79f072d791eb93a31f4759d280",
+  "bytes": 4008,
   "content_type": "text/html; charset=UTF-8",
   "kind": "html",
   "trimmed": true,
   "original_sha256": "30c4311e53ce43e793b2988822bf3258d2e7c6defeb78b6b08558ecff3e6b3c4",
   "original_bytes": 593783,
-  "note": "The real page, cut down to its six newest council meetings: one table a meeting. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out."
+  "note": "The real page, cut down to its six newest council meetings: one table a meeting. Scripts, styles and attributes are removed. The site's menus, footer and the rest of the page are left out. The page's base address, which its links are written against, is kept from its head."
 }
