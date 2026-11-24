@@ -129,7 +129,8 @@ function listOf(items: string[]): string {
 /** What a reviewer is told when a record's company has the name of a payer in the study.
  *
  * The match is by name and the note says so. It names the study's own label and class for the
- * payer and decides nothing. Empty when there is no match. */
+ * payer and decides nothing. Empty when there is no match. The owner approved this wording on
+ * November 24, 2026. */
 export function studyNote(company: unknown, match: StudyMatch | null | undefined): string {
   const payer = match?.study_payers;
   if (typeof company !== "string" || !company || !payer) return "";
@@ -149,7 +150,7 @@ export function studyNote(company: unknown, match: StudyMatch | null | undefined
 /** What the public is told on an alert, before and after the payers' names.
  *
  * The names are the study's own labels, each linked to its page in the study. The name a
- * record gave is never shown. */
+ * record gave is never shown. The owner approved this wording on November 24, 2026. */
 export function studyPublicLead(count: number): string {
   return count === 1
     ? "A record behind this alert names a company with the same name as a payer in the QPQ " +

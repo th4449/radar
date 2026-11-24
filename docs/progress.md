@@ -32,7 +32,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 - **Nothing is matched yet.** No copy of the page is stored, the local database holds no company, and the hosted database was not read. The matching is tested on the real list with names I wrote.
 - **The migration is not on the hosted database.** The alert page now asks for the new column. Apply the migration before the site is built against that database.
-- **The wording on the review page, the alert and the methodology page is mine.** The owner has not approved it.
+- **The methodology page's section is mine.** The owner approved the wording of the review page's note and of the alert's section on November 24, 2026, and has not been shown the methodology section.
 - **Most real matches will be missed.** A project filed under a new LLC does not meet its parent. Subsidiaries the study's page does not name are not listed: CenterPoint Energy Houston Electric, AEP Texas, DTE Electric, Amazon Data Services and others. Adding them is the owner's call.
 - 35 of the 61 payers are utilities. A utility named in an interconnection record says little about who is building.
 - How often the study's list changes, and whether the site answers GitHub's servers.
