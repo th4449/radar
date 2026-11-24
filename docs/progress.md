@@ -6,11 +6,11 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Pushed** on the owner's word, as `7af9565`. CI passed.
 
-**On the owner's word.** The wording is proposed and waits for the owner. No reviewer can see it yet: both Michigan sources are `manual` and the site is not public.
+**On the owner's word.** The owner read the wording and said on November 24, 2026 to keep it. No reviewer can see it yet: both Michigan sources are `manual` and the site is not public.
 
 - `config/keywords.yaml` has a new list, `rule_making`: moratorium, ordinance, zoning amendment, text amendment. Each was read on a real agenda.
 - **It is a label and nothing else.** Where one of the words sits in the same agenda item as "data center", the signal keeps which words. The record is a signal as before, with the same summary and the same confidence. A test holds each of those.
-- The review page shows it under "Why it is here". The proposed wording: *Also in the item: "moratorium", "ordinance". These are the words of a government writing its own rules. A project can use them too.*
+- The review page shows it under "Why it is here". The wording, as the owner approved it: *Also in the item: "moratorium", "ordinance". These are the words of a government writing its own rules. A project can use them too.*
 - The last sentence is there because an ordinance can rezone land for a project. The label names the words and decides nothing.
 - Tests came first: 5 in Python and 1 for the page. 1,224 and 13 pass. The page type-checks and builds.
 

@@ -78,7 +78,8 @@ export function fieldName(key: string): string {
  *
  * A moratorium or a zoning ordinance about data centers is a government writing its own rules,
  * not a project. An ordinance can rezone land for a project too, so the note names the words
- * and decides nothing. Empty when there are none. */
+ * and decides nothing. Empty when there are none. The owner approved this wording on
+ * November 24, 2026. */
 export function ruleMakingNote(words: unknown): string {
   const said = Array.isArray(words) ? words.filter((w) => typeof w === "string" && w) : [];
   if (said.length === 0) return "";
