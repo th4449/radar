@@ -47,6 +47,7 @@ class KeywordRules:
         self._own = [(w, _term_pattern(w)) for w in keywords.own_computers.shows]
         self._not_own = [_term_pattern(w) for w in keywords.own_computers.unless]
         self._never_alone = frozenset(keywords.only_with_another_term)
+        self._rule_making = [(w, _term_pattern(w)) for w in keywords.rule_making]
         self._project = re.compile(keywords.project_code_name.pattern)
         self._stoplist = frozenset(
             word.lower() for word in keywords.project_code_name.project_stoplist
@@ -73,6 +74,14 @@ class KeywordRules:
         another term. A record that uses nothing else has no reason.
         """
         return any(term not in self._never_alone for term in terms)
+
+    def rule_making(self, text: str) -> list[str]:
+        """The words in the text that show a government writing its own rules.
+
+        In the order of `rule_making` in config/keywords.yaml, each once. A label for the
+        reviewer: it is not a reason for a signal and takes none away.
+        """
+        return [word for word, pattern in self._rule_making if pattern.search(text)]
 
     def own_computers(self, text: str) -> str | None:
         """The word that shows the text is about a government's own computers, or None.

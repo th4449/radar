@@ -235,3 +235,12 @@ def test_a_term_that_counts_only_beside_another_is_one_of_the_code_words():
     data["only_with_another_term"] = ["special exception"]
     with pytest.raises(ValueError, match="is not one of the code words"):
         config.KeywordsFile(**data)
+
+
+def test_the_words_of_rule_making_are_the_ones_read_on_real_agendas():
+    kw = config.load_keywords()
+    assert kw.rule_making == ["moratorium", "ordinance", "zoning amendment", "text amendment"]
+    data = kw.model_dump()
+    data["rule_making"] = ["Moratorium"]
+    with pytest.raises(ValueError, match="lowercase"):
+        config.KeywordsFile(**data)

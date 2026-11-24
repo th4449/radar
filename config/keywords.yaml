@@ -31,6 +31,21 @@ code_words:
 only_with_another_term:
   - special land use
 
+# A government writing its own rules. A moratorium on data centers, or a zoning ordinance about
+# them, uses the words "data center" and is not a project. On November 24, 2026 the rules were
+# tried on 56 real Michigan agendas: 11 of the 15 files that said "data center" were this.
+#
+# These words are not a reason and not a filter. The record is a signal as before. Where one of
+# them sits in the same agenda item as the words "data center", the reviewer is told which. An
+# ordinance can rezone land for a project too, so the label names the words and decides nothing.
+#
+# Every word here came from a real agenda item. Add one only from a record somebody has read.
+rule_making:
+  - moratorium
+  - ordinance
+  - zoning amendment
+  - text amendment
+
 # "Project" followed by a capitalized code name, such as Project Falcon.
 # Words in project_stoplist are ordinary phrases, not code names.
 project_code_name:

@@ -258,3 +258,36 @@ def test_special_land_use_still_counts_beside_another_term_in_the_same_file():
         "special land use",
         "reinvestment zone",
     }
+
+
+# --- a government writing its own rules -----------------------------------------------------------
+
+MORATORIUM = "10. First reading of a general moratorium ordinance on data centers."
+STORAGE = "11. First reading of a general moratorium ordinance on energy storage."
+
+
+def test_a_reviewer_is_told_when_data_center_sits_beside_the_words_of_rule_making():
+    """The owner's decision of November 24, 2026.
+
+    On 56 real Michigan agendas, 11 of the 15 files that said "data center" were a moratorium or
+    a zoning ordinance. The label says which words sit in the same item. It changes nothing
+    else: the record is a signal as before, with the same summary and the same confidence.
+    """
+    plain = agenda_file(doc(HEAD, ROUTINE, CENTER), RULES).drafts[0]
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, MORATORIUM), RULES).drafts
+    assert draft.extracted["rule_making"] == {"words": ["moratorium", "ordinance"]}
+    assert "rule_making" not in plain.extracted
+    assert draft.confidence == plain.confidence
+    assert draft.summary == plain.summary
+    assert "moratorium" not in draft.summary
+
+
+def test_the_label_looks_only_at_the_item_that_says_data_center():
+    # The moratorium is on something else, in the next item.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, CENTER + "\n" + STORAGE), RULES).drafts
+    assert "rule_making" not in draft.extracted
+    # A code word beside "ordinance" is not labelled: the label is for the words themselves.
+    (draft,) = agenda_file(
+        doc(HEAD, "4. An ordinance designating a reinvestment zone on County Road 12."), RULES
+    ).drafts
+    assert "rule_making" not in draft.extracted

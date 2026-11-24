@@ -152,3 +152,16 @@ def test_special_land_use_is_a_reason_only_beside_another_term():
     for term in ("data center", "reinvestment zone", "development agreement", "large load"):
         assert RULES.stands_alone([term]) is True
     assert RULES.stands_alone([]) is False
+
+
+# --- the words of a government writing its own rules ----------------------------------------------
+
+
+def test_the_words_of_rule_making_are_found_whole_and_in_the_lists_order():
+    said = "First reading of a general Moratorium\nOrdinance on data centers, and two ordinances."
+    assert RULES.rule_making(said) == ["moratorium", "ordinance"]
+    assert RULES.rule_making("Zoning text amendments for the overlay district") == [
+        "text amendment"
+    ]
+    assert RULES.rule_making("A coordinance of moratoria") == []
+    assert RULES.rule_making("Presentation on a proposed data center and its water use") == []

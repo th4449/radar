@@ -629,6 +629,11 @@ def _meeting(government: str, day: dt.date, reasons: list[dict]) -> str | None:
     return f"{place_name(government)}, meeting of {_long_date(day)}"
 
 
+def _rule_making(words: list[str]) -> dict:
+    """What is kept with a signal when "data center" sits beside the words of rule making."""
+    return {"rule_making": {"words": words}} if words else {}
+
+
 def _set_aside(own: str | None) -> dict:
     """What is kept with a signal when the words "data center" in its record were set aside."""
     return {"set_aside": {"rule": "own_computers", "shows": own}} if own else {}
@@ -712,6 +717,13 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         if fips is None:
             out.out_of_scope += 1
             continue
+        # A moratorium or an ordinance about data centers uses the words too. The reviewer is
+        # told which words of rule making sit in the item. The signal is the same.
+        beside = (
+            rules.keywords.rule_making(text)
+            if any(r["rule"] == "direct_term" for r in reasons)
+            else []
+        )
         number = (item.get("number") or "").rstrip(".") or f"in position {item.get('sequence')}"
         file = f", file {item['file']}" if item.get("file") else ""
         terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
@@ -748,6 +760,7 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
                     "counties": named,
                     "meeting": _meeting(str(agenda["government"]), day, reasons),
                     **_set_aside(own),
+                    **_rule_making(beside),
                 },
             )
         )
@@ -795,16 +808,19 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
         return out
     found: list[tuple[int, str, list[Hit]]] = []
     own = None  # the word that showed an item to be about the government's own computers
+    beside: list[str] = []  # the words of rule making in an item that says "data center"
     for number, (_, passage) in enumerate(_passages(text), 1):
         hits = []
         for hit in rules.keywords.find(passage):
             if not _counts_in_a_file(hit, passage):
                 continue
             if hit.kind == "direct_term":
-                shows = rules.keywords.own_computers(_agenda_item(passage, hit.start, hit.end))
+                item = _agenda_item(passage, hit.start, hit.end)
+                shows = rules.keywords.own_computers(item)
                 if shows:
                     own = own or shows
                     continue
+                beside += [w for w in rules.keywords.rule_making(item) if w not in beside]
             hits.append(hit)
         if hits:
             found.append((number, passage, hits))
@@ -867,6 +883,7 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
                 "counties": named,
                 "meeting": _meeting(str(meta["government"]), day, reasons),
                 **_set_aside(own),
+                **_rule_making(beside),
             },
         )
     )

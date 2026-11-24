@@ -159,6 +159,8 @@ class KeywordsFile(_Strict):
     code_words: list[str] = Field(min_length=1)
     # Code words that give a signal only when the same record uses another term too.
     only_with_another_term: list[str] = Field(default_factory=list)
+    # Words that show a government writing its own rules. A label for the reviewer, no more.
+    rule_making: list[str] = Field(default_factory=list)
     project_code_name: ProjectCodeName
     own_computers: OwnComputers
 
@@ -169,6 +171,8 @@ class KeywordsFile(_Strict):
             raise ValueError("terms must be lowercase with no surrounding spaces")
         if len(set(terms)) != len(terms):
             raise ValueError("a term appears twice")
+        if any(w != w.lower().strip() for w in self.rule_making):
+            raise ValueError("the words of rule making must be lowercase")
         for term in self.only_with_another_term:
             if term not in self.code_words:
                 raise ValueError(f"{term!r} is not one of the code words")

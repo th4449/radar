@@ -273,3 +273,20 @@ def test_an_item_that_says_only_special_land_use_is_no_signal():
     assert kept.extracted["item"]["number"] == "2."
     assert {r["term"] for r in kept.extracted["reasons"]} == {"special land use", "data center"}
     assert (out.records, out.no_reason) == (3, 2)
+
+
+# --- a government writing its own rules -----------------------------------------------------------
+
+
+def test_an_item_that_says_data_center_beside_moratorium_is_labelled_for_the_reviewer():
+    """The owner's decision of November 24, 2026. The label changes nothing else."""
+    agenda = harris()
+    agenda["items"] = _items(
+        "Public hearing on Ordinance 313, a 12-month moratorium on data centers.",
+        "Discussion of data center development in the county and the county's authority.",
+    )
+    first, second = legistar_agenda(agenda_doc(agenda), RULES).drafts
+    assert first.extracted["rule_making"] == {"words": ["moratorium", "ordinance"]}
+    assert "rule_making" not in second.extracted
+    assert first.confidence == second.confidence
+    assert "moratorium" not in first.summary

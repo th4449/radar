@@ -73,3 +73,18 @@ export function fieldName(key: string): string {
     .toLowerCase();
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
+
+/** What a reviewer is told when the words "data center" sit beside the words of rule making.
+ *
+ * A moratorium or a zoning ordinance about data centers is a government writing its own rules,
+ * not a project. An ordinance can rezone land for a project too, so the note names the words
+ * and decides nothing. Empty when there are none. */
+export function ruleMakingNote(words: unknown): string {
+  const said = Array.isArray(words) ? words.filter((w) => typeof w === "string" && w) : [];
+  if (said.length === 0) return "";
+  const quoted = said.map((w) => `"${w}"`).join(", ");
+  return (
+    `Also in the item: ${quoted}. ` +
+    "These are the words of a government writing its own rules. A project can use them too."
+  );
+}

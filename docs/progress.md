@@ -2,6 +2,31 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: a label for the reviewer where "data center" sits beside the words of rule making
+
+**Pushed** on the owner's word, as `7af9565`. CI passed.
+
+**On the owner's word.** The wording is proposed and waits for the owner. No reviewer can see it yet: both Michigan sources are `manual` and the site is not public.
+
+- `config/keywords.yaml` has a new list, `rule_making`: moratorium, ordinance, zoning amendment, text amendment. Each was read on a real agenda.
+- **It is a label and nothing else.** Where one of the words sits in the same agenda item as "data center", the signal keeps which words. The record is a signal as before, with the same summary and the same confidence. A test holds each of those.
+- The review page shows it under "Why it is here". The proposed wording: *Also in the item: "moratorium", "ordinance". These are the words of a government writing its own rules. A project can use them too.*
+- The last sentence is there because an ordinance can rezone land for a project. The label names the words and decides nothing.
+- Tests came first: 5 in Python and 1 for the page. 1,224 and 13 pass. The page type-checks and builds.
+
+**Tried on the 56 Michigan agendas: 10 of the 15 signals that say "data center" are labelled.**
+
+| My reading of the file | Files | Labelled |
+|---|---|---|
+| A moratorium or a zoning ordinance | 11 | 9 |
+| A named project | 3 | 1 |
+| Unclear | 1 | 0 |
+
+- **Two rule-making files got no label.** Their items use none of the four words: one says "no new draft", the other "resolution language".
+- **One project file got the label.** The township's packet holds a list of state bills, one of them a statewide moratorium on data centers. The label is true to the words and says nothing false. It is not the township's own rule.
+
+**Not verified:** the label on Texas agendas, and on any agenda item from Legistar beyond the tests. The page was built, not opened in a browser.
+
 ## November 24, 2026 — M11: "special land use" is no longer a reason by itself
 
 **On the owner's word.** This changes a keyword rule that came from the build plan.

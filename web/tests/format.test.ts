@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { fieldName, localDay, longDate, problem, signalName } from "../src/lib/format.ts";
+import {
+  fieldName,
+  localDay,
+  longDate,
+  problem,
+  ruleMakingNote,
+  signalName,
+} from "../src/lib/format.ts";
 
 test("a date is written out and never shifted by a time zone", () => {
   assert.equal(longDate("2026-11-20"), "November 20, 2026");
@@ -33,4 +40,15 @@ test("a moment is shown as the day it was where the reader is", () => {
   assert.equal(localDay(evening, "UTC"), "November 21, 2026");
   assert.equal(localDay("2026-08-21"), "August 21, 2026");
   assert.equal(localDay(null), "");
+});
+
+test("a reviewer is told which words of rule making sit beside data center, and no more", () => {
+  assert.equal(
+    ruleMakingNote(["moratorium", "ordinance"]),
+    'Also in the item: "moratorium", "ordinance". These are the words of a government writing ' +
+      "its own rules. A project can use them too.",
+  );
+  assert.equal(ruleMakingNote([]), "");
+  assert.equal(ruleMakingNote(undefined), "");
+  assert.equal(ruleMakingNote("moratorium"), "");
 });

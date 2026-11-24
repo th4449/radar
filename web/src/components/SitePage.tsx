@@ -1,6 +1,14 @@
 import { useEffect, useState } from "preact/hooks";
 import { Frame } from "./Frame";
-import { fieldName, longDate, problem, RULE_NAMES, signalName, STATUS_NAMES } from "../lib/format";
+import {
+  fieldName,
+  longDate,
+  problem,
+  ruleMakingNote,
+  RULE_NAMES,
+  signalName,
+  STATUS_NAMES,
+} from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import type { Alert, Decision, DocumentRef, Reason, Review, Signal, Site } from "../lib/types";
@@ -101,6 +109,9 @@ function SignalBlock({ signal, source }: { signal: Signal; source: DocumentRef |
       </p>
       {x.site_link && (
         <p class="note">On this site because: {String(x.site_link)}.</p>
+      )}
+      {ruleMakingNote(x.rule_making?.words) && (
+        <p class="note">{ruleMakingNote(x.rule_making?.words)}</p>
       )}
 
       {snippets.map((s) => (
