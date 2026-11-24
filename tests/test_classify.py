@@ -131,3 +131,24 @@ def test_words_about_land_or_a_project_are_never_taken_for_a_governments_own_com
     ]
     for text in kept:
         assert RULES.own_computers(text) is None, text
+
+
+# --- a term that is not a reason by itself --------------------------------------------------------
+
+
+def test_special_land_use_is_a_reason_only_beside_another_term():
+    """The owner's decision of November 24, 2026.
+
+    "Special land use" is Michigan's ordinary term for a use that needs a hearing. On 56 real
+    Michigan agendas it was a reason by itself seven times: a drive-through, a campground, a
+    market. None was about a data center.
+    """
+    assert RULES.stands_alone(["special land use"]) is False
+    assert RULES.stands_alone(["special land use", "special land use"]) is False
+    assert RULES.stands_alone(["special land use", "data center"]) is True
+    assert RULES.stands_alone(["special land use", "light industrial"]) is True
+    assert RULES.stands_alone(["special land use", "Project Falcon"]) is True
+    # Every other term is a reason by itself, as it was.
+    for term in ("data center", "reinvestment zone", "development agreement", "large load"):
+        assert RULES.stands_alone([term]) is True
+    assert RULES.stands_alone([]) is False

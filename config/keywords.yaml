@@ -21,6 +21,16 @@ code_words:
   - reinvestment zone
   - special land use
 
+# Code words that are not a reason by themselves. One of these gives a signal only when the same
+# record uses another term too.
+#
+# "Special land use" is Michigan's ordinary term for a use that needs a hearing. On November 24,
+# 2026 the rules were tried on 56 real Michigan agendas. It was the only reason for a signal
+# seven times: a drive-through, a campground, a repair shop, a market. None was about a data
+# center. The owner said that day to stop a signal on it alone.
+only_with_another_term:
+  - special land use
+
 # "Project" followed by a capitalized code name, such as Project Falcon.
 # Words in project_stoplist are ordinary phrases, not code names.
 project_code_name:

@@ -2,6 +2,20 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M11: "special land use" is no longer a reason by itself
+
+**On the owner's word.** This changes a keyword rule that came from the build plan.
+
+- `config/keywords.yaml` has a new list, `only_with_another_term`, with one term in it: "special land use". A record that uses it and no other term gives no signal. Beside another term it still counts and is still shown to the reviewer.
+- The rule holds in every processor: agenda files, agenda items, planning files, permit rows and a file entered by hand. In an agenda file "beside" means anywhere in the file.
+- Tests came first: 5 new, in four files. 1,219 pass.
+- **Tried again on the 56 Michigan agendas: 16 signals where there were 23.** The seven that went are the drive-through, the campground and the like. Every file that says "data center" still gives its signal.
+- Texas' saved agendas and tests read as before. No Texas test used the term alone.
+
+**A correction.** I told the owner the set-aside for a government's own computers met nothing in the sample. It met one hit, and set it aside wrongly: a zoning ordinance's definition of a data center, which lists "servers". The table below is corrected. The rule is not changed.
+
+**Not verified:** how often Texas' stored agendas used "special land use" alone. The stored documents are in the hosted database, which this session did not read.
+
 ## November 24, 2026 — M11: the keyword rules tried on 56 Michigan agendas
 
 **Pushed** on the owner's word, as `3f9f2b3`. CI passed.
@@ -15,7 +29,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 | "development agreement" | 2 | 2 | a subdivision, and the data center overlay again |
 | "light industrial", "data processing" | 3 | 1 | the data center overlay again |
 | A project code name | 0 | 0 | none in the sample |
-| A government's own computers, set aside | 0 | 0 | none in the sample |
+| A government's own computers, set aside | 1 | 1 | a zoning ordinance's definition of a data center, which lists "servers". Wrongly set aside. Corrected November 24: this row first said none |
 
 **What it shows**
 
@@ -30,7 +44,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 **Not verified**
 
 - 56 files from two weeks is a small sample. The newest file of each page only, and none from the 24 Revize sites or from Ann Arbor's Legistar, whose six agendas gave no hit.
-- The code-name rule and the set-aside for a government's own computers met nothing to try them on.
+- The code-name rule met nothing to try it on. The set-aside for a government's own computers met one hit and got it wrong: a definition in a zoning ordinance. The file still gave its signal from its other hits. A file that held only such a definition would give none. Not fixed.
 - I judged what each hit was about by reading the words around it, not the whole file.
 
 **Proposed, not done.** Each is the owner's: `config/keywords.yaml` came from the build plan.

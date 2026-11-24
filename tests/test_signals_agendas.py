@@ -254,3 +254,22 @@ def test_an_item_about_a_project_is_kept_even_when_it_names_computing_services()
     (draft,) = out.drafts
     assert draft.confidence == RULES.confidence["direct_term"]
     assert out.own_computers == 0
+
+
+# --- a term that is not a reason by itself --------------------------------------------------------
+
+
+def test_an_item_that_says_only_special_land_use_is_no_signal():
+    """The owner's decision of November 24, 2026."""
+    agenda = harris()
+    agenda["items"] = _items(
+        "Public hearing on a special land use request for a drive-through at 12 Main Street.",
+        "Zoning amendment to make data centers a special land use in the overlay district.",
+        # A code name that does not count leaves the term alone, and so no reason.
+        "Special land use for Project Falcon.",
+    )
+    out = legistar_agenda(agenda_doc(agenda), RULES)
+    (kept,) = out.drafts
+    assert kept.extracted["item"]["number"] == "2."
+    assert {r["term"] for r in kept.extracted["reasons"]} == {"special land use", "data center"}
+    assert (out.records, out.no_reason) == (3, 2)

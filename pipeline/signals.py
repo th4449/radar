@@ -193,7 +193,18 @@ class Rules:
                     ],
                 }
             )
-        return out
+        return self.enough(out)
+
+    def enough(self, reasons: list[dict]) -> list[dict]:
+        """The reasons, or none when the only one is a term that is no reason by itself.
+
+        See `only_with_another_term` in config/keywords.yaml. A company on the Comptroller's
+        list, or a reason a person stated, is a reason of its own.
+        """
+        terms = [r["term"] for r in reasons if "term" in r]
+        if len(terms) == len(reasons) and not self.keywords.stands_alone(terms):
+            return []
+        return reasons
 
     def _listed(self, party: str) -> tuple[str, str, list[Listing]] | None:
         """How a name relates to the Comptroller's list, from the closest match down."""
@@ -445,7 +456,8 @@ def _posted(url: str) -> dt.date | None:
 def _terms(rules: Rules, text: str) -> list[Hit]:
     """Keyword hits in a planning file. Every transmission project there is called "Project"
     something, so a code name is not a reason in these files."""
-    return [h for h in rules.keywords.find(text) if h.kind != "project_code_name"]
+    hits = [h for h in rules.keywords.find(text) if h.kind != "project_code_name"]
+    return hits if rules.keywords.stands_alone(h.term for h in hits) else []
 
 
 def ercot_rpg_file(doc: Doc, rules: Rules) -> Outcome:
@@ -687,8 +699,10 @@ def legistar_agenda(doc: Doc, rules: Rules) -> Outcome:
         if own:
             out.own_computers += 1
             reasons = [r for r in reasons if r["rule"] != "direct_term"]
-            if not reasons:
-                continue
+        # A term that is no reason by itself counts only beside another that is left.
+        reasons = rules.enough(reasons)
+        if own and not reasons:
+            continue
         if not reasons:
             out.no_reason += 1
             continue
@@ -796,6 +810,9 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
             found.append((number, passage, hits))
     if own:
         out.own_computers = 1
+    # A term that is no reason by itself counts only beside another, anywhere in the file.
+    if not rules.keywords.stands_alone(hit.term for _, _, hits in found for hit in hits):
+        found = []
     if not found:
         out.no_reason = 0 if own else 1
         return out

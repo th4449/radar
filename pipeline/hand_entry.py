@@ -185,6 +185,7 @@ def prepare(
         if reason not in reasons:
             reasons.append(reason)
     reasons += [r for r in rules.reasons({}, party) if r not in reasons]
+    reasons = rules.enough(reasons)
     stated = " ".join(facts.reason.split()) if facts.reason else ""
     if stated:
         reasons.append({"rule": "stated_by_hand", "text": stated})

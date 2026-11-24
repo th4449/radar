@@ -225,3 +225,13 @@ def test_the_reference_list_of_texas_counties_does_not_change_the_scope():
     assert len(config.load_counties("TX").counties) == 30
     assert len(config.load_all_counties("TX").counties) == 254
     assert len(config.load_all_counties("MI").counties) == 83
+
+
+def test_a_term_that_counts_only_beside_another_is_one_of_the_code_words():
+    kw = config.load_keywords()
+    assert kw.only_with_another_term == ["special land use"]
+    assert set(kw.only_with_another_term) <= set(kw.code_words)
+    data = kw.model_dump()
+    data["only_with_another_term"] = ["special exception"]
+    with pytest.raises(ValueError, match="is not one of the code words"):
+        config.KeywordsFile(**data)

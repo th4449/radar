@@ -233,3 +233,28 @@ def test_a_file_with_a_project_item_and_a_hosting_item_keeps_the_project():
     (draft,) = agenda_file(doc(HEAD, REFRESH + "\n" + CENTER), RULES).drafts
     assert [r["rule"] for r in draft.extracted["reasons"]] == ["direct_term"]
     assert draft.extracted["meeting"] == "Sealy, meeting of November 17, 2026"
+
+
+# --- a term that is not a reason by itself --------------------------------------------------------
+
+DRIVE_THROUGH = "4. Public hearing on a special land use request for a drive-through at 12 Main."
+OVERLAY = "5. Zoning amendment to make data centers a special land use in the overlay district."
+
+
+def test_special_land_use_alone_is_no_signal():
+    """The owner's decision of November 24, 2026, after it was tried on 56 Michigan agendas."""
+    out = agenda_file(doc(HEAD, ROUTINE, DRIVE_THROUGH), RULES)
+    assert out.drafts == []
+    assert (out.records, out.no_reason) == (1, 1)
+
+
+def test_special_land_use_still_counts_beside_another_term_in_the_same_file():
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, DRIVE_THROUGH, OVERLAY), RULES).drafts
+    assert {r["term"] for r in draft.extracted["reasons"]} == {"special land use", "data center"}
+    assert draft.extracted["pages_with_terms"] == [3, 4]
+    # Beside another code word too, on another page of the same file.
+    (draft,) = agenda_file(doc(HEAD, DRIVE_THROUGH, ZONE), RULES).drafts
+    assert {r["term"] for r in draft.extracted["reasons"]} == {
+        "special land use",
+        "reinvestment zone",
+    }
