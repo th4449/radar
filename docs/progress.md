@@ -6,11 +6,11 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Pushed** on the owner's word, as `5cc8904`. CI passed.
 
-**On the owner's word. The wording is proposed and waits for the owner.** It is in the summary a subscriber would read. Nothing uses it yet: both Michigan sources are `manual` and the site is not public.
+**On the owner's word.** The owner read the wording and said on November 24, 2026 to keep it. It is in the summary a subscriber would read. Nothing uses it yet: both Michigan sources are `manual` and the site is not public.
 
 - A packet binds the agenda to the minutes of earlier meetings and to lists of bills. In three of the 15 Michigan files that said "data center", the words were there and nowhere on the agenda. The summary called each an agenda for that day's meeting.
 - **The rule:** where a file has more than two pages and the words are not on its first page, the summary does not call it an agenda. It says what the record shows.
-- **The proposed wording:** *A 31-page file that Augusta Charter Township posted for a meeting of November 24, 2026 uses the words "data center" past its first page.* The reference under it reads *Augusta Charter Township, file posted for the meeting of November 24, 2026.*
+- **The wording, as the owner approved it:** *A 31-page file that Augusta Charter Township posted for a meeting of November 24, 2026 uses the words "data center" past its first page.* The reference under it reads *Augusta Charter Township, file posted for the meeting of November 24, 2026.*
 - Everything else reads as before: a file of one or two pages, a long file with the words on its first page, and a file whose pages were not counted.
 - The same records are signals, as sure as before and held to the same meeting. A test holds that.
 - Tests came first: 12 new. 1,238 pass.

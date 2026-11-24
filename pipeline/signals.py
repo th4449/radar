@@ -871,7 +871,8 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
     place = place_name(str(meta["government"]))
     terms = ", ".join(f'"{t}"' for t in dict.fromkeys(r["term"] for r in reasons))
     # A packet binds the agenda to earlier minutes and to lists of bills. Where the words are
-    # past the first page of a long file, the summary does not call the file an agenda.
+    # past the first page of a long file, the summary does not call the file an agenda. The
+    # owner approved this wording on November 24, 2026.
     pages = meta.get("pages")
     past = isinstance(pages, int) and pages > _AGENDA_PAGES and found[0][0] > 1
     if past:
