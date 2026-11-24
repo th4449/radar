@@ -211,9 +211,7 @@ class StudyPayersFile(_Strict):
 
     @model_validator(mode="after")
     def _distinct(self) -> StudyPayersFile:
-        payers = [entry.payer for entry in self.other_names]
-        if len(set(payers)) != len(payers):
-            raise ValueError("a payer is listed twice")
+        # A payer may have several entries, one for each place its names were read.
         names = [name for entry in self.other_names for name in entry.names]
         if any(not name.strip() for name in names + self.whole_name_only):
             raise ValueError("an empty name")

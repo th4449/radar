@@ -2,6 +2,31 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 24, 2026 — M12: 45 operating companies added to the payers' names
+
+**On the owner's word.** The owner asked for the research, was shown the list with its sources and said to add it.
+
+- **45 names for 16 payers** in `config/study_payers.yaml`, each with the filing that states whose it is. 38 come from the company's own SEC filing, three from another company's SEC filing, three from the company's own site and one from a City of Detroit record.
+- **A name listed with its legal form now meets a record only as written.** Without that, listing "Switch, Ltd." would have let "Switch LLC" match. It also closes the same gap for "Southern Company", which was already listed.
+- A payer may now have several entries in the file, one for each source.
+
+**How it was checked**
+
+- Three research agents found the names. Each reported that the SEC refused a plain request and that it read the filings through a third-party fetch service.
+- That reading was not relied on. The SEC's robots file allows its filings archive. All 20 filings were fetched directly, once each, with a user agent that gives the project's public contact address. The SEC answered every one, and the words were read in the saved copies.
+- **On the Comptroller's saved list of 290 companies, 5 met a payer before and 19 do now.** A test holds that count.
+
+**Tests.** 1,374 pass.
+
+**Not verified, or left out**
+
+- Walbridge Aldinger LLC, the two QTS names and the Vantage name were read with a web reading tool, not as raw files.
+- Numbered project companies, such as "Vantage Data Centers TX11, LLC", are left out. No filing was found that states whose they are. The same holds for the project companies that only news reports tie to Google.
+- Electric Transmission Texas, LLC is left out: a joint venture of AEP and Berkshire Hathaway Energy.
+- Whether each filing is still current. Switch's is from 2021.
+- Oncor's annual report says a Sempra subsidiary owns 80.25% of it, and Sempra is a separate payer in the study. Nothing was changed for that.
+- Still nothing is matched in a database: no copy of the study's page is stored.
+
 ## November 24, 2026 — M12: the money cross-reference, built and not switched on
 
 **Two departures from the plan, both put to the owner first.** The owner said to build it this way.

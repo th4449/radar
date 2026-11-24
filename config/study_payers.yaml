@@ -10,13 +10,21 @@
 # matches a longer name that merely contains it. A legal form at the end is set aside, so
 # "Georgia Power" meets "Georgia Power Company".
 #
+# A name written here with its legal form, such as "DTE Electric Company", is one company's own
+# name. It meets a record only as written, so "DTE Electric LLC" does not meet it.
+#
 # Rules for this file:
-#   - `payer` is the study's label, spelled as the study spells it.
-#   - Add a name only when the study's own page writes it for that payer: a part of the label
-#     or a filer the page lists under the payer. `where` says which.
+#   - `payer` is the study's label, spelled as the study spells it. A payer may have several
+#     entries, one for each place its names were read.
+#   - Add a name when the study's own page writes it for that payer: a part of the label or a
+#     filer the page lists under the payer. `where` says which.
+#   - Add a company the study's page does not name only when a public filing states whose it
+#     is, a person has read those words in the filing, and the owner has said to add it.
+#     Write its full legal name, with its legal form. `where` gives the filing and its address.
 #   - No initials. "CMS" and "APS" are also other things.
 #   - Never a person's name and never a PAC's name.
-#   - A subsidiary the study's page does not name is not added here without the owner's word.
+#   - Never a company because its name looks related. "Vantage Data Centers TX11, LLC" is not
+#     here: no filing was found that states whose it is.
 other_names:
   - payer: Southern Company / Georgia Power
     names: [Southern Company, Georgia Power]
@@ -51,6 +59,89 @@ other_names:
   - payer: Oncor
     names: [Oncor Electric Delivery]
     where: a filer the page lists under the payer
+
+  # --- Companies the study's page does not name -------------------------------------------------
+  # The owner approved these 45 names on 2026-11-24. Each filing was read on that day. Unless
+  # `where` says otherwise it is the list of subsidiaries filed with the parent's own annual
+  # report (Form 10-K) for 2025, read at the SEC's address given.
+  - payer: CenterPoint Energy
+    names: ["CenterPoint Energy Houston Electric, LLC", CenterPoint Energy Resources Corp.]
+    where: Exhibit 21.1 of CenterPoint Energy, Inc. https://www.sec.gov/Archives/edgar/data/48732/000113031026000008/cnp_exhibit211x12312025.htm
+  - payer: Vistra
+    names:
+      - Luminant Generation Company LLC
+      - Luminant Energy Company LLC
+      - TXU Energy Retail Company LLC
+      - Vistra Operations Company LLC
+      - Comanche Peak Power Company LLC
+      - Oak Grove Management Company LLC
+    where: Exhibit 21.1 of Vistra Corp. https://www.sec.gov/Archives/edgar/data/1692819/000169281926000006/vistra-20251231xex211.htm
+  - payer: NRG Energy
+    names:
+      - NRG Texas Power LLC
+      - "Reliant Energy Retail Services, LLC"
+      - NRG Cedar Bayou 5 LLC
+      - NRG Greens Bayou 6 LLC
+      - NRG THW GT LLC
+    where: Exhibit 21.1 of NRG Energy, Inc. https://www.sec.gov/Archives/edgar/data/1013871/000101387126000004/exhibit211q42025.htm
+  - payer: AEP
+    names:
+      - "American Electric Power Company, Inc."
+      - AEP Texas Inc.
+      - Southwestern Electric Power Company
+      - Indiana Michigan Power Company
+    where: Exhibit 21 of American Electric Power Company, Inc. https://www.sec.gov/Archives/edgar/data/4904/000000490426000013/ex2120254q.htm
+  - payer: Energy Transfer
+    names: ["Energy Transfer Fuel, LP", Houston Pipe Line Company LP, "Oasis Pipeline, LP"]
+    where: Exhibit 21.1 of Energy Transfer LP https://www.sec.gov/Archives/edgar/data/1276187/000127618726000013/et12312025ex211.htm
+  - payer: DTE Energy
+    names: [DTE Electric Company, DTE Gas Company]
+    where: Exhibit 21.1 of DTE Energy Company https://www.sec.gov/Archives/edgar/data/28385/000093634026000054/a20251231ex211-subsidiaries.htm
+  - payer: CMS / Consumers Energy
+    names: [CMS Energy Corporation, NorthStar Clean Energy Company]
+    where: Exhibit 21.1 of CMS Energy Corporation https://www.sec.gov/Archives/edgar/data/201533/000081115626000004/cms10k20251231_ex21-1.htm
+  - payer: ITC Holdings
+    names: [International Transmission Company, "Michigan Electric Transmission Company, LLC"]
+    where: Exhibit 21 of ITC Holdings Corp. https://www.sec.gov/Archives/edgar/data/1317630/000131763026000006/itc20251231ex_21.htm
+  - payer: Amazon
+    names: ["Amazon Data Services, Inc.", "Amazon Web Services, Inc."]
+    where: Exhibit 21.1 of Amazon.com, Inc. https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231xex211.htm
+  - payer: Digital Realty
+    names:
+      - "Digital Realty Trust, Inc."
+      - "Digital Realty Trust, L.P."
+      - "Digital Garland Campbell, L.P."
+      - "DDI Garland, LLC"
+      - "DDI Lewisville, LLC"
+      - "Collins Technology Park Partners, LLC"
+    where: Exhibit 21.1 of Digital Realty Trust, Inc. https://www.sec.gov/Archives/edgar/data/1297996/000110465926015365/dlr-20251231xex21d1.htm
+  - payer: Google
+    names: [Alphabet Inc.]
+    where: Exhibit 21.01 of Alphabet Inc., which lists Google LLC as its subsidiary https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/googexhibit2101q42025.htm
+  - payer: Google
+    names: [Google Energy LLC]
+    where: another company's report (Form 8-K, 2026), which calls it a subsidiary of Alphabet Inc. https://www.sec.gov/Archives/edgar/data/1853868/000162828026059707/frvo-20260826.htm
+  - payer: Oracle
+    names: [Oracle Corporation, "Oracle America, Inc."]
+    where: Exhibit 21.01 of Oracle Corporation, for its year ended May 2026 https://www.sec.gov/Archives/edgar/data/1341439/000119312526277521/orcl-ex21_01.htm
+  - payer: Oracle
+    names: ["Oracle America Cloud Services, LLC"]
+    where: an exhibit to another company's report (Form 8-K, 2026), which calls it a wholly owned subsidiary of Oracle Corporation, formerly Green Chile Ventures LLC https://www.sec.gov/Archives/edgar/data/1144879/000149315226009538/ex4-1.htm
+  - payer: Oracle
+    names: [Green Chile Ventures LLC]
+    where: DTE Energy's report (Form 8-K, October 2025), which calls it a wholly owned subsidiary of Oracle Corporation https://www.sec.gov/Archives/edgar/data/936340/000093634025000228/dte-20251028.htm
+  - payer: QTS Data Centers
+    names: ["QTS Realty Trust, LLC", "Quality Technology Services, LLC"]
+    where: the company's own privacy page, which names both as the company https://qtsdatacenters.com/privacy-policy/
+  - payer: Vantage Data Centers
+    names: ["Vantage Data Centers Management Company, LLC"]
+    where: the company's own terms page, which names it as the owner of the site's copyright https://vantage-dc.com/terms-of-use/
+  - payer: Switch
+    names: ["Switch, Ltd."]
+    where: the 2021 annual report of Switch, Inc., the last one found, which calls it the company's principal asset https://www.sec.gov/Archives/edgar/data/1710583/000171058322000009/swch-20211231.htm
+  - payer: Walbridge
+    names: [Walbridge Aldinger LLC]
+    where: a City of Detroit record of 2026 that gives it as the company's name. The company's own site writes "Walbridge Aldinger". Read through a reading tool, not as the raw file. https://pub-detroitmi.escribemeetings.com/filestream.ashx?DocumentId=282690
 
 # Names that are also ordinary words. A record meets one of these only when it gives the name
 # alone, with no legal form: "Switch" meets the payer and "Switch LLC" does not, because any

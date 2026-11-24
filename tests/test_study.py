@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pytest
 
+from collectors.tx.comptroller_data_centers import parse as parse_texas_list
 from collectors.us.qpq_data_center_payers import parse
 from pipeline.config import StudyPayersFile, load_study_payers
 from pipeline.study import LEGAL_FORM_ASIDE, SAME_NAME, PayerNames
@@ -70,20 +71,95 @@ def test_a_listed_other_name_as_it_stands():
     assert met("Consumers Energy") == ("CMS / Consumers Energy", SAME_NAME, "Consumers Energy")
 
 
+# --- companies the study's page does not name, each from a public filing ------------------------
+
+
+@pytest.mark.parametrize(
+    "name,payer,listed",
+    [
+        (
+            "CenterPoint Energy Houston Electric LLC",
+            "CenterPoint Energy",
+            "CenterPoint Energy Houston Electric, LLC",
+        ),
+        ("DTE Electric Company", "DTE Energy", "DTE Electric Company"),
+        ("DTE Electric Co.", "DTE Energy", "DTE Electric Company"),
+        ("AEP Texas Inc.", "AEP", "AEP Texas Inc."),
+        ("Indiana Michigan Power Company", "AEP", "Indiana Michigan Power Company"),
+        ("Luminant Generation Company LLC", "Vistra", "Luminant Generation Company LLC"),
+        ("RELIANT ENERGY RETAIL SERVICES LLC", "NRG Energy", "Reliant Energy Retail Services, LLC"),
+        (
+            "Michigan Electric Transmission Company, LLC",
+            "ITC Holdings",
+            "Michigan Electric Transmission Company, LLC",
+        ),
+        ("Amazon Data Services Inc.", "Amazon", "Amazon Data Services, Inc."),
+        ("Oracle America Cloud Services LLC", "Oracle", "Oracle America Cloud Services, LLC"),
+        ("Digital Realty Trust, L.P.", "Digital Realty", "Digital Realty Trust, L.P."),
+        ("Alphabet Inc.", "Google", "Alphabet Inc."),
+        ("Walbridge Aldinger LLC", "Walbridge", "Walbridge Aldinger LLC"),
+    ],
+)
+def test_a_subsidiary_a_filing_names_meets_its_payer(name, payer, listed):
+    assert met(name) == (payer, SAME_NAME, listed)
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "DTE Electric",
+        "DTE Electric LLC",
+        "Amazon Data Services LLC",
+        "Luminant Generation",
+        "Digital Realty Trust LLC",
+        "Southern LLC",
+        "Alphabet",
+        "Alphabet LLC",
+    ],
+)
+def test_a_name_listed_with_its_legal_form_meets_a_record_only_as_written(name):
+    """Such a name is one company's own. Another legal form can be another company."""
+    assert met(name) is None
+
+
+def test_a_legal_name_on_an_ordinary_word_does_not_open_the_word():
+    assert met("Switch, Ltd.") == ("Switch", SAME_NAME, "Switch, Ltd.")
+    assert met("Switch, LTD") == ("Switch", SAME_NAME, "Switch, Ltd.")
+    assert met("Oracle Corporation") == ("Oracle", SAME_NAME, "Oracle Corporation")
+    for name in ("Switch LLC", "Switch Inc.", "Oracle LLC", "Oracle Ltd"):
+        assert met(name) is None
+
+
+def test_the_comptrollers_saved_list_meets_nine_payers():
+    """Real names from a real list. Before the filings were read, five of the 290 matched."""
+    page = Path(__file__).parent / "fixtures" / "tx_comptroller_data_centers"
+    rows = parse_texas_list((page / "data-center-lists.html").read_bytes())
+    companies = {n for r in rows for n in (*r.owners, *r.occupants, *r.operators)}
+    assert len(companies) == 290
+    matched = {name: NAMES.match(name).payer.name for name in companies if NAMES.match(name)}
+    assert len(matched) == 19
+    assert set(matched.values()) == {
+        "Amazon", "Digital Realty", "Google", "Microsoft", "Oracle", "QTS Data Centers",
+        "Switch", "Tesla", "Vantage Data Centers",
+    }  # fmt: skip
+    # The numbered project companies stay unmatched: no filing says whose they are.
+    assert not any("TX1" in name or "Irving DC" in name for name in matched)
+
+
 # --- what does not ------------------------------------------------------------------------------
 
 
 @pytest.mark.parametrize(
     "name",
     [
-        # A longer name that holds a payer's name. None of these is known to be the payer.
+        # A longer name that holds a payer's name. No filing was found that says whose it is.
         "Google Fiber Texas LLC",
         "Oncor Electric Delivery Administration Corp",
-        "DTE Electric Company",
-        "CenterPoint Energy Houston Electric LLC",
-        "Vantage Data Centers TX1 LLC",
-        "Amazon Data Services Inc",
-        "Digital Realty Trust LP",
+        "Vantage Data Centers TX11, LLC",
+        "QTS Irving DC3, LLC",
+        "Amazon Fulfillment Services Inc",
+        # Half owned by one payer's parent, so it is not listed.
+        "Electric Transmission Texas, LLC",
         # Initials are not listed.
         "CMS",
         "APS LLC",
@@ -99,7 +175,9 @@ def test_a_longer_or_unrelated_name_meets_no_payer(name):
 @pytest.mark.parametrize("word", ["Switch", "Meta", "Oracle", "Amazon"])
 def test_an_ordinary_word_meets_its_payer_only_when_it_stands_alone(word):
     assert met(word) == (word, SAME_NAME, word)
-    for form in ("LLC", "Inc.", "Ltd", "Corporation"):
+    # Any company can take the word and a legal form. Only a legal name a filing gives is
+    # listed: "Switch, Ltd." and "Oracle Corporation" are, and are tested below.
+    for form in ("LLC", "LP", "PLLC", "Holdings LLC"):
         assert met(f"{word} {form}") is None
 
 
@@ -108,6 +186,13 @@ def test_an_ordinary_word_meets_its_payer_only_when_it_stands_alone(word):
 
 def test_every_payer_the_file_names_is_on_the_studys_list():
     assert NAMES.unlisted == []
+
+
+def test_every_name_from_a_filing_gives_the_filings_address():
+    for entry in load_study_payers().other_names:
+        if "label" in entry.where or "the page lists" in entry.where:
+            continue  # a name the study's own page writes
+        assert "https://" in entry.where, entry.payer
 
 
 def test_every_ordinary_word_is_a_name_the_radar_could_meet():
@@ -141,16 +226,23 @@ def test_one_name_can_never_lead_to_two_payers():
         PayerNames(PAYERS, names)
 
 
-def test_two_payers_that_differ_only_by_legal_form_are_refused():
-    twin = dataclasses.replace(PAYERS[0], name="Dominion Energy Inc", url=PAYERS[0].url[:-1] + "0")
+def test_two_payers_with_one_name_are_refused():
+    twin = dataclasses.replace(PAYERS[0], name="DOMINION ENERGY", url=PAYERS[0].url[:-1] + "0")
     with pytest.raises(ValueError, match="two payers"):
         PayerNames([*PAYERS, twin], file())
+
+
+def test_a_payer_labeled_with_a_legal_form_is_kept_apart_from_its_namesake():
+    twin = dataclasses.replace(PAYERS[0], name="Dominion Energy Inc", url=PAYERS[0].url[:-1] + "0")
+    known = PayerNames([*PAYERS, twin], file())
+    assert known.match("Dominion Energy, Inc.").payer == twin
+    assert known.match("Dominion Energy").payer == PAYERS[0]
+    assert known.match("Dominion Energy LLC").payer == PAYERS[0]
 
 
 @pytest.mark.parametrize(
     "bad",
     [
-        {"other_names": [{"payer": "A", "names": ["x"], "where": "w"}] * 2},
         {
             "other_names": [
                 {"payer": "A", "names": ["Same"], "where": "w"},

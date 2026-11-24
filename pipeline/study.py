@@ -7,9 +7,12 @@ this module compares names.
 A match is by name and nothing more.
 
   same_name                    the record gives the payer's name, or a listed other name, as
-                               it stands: "Oncor".
-  same_name_legal_form_aside   the same name once a legal form at the end is set aside:
-                               "Georgia Power Company" and "Georgia Power".
+                               it stands: "Oncor", "DTE Electric Company".
+  same_name_legal_form_aside   the same name once the record's legal form is set aside:
+                               "Georgia Power Company" meets the listed "Georgia Power".
+
+A name listed with its own legal form, such as "DTE Electric Company", is one company's name.
+It meets a record only as written, so "DTE Electric LLC" does not meet it.
 
 A name never matches a longer name that merely contains it, so a project filed under a new
 company's name does not meet its parent. A match says the name is in the study. It says nothing
@@ -61,7 +64,7 @@ class PayerNames:
         # A payer the file names that the study no longer lists. Reported, never an error: the
         # study may drop a payer between two runs.
         self.unlisted: list[str] = sorted(
-            entry.payer for entry in names.other_names if entry.payer not in by_label
+            {entry.payer for entry in names.other_names if entry.payer not in by_label}
         )
 
         pairs = [(p, p.name) for p in payers]
@@ -74,8 +77,10 @@ class PayerNames:
         for payer, name in pairs:
             exact = canonical_name(name)
             self._claim(self._exact, exact, payer, name)
-            if exact not in whole_only:
-                self._claim(self._loose, match_key(name), payer, name)
+            # A name listed with its legal form is one company's own name. It meets a record
+            # only as written: "Switch, Ltd." must not let "Switch LLC" in.
+            if exact == match_key(name) and exact not in whole_only:
+                self._claim(self._loose, exact, payer, name)
 
     @staticmethod
     def _claim(held: dict[str, tuple[Payer, str]], key: str, payer: Payer, name: str) -> None:

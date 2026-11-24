@@ -37,6 +37,29 @@ Read from the saved copy.
 - It checks whether a company on record has the same name as a payer. The rules are in `pipeline/study.py` and `config/study_payers.yaml`.
 - A match says the company's name is in the study. It says nothing about a site.
 
+## Companies the study's page does not name
+
+Added on November 24, 2026, on the owner's word. A record names an operating company more often than its parent: "DTE Electric Company", not "DTE Energy". 45 such names for 16 payers are in `config/study_payers.yaml`, each with the filing that states whose it is.
+
+- **Where they come from.** 38 are in a list of subsidiaries or an annual report the company itself filed with the SEC. Three are named as a subsidiary in another company's SEC filing. Three are on the company's own site. One, Walbridge Aldinger LLC, is in a City of Detroit record.
+- **How the SEC was read.** `https://www.sec.gov/robots.txt` has `Allow: /Archives/edgar/data`. The SEC answers a request that says who is asking and refuses one that does not. Each of the 20 filings was fetched once, by hand, with a user agent that gives the project's public contact address, three seconds apart. The words were read in the saved copy.
+- **What was read another way.** The two company pages and the Detroit record were read with a web reading tool, not as raw files. The company's own site writes "Walbridge Aldinger" with no legal form.
+- **A name with its legal form meets a record only as written.** "DTE Electric Company" meets "DTE Electric Co." and not "DTE Electric LLC".
+- **On the Comptroller's saved list** of 290 companies, 5 met a payer before and 19 do now.
+
+Left out, each for a reason:
+
+- **Numbered project companies**, such as "Vantage Data Centers TX11, LLC" and "QTS Irving DC3, LLC". No filing was found that states whose they are.
+- **Project companies that only news reports tie to a parent.**
+- **Electric Transmission Texas, LLC.** AEP's annual report calls it a joint venture with Berkshire Hathaway Energy.
+- **Holding companies**, and subsidiaries whose work the filing does not state.
+
+Not verified:
+
+- Whether each filing is still current. Switch's is its annual report for 2021, the last one found.
+- **Oncor.** Its annual report for 2025 says a Sempra subsidiary owns 80.25% of it. Sempra is a separate payer in the study. Nothing was changed for that.
+- A name that only looks like a payer's can still match. A company called "Black Mountain Power Company LLC" would meet the payer "Black Mountain Power". Whether such a company exists was not checked at its source.
+
 ## Rules the collector keeps
 
 - One request for one page. Once a month is enough.
