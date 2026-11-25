@@ -1,6 +1,6 @@
 # Launch checklist
 
-BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no database is hosted, no email is sent and the site is not public.
+BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty, and no job can reach it until the owner adds its address as a secret.
 
 Each line says who does it. **Owner** means a decision or an action that section 11 of the build plan keeps for the owner. **Session** means work a build session can do once the owner has said yes to what it rests on.
 
@@ -8,7 +8,7 @@ Each line says who does it. **Owner** means a decision or an action that section
 
 Nothing below starts without a yes to its line.
 
-- [ ] **Owner.** Create the hosted Supabase project. It is a paid resource or can become one. The price was not checked for this list: check it against the 60 dollar a month target on the day.
+- [x] **Owner.** Create the hosted Supabase project. The owner said yes on November 25, 2026, to the price Supabase quoted that day: 10 dollars a month in the owner's organization, which is on the Pro plan. A session created it, named `radar`, in the us-east-1 region.
 - [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3.
 - [ ] **Owner.** Turn on real email, and choose the provider's tier. The email job only does dry runs today.
 - [ ] **Owner.** Make the site public: host it and point a name at it. Buying a domain or changing DNS is the owner's.
@@ -20,7 +20,7 @@ Nothing below starts without a yes to its line.
 
 ## 2. Built, and waiting for the hosted project
 
-The owner said on November 23, 2026 to build everything before putting anything online. These were built that day. **None has run against a hosted service, because none exists.** Each is switched on by a setting only the owner can make.
+The owner said on November 23, 2026 to build everything before putting anything online. These were built that day. **None has run against a hosted service.** The hosted database of November 25, 2026 holds the schema and no row. Each is switched on by a setting only the owner can make.
 
 - [x] **A place for the archive in the hosted project.** One private bucket in the project's storage, made by a migration. Tried against the storage service's local copy. `collectors/hosted_archive.py`.
 - [x] **Real runs in the workflows.** Every collector workflow is a dry run unless the repository variable `RADAR_LIVE` is the word true. No commit can switch it.
@@ -57,9 +57,9 @@ The owner said on November 23, 2026 to build everything before putting anything 
 
 ## 4. Before the first real run
 
-- [ ] **Session.** Apply every migration in `db/migrations/` to the hosted database, in order. The owner asked on November 25, 2026 for the newest one to be applied. **There is no hosted database to apply it to.** On that day the Supabase account priced a new project in the owner's organization, which is on the Pro plan, at 10 dollars a month.
-- [ ] **Session.** Run the policy tests against the hosted database or a copy of it. They are the proof that a pending reviewer cannot confirm, a user cannot approve themselves and the anonymous key reads only `public_alerts`.
-- [ ] **Owner.** Check the settings table: one confirmation required, and **the approval gate on**. While it is on, only an administrator can publish an alert.
+- [x] **Session.** Apply every migration in `db/migrations/` to the hosted database, in order. Done November 25, 2026 with `supabase db push`: all 14, the ledger under the files' own numbers. A dump of the hosted schema is the same as the local one's, line for line.
+- [ ] **Session.** Run the policy tests against the hosted database or a copy of it. They are the proof that a pending reviewer cannot confirm, a user cannot approve themselves and the anonymous key reads only `public_alerts`. **Not run on the hosted database:** they need its address, which is a secret, and they write test rows. They pass on the local database, whose schema is the same. Asked with the public key on November 25, 2026, the hosted API gave `public_alerts` and refused every table tried.
+- [ ] **Owner.** Check the settings table: one confirmation required, and **the approval gate on**. Read on November 25, 2026: one confirmation, the gate on. While it is on, only an administrator can publish an alert.
 - [ ] **Session.** Run each collector once by hand as a real run, one at a time, and read its log. A refusal ends that source: record it and do not run it again.
 - [ ] **Owner.** Save the Comptroller's list by hand and store it. See [runbook.md](runbook.md).
 - [ ] **Session.** Run processing once and read what it made. Expect sites in the reviewers' queue: at the bar of 3, a record that says "data center" reaches a reviewer by itself.

@@ -2,6 +2,40 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — The hosted database is created and every migration is on it
+
+**On the owner's word.** The owner was told the price, 10 dollars a month, and said to create it. Pushed earlier the same day, on the owner's word: `861c1bb`, CI passed.
+
+- **A Supabase project named `radar`,** in the owner's organization, us-east-1, Postgres 17. Created through the account's connector with the price confirmed.
+- **All 14 migrations applied in order** with `supabase db push`, from this checkout linked to the project. A dry run listed them first. The ledger holds 14 rows under the files' own numbers, `20261119000001` to `20261124000001`.
+- No secret passed through the session. The push used the sign-in the Supabase tool on this computer already holds. The database's password was never shown or set by me.
+
+**Checked on the hosted database**
+
+- **Its schema is the local one's.** A dump of the `public` and `private` schemas from each is the same, line for line: 2,334 lines, 19 tables, 30 policies, every grant, function and trigger.
+- Every table in `public` has row level security on. The anonymous role holds one grant: select on `public_alerts`. That view has the `study_payers` column.
+- **Asked through the hosted API with the public key:** `public_alerts` answers with an empty list. Twelve other tables and views were refused: documents, signals, sites, subscribers, reviewers, corrections, the audit log, the settings, the record of emails sent, both study tables and `document_refs`.
+- The archive bucket exists, is private and has no policy. The public key lists nothing in it.
+- Settings: one confirmation, the approval gate on.
+- PostGIS 3.3.7 is in the `extensions` schema.
+- No row in documents, signals, sites, reviewers or subscribers.
+
+**What Supabase's own security check says,** all by design and none changed:
+
+- Two views run with their owner's rights: `public_alerts` and `document_refs`. That is how the anonymous key reads one narrow view over tables it cannot read.
+- Five functions run with their owner's rights and can be called through the API: `submit_correction` and `unsubscribe` by anyone, `confirm_subscription`, `merge_sites` and `reviewer_directory` by a signed-in user. Each is the one door to what it does and checks its caller.
+- `alert_sends` has row level security and no policy. Only the service role reads it.
+
+**Not verified, or not done**
+
+- **The policy tests on the hosted database.** They need its address, a secret, and they write test rows. They pass on the local database, whose schema is the same.
+- **No job can reach it.** The owner adds `RADAR_DATABASE_URL` and `RADAR_ARCHIVE_KEY` as GitHub secrets and `RADAR_ARCHIVE_URL` as a variable. `RADAR_LIVE` stays the owner's switch. None is set.
+- The archive against the hosted storage service. `collectors/hosted_archive.py` has run only against the local copy.
+- No administrator exists. The owner creates the first by hand.
+- The sign-in settings of the project: its site address, its redirect addresses and its emails are as Supabase made them.
+- No copy of the study's page is stored there, so nothing is matched.
+- The stored history was not copied to it.
+
 ## November 25, 2026 — Five things the owner asked for: one cannot be done, four are
 
 **The owner's words:** apply the migration to the hosted database, switch on the study source, draft a letter to Revize about the 24 closed sites, re-read stored documents so their page numbers are right, and address the eight Michigan sites whose terms are held and Otsego's files on a second host.
