@@ -76,10 +76,18 @@ The owner said on November 23, 2026 that the clearing of own sites given for Tex
 |---|---|---|
 | Novi | The agenda itself, written on the page, with a link to each packet item | Yes. The page's words are kept. No packet item is asked for |
 | Heath Township | A link to the agenda file on the township's own site | Yes. The file is fetched |
-| Otsego city | A link to the agenda file on another host, `cdn-www-cityofotsego-org-g4w4.b-cdn.net` | No. The run log names the file. That host's robots file is not read, and the terms read were the city's |
+| Otsego city | A link to the agenda file on another host, `cdn-www-cityofotsego-org-g4w4.b-cdn.net` | Yes, since November 25, 2026, on the owner's word. See below |
 | Lyndon Township | Links with download addresses and no file type | No. The run log names the page |
 | Plainwell | Nothing to follow: its lists link PDF files. The second read's note that they end in `.aspx` was wrong. The fetcher's robots request came back open on November 24 | Yes, as any list of files is |
 | Holly | A download address with no file type. A link that turns out to be the file is now kept as the agenda. Not tried on Holly's site since | Not known |
+
+**Otsego's second host.** The owner said on November 25, 2026 to address it. The city's pages link every file on `cdn-www-cityofotsego-org-g4w4.b-cdn.net`, a delivery host named for the city's site, on bunny.net's service.
+
+- The radar's reader asked the host for its robots file that day. It answered 200 with the city's own file: it bars `/wp-admin/` and names the sitemap of `www.cityofotsego.org`. The agenda files are allowed.
+- The reader then fetched one agenda file from it, once. It is a two-page PDF with words on both pages, the City Commission's agenda for November 16, 2026. It is kept outside the repository.
+- The host counts as the city's own, **for Otsego's pages only.** It is listed in `OWN_FILE_HOSTS` in `collectors/tx/agenda_pages.py`. Another address on the same service is another customer's and does not count. Tests hold both.
+- The terms read were the city's, which say nothing on automated access. bunny.net's terms of service were read through a page-reading tool that gives a summary. It reported no sentence on robots, crawlers or the public's access to delivered files. They were not read in full.
+- Not verified: a run through the collector on the live site. The test runs on the saved pages with a made-up file.
 
 **Seven governments' pages carry the year in their address:** Novi, Commerce Township, Farmington, Farmington Hills, Highland Park, Holly and Plainwell, 21 pages. Each needs a new inventory row in January.
 
@@ -153,8 +161,8 @@ On the owner's word, after the fixes: each of the 101 pages cleared now, up to t
 
 ## Before a job reads it
 
-1. The owner decides the eight held sites. Until then they stay held.
-2. **Decided: the Revize files stay closed.** As the sites write them the robots rule bars them. The same file without the `?t=` mark is an address the rule allows. The owner said on November 23, 2026 to leave them closed. The 24 sites are marked `robots_bar` in `config/mi_agenda_site_terms.csv`, as Texas' two such sites are, so no run asks them for anything. A letter to Revize is not written.
+1. The owner decides the eight held sites. Until then they stay held. The owner said on November 25, 2026 to address them. A letter to each is drafted in `drafts/mi-held-sites-requests-2026-11-25.md`, with a reading of each sentence. None is sent and none of the eight is cleared.
+2. **Decided: the Revize files stay closed.** As the sites write them the robots rule bars them. The same file without the `?t=` mark is an address the rule allows. The owner said on November 23, 2026 to leave them closed. The 24 sites are marked `robots_bar` in `config/mi_agenda_site_terms.csv`, as Texas' two such sites are, so no run asks them for anything. A letter to Revize is drafted in `drafts/revize-request-2026-11-25.md`, on the owner's word of November 25, 2026. It is not sent. Revize's own site bars every program but seven named crawlers, so its contact page was not opened and the address is the owner's to fill in.
 3. The owner says to run it.
 4. The source's method changes from `manual` to `http`, the collector goes on the list in `collectors/run.py` and a workflow file is added. A test holds all three together.
 5. The owner decides what the trial of the keyword rules proposed. They were tried on the run's 56 files on November 24, 2026: `docs/progress.md` has the count. The direct term missed nothing, "special land use" alone gave only noise, and most mentions were a town writing its rules. The owner said that day to stop a signal on "special land use" alone, and it is done. A label for the reviewer, where "data center" sits beside "moratorium" or "ordinance" in the same item, was built the same day, and the owner approved its wording. A long file with the words past its first page is no longer called an agenda, built the same day, and the owner approved its wording.

@@ -126,7 +126,11 @@ The desk shows the two settings: confirmations needed for an alert, and the appr
 
 ## Letters and permissions
 
-Nine letters are out, listed in `docs/progress.md`. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
+Nine letters are out, listed in `docs/progress.md`. Two more are drafted and not sent, in `drafts/`: one to Revize about the 24 sites whose files its robots rule bars, and one for each of the eight Michigan governments whose terms are held. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
+
+## Page numbers on files stored before November 24, 2026
+
+`python -m pipeline.reread` notes which pages of each stored PDF hold no words, so a reviewer is shown the file's own page numbers. It needs `DATABASE_URL` and the archive. It says what it would do and writes nothing unless given `--write`. It opens a file only when the stored text has fewer pieces than the file has pages, and it leaves any file that reads differently today. It fetches nothing from any site. Dump the database first. A file stored since that day carries the note already, so the job has nothing to do on it.
 
 ## The email job
 

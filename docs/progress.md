@@ -2,6 +2,74 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — Five things the owner asked for: one cannot be done, four are
+
+**The owner's words:** apply the migration to the hosted database, switch on the study source, draft a letter to Revize about the 24 closed sites, re-read stored documents so their page numbers are right, and address the eight Michigan sites whose terms are held and Otsego's files on a second host.
+
+**1. The migration: not applied. There is no hosted database.**
+
+- **A correction first.** Notes of November 24 and my messages to the owner spoke of "the hosted database". None exists. The Supabase account lists four projects and none is the radar's. The repository has no variable and no secret. The stored history is in `radar_backtest` on the owner's computer, as the launch checklist has said since November 23. Seven lines below are corrected where they stand.
+- Creating a hosted project is a paid resource and the owner's decision under section 11. It was not created.
+- **The price, checked today:** the Supabase account priced a new project in the owner's organization, which is on the Pro plan, at 10 dollars a month.
+- Three "not verified" lines of November 24 said a check could not be made because the documents were hosted. They are on this computer. Those checks are still not made: how many long Texas agendas take the "past its first page" wording, the set-aside phrase against the 28 items the owner reviewed, and how often "special land use" stood alone in Texas.
+
+**2. The study source is switched on.**
+
+- `us_qpq_data_center_payers` is `http`, its collector is on the list in `collectors/run.py`, and `.github/workflows/collect-us-qpq-data-center-payers.yml` starts it by hand. No schedule. Like every workflow it is a dry run until the owner sets `RADAR_LIVE`.
+- **One dry run by hand,** by the radar's reader: robots read, the page loaded, the parser read the table. Nothing kept.
+- The methodology page lists it among the sources read, as "United States". That label is mine.
+- **No copy is stored, so nothing is matched.** A real run needs a database to keep the copy in.
+
+**3. A letter to Revize is drafted, not sent:** `drafts/revize-request-2026-11-25.md`, outside the repository.
+
+- It quotes the rule, `Allow: /*.pdf$`, and shows why a file linked with `?t=` after `.pdf` falls outside it. It asks Revize to change the rule, to permit the files in writing, or to say the bar is meant.
+- **The address is the owner's to fill in.** Revize's own site bars every program but seven named crawlers, read today, so its contact page was not opened.
+
+**4. The re-read job is built and has run on the stored history.** `python -m pipeline.reread`.
+
+- It notes, with each PDF stored before November 24, which of its pages hold no words. Where the stored text has a piece for every page, the note is empty and the file is not opened. Otherwise the file is read again from the archive, and the note is written only if it reads today as the stored text, to the letter, with the same count of pages.
+- A signal already made from the file gets the file's own page numbers in the same step, and is marked. Nothing else about it changes.
+- It writes nothing without `--write`, changes no stored text and fetches nothing from any site. 12 tests.
+- **Run on the history database,** after a dump to `~/.local/share/radar/backtest/backups/`:
+
+| | |
+|---|---|
+| PDFs with no note | 2,139: 1,777 agenda files and 362 ERCOT planning files |
+| Noted without opening the file | 1,957 |
+| Read again from the archive | 182: 181 agenda files and 1 ERCOT file |
+| Read again and matched the stored text to the letter | 182 |
+| Left without a note | 0 |
+| Pages with no words, in those 182 files | 2,548. The most in one file is 156 |
+| Signals changed | 0. The history database holds none |
+
+- 14 of the 182 are scans read by character recognition. Each read today exactly as it was stored.
+- **Checked afterward in the database:** for every one of the 2,139, the pieces of the stored text equal the file's pages less the pages noted. The count of documents is 5,919, as in the dump.
+- Not verified: the stored text against the dump, byte for byte. The job has no statement that changes text. And the signal step on a real signal: it is tested on made-up files only.
+
+**5. The eight held sites: a letter to each is drafted, not sent, and none is cleared.** `drafts/mi-held-sites-requests-2026-11-25.md`.
+
+- Each home page was read once by the radar's reader for the address to write to. Otsego Township's gives an email address. The other seven give a contact or clerk page, which was not opened.
+- The draft gives my reading of each sentence, for the owner to decide: Keego Harbor, Southgate and Dearborn allow non-commercial use on their plain words. Otsego Township, Berlin and Plymouth turn on the phrase "any means not intentionally made available". Ross Township and Rockwood need written permission. It is a reading, not legal advice.
+- **Clearing any of the eight is still the owner's word.** "Address" was not taken as that.
+
+**6. Otsego's second host counts as the city's own.**
+
+- The reader asked `cdn-www-cityofotsego-org-g4w4.b-cdn.net` for its robots file. It answered with the city's own file, which bars `/wp-admin/` and names the city's sitemap. The agenda files are allowed.
+- One agenda file was then fetched from it, once: a two-page PDF, the City Commission's agenda for November 16, 2026. Kept outside the repository.
+- The host is listed in `OWN_FILE_HOSTS` and counts for Otsego's pages only. Three tests, written first.
+- bunny.net's terms of service were read through a tool that gives a summary. It found nothing on robots or on the public's access. Not read in full.
+
+**Tests.** 1,389 pass, 15 of them new. The web tests are 17, and the site builds.
+
+**Not verified, or not done**
+
+- Anything on a hosted database. None exists.
+- The study workflow on GitHub's servers. It has not been started.
+- Otsego's files through the collector on the live site. Both Michigan sources are still `manual`.
+- Whether each of the eight sites' terms still read as they did on November 23.
+- Revize's address.
+- Nothing is pushed.
+
 ## November 25, 2026 — M12: the owner approved the methodology page's section on the study
 
 - The owner was shown the section "Company names and the QPQ Tracker's study" as it stands on the methodology page and said to keep it. No word of it changed.
@@ -10,7 +78,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Verified:** the tests, the lint and the web checks pass. Nothing else changed.
 
-**Still not verified, or not done:** everything listed in the two entries below, apart from this wording. Nothing is switched on. The migration is not on the hosted database.
+**Still not verified, or not done:** everything listed in the two entries below, apart from this wording. Nothing is switched on. The migration is not on the hosted database. (Corrected the same day: there is no hosted database. See the entry above.)
 
 ## November 24, 2026 — M12: 45 operating companies added to the payers' names
 
@@ -65,8 +133,8 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Not verified, or not done**
 
-- **Nothing is matched yet.** No copy of the page is stored, the local database holds no company, and the hosted database was not read. The matching is tested on the real list with names I wrote.
-- **The migration is not on the hosted database.** The alert page now asks for the new column. Apply the migration before the site is built against that database.
+- **Nothing is matched yet.** No copy of the page is stored, the local database holds no company, and the hosted database was not read. (Corrected November 25, 2026: no hosted database exists. The history database on the owner's computer holds no company either.) The matching is tested on the real list with names I wrote.
+- **The migration is not on the hosted database.** The alert page now asks for the new column. Apply the migration before the site is built against that database. (Corrected November 25, 2026: no hosted database exists yet. The migration waits for one.)
 - **The methodology page's section is mine.** The owner approved the wording of the review page's note and of the alert's section on November 24, 2026, and has not been shown the methodology section. (Shown and approved on November 25, 2026. See the entry above.)
 - **Most real matches will be missed.** A project filed under a new LLC does not meet its parent. Subsidiaries the study's page does not name are not listed: CenterPoint Energy Houston Electric, AEP Texas, DTE Electric, Amazon Data Services and others. Adding them is the owner's call.
 - 35 of the 61 payers are utilities. A utility named in an interconnection record says little about who is building.
@@ -170,7 +238,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Not verified**
 
-- Documents already in the hosted database carry no note. Their numbers can still run behind until each is read again. That would be a job over the stored files, and it is not built.
+- Documents already in the hosted database carry no note. Their numbers can still run behind until each is read again. That would be a job over the stored files, and it is not built. (Corrected November 25, 2026: no hosted database exists. The stored documents are in the history database on the owner's computer, which that session could have read and did not.) The job was built and run on November 25, 2026.
 - The page in a browser. It was built, not opened.
 - Scans read by character recognition: the note is made there too, and is tested only on a made-up scan.
 
@@ -190,7 +258,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **Why no page number.** The stored text drops a page that has no words, so the count of pages with words can run behind the file's own page numbers. In 2 of the 52 PDF files it does. "Past its first page" is true either way. The same count is what a reviewer sees as the pages with the terms. That is not fixed.
 
-**Not verified:** the rule on Texas agendas. A long Texas agenda that takes up a matter on its third page would read as a file, which is true and says less. How many do is not known: the stored documents are in the hosted database.
+**Not verified:** the rule on Texas agendas. A long Texas agenda that takes up a matter on its third page would read as a file, which is true and says less. How many do is not known: the stored documents are in the hosted database. (Corrected November 25, 2026: no hosted database exists. The stored documents are in the history database on the owner's computer, which that session could have read and did not.)
 
 ## November 24, 2026 — M11: an ordinance's definition of a data center is no longer set aside
 
@@ -203,7 +271,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 - Tests came first: 2 new, one on the real item and one on a file that holds only such a definition. 1,226 pass.
 - **On the 56 Michigan agendas: nothing is set aside now, where one hit was.** The same 16 signals, the same 10 labelled.
 
-**Not verified:** the phrase against the 28 real Texas items the owner reviewed. They are in the hosted database and the local one is empty. The seven real hosting wordings kept in the tests are all still set aside. Another ordinance that words its definition differently would need its own word, from its own record.
+**Not verified:** the phrase against the 28 real Texas items the owner reviewed. They are in the hosted database and the local one is empty. (Corrected November 25, 2026: no hosted database exists. The stored documents are in the history database on the owner's computer, which that session could have read and did not.) The seven real hosting wordings kept in the tests are all still set aside. Another ordinance that words its definition differently would need its own word, from its own record.
 
 ## November 24, 2026 — M11: a label for the reviewer where "data center" sits beside the words of rule making
 
@@ -242,7 +310,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 **A correction.** I told the owner the set-aside for a government's own computers met nothing in the sample. It met one hit, and set it aside wrongly: a zoning ordinance's definition of a data center, which lists "servers". The table below is corrected. The rule is not changed.
 
-**Not verified:** how often Texas' stored agendas used "special land use" alone. The stored documents are in the hosted database, which this session did not read.
+**Not verified:** how often Texas' stored agendas used "special land use" alone. The stored documents are in the hosted database, which this session did not read. (Corrected November 25, 2026: no hosted database exists. The stored documents are in the history database on the owner's computer, which that session could have read and did not.)
 
 ## November 24, 2026 — M11: the keyword rules tried on 56 Michigan agendas
 

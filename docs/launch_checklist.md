@@ -57,7 +57,7 @@ The owner said on November 23, 2026 to build everything before putting anything 
 
 ## 4. Before the first real run
 
-- [ ] **Session.** Apply every migration in `db/migrations/` to the hosted database, in order.
+- [ ] **Session.** Apply every migration in `db/migrations/` to the hosted database, in order. The owner asked on November 25, 2026 for the newest one to be applied. **There is no hosted database to apply it to.** On that day the Supabase account priced a new project in the owner's organization, which is on the Pro plan, at 10 dollars a month.
 - [ ] **Session.** Run the policy tests against the hosted database or a copy of it. They are the proof that a pending reviewer cannot confirm, a user cannot approve themselves and the anonymous key reads only `public_alerts`.
 - [ ] **Owner.** Check the settings table: one confirmation required, and **the approval gate on**. While it is on, only an administrator can publish an alert.
 - [ ] **Session.** Run each collector once by hand as a real run, one at a time, and read its log. A refusal ends that source: record it and do not run it again.
@@ -69,7 +69,7 @@ The owner said on November 23, 2026 to build everything before putting anything 
 
 Read from `config/sources.yaml` and the notes in `docs/sources/` on November 23, 2026.
 
-- **Read by a job:** Legistar agendas for 9 governments, agenda files on 57 governments' own sites, the ERCOT planning group, ERCOT large load totals, TCEQ pending air permits and state well reports.
+- **Read by a job:** Legistar agendas for 9 governments, agenda files on 57 governments' own sites, the ERCOT planning group, ERCOT large load totals, TCEQ pending air permits and state well reports. Since November 25, 2026 also the QPQ Tracker's study page, once a month, for its list of payers.
 - **Saved by a person:** the Comptroller's list of registered data centers, once a month.
 - **Waiting on an answer to a letter:** Texas public notices, the PUC, the Comptroller's local agreements, TDLR registrations, CivicPlus agenda platforms and two Michigan feeds. No collector reads them. FracTracker has been asked whether its data may be used as it is.
 - **Refused:** the Michigan Public Service Commission.
