@@ -2,6 +2,44 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — Letters sent, three Michigan sites cleared and read, three Texas checks run
+
+**The owner's words:** send the letters, pull the Michigan data for the sites that allow non-commercial use, and run the three Texas checks. Pushed earlier the same day, on the owner's word: `69040fa`, CI passed.
+
+**1. Four letters were sent. Four were not.**
+
+- **Sent,** by email from the Dekleptocracy Alliance mailbox, each as the owner saw it: Otsego Township, Berlin Charter Township, Plymouth Charter Township and Rockwood. Otsego Township's address is on its home page. The other three are the clerk's address on each site's clerk page, which the radar's reader opened once.
+- **Not sent: Revize.** No address. Revize's own site bars every program, so its contact page was not opened.
+- **Not sent: Ross Township.** Its contact page hides its addresses from programs and offers a form. The hidden addresses were not decoded. The form is the owner's to fill in.
+- **Not sent: Keego Harbor, Southgate and Dearborn.** The owner cleared them the same day and their agendas were read. Each letter says "We have collected none of your agendas", which is no longer true. They need new words or no letter. That is the owner's to say.
+- No message came back as undeliverable in the first minutes.
+- The watch on the mailboxes now lists thirteen letters.
+
+**2. Three sites are cleared and were read once.**
+
+- Keego Harbor, Southgate and Dearborn are marked `noncommercial_cleared` in `config/mi_agenda_site_terms.csv`, a new mark that lets a collector take a confirmed row. Each note keeps the sentence that was read and the day. Tests came first. Texas' four sites with like terms are untouched.
+- **What a collector could take in Michigan is now 121 rows of 56 governments,** 51 with their governing body: Allegan 12, Oakland 11, Washtenaw 9, Wayne 7, Kalamazoo 6, Monroe 6. It was 112 rows of 53.
+- **The pull, by hand, nothing in a database:** 9 pages, 9 agenda files, no refusal, 21 requests. Two files are scans read by character recognition. The files are outside the repository, each under its hash.
+- **One draft signal, and it is not a project.** A 151-page Keego Harbor packet uses "data center" on page 92 and "development agreement" on page 16. Both pages were opened. Page 92 is a county contract for computer services. Page 16 is a form's standing words. The set-aside for a government's own computers did not catch it: the contract says "Data Center Use & Services" and "County's Data Center", and neither is on the list. Adding a word is the owner's to decide.
+- Both Michigan sources are still `manual`. No job reads them.
+
+**3. The three Texas checks, on the stored history.** 1,784 agenda files and 3,635 Legistar agendas with 107,102 items. Read only.
+
+- **How many agenda files take the "past its first page" wording: 142 of 228 signals, 62 percent.** The owner approved the wording on three Michigan files of 16. In Texas it is the common case. In 53 of the 142 the first page with the words is page 2, and in 20 it is page 11 or later. 15 of the 142 hold the direct term. Another 25 long files have the words on their first page, and 61 are one or two pages or uncounted. The page numbers of all 142 are sure, since the re-read.
+- **The phrase "facility used for" changes nothing in Texas.** With it and without it the rules give the same 1,052 signals and set aside the same 31 items. No stored Texas agenda holds the phrase.
+- **"Special land use" is not used in Texas' stored agendas.** No document holds the words, so the rule that stopped a signal on them alone removed none.
+
+**Tests.** 1,390 pass, one of them new.
+
+**Not verified, or not done**
+
+- Whether the four letters arrived. No bounce is not proof.
+- The three cleared sites' terms were not read again today. The sentences are those read on November 23.
+- Dearborn's five other pages. Their rows are inferred and no second read confirmed them.
+- The pull's files against a second read. The collector's newest agenda was not compared with the checks file.
+- Whether a wording change is wanted for Texas, where most file signals read "past its first page".
+- Nothing is pushed.
+
 ## November 25, 2026 — The hosted database is created and every migration is on it
 
 **On the owner's word.** The owner was told the price, 10 dollars a month, and said to create it. Pushed earlier the same day, on the owner's word: `861c1bb`, CI passed.

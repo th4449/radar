@@ -126,7 +126,7 @@ The desk shows the two settings: confirmations needed for an alert, and the appr
 
 ## Letters and permissions
 
-Nine letters are out, listed in `docs/progress.md`. Two more are drafted and not sent, in `drafts/`: one to Revize about the 24 sites whose files its robots rule bars, and one for each of the eight Michigan governments whose terms are held. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
+Thirteen letters are out, listed in `docs/progress.md`. Four went on November 25, 2026 to Michigan governments whose terms are held: Otsego Township, Berlin Charter Township, Plymouth Charter Township and Rockwood. Not sent, in `drafts/`: the letter to Revize, which has no address yet, and the one to Ross Township, whose site offers only a form. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
 
 ## Page numbers on files stored before November 24, 2026
 

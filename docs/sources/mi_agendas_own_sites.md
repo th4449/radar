@@ -3,7 +3,7 @@
 - Source id: `mi_agendas_own_sites`
 - Interface: each government's own website. The list is `config/mi_agenda_inventory.csv`
 - Checked: November 23, 2026
-- Result: **53 of 220 governments have a row a collector could take. A collector is written. No job reads any of them.** It was 77 until the run by hand of November 23 met 24 sites whose files a robots rule bars. The owner said to leave those closed. The source is still marked `manual`, and only the owner changes that.
+- Result: **56 of 220 governments have a row a collector could take. A collector is written. No job reads any of them.** It was 53 until November 25, 2026, when the owner cleared three sites whose terms allow non-commercial use. It was 77 until the run by hand of November 23 met 24 sites whose files a robots rule bars. The owner said to leave those closed. The source is still marked `manual`, and only the owner changes that.
 - Collector: `collectors/mi/agenda_pages.py`, which is Texas' `collectors/tx/agenda_pages.py` pointed at Michigan's inventory
 - Tests: `tests/test_mi_agendas_own_sites.py`, on ten saved pages
 - Counties: Allegan, Kalamazoo, Monroe, Oakland, Washtenaw and Wayne
@@ -42,14 +42,14 @@ Read for the 90 hosts that carry a confirmed row. Every home page loaded and non
 | No terms, disclaimer or privacy page | 63 | may read |
 | A privacy or policy page that says nothing on automated access or reuse | 16 | may read |
 | Terms bar obtaining material "through any means not intentionally made available" | 3 | **held for the owner** |
-| Terms allow non-commercial use and ask consent for other use | 3 | **held for the owner** |
+| Terms allow non-commercial use and ask consent for other use | 3 | **cleared by the owner on November 25, 2026** |
 | Terms bar use or copying without written consent | 2 | **held for the owner** |
 | Built and hosted by CivicPlus | 2 | held with the CivicPlus platforms |
 | The home page gave the reader nothing | 1 | not read |
 
 **No site's terms name a robot, a crawler or a scraper.**
 
-The eight held for the owner:
+The eight that were held for the owner. **Three are cleared since November 25, 2026: Keego Harbor, Southgate and Dearborn.** The owner said that day to read the sites that allow non-commercial use. The radar is free and non-commercial, and that must stay so for the clearing to hold. Their rows in `config/mi_agenda_site_terms.csv` are marked `noncommercial_cleared`. **Five stay held:** Otsego Township, Berlin Charter Township, Plymouth Charter Township, Ross Township and Rockwood. Letters went to four of them that day. Ross Township's contact page hides its addresses from programs and offers a form, which is the owner's to fill in.
 
 - **Otsego Township, Berlin Charter Township and Plymouth Charter Township** use the same sentence: "You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided for through" the site. An agenda linked on a public page is made available by the site. Whether a program that follows that link is such a means is the owner's to decide.
 - **Ross Township** has that sentence and adds: "You will use protected content solely for your personal use, and will make no other use of the content without the express written permission of Ross Township and the copyright owner."
@@ -146,6 +146,26 @@ On the owner's word, after the fixes: each of the 101 pages cleared now, up to t
 - **Nine of the first run's 22 differing pages are on Revize sites that are now closed,** so they were not read again.
 - **Three more faults, each fixed after the run and not run again.** A page can name a base address for its links: Allegan's does, and without it each of its files was a 404 on both runs. A link on Holly's list led to a download address, and what came back was kept as nothing. And the labels of three buttons were kept as the first words of one of Novi's agendas.
 - **Still differing, 13 pages,** for the reasons the first run showed: packets that nothing calls an agenda, names with no day or no year, and pages where the second read counted a notice or a file of minutes. Novi's corridor authority is one: old packet files on its list keep the collector from following it.
+
+## The pull of November 25, 2026: the three cleared sites
+
+On the owner's word the collector ran once, by hand, over the nine cleared pages of Keego Harbor, Southgate and Dearborn, with the limits an everyday run keeps. Nothing went to a database. The files are kept outside the repository, each under its hash, with its address and retrieval time in the run's report.
+
+| | |
+|---|---|
+| Pages asked for, and read | 9 and 9: Southgate 5, Keego Harbor 3, Dearborn 1 |
+| Agenda files kept | 9: Keego Harbor 4, Southgate 4, Dearborn 1 |
+| Sites that refused | 0 |
+| Files that are text, and scans read by character recognition | 7 and 2 |
+| Meetings covered | November 4 to December 2, 2026 |
+| Draft signals, stored nowhere | 1 |
+| Requests, with a robots request for each host | 21 |
+
+- **Keego Harbor's and Southgate's files are on the cities' own hosts,** not on a Revize file host, though Revize builds both sites. Their addresses carry `?t=` and no robots file bars them: each host answers 404 to the robots request.
+- **Only one of Dearborn's six pages is cleared:** its council's. The other five rest on an inferred row.
+- **The one draft signal is not a project.** A 151-page Keego Harbor packet for November 19 uses "data center" on page 92 and "development agreement" on page 16. Both pages were opened. Page 92 is a county contract for computer services: space for the city's equipment in the county's data center. Page 16 is a form's standing words about mitigation. A reviewer would reject it.
+- **The set-aside for a government's own computers did not catch it.** The contract's words are "Data Center Use & Services" and "County's Data Center", and neither is on the rule's list. Adding a word is the owner's to decide.
+- The file's page numbers are sure: the packet has words on every page.
 
 ## Not verified
 
