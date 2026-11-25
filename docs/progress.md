@@ -2,6 +2,16 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — M12: the owner approved the methodology page's section on the study
+
+- The owner was shown the section "Company names and the QPQ Tracker's study" as it stands on the methodology page and said to keep it. No word of it changed.
+- The approval is noted at the top of `web/src/pages/methodology/index.astro`.
+- All three pieces of the study's wording are now approved: the review page's note, the alert's section and this one.
+
+**Verified:** the tests, the lint and the web checks pass. Nothing else changed.
+
+**Still not verified, or not done:** everything listed in the two entries below, apart from this wording. Nothing is switched on. The migration is not on the hosted database.
+
 ## November 24, 2026 — M12: 45 operating companies added to the payers' names
 
 **On the owner's word.** The owner asked for the research, was shown the list with its sources and said to add it.
@@ -57,7 +67,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 
 - **Nothing is matched yet.** No copy of the page is stored, the local database holds no company, and the hosted database was not read. The matching is tested on the real list with names I wrote.
 - **The migration is not on the hosted database.** The alert page now asks for the new column. Apply the migration before the site is built against that database.
-- **The methodology page's section is mine.** The owner approved the wording of the review page's note and of the alert's section on November 24, 2026, and has not been shown the methodology section.
+- **The methodology page's section is mine.** The owner approved the wording of the review page's note and of the alert's section on November 24, 2026, and has not been shown the methodology section. (Shown and approved on November 25, 2026. See the entry above.)
 - **Most real matches will be missed.** A project filed under a new LLC does not meet its parent. Subsidiaries the study's page does not name are not listed: CenterPoint Energy Houston Electric, AEP Texas, DTE Electric, Amazon Data Services and others. Adding them is the owner's call.
 - 35 of the 61 payers are utilities. A utility named in an interconnection record says little about who is building.
 - How often the study's list changes, and whether the site answers GitHub's servers.
