@@ -2,6 +2,18 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — A notice to Dearborn. Southgate's and Keego Harbor's are the owner's to send
+
+**On the owner's word:** send the three cleared cities a notice in place of the request. The owner was shown the three changes first: the subject, the opening and the words after the quoted terms.
+
+- **Dearborn: sent** to the City Clerk, at the address on the city's clerk page.
+- **Southgate: not sent.** The city's contact page says it lists no addresses "due to spam bots" and writes the clerk's office address out in words. A program did not use an address the city keeps from programs. The notice is written, in `drafts/mi-notices-2026-11-25.md`.
+- **Keego Harbor: not sent.** Its contact page gives a form and no address. The notice is written, in the same file.
+- Four pages were read for this by the radar's reader, once each: a clerk or contact page of each city, and Southgate's contact page.
+- The watch on the mailboxes lists fourteen letters.
+
+**Not verified:** that any of the five letters of the day arrived.
+
 ## November 25, 2026 — Letters sent, three Michigan sites cleared and read, three Texas checks run
 
 **The owner's words:** send the letters, pull the Michigan data for the sites that allow non-commercial use, and run the three Texas checks. Pushed earlier the same day, on the owner's word: `69040fa`, CI passed.
