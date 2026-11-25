@@ -138,7 +138,7 @@ def test_each_state_has_its_own_checks_and_site_terms_files():
 
 HELD = (
     "access_means_clause",
-    "noncommercial_only",
+    "noncommercial_only",  # no Michigan row carries it now. Texas has none either
     "reuse_needs_consent",
     "vendor_site",
     "could_not_read",
@@ -166,7 +166,6 @@ def test_a_michigan_row_is_cleared_only_when_confirmed_and_every_host_of_its_sit
     governments = {b.government for b in cleared}
     # Sites whose terms are held for the owner, or built by a vendor whose terms bar a collector.
     for held in (
-        "Dearborn city",
         "Rochester city",
         "Ross township",
         "Rockwood city",
@@ -177,6 +176,42 @@ def test_a_michigan_row_is_cleared_only_when_confirmed_and_every_host_of_its_sit
     from collectors.tx.legistar import cleared_clients
 
     assert len(cleared_clients(dt.date(2026, 11, 21))) == 9
+
+
+def test_three_sites_whose_terms_allow_non_commercial_use_are_cleared_on_the_owners_word():
+    """The owner said on November 25, 2026 to read the sites that allow non-commercial use."""
+    today = dt.date(2026, 11, 25)
+    assert "noncommercial_cleared" in ac.SITE_ALLOWS
+    assert "noncommercial_only" not in ac.SITE_ALLOWS
+    sites = inv.load_site_terms(state="MI")
+    cleared = {r["government"]: r for r in sites if r["result"] == "noncommercial_cleared"}
+    assert set(cleared) == {"Keego Harbor city", "Southgate city", "Dearborn city"}
+    for row in cleared.values():
+        # The sentence that was read stays in the note, with the day the owner cleared it.
+        assert "non-commercial" in row["note"] or "Commercial use" in row["note"]
+        assert "The owner cleared it on 2026-11-25" in row["note"]
+    # None is left held under the old mark, and the other five held sites are as they were.
+    assert not [r for r in sites if r["result"] == "noncommercial_only"]
+    still = {
+        r["government"]
+        for r in sites
+        if r["result"] in ("access_means_clause", "reuse_needs_consent")
+    }
+    assert still == {
+        "Otsego township",
+        "Berlin charter township",
+        "Plymouth charter township",
+        "Ross township",
+        "Rockwood city",
+    }
+    bodies = inv.load_inventory(state="MI")
+    checks = ac.Checks(ac.load_checks(state="MI"))
+    takes = {b.government for b in bodies if ac.collectable(b, checks, today, state="MI")}
+    assert set(cleared) <= takes
+    assert not still & takes
+    # Texas' four sites with like terms are not cleared by this.
+    texas = inv.load_site_terms()
+    assert not [r for r in texas if r["result"] == "noncommercial_cleared"]
 
 
 def test_no_job_reads_a_michigan_agenda_source_yet():

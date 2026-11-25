@@ -298,13 +298,16 @@ def test_the_pages_read_are_the_ones_michigans_inventory_clears():
     governments = {p.government for p in CLEARED.values()}
     # 145 pages of 76 governments until the run by hand of November 23, 2026. It met 24 sites
     # whose agenda files sit on a host that bars them as the sites write their addresses.
-    assert (len(CLEARED), len(governments)) == (101, 52)
+    # 101 pages of 52 until November 25, 2026, when the owner cleared three sites whose terms
+    # allow non-commercial use: Keego Harbor, Southgate and Dearborn, nine pages.
+    assert (len(CLEARED), len(governments)) == (110, 55)
     assert {"Allegan city", "Novi city", "Oshtemo charter township"} <= governments
+    assert {"Keego Harbor city", "Southgate city", "Dearborn city"} <= governments
     assert not governments & {"Chelsea city", "Pontiac city", "Allen Park city", "Milan city"}
     # Held for the owner by their own terms, built by CivicPlus, refused, or closed by robots.
     assert not governments & {
-        "Dearborn city",
-        "Keego Harbor city",
+        "Ross township",
+        "Rockwood city",
         "Rochester city",
         "Detroit city",
         "Dexter township",

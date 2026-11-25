@@ -314,8 +314,10 @@ def verdict(body: AgendaBody, checks: Checks, today: dt.date) -> tuple[Verdict, 
     return "confirmed", f"Checked {check.checked_on}. Newest agenda {check.newest_agenda_date}."
 
 
-# What a government's own pages may say and still be read by a collector.
-SITE_ALLOWS = ("own_pages_silent", "no_terms_found")
+# What a government's own pages may say and still be read by a collector. The last is a site
+# whose terms allow non-commercial use and say nothing on automated access, which the owner
+# read and cleared by name. The radar's use must stay free and non-commercial for it to hold.
+SITE_ALLOWS = ("own_pages_silent", "no_terms_found", "noncommercial_cleared")
 
 
 def site_allows(body: AgendaBody, sites: list[dict[str, str]]) -> bool:
