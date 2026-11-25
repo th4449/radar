@@ -799,6 +799,15 @@ def _file_pages(meta: dict, pieces: int) -> tuple[list[int | None], bool]:
     return numbers, pieces == pages and not meta.get("members")
 
 
+def text_pieces(text: str) -> int:
+    """How many pieces a file's stored text has: one for each page or slide with words."""
+    return len(_passages(text))
+
+
+# For pipeline/reread.py, which notes the pages with no words on files stored before the note.
+file_pages = _file_pages
+
+
 # A file of one or two pages that a government posts as its agenda is its agenda.
 _AGENDA_PAGES = 2
 
