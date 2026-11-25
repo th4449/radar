@@ -2,6 +2,7 @@
 # One request for each host on the day shown, redirects followed (RFC 9309 section 2.3.1.2), no retry.
 # kind       site        a government's or a development authority's own host
 #            file_host   a Revize host that keeps sites' files
+#            own_file_host  a host that serves one government's own files and counts as its site
 # read_at    where the answer came from, when the request was redirected to another host
 # collector  yes: the file lets the collector read the site's pages, or there is no file
 #            no: it bars the collector, was refused or could not be read
@@ -145,3 +146,4 @@ www.webstermi.us,site,2026-11-23,404,https://cms9files.revize.com/webstertwpmi/r
 www.wolverinelake.com,site,2026-11-23,404,https://cms8.revize.com/revize/wolverinelakemi/robots.txt,yes,,No robots file.
 www.woodhavenmi.org,site,2026-11-23,404,http://cms5.revize.com/revize/woodhavenmi/robots.txt,yes,,No robots file.
 ypsitownship.org,site,2026-11-23,404,https://files.ypsitownship.org/robots.txt,yes,,No robots file.
+cdn-www-cityofotsego-org-g4w4.b-cdn.net,own_file_host,2026-11-25,200,,yes,,"Otsego city's delivery host. It answers with the city's own robots file: it bars /wp-admin/ and names the sitemap of www.cityofotsego.org. The agenda files are allowed. The owner said on 2026-11-25 to count the host as the city's own."

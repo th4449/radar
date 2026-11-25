@@ -627,6 +627,11 @@ def find_feed_links(body: bytes, feed_url: str) -> list[AgendaLink]:
 FILE_HOSTS = frozenset({"img1.wsimg.com", CALENDAR_HOST})
 # HeyGov keeps every government's files on one host, each in a folder named for its site.
 HEYGOV_FILES = "files.heygov.com"
+# A host that serves one government's own files and counts as that government's site, for its
+# pages only. Each is here on the owner's word, after the reader asked the host for its robots
+# file. Otsego's pages link every file on a delivery host named for the city's site, which
+# answers with the city's own robots file: read November 25, 2026.
+OWN_FILE_HOSTS = {"cdn-www-cityofotsego-org-g4w4.b-cdn.net": "cityofotsego.org"}
 # The platforms whose agenda pages this collector reads, once each is cleared.
 PLATFORMS_READ = ("own_site_files", "cira_county_site", "heygov")
 
@@ -639,12 +644,15 @@ def on_the_site(link: str, page_url: str) -> bool:
     """True for a file on the government's own site or on its site builder's file host.
 
     The terms that were read are the government's. A link that leads anywhere else is listed
-    and not followed. On HeyGov's file host only the government's own folder counts.
+    and not followed. On HeyGov's file host only the government's own folder counts, and a
+    host that serves one government's files counts for that government's pages only.
     """
     parts = urlsplit(link)
     host = parts.netloc.lower()
     if host == HEYGOV_FILES:
         return parts.path.lower().startswith(f"/{_site(page_url)}/")
+    if host in OWN_FILE_HOSTS:
+        return OWN_FILE_HOSTS[host] == _site(page_url)
     return _site(link) == _site(page_url) or host in FILE_HOSTS
 
 

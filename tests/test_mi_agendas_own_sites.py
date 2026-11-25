@@ -29,6 +29,7 @@ from collectors.tx.agenda_pages import (
     find_agenda_links,
     find_date,
     find_meeting_links,
+    on_the_site,
     page_text,
 )
 from pipeline.config import load_sources
@@ -629,20 +630,64 @@ def test_a_meetings_page_that_links_its_agenda_file_has_the_file_fetched(tmp_pat
     assert sink.runs[1]["detail"] == {"governments": 1}
 
 
-def test_an_agenda_file_on_another_host_is_named_and_not_asked_for(tmp_path):
-    older = "https://www.cityofotsego.org/document/november-2-2026-city-commission-agenda/"
+OTSEGO_OLDER = "https://www.cityofotsego.org/document/november-2-2026-city-commission-agenda/"
+
+
+def otsego_web(file_url: str = OTSEGO_FILE) -> tuple[Site, str]:
+    """Otsego's list and two meetings' pages. The older page is the saved one with a made-up
+    file address, so the two meetings do not share a file."""
+    older_file = file_url.replace("2.0-AGENDA", "1.0-AGENDA")
+    newer = OTSEGO_MEETING_BODY.replace(OTSEGO_FILE.encode(), file_url.encode())
+    older = OTSEGO_MEETING_BODY.replace(OTSEGO_FILE.encode(), older_file.encode())
+    assert OTSEGO_FILE.encode() in OTSEGO_MEETING_BODY and older != newer
     site = Site(
         {
             OTSEGO: httpx.Response(200, content=OTSEGO_BODY, headers=HTML),
-            OTSEGO_MEETING: httpx.Response(200, content=OTSEGO_MEETING_BODY, headers=HTML),
-            older: httpx.Response(200, content=OTSEGO_MEETING_BODY, headers=HTML),
+            OTSEGO_MEETING: httpx.Response(200, content=newer, headers=HTML),
+            OTSEGO_OLDER: httpx.Response(200, content=older, headers=HTML),
+            file_url: httpx.Response(200, content=agenda(4), headers=PDF),
+            older_file: httpx.Response(200, content=agenda(5), headers=PDF),
         }
     )
-    sink = MemorySink()
+    return site, older_file
+
+
+def test_otsegos_agenda_file_on_the_citys_own_file_host_is_fetched(tmp_path):
+    """The owner said on November 25, 2026 to count the host as the city's own.
+
+    The city's pages link every file on a host named for the city's site, which answers with
+    the city's own robots file. The reader asked it for that file the same day.
+    """
+    (site, older_file), sink = otsego_web(), MemorySink()
     summary = run(site, sink, tmp_path, pages=(CLEARED[OTSEGO],))
     assert summary.status == "ok", summary.error
-    assert site.page_urls() == [OTSEGO, OTSEGO_MEETING, older]
-    assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {OTSEGO: [OTSEGO_FILE]}
+    assert site.page_urls() == [OTSEGO, OTSEGO_MEETING, OTSEGO_OLDER, OTSEGO_FILE, older_file]
+    file = next(d for d in sink.documents.values() if d.url == OTSEGO_FILE)
+    assert (file.raw_meta["record"], file.raw_meta["page"]) == ("agenda_file", OTSEGO)
+    assert file.raw_meta["meeting_page"] == OTSEGO_MEETING
+    assert file.raw_meta["meeting_date"] == "2026-11-16"
+    assert "agenda_links_on_other_hosts" not in sink.runs[1]["detail"]
+
+
+def test_the_citys_file_host_counts_for_the_citys_pages_and_no_one_elses():
+    assert on_the_site(OTSEGO_FILE, OTSEGO)
+    assert on_the_site(OTSEGO_FILE, OTSEGO_MEETING)
+    assert not on_the_site(OTSEGO_FILE, "https://www.otsegotownship.org/township-board/")
+    assert not on_the_site(OTSEGO_FILE, HEATH)
+    # Another address on the same service is another customer's.
+    other = OTSEGO_FILE.replace("cdn-www-cityofotsego-org-g4w4", "cdn-www-cityofotsego-org-zzzz")
+    assert not on_the_site(other, OTSEGO)
+
+
+def test_an_agenda_file_on_another_host_is_named_and_not_asked_for(tmp_path):
+    elsewhere = "https://files.example.org/wp-content/uploads/2026/11/2.0-AGENDA.pdf"
+    (site, older_file), sink = otsego_web(elsewhere), MemorySink()
+    summary = run(site, sink, tmp_path, pages=(CLEARED[OTSEGO],))
+    assert summary.status == "ok", summary.error
+    assert site.page_urls() == [OTSEGO, OTSEGO_MEETING, OTSEGO_OLDER]
+    assert sink.runs[1]["detail"]["agenda_links_on_other_hosts"] == {
+        OTSEGO: [elsewhere, older_file]
+    }
 
 
 def test_a_meetings_page_whose_links_name_no_file_gives_nothing_and_is_named(tmp_path):
