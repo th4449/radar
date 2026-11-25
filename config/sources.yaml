@@ -304,12 +304,12 @@ sources:
     name: QPQ Tracker study of who paid for the data centers, its list of payers
     url: https://www.purchasingpolicy.org/data-centers
     layer: baseline
-    method: manual
+    method: http
     intended_method: http
     cadence: monthly
     robots_status: allowed
     verified_at: 2026-11-24
-    notes: Milestone M12. A list of companies, not of sites. One public page holds a table of the payers the study counts. The radar checks whether a company it has on record has the same name as a payer. The site's robots file allows the page and bars /api/, so the site's API is not called. No endpoint of that API returns the list in any case. The site has no terms of use page. The owner said on 2026-11-24 to build from the page. The method stays manual until the owner says to run it. See docs/sources/us_qpq_data_center_payers.md.
+    notes: Milestone M12. A list of companies, not of sites. One public page holds a table of the payers the study counts. The radar checks whether a company it has on record has the same name as a payer. The site's robots file allows the page and bars /api/, so the site's API is not called. No endpoint of that API returns the list in any case. The site has no terms of use page. The owner said on 2026-11-24 to build from the page and on 2026-11-25 to switch the source on. One request a month. Like every workflow, its job is a dry run until the owner sets RADAR_LIVE. See docs/sources/us_qpq_data_center_payers.md.
 
   - id: us_more_than_just_parks
     state: US

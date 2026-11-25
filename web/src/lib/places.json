@@ -748,6 +748,14 @@
       "read": false,
       "by_hand": false,
       "use": "signal"
+    },
+    {
+      "name": "QPQ Tracker study of who paid for the data centers, its list of payers",
+      "state": "US",
+      "url": "https://www.purchasingpolicy.org/data-centers",
+      "read": true,
+      "by_hand": false,
+      "use": "baseline"
     }
   ]
 }

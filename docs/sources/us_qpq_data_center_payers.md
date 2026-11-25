@@ -4,7 +4,7 @@
 - Layer: baseline. A list of companies, not of sites and not a signal.
 - Page: https://www.purchasingpolicy.org/data-centers
 - Checked: November 24, 2026
-- Result: **allowed, and manual.** The page is open to a collector. No job reads it. The method stays manual until the owner says to run it.
+- Result: **allowed, and switched on.** The owner said on November 25, 2026 to switch the source on. Its method is `http`, its collector is on the list in `collectors/run.py` and it has a workflow file, started by hand. Like every workflow, its job is a dry run until the owner sets `RADAR_LIVE`. **No copy of the page is stored anywhere yet.**
 - Collector and parser: `collectors/us/qpq_data_center_payers.py`
 - Fixture: `tests/fixtures/us_qpq_data_center_payers/data-centers-payers.html`, the page's table of payers, cut from one copy saved on November 24, 2026 with one request through `collectors.capture`.
 
@@ -17,7 +17,8 @@ The QPQ Tracker is a project of Anti-Corruption Action, the organization that ru
 - **The API has no list of payers.** The notes list nine endpoints: a name search, an entity's connections, two flow graphs, giving by state, stock trades, policy events, one policy event and a health check. None returns the study's payers. This was read from the notes. No endpoint was called.
 - **The study page holds the whole list.** A table headed "All 61 payers" has one row for each payer. It is in the page as served, so no browser is needed.
 - **Terms.** The site has no terms of use page. `/terms` answers 404, and the About page links none. The About page states no terms for reuse of the site's own pages. It says the tracker "does not assert that any donation caused any outcome".
-- **The owner's word.** On November 24, 2026 the owner said to build from the study page.
+- **The owner's word.** On November 24, 2026 the owner said to build from the study page, and on November 25, 2026 to switch the source on.
+- **A dry run by hand,** November 25, 2026: one request by the radar's reader, robots read first. The page loaded and the parser read its table. Nothing was kept.
 
 ## What the page holds
 
@@ -70,6 +71,7 @@ Not verified:
 ## What was not verified
 
 - How often the study's list changes. The page says its figures were re-derived on October 22, 2026.
-- Whether the site answers GitHub's servers. The one request came from a desk.
+- Whether the site answers GitHub's servers. Both requests came from a desk. The workflow has not been started.
+- A real run. There is no hosted database to keep the copy in, and the history database is the backtest's.
 - Any endpoint of the API. None was called.
 - The robots file, the API notes and the About page were read with a web reading tool, not the radar's fetcher. The fetcher read the robots file itself before it took the fixture, and went on.

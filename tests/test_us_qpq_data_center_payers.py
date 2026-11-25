@@ -41,8 +41,7 @@ ROBOTS = (
 
 
 def source():
-    """The source as it will stand once the owner says to run it. Today it is manual."""
-    return load_sources().by_id(SOURCE_ID).model_copy(update={"method": "http"})
+    return load_sources().by_id(SOURCE_ID)
 
 
 # --- the parser ---------------------------------------------------------------------------------
@@ -112,14 +111,25 @@ def test_a_table_shorter_than_the_page_says_stops_the_parser():
 # --- the source and its rules -------------------------------------------------------------------
 
 
-def test_the_source_is_manual_and_no_job_reads_it():
+def test_the_source_is_switched_on_and_its_job_is_started_by_hand():
+    """The owner said on November 25, 2026 to switch the source on."""
     src = load_sources().by_id(SOURCE_ID)
     assert str(src.url) == URL == META["url"]
-    assert src.method == "manual" and not src.may_fetch_automatically
-    assert SOURCE_ID not in REGISTRY
-    assert (FIXTURES.parents[2] / "docs" / "sources" / f"{SOURCE_ID}.md").exists()
+    assert src.method == "http" and src.may_fetch_automatically
+    assert src.verified_at is not None and src.robots_status == "allowed"
+    assert REGISTRY[SOURCE_ID] is QpqDataCenterPayers
+    root = FIXTURES.parents[2]
+    assert (root / "docs" / "sources" / f"{SOURCE_ID}.md").exists()
+    workflow = (
+        root / ".github" / "workflows" / "collect-us-qpq-data-center-payers.yml"
+    ).read_text()
+    assert "workflow_dispatch:" in workflow and "schedule:" not in workflow
+
+
+def test_a_copy_marked_manual_is_still_refused():
+    manual = source().model_copy(update={"method": "manual"})
     with pytest.raises(NotPermitted):
-        Fetcher(src, contact=CONTACT)
+        Fetcher(manual, contact=CONTACT)
 
 
 def test_the_sites_robots_file_allows_the_page_and_bars_its_api():

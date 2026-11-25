@@ -6,7 +6,9 @@ const texas = STATES.find((s) => s.code === "TX")!;
 const michigan = STATES.find((s) => s.code === "MI")!;
 const read = SOURCES.filter((s) => s.read);
 const waiting = SOURCES.filter((s) => !s.read);
-const stateOf = (code: string) => STATES.find((s) => s.code === code)?.name ?? code;
+// A source that covers the whole country carries the code US, which is no state on the list.
+const stateOf = (code: string) =>
+  STATES.find((s) => s.code === code)?.name ?? (code === "US" ? "United States" : code);
 
 // The owner approved the wording of the section "Company names and the QPQ Tracker's study" on
 // November 25, 2026. Do not change it without the owner's word.
