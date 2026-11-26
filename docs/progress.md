@@ -2,6 +2,16 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The monitor ran again: every source is ok
+
+**On the owner's word.** Pushed earlier, on the owner's word: `210d526`, CI passed.
+
+- **The job ended green.** Started by hand on GitHub at 22:38 UTC. https://github.com/th4449/radar/actions/runs/45906089620. No database address is in its log.
+- **Its report: 0 of 8 sources need a person.** The seven collectors read cleanly on November 26, 2026. The Comptroller's list is `ok`: "A person stored a copy 0 days ago." Processing is `ok`.
+- So the monitor has now shown both of its ends on the hosted database: a failed job while the list was due, and a green one once it was stored.
+
+**Not verified:** the monitor on a schedule, and its states `failing`, `blocked`, `stuck`, `stale` and `never_run` on the hosted database. The policy tests have not run there.
+
 ## November 26, 2026 — The second processing run read the Comptroller's list
 
 **On the owner's word.** After the list was stored the owner was asked whether to run processing again and said to run it. Committed earlier and not pushed: `db899f7`.
