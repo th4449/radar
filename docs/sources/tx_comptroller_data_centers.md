@@ -75,6 +75,12 @@ The owner's decision of November 23, 2026. In `config/sources.yaml` the source i
 - **The parser read it:** 70 registered qualifying data centers and 119 large projects, 189 in all. That is six more large projects than on November 19, with effective dates from November 6 to November 16, 2026. None is gone.
 - The backtest now reads this copy. Its result did not change.
 
+**The first page stored in the hosted project, November 26, 2026**
+
+- The owner saved the page from Chrome as "Webpage, HTML Only" at 22:23 UTC and stored it two minutes later with `scripts/store_by_hand_hosted.py`. A first save, as a complete webpage, was set aside and not stored: its links were rewritten to a local folder.
+- 150,699 bytes, SHA-256 `3b444dcf7e95d4913cfaff9ff1fd37eedbf0144142be283123fa1c2854980b87`. The file on the owner's machine hashes to the same value, and the archive reports the same size.
+- **The parser read it:** 195 registrations, six more than on November 23. 70 registered qualifying data centers and 125 large projects. The six more are all large projects. The newest effective date is November 19, 2026. The six were not compared name by name with the copy of November 23.
+
 **Not verified**
 
 - Which browser and which save format the owner used on November 23. One page saved from a browser has been read. Another browser's save may differ. If the parser refuses one, nothing is stored and the command says so.

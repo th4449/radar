@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The Comptroller's list is stored in the hosted project
+
+**The owner's own act.** The owner saved the page in a browser and ran `scripts/store_by_hand_hosted.py`. Pushed earlier, on the owner's word: `e1a96a9`, CI passed.
+
+- **The first save was not used.** It was a complete webpage, with its links rewritten to a local folder. The helper's check would have taken it. The owner was told why the page as served is the better record and saved it again as HTML only.
+- **Stored at 22:25 UTC:** `ok`, 1 document seen, 1 new, runner `by-hand`, marked as saved by a person at 22:23 UTC. 150,699 bytes, SHA-256 `3b444dcf7e95d4913cfaff9ff1fd37eedbf0144142be283123fa1c2854980b87`.
+- **Read back and checked.** The file on the owner's machine hashes to the stored value. The archive holds a file of that name and that size. The hosted project holds 222 documents and 222 archive files.
+- **The parser reads 195 registrations:** 70 registered qualifying data centers and 125 large projects, six more large projects than on November 23, 2026.
+- **The helper's first real use worked,** which was the thing not verified when it was built. The password went in at the hidden prompt. No setting was left in the shell.
+- **Processing has not read the list yet.** It was stored after the day's processing run. A new copy of the list gives the rules a new version, so the next run reads every document again.
+
+**Not verified:** the six new registrations were not compared name by name with the earlier copy. The monitor has not run since, so its report still shows the list as due.
+
 ## November 26, 2026 — A way to store a hand-saved page in the hosted project
 
 **On the owner's word.** The owner was told of the gap below and said to build the helper. Pushed earlier, on the owner's word: `a02abe7`, CI passed.
