@@ -39,6 +39,7 @@ A file it already holds is asked for with its ETag. It keeps to one request ever
 
 - Six pages fetched once each on November 20, 2026 through `collectors.capture`: both indexes, the working group meetings of November 19 and December 17, the committee meeting of November 18 and the Large Load Integration page. Four are saved as fixtures.
 - One dry run of the collector the same day: 18 documents, no errors. That is two indexes, four meetings and twelve files. A dry run keeps nothing.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word: 18 documents seen, 18 new, no errors, in 91 seconds. All 18 are in the hosted database and archive. Two are the working group's agendas as spreadsheets, kept whole and stored without text: the reader takes no text from a spreadsheet. Run: https://github.com/th4449/radar/actions/runs/45889963738.
 
 ## Slide decks and zip files
 
