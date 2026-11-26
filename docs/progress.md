@@ -11,7 +11,9 @@ Newest first. Each entry says what was built, what was verified live and what is
 - **Supabase refused it:** "permission denied to alter role. Only superusers can alter privileged roles." That is Supabase's guard on its own roles. **Nothing was changed** and no secret was set. Supabase's tool has no command that resets the password. No other way in was tried.
 - **What is left is the owner's:** reset the database password in the project's database settings in the dashboard. Then run `drafts/set_database_url.py`, which asks for the password without showing it, checks that the address connects through the session pooler and hands it to GitHub. It was tried against the local database with a right and a wrong password. The file is in `drafts/`, which git ignores.
 
-**Not verified:** the helper against the hosted database, and that the pooler's address answers GitHub's servers. Both wait for the password.
+- **The owner ran the helper once, later the same day, and the password was refused.** The pooler answered from this machine and knew the project: "password authentication failed for user "postgres"". So the address's host and user name are right, and the password given was not the one the database holds. Nothing was set. `gh secret list` shows `RADAR_ARCHIVE_KEY` alone.
+
+**Not verified:** the helper with a password the hosted database accepts, and that the pooler's address answers GitHub's servers. Whether the pooler takes a new password at once or after a wait: not checked.
 
 ## November 26, 2026 — The live switch is on and the archive's key is set
 
