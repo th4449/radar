@@ -3,6 +3,7 @@ import { fetchAlert, type PublicAlert } from "../lib/alerts";
 import { idFrom } from "../lib/choices";
 import { problem } from "../lib/format";
 import { configured, supabase } from "../lib/supabase";
+import { href } from "../lib/paths";
 
 /** Anyone may send a correction. No account is needed. Only administrators read it. */
 export default function Corrections() {
@@ -56,7 +57,7 @@ export default function Corrections() {
     <form class="plain" onSubmit={send}>
       {alert && (
         <p>
-          About the alert <a href={`/alert/?id=${alert.alert_id}`}>{alert.headline}</a>.
+          About the alert <a href={href(`/alert/?id=${alert.alert_id}`)}>{alert.headline}</a>.
         </p>
       )}
       <label for="message">What is wrong, and what the record says</label>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { supabase } from "./supabase";
 import type { Reviewer } from "./types";
+import { href } from "./paths";
 
 export interface Account {
   loading: boolean;
@@ -73,7 +74,7 @@ export function useAccount(): Account {
 
 export async function signOut(to = "/review/"): Promise<void> {
   await supabase.auth.signOut();
-  window.location.assign(to);
+  window.location.assign(href(to));
 }
 
 export interface User {

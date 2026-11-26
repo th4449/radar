@@ -33,7 +33,7 @@ The owner said on November 23, 2026 to build everything before putting anything 
 ## 2a. Not built yet
 
 - [ ] **Hosting for the site.** The build is static and passes in CI. It is deployed nowhere. The owner has named its address: `standuptocorruption.org/radar`.
-- [ ] **A build that works under `/radar`.** Today the site assumes it sits at the root of a domain: 39 links in `web/src` start at `/`, the sign-in emails send a person back to `/account/` and `/review/`, and the build sets no base path. Under `/radar` every one of those would leave the radar. The hosted project's sign-in settings also need the public address before a sign-in link works.
+- [x] **A build that works under `/radar`.** Built November 26, 2026. `RADAR_BASE_PATH=/radar npm run build` builds the site for that path. Every link, redirect and sign-in return address goes through one helper, a test fails on an address written by hand, and CI builds the site both ways and reads the `/radar` build for any address that points outside it. **Still to do when the site is hosted:** the hosted project's sign-in settings need the public address and its two return addresses, `/radar/account/` and `/radar/review/`, before a sign-in link works. That is a setting in the hosted project and the owner's.
 
 ## 2b. Sources a person may enter by hand
 

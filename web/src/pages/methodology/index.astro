@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { SOURCES, STATES } from "../../lib/places";
+import { href } from "../../lib/paths";
 
 const texas = STATES.find((s) => s.code === "TX")!;
 const michigan = STATES.find((s) => s.code === "MI")!;
@@ -169,7 +170,7 @@ const stateOf = (code: string) =>
 
     <h2>Corrections</h2>
     <p>
-      If an alert is wrong, <a href="/corrections/">send a correction</a>. You do not need an
+      If an alert is wrong, <a href={href("/corrections/")}>send a correction</a>. You do not need an
       account.
     </p>
 

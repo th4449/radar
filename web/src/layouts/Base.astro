@@ -1,5 +1,6 @@
 ---
 import "../styles/site.css";
+import { href } from "../lib/paths";
 interface Props {
   title: string;
   /** A reviewer desk page. It draws its own masthead once it knows who is signed in. */
@@ -21,15 +22,15 @@ const { title, desk = false } = Astro.props;
     {
       !desk && (
         <header class="masthead">
-          <a class="name" href="/">
+          <a class="name" href={href("/")}>
             Data Center Early Warning Radar
           </a>
           <nav aria-label="Site">
-            <a href="/tx/">Texas</a>
-            <a href="/mi/">Michigan</a>
-            <a href="/subscribe/">Get alerts</a>
-            <a href="/methodology/">Methodology</a>
-            <a href="/corrections/">Corrections</a>
+            <a href={href("/tx/")}>Texas</a>
+            <a href={href("/mi/")}>Michigan</a>
+            <a href={href("/subscribe/")}>Get alerts</a>
+            <a href={href("/methodology/")}>Methodology</a>
+            <a href={href("/corrections/")}>Corrections</a>
           </nav>
         </header>
       )
@@ -41,10 +42,10 @@ const { title, desk = false } = Astro.props;
         not a finding. Nothing here is public until a reviewer has checked it against its source.
       </p>
       <p>
-        <a href="/methodology/">Methodology</a>
-        <a href="/corrections/">Send a correction</a>
-        <a href="/account/">Your alerts</a>
-        <a href="/review/">Reviewer desk</a>
+        <a href={href("/methodology/")}>Methodology</a>
+        <a href={href("/corrections/")}>Send a correction</a>
+        <a href={href("/account/")}>Your alerts</a>
+        <a href={href("/review/")}>Reviewer desk</a>
       </p>
     </footer>
   </body>

@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Subscribe from "../../components/Subscribe";
+import { href } from "../../lib/paths";
 ---
 
 <Base title="Get alerts">
@@ -20,7 +21,7 @@ import Subscribe from "../../components/Subscribe";
     </p>
     <p>
       Signing up gives you alerts. It does not make you a reviewer.{" "}
-      <a href="/review/">Reviewers apply separately.</a>
+      <a href={href("/review/")}>Reviewers apply separately.</a>
     </p>
   </main>
 </Base>

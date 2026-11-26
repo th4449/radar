@@ -7,6 +7,31 @@ are Preact components that read the database in the browser with the visitor's o
 hides a button is a courtesy. The policy or trigger behind it is the rule, and each one has a
 test under `tests/db/`.
 
+## Where the site sits
+
+The site can be served at the root of a domain or under a path on another site's domain, such
+as `standuptocorruption.org/radar`. The path is chosen when the site is built:
+
+```bash
+RADAR_BASE_PATH=/radar npm run build
+```
+
+With no `RADAR_BASE_PATH` the site is built for the root, as in development.
+
+- **Every link, redirect and sign-in address goes through `href()`** in `src/lib/paths.ts`.
+  An address written by hand from the root, like `/tx/`, would leave the radar when the site is
+  under a path. A test reads the source and fails on one.
+- **A built site can be checked:** `node tests/built.ts dist /radar` lists any address in the
+  built pages and scripts that points outside the path. CI builds the site both ways and runs
+  it on the build for `/radar`.
+- The addresses in the tables below are inside the site. Under `/radar`, `/tx/` is
+  `/radar/tx/`.
+- **The sign-in service must be told the public address too.** A sign-in email sends a person
+  back to `/account/` or `/review/` under the path, and the hosted project accepts only the
+  return addresses on its list. That list is a setting in the hosted project, not in this code.
+- The emails' own links come from `site_url` in `config/email.yaml`, which takes the whole
+  address with its path and no slash at the end.
+
 ## Public pages
 
 A visitor with no account reads one thing from the database: the view `public_alerts`, which

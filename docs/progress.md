@@ -2,6 +2,21 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The site builds under `/radar`
+
+**On the owner's word.** The owner said to make the site build work under `/radar`, the address named earlier in the day. Site code only. Nothing is hosted and nothing is public. Pushed earlier, on the owner's word: `4b5f915`, CI passed.
+
+- **The path is a build setting.** `RADAR_BASE_PATH=/radar npm run build` builds the site for that path. With no setting it is built for the root of a domain, as in development.
+- **Every address goes through one helper,** `href()` in `web/src/lib/paths.ts`: 46 links in 20 files, three redirects and the three return addresses a sign-in email uses. An address written by hand from the root would leave the radar on the shared domain.
+- **Tests, written first.** The helper's rules. A test that reads the source and fails on any address written by hand. A check that reads a built site, pages and scripts, and lists any address that points outside the path. 27 site tests pass, 10 of them new.
+- **Both builds were made and read:** 127 pages each. At the root and under `/radar`, every address stays inside. The check was also proved on a real build: with one link written by hand it failed and named the file.
+- **Looked at in a browser under `/radar`:** the home page, Texas and its county links, the reviewer desk and an alert page. Every link on each starts with `/radar/`, the styles load, and the sign-in return addresses come out as `/radar/account/` and `/radar/review/`. The plain address `/tx/` answers 404 there, as it should.
+- **CI now builds the site both ways** and runs the check on the `/radar` build.
+- **One link the source test could not see** was found by reading: the county link on an alert page was built from a variable. It goes through the helper now.
+- **The site's packages had to be installed again.** iCloud had evicted 14,733 of their files and was bringing them back at about 500 a minute. `npm ci` installed them from the lockfile, as CI does. The lockfile did not change.
+
+**Not verified:** the site served from `standuptocorruption.org/radar`. How that site will serve these files is not decided. A sign-in link under the path: the hosted project's sign-in settings do not hold the public address yet, and that setting is the owner's. The emails' links, which come from `site_url` in `config/email.yaml`: that is still unset by design.
+
 ## November 26, 2026 — The policy tests pass on the hosted database: 159 of 159
 
 **On the owner's word.** After the fix was pushed the owner was told what a second run would do and said to run it. Pushed earlier, on the owner's word: `7ae0dc2`, CI passed.

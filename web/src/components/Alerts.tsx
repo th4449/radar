@@ -4,6 +4,7 @@ import { fetchAlerts, pointOf, recordCount, type PublicAlert } from "../lib/aler
 import { localDay, problem } from "../lib/format";
 import { countyName, whereLine } from "../lib/places";
 import { configured } from "../lib/supabase";
+import { href } from "../lib/paths";
 
 interface Props {
   state?: string;
@@ -14,7 +15,7 @@ export function AlertLine({ alert, county }: { alert: PublicAlert; county?: bool
   return (
     <li class="alert">
       <h3>
-        <a href={`/alert/?id=${alert.alert_id}`}>{alert.headline}</a>
+        <a href={href(`/alert/?id=${alert.alert_id}`)}>{alert.headline}</a>
       </h3>
       <p>
         Confirmed. Published {localDay(alert.published_at)}.{" "}

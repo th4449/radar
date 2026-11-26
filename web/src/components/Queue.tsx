@@ -4,6 +4,7 @@ import { longDate, problem, signalName, STATUS_NAMES } from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import type { Review, Site, SiteStatus } from "../lib/types";
+import { href } from "../lib/paths";
 
 interface Row extends Site {
   signals: { signal_type: string }[];
@@ -87,7 +88,7 @@ function List({ account }: { account: Account }) {
                 return (
                   <tr>
                     <td>
-                      <a href={`/review/site/?id=${row.id}`}>{row.label}</a>
+                      <a href={href(`/review/site/?id=${row.id}`)}>{row.label}</a>
                     </td>
                     <td class="num">{Number(row.score).toFixed(1)}</td>
                     <td>

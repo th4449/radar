@@ -4,6 +4,7 @@ import { localDay, longDate, problem } from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import type { ReviewerStatus } from "../lib/types";
+import { href } from "../lib/paths";
 
 interface Person {
   user_id: string;
@@ -206,7 +207,7 @@ function Pipeline() {
               {sites.map((id, i) => (
                 <>
                   {i > 0 && " and "}
-                  <a href={`/review/site/?id=${id}`}>site {id}</a>
+                  <a href={href(`/review/site/?id=${id}`)}>site {id}</a>
                 </>
               ))}
             </li>
@@ -385,7 +386,7 @@ function CorrectionsDesk() {
                 {localDay(row.created_at)}
                 {row.alert_id !== null && (
                   <>
-                    , about <a href={`/alert/?id=${row.alert_id}`}>alert {row.alert_id}</a>
+                    , about <a href={href(`/alert/?id=${row.alert_id}`)}>alert {row.alert_id}</a>
                   </>
                 )}
               </h3>

@@ -1,10 +1,11 @@
 ---
 import Base from "../../layouts/Base.astro";
+import { href } from "../../lib/paths";
 ---
 
 <Base title="Reviewer terms" desk>
   <header class="masthead">
-    <a class="name" href="/review/">Radar reviewer desk</a>
+    <a class="name" href={href("/review/")}>Radar reviewer desk</a>
   </header>
   <main>
     <h1>Reviewer terms</h1>
@@ -46,6 +47,6 @@ import Base from "../../layouts/Base.astro";
         An administrator can reverse a decision and can suspend a reviewer.
       </li>
     </ol>
-    <p><a href="/review/">Back to the reviewer desk</a></p>
+    <p><a href={href("/review/")}>Back to the reviewer desk</a></p>
   </main>
 </Base>

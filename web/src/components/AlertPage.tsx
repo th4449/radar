@@ -13,6 +13,7 @@ import {
 } from "../lib/format";
 import { countyPath, stateByCode, whereLine } from "../lib/places";
 import { configured } from "../lib/supabase";
+import { href } from "../lib/paths";
 
 function Records({ alert }: { alert: PublicAlert }) {
   return (
@@ -95,7 +96,7 @@ export default function AlertPage() {
         <h1>No such alert</h1>
         <p>
           There is no public alert at this address. An alert is taken down if a reviewer's
-          confirmation is reversed. <a href="/">See every confirmed alert.</a>
+          confirmation is reversed. <a href={href("/")}>See every confirmed alert.</a>
         </p>
       </>
     );
@@ -142,19 +143,19 @@ export default function AlertPage() {
         <p>The records name the county and give no point, so there is no map.</p>
       )}
       <p>
-        {county && <a href={county}>Every alert in this county</a>}
+        {county && <a href={href(county)}>Every alert in this county</a>}
         {county && state && ". "}
-        {state && <a href={`/${state.slug}/`}>Every alert in {state.name}</a>}.
+        {state && <a href={href(`/${state.slug}/`)}>Every alert in {state.name}</a>}.
       </p>
 
       <h2>What confirmed means</h2>
       <p>
         A reviewer approved by Dekleptocracy Alliance opened each record at its source and
         checked that it says what this alert says. Confirmed does not mean a data center is
-        planned. <a href="/methodology/">Read how the radar works.</a>
+        planned. <a href={href("/methodology/")}>Read how the radar works.</a>
       </p>
       <p>
-        <a href={`/corrections/?alert=${alert.alert_id}`}>Send a correction about this alert</a>
+        <a href={href(`/corrections/?alert=${alert.alert_id}`)}>Send a correction about this alert</a>
       </p>
     </article>
   );

@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Alerts from "../../components/Alerts";
 import { SOURCES, STATES, stateIsRead, type StateInfo } from "../../lib/places";
+import { href } from "../../lib/paths";
 
 export function getStaticPaths() {
   return STATES.map((state) => ({ params: { state: state.slug }, props: { state } }));
@@ -30,8 +31,8 @@ const whole = state.code === "MI";
       }
     </p>
     <p>
-      <a href="/subscribe/">Get {state.name} alerts by email.</a>{" "}
-      <a href="/methodology/#sources">Which records the radar reads.</a>
+      <a href={href("/subscribe/")}>Get {state.name} alerts by email.</a>{" "}
+      <a href={href("/methodology/#sources")}>Which records the radar reads.</a>
     </p>
 
     <h2>Confirmed alerts in {state.name}</h2>
@@ -42,7 +43,7 @@ const whole = state.code === "MI";
       {
         state.counties.map((county) => (
           <li>
-            <a href={`/${state.slug}/${county.slug}/`}>{county.name}</a>
+            <a href={href(`/${state.slug}/${county.slug}/`)}>{county.name}</a>
           </li>
         ))
       }

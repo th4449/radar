@@ -12,6 +12,7 @@ import {
 import { localDay, problem } from "../lib/format";
 import { signOut, useUser } from "../lib/session";
 import { configured, supabase } from "../lib/supabase";
+import { absolute, href } from "../lib/paths";
 
 interface Row {
   email: string;
@@ -33,7 +34,7 @@ function SignIn() {
     setError("");
     const { error: failed } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/account/` },
+      options: { emailRedirectTo: absolute("/account/") },
     });
     setBusy(false);
     if (failed) setError(problem(failed));
@@ -51,7 +52,7 @@ function SignIn() {
     <form class="plain" onSubmit={send}>
       <p>
         To change or stop your alerts, sign in with the address they go to. New here?{" "}
-        <a href="/subscribe/">Sign up for alerts.</a>
+        <a href={href("/subscribe/")}>Sign up for alerts.</a>
       </p>
       <label for="email">Your email address</label>
       <input

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { pointOf, type PublicAlert } from "../lib/alerts";
+import { href } from "../lib/paths";
 
 // Tiles and style from OpenFreeMap. See docs/services/openfreemap.md for its terms.
 const STYLE = "https://tiles.openfreemap.org/styles/positron";
@@ -80,7 +81,7 @@ export function AlertMap({ alerts, state, close }: Props) {
           });
           made.on("click", "alerts", (event) => {
             const id = event.features?.[0]?.properties?.id;
-            if (id) window.location.assign(`/alert/?id=${id}`);
+            if (id) window.location.assign(href(`/alert/?id=${id}`));
           });
           made.on("mouseenter", "alerts", () => {
             made.getCanvas().style.cursor = "pointer";

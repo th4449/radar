@@ -103,3 +103,12 @@ jobs:
       # Built with no database address. The pages then say so, and nothing is embedded.
       - name: Build
         run: npm run build
+
+      # The site will be served under a path on another site's domain. Build it that way too
+      # and read the result: no address in it may point outside the path.
+      - name: Build under a path and check every address stays inside it
+        env:
+          RADAR_BASE_PATH: /radar
+        run: |
+          npm run build -- --outDir dist-radar
+          node tests/built.ts dist-radar /radar

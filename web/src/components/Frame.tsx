@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { signOut, useAccount, type Account } from "../lib/session";
 import { configured } from "../lib/supabase";
+import { href } from "../lib/paths";
 
 type Need = "anyone" | "reviewer" | "admin";
 
@@ -26,14 +27,14 @@ export function Frame({ need, children }: Props) {
   } else if (need === "reviewer" && !account.approved) {
     body = (
       <p>
-        This page is for approved reviewers. <a href="/review/">Go to the reviewer desk</a> to sign
+        This page is for approved reviewers. <a href={href("/review/")}>Go to the reviewer desk</a> to sign
         in or to see where your application stands.
       </p>
     );
   } else if (need === "admin" && !account.admin) {
     body = (
       <p>
-        This page is for administrators. <a href="/review/">Go to the reviewer desk.</a>
+        This page is for administrators. <a href={href("/review/")}>Go to the reviewer desk.</a>
       </p>
     );
   } else {
@@ -43,13 +44,13 @@ export function Frame({ need, children }: Props) {
   return (
     <>
       <header class="masthead">
-        <a class="name" href="/review/">
+        <a class="name" href={href("/review/")}>
           Radar reviewer desk
         </a>
         <nav aria-label="Reviewer desk">
-          {account.approved && <a href="/review/queue/">Queue</a>}
-          {account.admin && <a href="/review/admin/">Administrator</a>}
-          <a href="/review/terms/">Reviewer terms</a>
+          {account.approved && <a href={href("/review/queue/")}>Queue</a>}
+          {account.admin && <a href={href("/review/admin/")}>Administrator</a>}
+          <a href={href("/review/terms/")}>Reviewer terms</a>
         </nav>
         {account.email && (
           <span class="who">

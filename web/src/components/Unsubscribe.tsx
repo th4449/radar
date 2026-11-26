@@ -2,6 +2,7 @@ import { useState } from "preact/hooks";
 import { tokenFrom } from "../lib/choices";
 import { problem } from "../lib/format";
 import { configured, supabase } from "../lib/supabase";
+import { href } from "../lib/paths";
 
 /** The link in every email lands here. It needs no sign-in. */
 export default function Unsubscribe() {
@@ -26,7 +27,7 @@ export default function Unsubscribe() {
     return (
       <p>
         This address is missing its unsubscribe code. Use the link at the foot of any alert
-        email, or <a href="/account/">sign in and stop your alerts</a>.
+        email, or <a href={href("/account/")}>sign in and stop your alerts</a>.
       </p>
     );
   }
@@ -41,7 +42,7 @@ export default function Unsubscribe() {
     return (
       <p role="status">
         This link no longer works. You are most likely unsubscribed already.{" "}
-        <a href="/account/">Sign in to check.</a>
+        <a href={href("/account/")}>Sign in to check.</a>
       </p>
     );
   }

@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Alerts from "../../components/Alerts";
 import { STATES, type County, type StateInfo } from "../../lib/places";
+import { href } from "../../lib/paths";
 
 export function getStaticPaths() {
   return STATES.flatMap((state) =>
@@ -20,7 +21,7 @@ const { state, county } = Astro.props;
 
 <Base title={`${county.name} County, ${state.name}`}>
   <main>
-    <p class="kicker"><a href={`/${state.slug}/`}>{state.name}</a></p>
+    <p class="kicker"><a href={href(`/${state.slug}/`)}>{state.name}</a></p>
     <h1>{county.name} County</h1>
     <p class="lede">
       Confirmed alerts for {county.name} County, {state.name}. Each one links to the public
@@ -32,7 +33,7 @@ const { state, county } = Astro.props;
 
     <h2>Get alerts for this county</h2>
     <p>
-      <a href="/subscribe/">Sign up for {state.name} alerts.</a>{" "}
+      <a href={href("/subscribe/")}>Sign up for {state.name} alerts.</a>{" "}
       You can narrow them to {`${county.name} County`} on the form.
     </p>
   </main>

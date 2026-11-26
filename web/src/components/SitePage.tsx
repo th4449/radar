@@ -15,6 +15,7 @@ import {
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import type { Alert, Decision, DocumentRef, Reason, Review, Signal, Site } from "../lib/types";
+import { href } from "../lib/paths";
 
 interface Loaded {
   site: Site;
@@ -393,7 +394,7 @@ function MergeForm({ site }: { site: Site }) {
     });
     setBusy(false);
     if (failed) setError(problem(failed));
-    else window.location.assign(`/review/site/?id=${into}`);
+    else window.location.assign(href(`/review/site/?id=${into}`));
   }
 
   if (others.length === 0) return <p class="note">No other site is in this county.</p>;
@@ -481,7 +482,7 @@ function Page({ account }: { account: Account }) {
   return (
     <>
       <p class="note">
-        <a href="/review/queue/">Review queue</a>
+        <a href={href("/review/queue/")}>Review queue</a>
       </p>
       <h1>{site.label}</h1>
       <p class="lede">

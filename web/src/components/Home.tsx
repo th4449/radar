@@ -3,6 +3,7 @@ import { Frame } from "./Frame";
 import { problem } from "../lib/format";
 import type { Account } from "../lib/session";
 import { supabase } from "../lib/supabase";
+import { absolute, href } from "../lib/paths";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ function SignIn() {
     setError("");
     const { error: failed } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/review/` },
+      options: { emailRedirectTo: absolute("/review/") },
     });
     setBusy(false);
     if (failed) setError(problem(failed));
@@ -107,7 +108,7 @@ function Apply({ account }: { account: Account }) {
           onChange={(e) => setAgreed((e.target as HTMLInputElement).checked)}
         />
         <span>
-          I have read and agree to the <a href="/review/terms/">reviewer terms</a>.
+          I have read and agree to the <a href={href("/review/terms/")}>reviewer terms</a>.
         </span>
       </label>
       <div class="row">
@@ -150,11 +151,11 @@ function Standing({ account }: { account: Account }) {
         {account.admin ? ", an administrator" : ""}.
       </p>
       <p>
-        <a href="/review/queue/">Open the review queue</a>
+        <a href={href("/review/queue/")}>Open the review queue</a>
         {account.admin && (
           <>
             {" "}
-            or <a href="/review/admin/">the administrator desk</a>
+            or <a href={href("/review/admin/")}>the administrator desk</a>
           </>
         )}
         .

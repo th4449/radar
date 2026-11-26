@@ -4,6 +4,7 @@ import { DEFAULT_CHOICES, PENDING_KEY, type Choices, type Pending } from "../lib
 import { problem } from "../lib/format";
 import { useUser } from "../lib/session";
 import { configured, supabase } from "../lib/supabase";
+import { absolute, href } from "../lib/paths";
 
 /** Step one of two. The person chooses and gives an address. The emailed link is step two. */
 export default function Subscribe() {
@@ -27,7 +28,7 @@ export default function Subscribe() {
     }
     const { error: failed } = await supabase.auth.signInWithOtp({
       email: address,
-      options: { emailRedirectTo: `${window.location.origin}/account/` },
+      options: { emailRedirectTo: absolute("/account/") },
     });
     setBusy(false);
     if (failed) setError(problem(failed));
@@ -42,7 +43,7 @@ export default function Subscribe() {
     return (
       <p>
         You are signed in as <strong>{user.email}</strong>.{" "}
-        <a href="/account/">Choose or change your alerts.</a>
+        <a href={href("/account/")}>Choose or change your alerts.</a>
       </p>
     );
   }
