@@ -1,6 +1,6 @@
 # Launch checklist
 
-BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty, and no job can reach it until the owner adds its address as a secret. Since November 26, 2026, the switch `RADAR_LIVE` is true and the archive's key is set, both on the owner's word. A real run still cannot start: it stops before it asks any site for anything, because the database's address is not set.
+BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty. Since November 26, 2026, the switch `RADAR_LIVE` is true and both secrets are set: the archive's key and the database's address. **Nothing now stands between a started workflow and a real run.** A collect workflow started on GitHub asks its source for records and keeps them. None has a schedule and none has been started.
 
 Each line says who does it. **Owner** means a decision or an action that section 11 of the build plan keeps for the owner. **Session** means work a build session can do once the owner has said yes to what it rests on.
 
@@ -9,7 +9,7 @@ Each line says who does it. **Owner** means a decision or an action that section
 Nothing below starts without a yes to its line.
 
 - [x] **Owner.** Create the hosted Supabase project. The owner said yes on November 25, 2026, to the price Supabase quoted that day: 10 dollars a month in the owner's organization, which is on the Pro plan. A session created it, named `radar`, in the us-east-1 region.
-- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3. `RADAR_ARCHIVE_KEY` was added on November 26, 2026. `RADAR_DATABASE_URL` is not: it holds the database's password, which only the owner can set. A session tried on November 26, 2026, and Supabase refused: its guard lets no one change the owner role's password with SQL. The owner resets the password in the project's database settings in the dashboard, then runs `drafts/set_database_url.py`.
+- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3. `RADAR_ARCHIVE_KEY` was added on November 26, 2026. `RADAR_DATABASE_URL` was added the same day by the owner: a reset of the database password in the dashboard, then `drafts/set_database_url.py`, which checked that the address connects before it set the secret. A session had tried first and Supabase refused: its guard lets no one change the owner role's password with SQL. Still to add: `RESEND_API_KEY`, when email is wanted.
 - [ ] **Owner.** Turn on real email, and choose the provider's tier. The email job only does dry runs today.
 - [ ] **Owner.** Make the site public: host it and point a name at it. Buying a domain or changing DNS is the owner's. The owner said on November 26, 2026, that the site will be at `standuptocorruption.org/radar`. It is not there yet.
 - [ ] **Owner.** Create the first administrator by hand, outside the repository. There is no self-service path to that role.
@@ -47,7 +47,7 @@ The owner said on November 23, 2026 to build everything before putting anything 
 |---|---|---|---|
 | `RADAR_CONTACT` | GitHub variable, not a secret | The public contact address in every request | **Yes.** Set November 25, 2026, on the owner's word |
 | `RADAR_LIVE` | GitHub variable | The word true switches the workflows from dry runs to real runs. **The owner's switch** | **Yes, and it is true.** Set November 26, 2026, on the owner's word. A workflow started now is a real run |
-| `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing, the email job and the monitor write and read the database | No |
+| `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing, the email job and the monitor write and read the database | **Yes.** Set November 26, 2026, by the owner. The session pooler's address, which answers on IPv4. A new database password means setting it again |
 | `RADAR_ARCHIVE_URL` | GitHub variable | The hosted project's address, for the archive | **Yes.** Set November 25, 2026, on the owner's word |
 | `RADAR_ARCHIVE_KEY` | GitHub secret | The project's service key, which alone reads and writes the archive's bucket | **Yes.** Added November 26, 2026, on the owner's word. It is the project's older `service_role` key. It went from Supabase's tool straight into GitHub and was never shown or written to a file. Supabase says it is retiring this kind of key in early 2027: replace it before then with a secret key from the project's API key settings |
 | `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` | Site build | Sent to every browser. The anonymous key reads one view | No |

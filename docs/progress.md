@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The database's address is set
+
+**The owner's own act.** The owner reset the database password in the Supabase dashboard and ran `drafts/set_database_url.py`.
+
+- **The helper connected before it set anything.** It reached the hosted database through the session pooler as the owner role and counted 19 tables in the public schema. Then it handed the address to GitHub. The password was typed at a prompt that shows nothing. It is in no file and not in the transcript.
+- **`gh secret list` shows both secrets:** `RADAR_ARCHIVE_KEY` and `RADAR_DATABASE_URL`, the second set at 19:50 UTC.
+- **Nothing now stands between a started workflow and a real run.** `RADAR_LIVE` is true and both secrets are set. A collect workflow started on GitHub asks its source for records and keeps them. No workflow has a schedule and none was started. Email is still a dry run: `RADAR_EMAIL_LIVE` is not set and there is no `RESEND_API_KEY`.
+- **A new database password breaks the secret.** After any later reset, run the helper again.
+
+**Not verified:** a workflow on GitHub's servers, and so that the pooler's address answers them and that GitHub stored both secrets whole. The helper connected from this machine only. The policy tests have not run on the hosted database.
+
 ## November 26, 2026 — The database's address is not set: Supabase refused the password change
 
 **On the owner's word.** The owner said to fix `RADAR_DATABASE_URL`. Committed earlier and not pushed: `411f45d`.
