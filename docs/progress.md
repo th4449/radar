@@ -7,7 +7,7 @@ Newest first. Each entry says what was built, what was verified live and what is
 **On the owner's word.** The owner was told that 142 of 228 Texas file signals read "past its first page", was offered *uses the words "data center" on page 2*, and said to name the page. Pushed earlier, on the owner's word: `bc98731`, CI passed.
 
 - **The rule:** where a file has more than two pages, the words are not on its first page and the file's own page numbers are sure, the summary names the page.
-- **The wording.** The one-page form is the one the owner was shown. **The other three are mine and the owner has not read them.**
+- **The wording.** The one-page form is the one the owner was shown first. The owner was then shown all four and said the same day to keep them. The approval is noted beside the wording in `pipeline/signals.py`.
 
 | Pages with the words | The summary ends |
 |---|---|

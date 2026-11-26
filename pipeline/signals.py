@@ -822,7 +822,11 @@ def _a_or_an(number: int) -> str:
 
 
 def _on_pages(pages: list[int]) -> str:
-    """ "on page 2", "on pages 2 and 5", "on pages 2, 5 and 9", or a count and the first."""
+    """ "on page 2", "on pages 2 and 5", "on pages 2, 5 and 9", or a count and the first.
+
+    The owner approved all four forms on November 25, 2026. Do not change them without the
+    owner's word.
+    """
     if len(pages) == 1:
         return f"on page {pages[0]}"
     if len(pages) == 2:
