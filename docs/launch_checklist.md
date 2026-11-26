@@ -71,7 +71,7 @@ Read from `config/sources.yaml` and the notes in `docs/sources/` on November 23,
 
 - **Read by a job:** Legistar agendas for 9 governments, agenda files on 57 governments' own sites, the ERCOT planning group, ERCOT large load totals, TCEQ pending air permits and state well reports. Since November 25, 2026 also the QPQ Tracker's study page, once a month, for its list of payers.
 - **Saved by a person:** the Comptroller's list of registered data centers, once a month.
-- **Waiting on an answer to a letter:** Texas public notices, the PUC, the Comptroller's local agreements, TDLR registrations, CivicPlus agenda platforms, two Michigan feeds and, since November 25, 2026, four Michigan governments whose terms are held. No collector reads them. FracTracker has been asked whether its data may be used as it is.
+- **Waiting on an answer to a letter:** Texas public notices, the PUC, the Comptroller's local agreements, TDLR registrations, CivicPlus agenda platforms, two Michigan feeds and, since November 25, 2026, five Michigan governments whose terms are held and Revize, for 24 Michigan sites. No collector reads them. FracTracker has been asked whether its data may be used as it is.
 - **Refused:** the Michigan Public Service Commission.
 - **No Michigan source is read.** The site says so.
 

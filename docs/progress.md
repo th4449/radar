@@ -2,6 +2,34 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — Every letter of the day is out
+
+Pushed earlier, on the owner's word: `cae92af`, CI passed.
+
+**The owner said** Ross Township's letter and Revize's letter are sent, and gave an address for Southgate.
+
+- **Southgate's notice: sent** from the Dekleptocracy Alliance mailbox to the address the owner gave, an address at `southgatemi.gov`. The text is the notice the owner approved.
+- **Eighteen letters are out.** Nine went on November 25:
+
+| To | What | Sent by |
+|---|---|---|
+| Otsego Township | request for permission | the session, on the owner's word |
+| Berlin Charter Township | request for permission | the session, on the owner's word |
+| Plymouth Charter Township | request for permission | the session, on the owner's word |
+| Rockwood | request for permission | the session, on the owner's word |
+| Ross Township | request for permission | the owner |
+| Dearborn | notice that its agendas are read | the session, on the owner's word |
+| Keego Harbor | notice that its agendas are read | the owner |
+| Southgate | notice that its agendas are read | the session, to the address the owner gave |
+| Revize | question about its robots rule and 24 sites | the owner |
+
+- Nothing drafted is unsent.
+- The watch on the mailboxes lists all eighteen. An objection from Dearborn, Keego Harbor or Southgate goes first in its report.
+
+**Nothing changes until an answer comes.** The five held sites stay held and the 24 Revize sites stay closed.
+
+**Not verified:** that any letter arrived. Which address the owner used for Ross Township, Keego Harbor and Revize is not known to the session.
+
 ## November 25, 2026 — A county's contract for space in its own data center is set aside
 
 **On the owner's word:** add the county contract's wording to the list that sets aside a government's own computers. Pushed earlier, on the owner's word: `2dc53f6`, CI passed.
