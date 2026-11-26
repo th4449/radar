@@ -20,8 +20,11 @@ from .conftest import as_anon, as_service, as_user, confirm, make_reviewer, make
 
 pytestmark = pytest.mark.db
 
-PAGE = "https://www.purchasingpolicy.org/entity/139640b7-37f0-4bea-a87a-ab0d38580032"
-OTHER = "https://www.purchasingpolicy.org/entity/1906ec73-51b6-44a3-976f-b5a6d615dc4f"
+# Two payer pages that no stored record can hold. A payer's page is unique in the table. These
+# were two real pages of the study until November 26, 2026, when the hosted database held the
+# real payers and refused the tests' rows before any policy was asked.
+PAGE = f"https://www.purchasingpolicy.org/entity/{uuid.uuid4()}"
+OTHER = f"https://www.purchasingpolicy.org/entity/{uuid.uuid4()}"
 
 
 def scalar(conn: psycopg.Connection, sql: str, params: list | None = None):
@@ -97,8 +100,13 @@ def test_an_approved_reviewer_reads_payers_and_matches(db):
     payer = make_payer(db)
     match(db, make_entity(db), payer)
     with as_user(db, make_reviewer(db)):
-        assert scalar(db, "select count(*) from public.study_payers") == 1
-        assert scalar(db, "select count(*) from public.entity_study_payers") == 1
+        assert scalar(db, "select count(*) from public.study_payers where id = %s", [payer]) == 1
+        assert (
+            scalar(
+                db, "select count(*) from public.entity_study_payers where payer_id = %s", [payer]
+            )
+            == 1
+        )
 
 
 @pytest.mark.parametrize("status", ["pending", "suspended"])
@@ -157,7 +165,12 @@ def test_the_pipeline_writes_both(db):
             [document, PAGE],
         )
         match(db, entity, payer, basis="same_name_legal_form_aside")
-        assert scalar(db, "select count(*) from public.entity_study_payers") == 1
+        assert (
+            scalar(
+                db, "select count(*) from public.entity_study_payers where payer_id = %s", [payer]
+            )
+            == 1
+        )
 
 
 # --- what a row may hold ------------------------------------------------------------------------
@@ -204,7 +217,10 @@ def test_a_payer_that_leaves_the_study_takes_its_matches_with_it(db):
     payer = make_payer(db)
     match(db, make_entity(db), payer)
     db.execute("delete from public.study_payers where id = %s", [payer])
-    assert scalar(db, "select count(*) from public.entity_study_payers") == 0
+    assert (
+        scalar(db, "select count(*) from public.entity_study_payers where payer_id = %s", [payer])
+        == 0
+    )
 
 
 # --- what the public sees -----------------------------------------------------------------------

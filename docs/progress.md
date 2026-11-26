@@ -2,6 +2,28 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The policy tests ran on the hosted database: 143 passed, 16 did not get to their check
+
+**On the owner's word.** The owner said to start the workflow. Pushed earlier, on the owner's word: `b31c45d`, CI passed, with the policy tests run both ways on GitHub.
+
+- **The run.** Started by hand at 23:00 UTC with no other job running. https://github.com/th4449/radar/actions/runs/45908298285. 159 cases in 4 minutes 6 seconds: **143 passed and 16 failed.** No database address is in its log.
+- **Nothing was left.** The workflow counted 56 tables and 799 rows before and the same after. A count taken from outside before and after agrees: no account, reviewer, subscriber, review, alert or audit row, and 222 documents, 81 signals, 8 sites and 61 payers as before. No test source and no test payer is there. The approval gate is on.
+- **All of `test_policies.py` passed on the hosted database,** with the processing and site policy files. That file holds the three proofs the checklist names: a pending reviewer cannot confirm, a user cannot approve themselves and the anonymous key reads only the public alerts view.
+- **The 16 failures are one fault, and it is the tests' own.** All are in `test_study_policies.py`, all the same error: `duplicate key value violates unique constraint "study_payers_url_key"`. The tests used two real payer pages of the study as their made-up data. A payer's page is unique in the table, and since today's processing the hosted database holds the real payers. So the database refused each test's own row before any policy was asked. **Those 16 cases showed nothing about the hosted database's policies, either way.**
+- **The trace it left, as foretold:** row numbers were used up. The sites counter went from 8 to 89, so the next site is numbered 90.
+- **The run was not started again.** The owner had been told a failure there would be reported first.
+
+**A correction.** I told the owner the policy tests held on a database with records in it. The mode built for that put in no payer, though its own note said it did, and no such mode can catch a test that inserts a value a real record already holds under a unique rule. The fault was found by the hosted database, not by me.
+
+**Fixed locally, not pushed and not rerun.**
+
+- The study tests' two payer pages are now random addresses of the right form, which no record can hold.
+- The records-already-there mode now puts in a payer matched to a company at the published site. With that, three more study tests failed for counting whole tables. They would have failed on the hosted database next. Each now counts its own rows.
+- Every unique rule in the schema was read against the fixed values the four files insert. The two payer pages were the only real values.
+- All 159 cases pass both ways locally. 1,431 tests pass.
+
+**Not verified:** the 16 cases on the hosted database. They wait for the fix to be pushed and for the owner's word to run again.
+
 ## November 26, 2026 — A safe run of the policy tests on the hosted database is built, and not run
 
 **On the owner's word.** The owner read the plan below and said to build it. **Nothing was run on the hosted database and nothing was written to it.** Committed earlier and not pushed: `6b25f36`.

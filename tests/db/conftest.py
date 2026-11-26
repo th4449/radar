@@ -16,9 +16,14 @@ switch is for the workflow that runs the policy tests on the hosted database, an
 only the four policy files run. See docs/launch_checklist.md.
 
 **RADAR_TEST_RESIDENTS=1 puts records in the database before each test,** inside the same
-transaction: sites, a published alert, reviewers, a subscriber and a study payer. A policy test
-must hold on a database that already holds records, as the hosted one does. CI runs the policy
-tests both ways.
+transaction: sites, a published alert, reviewers, a subscriber and a study payer matched to a
+company at the published site. A policy test must hold on a database that already holds
+records, as the hosted one does. CI runs the policy tests both ways.
+
+**That mode cannot catch a test that inserts a value a real record already holds** under a
+unique rule. On November 26, 2026 the study tests used two real payer pages, and the hosted
+database refused them. A test's own values must be ones no record can hold: made up, and
+random where the column is unique.
 """
 
 from __future__ import annotations
@@ -240,6 +245,25 @@ def residents(conn: psycopg.Connection) -> None:
                values (%s, 'Resident alert', 'Body', now())""",
             [published],
         )
+    document = conn.execute(
+        "select document_id from public.signals where site_id = %s limit 1", [published]
+    ).fetchone()[0]
+    payer = conn.execute(
+        """insert into public.study_payers (document_id, name, payer_class, url, states)
+           values (%s, 'Resident Power', 'Utility', %s, '{TX}') returning id""",
+        [document, f"https://www.purchasingpolicy.org/entity/{uuid.uuid4()}"],
+    ).fetchone()[0]
+    entity = conn.execute(
+        """insert into public.entities (name, normalized_name, kind, match_key)
+           values ('Resident Power Delivery LLC', 'resident power delivery llc', 'company',
+                   'resident power delivery') returning id"""
+    ).fetchone()[0]
+    conn.execute(
+        """insert into public.entity_study_payers (entity_id, payer_id, basis, matched_name)
+           values (%s, %s, 'same_name', 'Resident Power')""",
+        [entity, payer],
+    )
+    conn.execute("update public.signals set entity_id = %s where site_id = %s", [entity, published])
     subscriber = make_user(conn, "resident-subscriber", verified=True)
     with as_user(conn, subscriber):
         conn.execute(
