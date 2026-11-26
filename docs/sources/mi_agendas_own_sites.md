@@ -164,7 +164,7 @@ On the owner's word the collector ran once, by hand, over the nine cleared pages
 - **Keego Harbor's and Southgate's files are on the cities' own hosts,** not on a Revize file host, though Revize builds both sites. Their addresses carry `?t=` and no robots file bars them: each host answers 404 to the robots request.
 - **Only one of Dearborn's six pages is cleared:** its council's. The other five rest on an inferred row.
 - **The one draft signal is not a project.** A 151-page Keego Harbor packet for November 19 uses "data center" on page 92 and "development agreement" on page 16. Both pages were opened. Page 92 is a county contract for computer services: space for the city's equipment in the county's data center. Page 16 is a form's standing words about mitigation. A reviewer would reject it.
-- **The set-aside for a government's own computers did not catch it.** The contract's words are "Data Center Use & Services" and "County's Data Center", and neither is on the rule's list. Adding a word is the owner's to decide.
+- **The set-aside for a government's own computers did not catch it.** The contract's words are "Data Center Use & Services" and "County's Data Center", and neither was on the rule's list. **The owner said the same day to add the wording.** Both spellings in the contract are now under `own_computers` in `config/keywords.yaml`: "data center use & services" and "data center use and services". On the file itself the words "data center" are now set aside. The file still gives a weak signal for "development agreement" alone, held to no meeting, so it opens no site.
 - The file's page numbers are sure: the packet has words on every page.
 
 ## Not verified

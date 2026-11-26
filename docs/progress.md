@@ -2,6 +2,23 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — A county's contract for space in its own data center is set aside
+
+**On the owner's word:** add the county contract's wording to the list that sets aside a government's own computers. Pushed earlier, on the owner's word: `2dc53f6`, CI passed.
+
+- **Two entries under `own_computers` in `config/keywords.yaml`,** both spellings as the contract writes them: "data center use & services" and "data center use and services". They come from page 92 of the Keego Harbor packet read that day.
+- "Data center use" by itself is not added. It is how a zoning item names the land use.
+- Tests came first: 2 new, on the contract's own lines. One holds that the same words beside a rezoning still give the signal.
+- **On the file itself:** the words "data center" are now set aside. The file still gives one draft signal, for "development agreement" alone on page 16, as sure as 0.3 where it was 0.9, held to no meeting. It opens no site.
+- **On the stored Texas agendas: nothing changes.** The same 1,052 signals and the same 31 items set aside. No Texas document holds the words "data center use".
+- The rules' version changes by itself when the keywords file does.
+
+**Also recorded.** The owner said Keego Harbor's notice is sent. Fifteen letters are out. Southgate's notice, Ross Township's letter and Revize's letter are not sent.
+
+**Tests.** 1,392 pass.
+
+**Not verified:** the wording on any other county's contract. Another county will word its services differently, and each new wording needs its own record.
+
 ## November 25, 2026 — A notice to Dearborn. Southgate's and Keego Harbor's are the owner's to send
 
 **On the owner's word:** send the three cleared cities a notice in place of the request. The owner was shown the three changes first: the subject, the opening and the words after the quoted terms.

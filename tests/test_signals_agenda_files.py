@@ -231,6 +231,43 @@ def test_only_the_item_itself_decides_and_not_the_item_beside_it():
     assert draft.extracted["set_aside"]["rule"] == "own_computers"
 
 
+# A county's contract to keep a city's equipment in the county's own data center, as it stands on
+# page 92 of a packet Keego Harbor posted for a meeting of November 19, 2026. The file gave a
+# draft signal on November 25, 2026, and a reviewer would have rejected it.
+COUNTY_SERVICES = (
+    "1.9.6. Data Center Use & Services means providing space for Public Body\u2019s\n"
+    "equipment in County\u2019s Data Center and access to electrical power and backup\n"
+    "power.\n"
+    "1.9.7. Oaknet Connectivity means use of communication lines and network equipment\n"
+    "maintained by County for the transmission of digital information whether leased or owned"
+)
+COUNTY_EXHIBITS = (
+    "Exhibit V: Collaborative Asset Management System (CAMS)\n"
+    "Exhibit VI: Data Center Use and Services\n"
+    "X Exhibit VII: Oaknet Connectivity"
+)
+
+
+def test_a_countys_contract_for_space_in_its_own_data_center_is_set_aside():
+    """The owner said on November 25, 2026 to add the contract's wording to the list."""
+    for words in (COUNTY_SERVICES, COUNTY_EXHIBITS, COUNTY_SERVICES + "\n" + COUNTY_EXHIBITS):
+        out = agenda_file(doc(HEAD, ROUTINE, words), RULES)
+        assert out.drafts == [], words
+        assert out.own_computers == 1 and out.no_reason == 0
+
+
+def test_the_contracts_wording_does_not_set_aside_a_project_or_a_rule_on_the_land_use():
+    # The same words beside land or a project still give the signal.
+    project = "7. Rezoning of 40 acres for data center use and services buildings."
+    (draft,) = agenda_file(doc(HEAD, project), RULES).drafts
+    assert "data center" in [r["term"] for r in draft.extracted["reasons"]]
+    assert "set_aside" not in draft.extracted
+    # "Data center use" by itself is the land use, and is not on the list.
+    land_use = "8. Discussion of data center use in the industrial district."
+    (draft,) = agenda_file(doc(HEAD, land_use), RULES).drafts
+    assert "set_aside" not in draft.extracted
+
+
 def test_a_file_with_a_project_item_and_a_hosting_item_keeps_the_project():
     (draft,) = agenda_file(doc(HEAD, REFRESH + "\n" + CENTER), RULES).drafts
     assert [r["rule"] for r in draft.extracted["reasons"]] == ["direct_term"]

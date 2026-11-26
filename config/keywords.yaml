@@ -173,6 +173,11 @@ own_computers:
     - data center cooling
     - data center optimization
     - data center installation
+    # A county's contract to keep a city's equipment in the county's data center: "Data Center
+    # Use & Services means providing space for Public Body's equipment in County's Data
+    # Center". From a Keego Harbor packet read on November 25, 2026. Both spellings are in it.
+    - data center use & services
+    - data center use and services
     - air conditioning units
     - managed services
     - cloud services

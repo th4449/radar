@@ -126,7 +126,7 @@ The desk shows the two settings: confirmations needed for an alert, and the appr
 
 ## Letters and permissions
 
-Fourteen letters are out, listed in `docs/progress.md`. Four went on November 25, 2026 to Michigan governments whose terms are held: Otsego Township, Berlin Charter Township, Plymouth Charter Township and Rockwood. A fifth went that day to Dearborn: a notice that its agendas are read, not a request. Not sent, in `drafts/`: the letter to Revize, which has no address yet, the one to Ross Township, whose site offers only a form, and the notices to Southgate and Keego Harbor, which give a program no address to write to. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
+Fifteen letters are out, listed in `docs/progress.md`. Four went on November 25, 2026 to Michigan governments whose terms are held: Otsego Township, Berlin Charter Township, Plymouth Charter Township and Rockwood. Two more went that day, to Dearborn and Keego Harbor: each a notice that its agendas are read, not a request. The owner sent Keego Harbor's. Not sent, in `drafts/`: the letter to Revize, which has no address yet, the one to Ross Township, whose site offers only a form, and the notice to Southgate, which keeps its addresses from programs. A source waiting on an answer is not read by a job. When an answer comes, the owner decides what it allows, and a build session records it in the source's note before any collector changes.
 
 ## Page numbers on files stored before November 24, 2026
 
