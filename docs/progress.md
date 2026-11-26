@@ -2,6 +2,16 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — Two GitHub variables are set
+
+**On the owner's word.** Pushed earlier, on the owner's word: `cff1d97`, CI passed.
+
+- `RADAR_CONTACT` is the project's public contact address. `RADAR_ARCHIVE_URL` is the hosted project's address. Neither is a secret, and both read back from GitHub as set.
+- **A correction.** I told the owner four settings stood between the radar and real runs. There are five. I had left out `RADAR_CONTACT`, without which a workflow refuses to start, even as a dry run.
+- **Three are not set and are the owner's:** the secrets `RADAR_DATABASE_URL` and `RADAR_ARCHIVE_KEY`, and the switch `RADAR_LIVE`. Until then every workflow is a dry run and keeps nothing.
+
+**Not verified:** a workflow on GitHub's servers. None has been started.
+
 ## November 25, 2026 — A long file's summary names the page
 
 **On the owner's word.** The owner was told that 142 of 228 Texas file signals read "past its first page", was offered *uses the words "data center" on page 2*, and said to name the page. Pushed earlier, on the owner's word: `bc98731`, CI passed.

@@ -44,10 +44,10 @@ The owner said on November 23, 2026 to build everything before putting anything 
 
 | Name | Where | For | Exists |
 |---|---|---|---|
-| `RADAR_CONTACT` | GitHub variable, not a secret | The public contact address in every request | Check before the first real run |
+| `RADAR_CONTACT` | GitHub variable, not a secret | The public contact address in every request | **Yes.** Set November 25, 2026, on the owner's word |
 | `RADAR_LIVE` | GitHub variable | The word true switches the workflows from dry runs to real runs. **The owner's switch** | No |
 | `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing, the email job and the monitor write and read the database | No |
-| `RADAR_ARCHIVE_URL` | GitHub variable | The hosted project's address, for the archive | No |
+| `RADAR_ARCHIVE_URL` | GitHub variable | The hosted project's address, for the archive | **Yes.** Set November 25, 2026, on the owner's word |
 | `RADAR_ARCHIVE_KEY` | GitHub secret | The project's service key, which alone reads and writes the archive's bucket | No |
 | `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` | Site build | Sent to every browser. The anonymous key reads one view | No |
 | `RADAR_EMAIL_LIVE` | GitHub variable | The word true lets the email job send. **The owner's switch** | No |
