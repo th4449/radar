@@ -2,6 +2,24 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The first processing run on the hosted database
+
+**On the owner's word.** After the seventh collector run the owner was told what processing does and which checklist lines were still open, and said to run it. Pushed earlier, on the owner's word: `ab004ba`, CI passed.
+
+- **Checked first that it asks no outside site for anything.** Without `--fetch-applications` the job reads stored documents only. Model triage is off: its switch is not set.
+- **The run ended `ok`:** 202 documents read, 46 new signals, 4 records held back, no errors. Started by hand on GitHub at 21:58 UTC. https://github.com/th4449/radar/actions/runs/45901729641. Rules version `2026-11-25.1+b3b5324b6e26`. No database address and no key is in its log.
+- **202 of 221.** The 18 ERCOT large load files are context and make no signal. The study page is read by the money cross-reference, not for signals.
+- **The 46 signals:** 19 well reports, 12 Legistar agenda items, 8 agenda files on governments' own sites and 7 pending air permits. The planning group's 3 records gave no reason for one.
+- **What gave no signal,** by the run's own count: 8,335 of 8,358 well reports, 1,399 of 1,412 Legistar items, 601 of 608 pending permits and 55 of 63 agenda files. Two agenda records were set aside as a government's own computers.
+- **4 well reports were held back:** each had a reason, and the party it names may be a person. They are counted by tracking number and make no signal.
+- **5 sites, 4 of them in the reviewers' queue.** 23 signals sit on a site. 16 agenda signals sit on none, as designed for a code word or a zoning term alone. 7 air permits have no county in the list and are unplaced: the step that fetches each permit's application file was not run.
+- **The scores are placeholders.** `config/scoring.yaml` says so and the run's summary repeats it. The owner has not yet kept or changed the review bar of 3.
+- **The money cross-reference read the study page:** 61 payers stored, no company on record matched one.
+- **Nothing is public.** `public_alerts` is empty, the approval gate is on, no reviewer or administrator exists and the site is not hosted. **The sites are not named here:** they are unreviewed, and this repository is public.
+- **No copy of the Comptroller's list is stored,** so no record could match a registered data center. The run's summary says so.
+
+**Not verified:** no signal or site was checked by hand against its source record. That a reviewer is refused restricted text on the hosted database: the policy tests have not run there. The monitor has not run on GitHub.
+
 ## November 26, 2026 — The seventh real run: agendas on 57 governments' own sites
 
 **On the owner's word.** After the sixth run the owner was told what this collector asks for and that its length was not known, and said to start it. Its limits were read first: one request for a page, at most four dated agenda files and two undated ones a page, 800 requests at most. Committed earlier and not pushed: `b4192b0` through `a0f3448`.
