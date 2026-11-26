@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The monitor ran once: one source needs a person
+
+**On the owner's word.** After the processing run the owner was asked whether to run the monitor and said to run it. Committed earlier and not pushed: `ebca51d`.
+
+- **The job ended as failed, and that is the monitor working.** It fails when any source needs a person. Started by hand on GitHub at 22:02 UTC. https://github.com/th4449/radar/actions/runs/45902150136. No database address is in its log.
+- **Its report: 1 of 8 sources needs a person.** `tx_comptroller_data_centers` is `due_by_hand`: no copy is stored. The seven collectors are `ok`, each read cleanly on November 26, 2026. Processing is `ok`.
+- **It read the run log and changed nothing.** GitHub may have emailed the account that started the run that a job failed. That is GitHub's own notice, not the radar's email job.
+- **A gap in the runbook.** Its step for storing the Comptroller's page runs on a person's machine and needs the hosted database's address and the archive's key there. Both exist only as GitHub secrets, and the runbook does not say how a person supplies them. Nothing is built for it yet.
+
+**Not verified:** the monitor on a schedule, and its other states on the hosted database. Only `ok` and `due_by_hand` have been seen there.
+
 ## November 26, 2026 — The first processing run on the hosted database
 
 **On the owner's word.** After the seventh collector run the owner was told what processing does and which checklist lines were still open, and said to run it. Pushed earlier, on the owner's word: `ab004ba`, CI passed.
