@@ -2,6 +2,28 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 25, 2026 — A long file's summary names the page
+
+**On the owner's word.** The owner was told that 142 of 228 Texas file signals read "past its first page", was offered *uses the words "data center" on page 2*, and said to name the page. Pushed earlier, on the owner's word: `bc98731`, CI passed.
+
+- **The rule:** where a file has more than two pages, the words are not on its first page and the file's own page numbers are sure, the summary names the page.
+- **The wording.** The one-page form is the one the owner was shown. **The other three are mine and the owner has not read them.**
+
+| Pages with the words | The summary ends |
+|---|---|
+| One | *on page 2.* |
+| Two | *on pages 2 and 3.* |
+| Three | *on pages 2, 3 and 7.* |
+| Four or more | *on 5 of its pages, first on page 3.* |
+
+- **Where the numbers are not sure, or the words are only in a file attached inside the PDF,** the summary still ends *past its first page*, the wording the owner approved on November 24.
+- Nothing else changes: which files are signals, how sure, the meeting they are held to and the reference line.
+- `RULES_VERSION` is `2026-11-25.1`.
+- Tests came first: 6 new. 1,398 pass.
+- **On the stored Texas agenda files, all 142 now name a page:** 93 one page, 37 two and 12 three. None has four or more and none falls back. The other 86 of the 228 read "An agenda that", as before. A real one: *A 3-page file that Maud posted for a meeting of January 1, 2026 uses the words "large load" on page 2.*
+
+**Not verified:** the four-page form on a real file. No stored file has the words on four pages or more.
+
 ## November 25, 2026 — Every letter of the day is out
 
 Pushed earlier, on the owner's word: `cae92af`, CI passed.

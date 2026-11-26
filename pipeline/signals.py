@@ -38,7 +38,7 @@ from pipeline.entities import Party, canonical_name, classify_party, find_compan
 from pipeline.quantities import find_quantities
 
 # Bump this when a rule in this module changes, so stored documents are read again.
-RULES_VERSION = "2026-11-23.2"
+RULES_VERSION = "2026-11-25.1"
 
 LISTING_SOURCE = "tx_comptroller_data_centers"
 MAX_EVIDENCE = 20  # snippets or quantities kept with one signal
@@ -821,6 +821,17 @@ def _a_or_an(number: int) -> str:
     return "An" if said_with_a_vowel else "A"
 
 
+def _on_pages(pages: list[int]) -> str:
+    """ "on page 2", "on pages 2 and 5", "on pages 2, 5 and 9", or a count and the first."""
+    if len(pages) == 1:
+        return f"on page {pages[0]}"
+    if len(pages) == 2:
+        return f"on pages {pages[0]} and {pages[1]}"
+    if len(pages) == 3:
+        return f"on pages {pages[0]}, {pages[1]} and {pages[2]}"
+    return f"on {len(pages)} of its pages, first on page {pages[0]}"
+
+
 def _counts_in_a_file(hit: Hit, passage: str) -> bool:
     if hit.kind != "project_code_name":
         return True
@@ -914,9 +925,15 @@ def agenda_file(doc: Doc, rules: Rules) -> Outcome:
     numbers, exact = _file_pages(meta, len(passages))
     on_pages = [numbers[n - 1] for n, _, _ in found if numbers[n - 1] is not None]
     if past:
+        # Where the file's own page numbers are sure, the summary names the page. The owner
+        # said so on November 25, 2026: in the stored Texas agendas most long files had the
+        # words past the first page, and "past its first page" told a reader little. Where
+        # the numbers are not sure, or the words are only in a file attached inside the PDF,
+        # it says "past its first page", the wording the owner approved on November 24, 2026.
+        where = _on_pages(on_pages) if exact and on_pages else "past its first page"
         summary = (
             f"{_a_or_an(pages)} {pages}-page file that {place} posted for a meeting of "
-            f"{_long_date(day)} uses the words {terms} past its first page."
+            f"{_long_date(day)} uses the words {terms} {where}."
         )
         reference = f"{place}, file posted for the meeting of {_long_date(day)}"
     else:

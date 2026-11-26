@@ -419,6 +419,72 @@ def test_a_long_scanned_file_still_says_a_machine_read_it():
     )
 
 
+# --- a long file names the page ------------------------------------------------------------------
+#
+# The owner said on November 25, 2026 to name the page. On the stored Texas agendas 142 of 228
+# file signals read "past its first page", and in 53 of them the words were on page 2.
+
+MORE = "9. Presentation on the water needs of a proposed data center."
+
+
+def test_a_long_file_names_the_page_where_its_page_numbers_are_sure():
+    # Seven pages and seven pieces of text: no page was dropped.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, LONG, BILLS, pages=7), RULES).drafts
+    assert draft.summary == (
+        "A 7-page file that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"data center" on page 7.'
+    )
+    assert draft.extracted["reference"] == "Sealy, file posted for the meeting of November 17, 2026"
+    assert draft.extracted["past_first_page"] is True
+    assert draft.extracted["pages_with_terms"] == [7]
+
+
+def test_the_page_named_is_the_files_own_and_not_the_count_of_pages_with_words():
+    # Nine pages. The second and the fifth hold no words, so the seventh piece is page 9.
+    (draft,) = agenda_file(
+        doc(HEAD, ROUTINE, LONG, BILLS, pages=9, pages_without_text=[2, 5]), RULES
+    ).drafts
+    assert draft.summary.endswith('uses the words "data center" on page 9.')
+
+
+def test_two_and_three_pages_are_listed_and_more_are_counted():
+    def summary(*pages: str) -> str:
+        (draft,) = agenda_file(doc(HEAD, ROUTINE, *pages, pages=2 + len(pages)), RULES).drafts
+        return draft.summary.split(" uses the words ")[1]
+
+    assert summary(MORE, "Minutes.", BILLS) == '"data center" on pages 3 and 5.'
+    assert summary(MORE, BILLS, MORE) == '"data center" on pages 3, 4 and 5.'
+    assert (
+        summary(MORE, BILLS, "Minutes.", MORE, BILLS, MORE)
+        == '"data center" on 5 of its pages, first on page 3.'
+    )
+
+
+def test_a_long_file_whose_page_numbers_are_not_sure_reads_as_it_did():
+    # Thirty-one pages and seven pieces of text, stored before the pages with no words were noted.
+    (draft,) = agenda_file(doc(HEAD, ROUTINE, LONG, BILLS, pages=31), RULES).drafts
+    assert draft.extracted["pages_exact"] is False
+    assert draft.summary.endswith('uses the words "data center" past its first page.')
+
+
+def test_words_only_in_a_file_attached_inside_a_long_pdf_name_no_page():
+    attached = "File: exhibit.pdf\n" + BILLS
+    (draft,) = agenda_file(
+        doc(HEAD, ROUTINE, "Minutes.", attached, pages=3, pages_without_text=[]), RULES
+    ).drafts
+    assert draft.extracted["pages_with_terms"] == []
+    assert draft.summary.endswith('uses the words "data center" past its first page.')
+
+
+def test_a_long_scanned_file_names_the_page_and_still_says_a_machine_read_it():
+    read = {"engine": "tesseract 5.5.4", "confidence": 94.2, "doubtful_words": 6, "words": 310}
+    (draft,) = process(doc(HEAD, ROUTINE, LONG, BILLS, pages=7, ocr=read), RULES).drafts
+    assert draft.summary == (
+        "A 7-page file that Sealy posted for a meeting of November 17, 2026 uses the words "
+        '"data center" on page 7. The file is a scan, read by character recognition.'
+    )
+
+
 # --- the file's own page numbers ------------------------------------------------------------------
 
 
