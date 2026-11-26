@@ -264,6 +264,8 @@ def test_an_alert_with_no_match_gives_an_empty_list(db):
 def test_a_match_at_a_site_that_is_not_published_stays_private(db):
     entity = make_entity(db)
     match(db, entity, make_payer(db))
-    site_naming(db, entity)
+    site = site_naming(db, entity)
     with as_anon(db):
-        assert scalar(db, "select count(*) from public.public_alerts") == 0
+        assert (
+            scalar(db, "select count(*) from public.public_alerts where site_id = %s", [site]) == 0
+        )

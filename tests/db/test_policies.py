@@ -119,7 +119,9 @@ def test_anon_reads_only_published_alerts_with_their_sources(db):
 
     with as_anon(db):
         rows = db.execute(
-            "select label, status, state, county_fips, sources from public.public_alerts"
+            "select label, status, state, county_fips, sources from public.public_alerts "
+            "where site_id = any(%s)",
+            [[published_site, pending_site]],
         ).fetchall()
 
     assert len(rows) == 1
@@ -344,8 +346,8 @@ def test_pending_reviewer_cannot_confirm_an_alert(db):
                values (%s, 'h', 'b', now())""",
             [site],
         )
-    assert scalar(db, "select count(*) from public.reviews") == 0
-    assert scalar(db, "select count(*) from public.alerts") == 0
+    assert scalar(db, "select count(*) from public.reviews where site_id = %s", [site]) == 0
+    assert scalar(db, "select count(*) from public.alerts where site_id = %s", [site]) == 0
 
 
 def test_user_cannot_approve_themselves(db):
@@ -479,8 +481,17 @@ def test_approved_reviewer_confirms_after_ticking_source_checked(db):
     reviewer = make_reviewer(db)
     site = make_site(db)
     with as_user(db, reviewer):
-        assert scalar(db, "select count(*) from public.sites") == 1
-        assert scalar(db, "select count(*) from public.documents") == 1
+        assert scalar(db, "select count(*) from public.sites where id = %s", [site]) == 1
+        assert (
+            scalar(
+                db,
+                """select count(*) from public.documents d
+                   where exists (select 1 from public.signals s
+                                 where s.document_id = d.id and s.site_id = %s)""",
+                [site],
+            )
+            == 1
+        )
         for decision in ("confirm", "reject"):
             assert refused(
                 db,
@@ -717,7 +728,11 @@ def test_after_the_gate_is_lifted_a_job_can_publish_a_confirmed_site(db):
         db.execute(publish, [confirmed_site])
         assert refused(db, publish, [unconfirmed_site])
     with as_anon(db):
-        assert scalar(db, "select count(*) from public.public_alerts") == 1
+        shown = db.execute(
+            "select site_id from public.public_alerts where site_id = any(%s)",
+            [[confirmed_site, unconfirmed_site]],
+        ).fetchall()
+        assert shown == [(confirmed_site,)]
 
 
 def test_reversed_or_suspended_confirmations_do_not_count(db):
@@ -796,7 +811,9 @@ def test_reversing_the_last_confirmation_takes_a_published_alert_down(db):
     with as_user(db, admin):
         db.execute("update public.reviews set reversed_at = now() where id = %s", [review])
     with as_anon(db):
-        assert scalar(db, "select count(*) from public.public_alerts") == 0
+        assert (
+            scalar(db, "select count(*) from public.public_alerts where site_id = %s", [site]) == 0
+        )
     assert scalar(db, "select status from public.sites where id = %s", [site]) == "in_review"
 
 
@@ -809,7 +826,9 @@ def test_unpublished_alert_leaves_the_public_view(db):
     with as_user(db, admin):
         db.execute("update public.alerts set published_at = null where id = %s", [alert])
     with as_anon(db):
-        assert scalar(db, "select count(*) from public.public_alerts") == 0
+        assert (
+            scalar(db, "select count(*) from public.public_alerts where site_id = %s", [site]) == 0
+        )
 
 
 # --- audit log ----------------------------------------------------------------------------------

@@ -1,0 +1,69 @@
+name: Policy tests on the hosted database
+
+# Runs the four policy test files against the hosted database itself. They are the proof that
+# a pending reviewer cannot confirm, that a user cannot approve themselves and that the
+# anonymous key reads only the public alerts view. See docs/launch_checklist.md, part 4.
+#
+# The tests write rows and roll them back. Three things keep any of it from staying:
+#
+#   1. Each test runs in one transaction that the test setup opens and rolls back. No block
+#      inside a test can commit. tests/db/test_harness.py holds that.
+#   2. Only the four policy files run here. The setup refuses any other file on a database
+#      that is not on the machine running the tests.
+#   3. The rows of every table are counted before and after, from outside the tests. Any
+#      difference fails the job and names the table.
+#
+# One trace is left by design: row numbers are used up, so later ids skip.
+#
+# Started by hand only, and only on the owner's word. It has no schedule and must never get
+# one. Do not start it while a collector, processing or the email job is running: their rows
+# would show as a difference in the counts.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: policy-tests
+  cancel-in-progress: false
+
+jobs:
+  policy-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Count every table before
+        env:
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+        run: uv run python scripts/table_counts.py save "$RUNNER_TEMP/before.json"
+
+      - name: Run the four policy test files
+        env:
+          RADAR_TEST_DB_URL: ${{ secrets.RADAR_DATABASE_URL }}
+          RADAR_TEST_HOSTED: "1"
+          # A skipped test is a failure here.
+          RADAR_REQUIRE_DB: "1"
+        run: >
+          uv run pytest -ra -p no:cacheprovider
+          tests/db/test_policies.py
+          tests/db/test_processing_policies.py
+          tests/db/test_site_policies.py
+          tests/db/test_study_policies.py
+
+      # Whatever the tests did, count again.
+      - name: Count every table after and compare
+        if: always()
+        env:
+          DATABASE_URL: ${{ secrets.RADAR_DATABASE_URL }}
+        run: uv run python scripts/table_counts.py compare "$RUNNER_TEMP/before.json"

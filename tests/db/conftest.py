@@ -6,6 +6,19 @@ back, so tests never see each other's rows.
 
 A test acts as a user the same way the Supabase API does: it switches to the `authenticated`
 role and sets the JWT claims for the request.
+
+**Nothing a test writes is kept, whatever the test does.** The fixture opens the transaction
+itself, before the test's first statement, so no block inside a test can be a transaction of its
+own and commit.
+
+**A database that is not on this machine is refused** unless RADAR_TEST_HOSTED is 1. That
+switch is for the workflow that runs the policy tests on the hosted database, and even then
+only the four policy files run. See docs/launch_checklist.md.
+
+**RADAR_TEST_RESIDENTS=1 puts records in the database before each test,** inside the same
+transaction: sites, a published alert, reviewers, a subscriber and a study payer. A policy test
+must hold on a database that already holds records, as the hosted one does. CI runs the policy
+tests both ways.
 """
 
 from __future__ import annotations
@@ -15,6 +28,7 @@ import os
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
+from urllib.parse import urlsplit
 
 import psycopg
 import pytest
@@ -23,12 +37,36 @@ DB_URL = os.environ.get(
     "RADAR_TEST_DB_URL", "postgresql://postgres:postgres@127.0.0.1:55322/postgres"
 )
 REQUIRE_DB = os.environ.get("RADAR_REQUIRE_DB") == "1"
+HOSTED_ALLOWED = os.environ.get("RADAR_TEST_HOSTED") == "1"
+RESIDENTS = os.environ.get("RADAR_TEST_RESIDENTS") == "1"
+LOCAL_HOSTS = ("127.0.0.1", "localhost", "::1")
+# The only files that may run on a database that is not on this machine. Each holds on a
+# database with records in it. The other files here test the pipeline and assume empty tables.
+HOSTED_FILES = frozenset(
+    {
+        "test_policies.py",
+        "test_processing_policies.py",
+        "test_site_policies.py",
+        "test_study_policies.py",
+    }
+)
+
+
+def is_local(url: str) -> bool:
+    """True when the address names a database on this machine."""
+    return (urlsplit(url).hostname or "") in LOCAL_HOSTS
+
 
 pytestmark = pytest.mark.db
 
 
 @pytest.fixture(scope="session")
 def _db_available() -> None:
+    if not is_local(DB_URL) and not HOSTED_ALLOWED:
+        pytest.fail(
+            "RADAR_TEST_DB_URL names a database that is not on this machine. These tests write "
+            "rows before they roll back. Set RADAR_TEST_HOSTED=1 only in the workflow made for it."
+        )
     try:
         with psycopg.connect(DB_URL, connect_timeout=3) as conn:
             ready = conn.execute("select to_regclass('public.reviewers') is not null").fetchone()[0]
@@ -42,9 +80,16 @@ def _db_available() -> None:
 
 
 @pytest.fixture
-def db(_db_available: None) -> Iterator[psycopg.Connection]:
+def db(_db_available: None, request: pytest.FixtureRequest) -> Iterator[psycopg.Connection]:
+    if not is_local(DB_URL) and request.node.path.name not in HOSTED_FILES:
+        pytest.fail(f"{request.node.path.name} is not one of the files that may run there.")
     conn = psycopg.connect(DB_URL)
     try:
+        # Open the transaction here. A `with conn.transaction()` block inside a test is then
+        # always a savepoint, never a transaction of its own that commits when it ends.
+        conn.execute("select 1")
+        if RESIDENTS:
+            residents(conn)
         yield conn
     finally:
         conn.rollback()
@@ -170,3 +215,33 @@ def confirm(conn: psycopg.Connection, reviewer: uuid.UUID, site_id: int) -> int:
                values (%s, %s, 'confirm', true) returning id""",
             [site_id, reviewer],
         ).fetchone()[0]
+
+
+# --- records that were there before the test ----------------------------------------------------
+
+
+def residents(conn: psycopg.Connection) -> None:
+    """Fill the database the way a running radar fills it, inside the test's transaction.
+
+    The hosted database holds records. A policy test that passes only on empty tables says
+    nothing about it. With these in place a test must tell its own rows from someone else's.
+    """
+    admin = make_reviewer(conn, role="admin")
+    make_reviewer(conn)
+    make_reviewer(conn, status="pending")
+    make_site(conn, "Resident candidate")
+    in_review = make_site(conn, "Resident in review")
+    conn.execute("update public.sites set status = 'in_review' where id = %s", [in_review])
+    published = make_site(conn, "Resident published")
+    confirm(conn, admin, published)
+    with as_user(conn, admin):
+        conn.execute(
+            """insert into public.alerts (site_id, headline, body, published_at)
+               values (%s, 'Resident alert', 'Body', now())""",
+            [published],
+        )
+    subscriber = make_user(conn, "resident-subscriber", verified=True)
+    with as_user(conn, subscriber):
+        conn.execute(
+            "insert into public.subscribers (user_id, states) values (%s, '{TX}')", [subscriber]
+        )

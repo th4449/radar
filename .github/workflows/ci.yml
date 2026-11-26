@@ -63,6 +63,19 @@ jobs:
           RADAR_REQUIRE_OCR: "1"
         run: uv run pytest -ra
 
+      # The hosted database holds records. A policy test that passes only on empty tables
+      # says nothing about it. This run puts records in first, inside each test's transaction.
+      - name: The policy tests again, on a database that already holds records
+        env:
+          RADAR_REQUIRE_DB: "1"
+          RADAR_TEST_RESIDENTS: "1"
+        run: >
+          uv run pytest -ra
+          tests/db/test_policies.py
+          tests/db/test_processing_policies.py
+          tests/db/test_site_policies.py
+          tests/db/test_study_policies.py
+
   web:
     runs-on: ubuntu-latest
     timeout-minutes: 10

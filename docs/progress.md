@@ -2,6 +2,22 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — A safe run of the policy tests on the hosted database is built, and not run
+
+**On the owner's word.** The owner read the plan below and said to build it. **Nothing was run on the hosted database and nothing was written to it.** Committed earlier and not pushed: `6b25f36`.
+
+- **Nothing a test writes can be kept.** The test setup now opens the transaction itself, before the test's first statement. A block inside a test is then always a savepoint. `tests/db/test_harness.py` holds this: its test fails when the line is taken out, which was tried, and it cleans up after itself if the guard is ever lost.
+- **A database that is not on this machine is refused** unless `RADAR_TEST_HOSTED` is 1, and even then only the four policy files may run there. The other database tests exercise the pipeline and assume empty tables.
+- **The policy tests now hold on a database with records in it.** With `RADAR_TEST_RESIDENTS=1` the setup first puts in three sites, a published alert, three reviewers and a subscriber, inside each test's transaction. Seven tests failed that way, each because it counted a whole table. Each now counts its own rows. All 159 cases pass both ways, and CI runs both.
+- **A check from outside.** `scripts/table_counts.py` counts the rows of every table in the radar's schemas, the accounts and the archive's list, before and after. Any difference ends with an error and names the table. Tried on the local database around the policy tests: 52 tables, the same before and after. With one row left on purpose it failed and named the table.
+- **The workflow** is `.github/workflows/policy-tests.yml`: count, run the four files, count again and compare. Started by hand only. It has no schedule.
+- **Read-only checks on the hosted database for it:** its owner role can read all 56 tables the count would read, and the accounts table has the same 35 columns as the local one.
+- 1,431 tests pass: 16 more than before.
+
+**Not verified:** the workflow has never run. Whether the tests pass on the hosted database is exactly what it is for. A count shows that no row was left or lost. It does not show that no row was changed. The tests' own rollback is the guard against that.
+
+**Waiting for the owner's word:** starting the workflow. One trace it leaves by design: row numbers are used up, so later ids skip.
+
 ## November 26, 2026 — The hosted database's rules are the local ones, definition for definition
 
 **On the owner's word.** The owner said to look into a safe way to run the policy tests on the hosted database. Nothing was written to it. Pushed earlier, on the owner's word: `6206657`, CI passed.
