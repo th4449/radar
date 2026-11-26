@@ -4,7 +4,7 @@
 - Layer: baseline. A list of companies, not of sites and not a signal.
 - Page: https://www.purchasingpolicy.org/data-centers
 - Checked: November 24, 2026
-- Result: **allowed, and switched on.** The owner said on November 25, 2026 to switch the source on. Its method is `http`, its collector is on the list in `collectors/run.py` and it has a workflow file, started by hand. Like every workflow, its job is a dry run until the owner sets `RADAR_LIVE`. **No copy of the page is stored anywhere yet.**
+- Result: **allowed, and switched on.** The owner said on November 25, 2026 to switch the source on. Its method is `http`, its collector is on the list in `collectors/run.py` and it has a workflow file, started by hand. **One copy of the page is stored,** by the radar's first real run on November 26, 2026. See "What was verified".
 - Collector and parser: `collectors/us/qpq_data_center_payers.py`
 - Fixture: `tests/fixtures/us_qpq_data_center_payers/data-centers-payers.html`, the page's table of payers, cut from one copy saved on November 24, 2026 with one request through `collectors.capture`.
 
@@ -19,6 +19,7 @@ The QPQ Tracker is a project of Anti-Corruption Action, the organization that ru
 - **Terms.** The site has no terms of use page. `/terms` answers 404, and the About page links none. The About page states no terms for reuse of the site's own pages. It says the tracker "does not assert that any donation caused any outcome".
 - **The owner's word.** On November 24, 2026 the owner said to build from the study page, and on November 25, 2026 to switch the source on.
 - **A dry run by hand,** November 25, 2026: one request by the radar's reader, robots read first. The page loaded and the parser read its table. Nothing was kept.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word. One request. The run ended `ok`: 1 document seen, 1 new, no errors. The hosted database holds the page's row with its address, retrieval time and hash, and the archive holds one file of 1,393,885 bytes named by the same hash, `b678f3f9b02f5032f75ed5bc8f4245be0ff0a0e0df417602b9c9688652f35a40`. Run: https://github.com/th4449/radar/actions/runs/45888861911. Nothing was processed, so the hosted list of payers is still empty.
 
 ## What the page holds
 

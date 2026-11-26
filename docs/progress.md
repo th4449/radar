@@ -2,6 +2,20 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The first real run: one page stored
+
+**On the owner's word.** The owner said to start the first real run. Pushed earlier, on the owner's word: `cbd8096`, CI passed.
+
+- **Which collector, and why.** `us_qpq_data_center_payers`, the smallest: one request, to the QPQ Tracker's study page, which its robots file allows. It was chosen to prove the path from GitHub to the hosted project before a collector that asks many sites.
+- **The run ended `ok`:** 1 document seen, 1 new, no errors, in 7 seconds. Started by hand on GitHub at 20:08 UTC. https://github.com/th4449/radar/actions/runs/45888861911. The log shows the database address and the archive key as `***`, and neither appears anywhere else in it.
+- **Read back from the hosted project afterwards.** One row in `collector_runs`: `ok`, runner `gha-45888861911`. One row in `documents`: the page's address, retrieved 20:09:11 UTC, 116,680 characters of text, hash `b678f3f9b02f5032f75ed5bc8f4245be0ff0a0e0df417602b9c9688652f35a40`. One file in the `archive` bucket: 1,393,885 bytes, `text/html`, named by the same hash. Before the run both counts were 0.
+- **So three things that were open are now shown:** the pooler's address answers GitHub's servers, GitHub stored the database address whole and GitHub stored the archive key whole.
+- **Nothing else ran.** No processing, so no signal, no site and no payer row: `study_payers` is empty on the hosted database. No email. No other collector.
+- **One checklist line was open when the run started and still is:** the policy tests have not run on the hosted database. They guard reviewers and the public view. This run touched neither.
+- **Supabase's management service answered 502 twice** while the result was being read, then answered. The run itself was not affected.
+
+**Not verified:** the archive file's bytes were not read back and hashed. Its name and the row's hash agree, and the storage service reports its size. The other six collectors, processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The database's address is set
 
 **The owner's own act.** The owner reset the database password in the Supabase dashboard and ran `drafts/set_database_url.py`.

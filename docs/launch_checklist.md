@@ -1,6 +1,6 @@
 # Launch checklist
 
-BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty. Since November 26, 2026, the switch `RADAR_LIVE` is true and both secrets are set: the archive's key and the database's address. **Nothing now stands between a started workflow and a real run.** A collect workflow started on GitHub asks its source for records and keeps them. None has a schedule and none has been started.
+BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It holds one document. Since November 26, 2026, the switch `RADAR_LIVE` is true and both secrets are set: the archive's key and the database's address. **Nothing now stands between a started workflow and a real run.** A collect workflow started on GitHub asks its source for records and keeps them. None has a schedule. **One has been started:** the payers collector, on November 26, 2026, on the owner's word. It stored one page. The other six collectors, processing and the monitor have not run.
 
 Each line says who does it. **Owner** means a decision or an action that section 11 of the build plan keeps for the owner. **Session** means work a build session can do once the owner has said yes to what it rests on.
 
@@ -20,7 +20,7 @@ Nothing below starts without a yes to its line.
 
 ## 2. Built, and waiting for the hosted project
 
-The owner said on November 23, 2026 to build everything before putting anything online. These were built that day. **None has run against a hosted service.** The hosted database of November 25, 2026 holds the schema and no row. Each is switched on by a setting only the owner can make.
+The owner said on November 23, 2026 to build everything before putting anything online. These were built that day. **None has run against a hosted service.** The hosted database of November 25, 2026 held the schema and no row until the first real run of November 26, 2026. Each is switched on by a setting only the owner can make.
 
 - [x] **A place for the archive in the hosted project.** One private bucket in the project's storage, made by a migration. Tried against the storage service's local copy. `collectors/hosted_archive.py`.
 - [x] **Real runs in the workflows.** Every collector workflow is a dry run unless the repository variable `RADAR_LIVE` is the word true. No commit can switch it.
@@ -61,7 +61,7 @@ The owner said on November 23, 2026 to build everything before putting anything 
 - [x] **Session.** Apply every migration in `db/migrations/` to the hosted database, in order. Done November 25, 2026 with `supabase db push`: all 14, the ledger under the files' own numbers. A dump of the hosted schema is the same as the local one's, line for line.
 - [ ] **Session.** Run the policy tests against the hosted database or a copy of it. They are the proof that a pending reviewer cannot confirm, a user cannot approve themselves and the anonymous key reads only `public_alerts`. **Not run on the hosted database:** they need its address, which is a secret, and they write test rows. They pass on the local database, whose schema is the same. Asked with the public key on November 25, 2026, the hosted API gave `public_alerts` and refused every table tried.
 - [ ] **Owner.** Check the settings table: one confirmation required, and **the approval gate on**. Read on November 25, 2026: one confirmation, the gate on. While it is on, only an administrator can publish an alert.
-- [ ] **Session.** Run each collector once by hand as a real run, one at a time, and read its log. A refusal ends that source: record it and do not run it again.
+- [ ] **Session.** Run each collector once by hand as a real run, one at a time, and read its log. A refusal ends that source: record it and do not run it again. **One of seven is done:** `us_qpq_data_center_payers`, November 26, 2026, `ok`, one page stored. Not run: the two agenda collectors, the two ERCOT collectors, TCEQ pending air permits and the well reports.
 - [ ] **Owner.** Save the Comptroller's list by hand and store it. See [runbook.md](runbook.md).
 - [ ] **Session.** Run processing once and read what it made. Expect sites in the reviewers' queue: at the bar of 3, a record that says "data center" reaches a reviewer by itself.
 - [ ] **Session.** Run the monitor. Every watched source should be `ok`.
