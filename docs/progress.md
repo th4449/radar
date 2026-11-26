@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The fifth real run: the state well reports
+
+**On the owner's word.** After the fourth run the owner was told what this collector does that the others do not, one large download and an extract with owner names, and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`, `3f3a7a3`.
+
+- **The run ended `ok`:** 1 document seen, 1 new, no errors, in 14 seconds. Started by hand on GitHub at 20:28 UTC. https://github.com/th4449/radar/actions/runs/45891285142. No database address and no key is in its log.
+- **The board's file was read and not kept.** 152,638,103 bytes, last changed November 26, 2026, SHA-256 `d2a21e5afcfadb130d962fe137e781fb6144398765498020714f024f832e5d7d`. The row records that the original was not kept.
+- **The extract is what is stored:** 8,358 rows of 23 columns, 1,527,606 bytes, hash `5437efb02049bd3cdf6369fdc012dc9d5fb05cc28395828be3cd95b714554832`. Of 715,668 rows read, 521,136 were in other counties, 111,755 were older than November 26, 2024, 74,415 were household rows and 4 were malformed. The five counts add up to the total. The four malformed tracking numbers are the same four as on November 20, 2026.
+- **The document is marked restricted,** as designed: an administrator reads it and a reviewer does not.
+- **The hosted project holds** 27 documents, 27 hashes and 27 archive files, 27,041,400 bytes in all.
+- **Nothing else ran.** No processing, so no signal and no site. No email.
+
+**Not verified:** that a reviewer is in fact refused the restricted extract on the hosted database: the policy tests have not run there, and no reviewer exists. The archive files' bytes were not read back and hashed. The two agenda collectors, processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The fourth real run: TCEQ pending air permits
 
 **On the owner's word.** After the third run the owner was asked whether to start the collector for TCEQ's pending air permit lists and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`.

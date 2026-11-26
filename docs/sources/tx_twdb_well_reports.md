@@ -64,7 +64,8 @@ A row with a stray pipe character cannot be split into its columns. It is not us
 - The download page, fetched once on November 20, 2026.
 - The file, downloaded once by hand the same day to read its layout. That copy was deleted.
 - One full run of the collector the same day, keeping nothing afterward. It read 715,155 rows and kept 8,325, from 29 of the 30 counties. It left out 74,333 household rows in the test counties, 111,710 older rows and 520,783 rows from other counties. Four rows were malformed. The extract is 1.5 MB. The run took 9 seconds and about 400 MB of memory.
-- The kept rows by use: environmental soil boring 3,661, monitor 2,918, test well 554, irrigation 440, other 395, public supply 168, industrial 66 and seven smaller groups.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word: `ok`, in 14 seconds. It read 715,668 rows and kept 8,358. It left out 74,415 household rows in the test counties, 111,755 older rows and 521,136 rows from other counties. Four rows were malformed, the same four. The extract is 1.5 MB, is in the hosted database and archive and is marked restricted. The board's file, 152,638,103 bytes, was not kept. Run: https://github.com/th4449/radar/actions/runs/45891285142.
+- The kept rows by use on November 20, 2026: environmental soil boring 3,661, monitor 2,918, test well 554, irrigation 440, other 395, public supply 168, industrial 66 and seven smaller groups.
 
 ## What is still open
 
@@ -82,7 +83,7 @@ A row with a stray pipe character cannot be split into its columns. It is not us
 - `locwwrep.asp`, the guide to locating a well report.
 - The lookup and map applications on `www3.twdb.texas.gov`. That host has no robots file.
 - How often a report is corrected after it is submitted.
-- A run from GitHub's servers.
+- Whether a reviewer is refused the restricted extract on the hosted database. The policy tests have not run there.
 
 
 ## About the fixture
