@@ -2,6 +2,21 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The live switch is on and the archive's key is set
+
+**On the owner's word.** The owner said: add `RADAR_ARCHIVE_KEY` and set `RADAR_LIVE` to true. The owner also said the radar will be at `standuptocorruption.org/radar`. Pushed earlier, on the owner's word: `e22c50e`, CI passed.
+
+- **`RADAR_LIVE` is the word true.** It reads back from GitHub as set. From now on a workflow started on GitHub is a real run, not a dry run. Nothing started: no workflow has a schedule and none was started by hand.
+- **`RADAR_ARCHIVE_KEY` is a GitHub secret.** It is the hosted project's `service_role` key. It was piped from Supabase's tool into GitHub. It was never printed, and it is in no file.
+- **Checked before it was set,** with two read-only requests to the hosted storage: the key reads the `archive` bucket, the bucket is private and it holds no files.
+- **The project's newer secret key was not used.** Supabase's tool hides its value, so it could not be passed on. Two things follow, both from Supabase's own pages, read in excerpt on November 26, 2026. The older key and the older public key are signed by one secret, so revoking that secret ends both. And Supabase says it is retiring both older keys in early 2027. **Before then the owner should make a secret key in the project's API key settings and put it in `RADAR_ARCHIVE_KEY`.** Sources: `supabase.com/docs/guides/auth/signing-keys` and `supabase.com/docs/guides/getting-started/api-keys`.
+- **A real run still cannot start.** `RADAR_DATABASE_URL` is not set. A run without it stops with "a real run needs DATABASE_URL and an archive" before it asks any site for anything. That address holds the database's password, which only the owner can set or read.
+- **A dry run on GitHub is no longer possible through the workflows.** With the switch on, each one goes straight to a real run. A dry run still works from this machine.
+- **The site's address is written down and nothing is hosted there.** `config/email.yaml` still has no site address: that is one of the three locks on real email and it was not asked for.
+- **The build does not work under `/radar` yet.** 39 links start at the root of a domain, the sign-in emails send a person back to `/account/` and `/review/`, and the build sets no base path. Not changed in this step.
+
+**Not verified:** a workflow on GitHub's servers. None has been started. Whether GitHub stored the key whole: a secret cannot be read back, so the proof is the first real run.
+
 ## November 25, 2026 — Two GitHub variables are set
 
 **On the owner's word.** Pushed earlier, on the owner's word: `cff1d97`, CI passed.

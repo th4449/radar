@@ -1,6 +1,6 @@
 # Launch checklist
 
-BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty, and no job can reach it until the owner adds its address as a secret.
+BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule, no email is sent and the site is not public. A hosted database exists since November 25, 2026. It is empty, and no job can reach it until the owner adds its address as a secret. Since November 26, 2026, the switch `RADAR_LIVE` is true and the archive's key is set, both on the owner's word. A real run still cannot start: it stops before it asks any site for anything, because the database's address is not set.
 
 Each line says who does it. **Owner** means a decision or an action that section 11 of the build plan keeps for the owner. **Session** means work a build session can do once the owner has said yes to what it rests on.
 
@@ -9,9 +9,9 @@ Each line says who does it. **Owner** means a decision or an action that section
 Nothing below starts without a yes to its line.
 
 - [x] **Owner.** Create the hosted Supabase project. The owner said yes on November 25, 2026, to the price Supabase quoted that day: 10 dollars a month in the owner's organization, which is on the Pro plan. A session created it, named `radar`, in the us-east-1 region.
-- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3.
+- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3. `RADAR_ARCHIVE_KEY` was added on November 26, 2026. `RADAR_DATABASE_URL` is not: it holds the database's password, which only the owner can set or read.
 - [ ] **Owner.** Turn on real email, and choose the provider's tier. The email job only does dry runs today.
-- [ ] **Owner.** Make the site public: host it and point a name at it. Buying a domain or changing DNS is the owner's.
+- [ ] **Owner.** Make the site public: host it and point a name at it. Buying a domain or changing DNS is the owner's. The owner said on November 26, 2026, that the site will be at `standuptocorruption.org/radar`. It is not there yet.
 - [ ] **Owner.** Create the first administrator by hand, outside the repository. There is no self-service path to that role.
 - [ ] **Owner.** Approve each reviewer. Never automated.
 - [ ] **Owner.** Put the collectors, processing and the monitor on a schedule.
@@ -32,7 +32,8 @@ The owner said on November 23, 2026 to build everything before putting anything 
 
 ## 2a. Not built yet
 
-- [ ] **Hosting for the site.** The build is static and passes in CI. It is deployed nowhere.
+- [ ] **Hosting for the site.** The build is static and passes in CI. It is deployed nowhere. The owner has named its address: `standuptocorruption.org/radar`.
+- [ ] **A build that works under `/radar`.** Today the site assumes it sits at the root of a domain: 39 links in `web/src` start at `/`, the sign-in emails send a person back to `/account/` and `/review/`, and the build sets no base path. Under `/radar` every one of those would leave the radar. The hosted project's sign-in settings also need the public address before a sign-in link works.
 
 ## 2b. Sources a person may enter by hand
 
@@ -45,10 +46,10 @@ The owner said on November 23, 2026 to build everything before putting anything 
 | Name | Where | For | Exists |
 |---|---|---|---|
 | `RADAR_CONTACT` | GitHub variable, not a secret | The public contact address in every request | **Yes.** Set November 25, 2026, on the owner's word |
-| `RADAR_LIVE` | GitHub variable | The word true switches the workflows from dry runs to real runs. **The owner's switch** | No |
+| `RADAR_LIVE` | GitHub variable | The word true switches the workflows from dry runs to real runs. **The owner's switch** | **Yes, and it is true.** Set November 26, 2026, on the owner's word. A workflow started now is a real run |
 | `RADAR_DATABASE_URL` | GitHub secret | Collectors, processing, the email job and the monitor write and read the database | No |
 | `RADAR_ARCHIVE_URL` | GitHub variable | The hosted project's address, for the archive | **Yes.** Set November 25, 2026, on the owner's word |
-| `RADAR_ARCHIVE_KEY` | GitHub secret | The project's service key, which alone reads and writes the archive's bucket | No |
+| `RADAR_ARCHIVE_KEY` | GitHub secret | The project's service key, which alone reads and writes the archive's bucket | **Yes.** Added November 26, 2026, on the owner's word. It is the project's older `service_role` key. It went from Supabase's tool straight into GitHub and was never shown or written to a file. Supabase says it is retiring this kind of key in early 2027: replace it before then with a secret key from the project's API key settings |
 | `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` | Site build | Sent to every browser. The anonymous key reads one view | No |
 | `RADAR_EMAIL_LIVE` | GitHub variable | The word true lets the email job send. **The owner's switch** | No |
 | `RESEND_API_KEY` | GitHub secret | Sending alerts | No |
