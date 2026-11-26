@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — A way to store a hand-saved page in the hosted project
+
+**On the owner's word.** The owner was told of the gap below and said to build the helper. Pushed earlier, on the owner's word: `a02abe7`, CI passed.
+
+- **The gap.** `collectors.by_hand` needs the hosted database's address and the archive's key. Both live on GitHub and on no person's machine, so the Comptroller's page could be saved and not stored.
+- **Built: `scripts/store_by_hand_hosted.py`.** It checks the file first and refuses one that is not the page before it asks for anything. Then it asks for the database password at a prompt that shows nothing, checks that the database takes it, reads the archive's key from Supabase's own tool and runs the storing command. It reads which project from the checkout's link in `supabase/.temp/`, which git ignores, so no project name is in the repository.
+- **The secrets stay in memory.** Neither is printed or written to a file. The settings are put back as they were when the command ends, also when storing fails. A local archive folder set in the shell is set aside for the one command, since two archives would be refused.
+- **17 tests, written first,** with made-up values and stand-ins for the prompt, Supabase's tool, the database and the storing command. They touch no database and no network. 1,415 tests pass.
+- **Tried by hand on this machine:** a file that is not the page is refused with no prompt. The saved test page with no password stops with "Nothing was stored." The checkout's link is read, and Supabase's tool gives a key of the right kind. Its value was not shown.
+- **The runbook's step now names this command.**
+
+**Not verified:** a page stored in the hosted project with it. That takes the owner's password and a page the owner saved. The key it reads is the older service key, which Supabase says it will retire in early 2027.
+
 ## November 26, 2026 — The monitor ran once: one source needs a person
 
 **On the owner's word.** After the processing run the owner was asked whether to run the monitor and said to run it. Committed earlier and not pushed: `ebca51d`.

@@ -56,13 +56,21 @@ The Comptroller's site refused the reader on November 23, 2026. A person saves t
 
 1. Open https://comptroller.texas.gov/taxes/data-centers/data-center-lists.php in a browser.
 2. Save it as HTML only: "Page Source" in Safari, "Webpage, HTML Only" in Chrome. Not a web archive and not a PDF.
-3. Store it, with the name the browser gave the file:
+3. Store it in the hosted project, with the name the browser gave the file:
 
 ```
-uv run python -m collectors.by_hand tx_comptroller_data_centers "<the saved file>"
+uv run python scripts/store_by_hand_hosted.py tx_comptroller_data_centers "<the saved file>"
 ```
 
-The command makes no request. It refuses a file that is not the page and stores nothing then. **Never use it on a file a program fetched.**
+The command makes no request to the Comptroller's site. It checks the file first and refuses one that is not the page, before it asks for anything. **Never use it on a file a program fetched.**
+
+**What it asks for and why.** Storing needs the hosted database's address and the archive's key, and neither is on any person's machine.
+
+- It asks for **the database password** at a prompt that shows nothing. That is the password set in the Supabase dashboard. The command does not choose or change it.
+- It reads **the archive's key** from Supabase's own tool, so the person must be signed in to it (`supabase login`) and the checkout must be linked to the project (`supabase link`).
+- It prints neither, writes neither to a file and leaves neither in the shell.
+
+`python -m collectors.by_hand`, the command underneath, is for a database whose settings are already in the shell, such as the local one.
 
 ## Entering a record by hand
 
