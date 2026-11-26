@@ -79,6 +79,7 @@ Code: `pipeline/tceq_applications.py`. No real application file is saved as a fi
 
 - The start page and the two lists, fetched once each on November 20, 2026 through `collectors.capture`. The start page is not committed.
 - One dry run of the collector the same day: 2 documents, no errors. A dry run keeps nothing.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word: 2 documents seen, 2 new, no errors, in 11 seconds. Both lists are in the hosted database and archive, each with text. Run: https://github.com/th4449/radar/actions/runs/45890978008.
 - Two application files fetched once each by hand on November 20, 2026, to read their layout. Deleted afterward.
 - One run of the application step the same day, on the local database, deleted afterward. Of 12 rows: 9 files gave a county, 6 of them one of the 30 test counties. One file states its county only in running text and gave none. Two files were over the size limit.
 - That run found a fault. One file's text held a NUL character, which the database refuses. The text reader now drops them.

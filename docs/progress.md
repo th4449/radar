@@ -2,6 +2,16 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The fourth real run: TCEQ pending air permits
+
+**On the owner's word.** After the third run the owner was asked whether to start the collector for TCEQ's pending air permit lists and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`.
+
+- **The run ended `ok`:** 2 documents seen, 2 new, no errors, in 11 seconds. Started by hand on GitHub at 20:25 UTC. https://github.com/th4449/radar/actions/runs/45890978008. No database address and no key is in its log.
+- **Read back from the hosted project afterwards.** `collector_runs` has a fourth row: `ok`, runner `gha-45890978008`. The source has 2 documents, both pages with text: the pending new source review list, 132,343 bytes, and the pending Title V list, 96,907 bytes. The hosted project holds 26 documents, 26 hashes and 26 archive files, 25,513,794 bytes in all.
+- **Nothing else ran.** No processing, so no signal and no site. No email.
+
+**Not verified:** the archive files' bytes were not read back and hashed. The policy tests have not run on the hosted database. Three collectors, processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The third real run: the ERCOT planning group
 
 **On the owner's word.** After the second run the owner was asked whether to start the ERCOT planning group's collector and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`.
