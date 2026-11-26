@@ -103,6 +103,7 @@ On November 21, 2026:
 - A search of four governments' records for the words "data center". Harris County's commissioners court took up data center development in the county on October 15, 2026. Dallas has had two briefings on data centers this year. Pflugerville's development corporation held a hearing in 2022 on an agreement with a data center company. Round Rock's matches were its own equipment purchases.
 - Harris County's meeting of October 15, 2026: 1,740 items in one answer of 2 MB.
 - **A run of the collector itself** on the nine governments, capped at five meetings each for a first look. 41 requests, no errors and no refusal. It read 32 meetings holding 1,207 agenda items. Nothing was written to a database.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word: 70 requests, no errors and no refusal, in 5 minutes 50 seconds. It stored 9 lists of meetings and 61 meetings holding 1,461 agenda items, dated November 12 to December 9, 2026. No government reached the cap of 40. All 70 are extracts and are marked restricted. Run: https://github.com/th4449/radar/actions/runs/45892001196.
 - **The signal step on those 32 meetings: 7 signals from 1,207 items.** Four items name a reinvestment zone, two a light industrial zoning and one a data center.
   - One is the kind the radar exists for: a city council item designating a reinvestment zone for a named company.
   - The data center item is Harris County buying a service for its own computers.

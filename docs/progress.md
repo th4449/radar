@@ -2,6 +2,18 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The sixth real run: Legistar agendas for nine Texas governments
+
+**On the owner's word.** After the fifth run the owner was told what this collector asks for and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`, `3f3a7a3`, `65dd213`.
+
+- **The run ended `ok`:** 70 documents seen, 70 new, no errors and no refusal, in 5 minutes 50 seconds. Started by hand on GitHub at 20:34 UTC. https://github.com/th4449/radar/actions/runs/45892001196. No database address and no key is in its log.
+- **70 is 9 lists of meetings and 61 meetings.** Lewisville 14, Coppell 12, Dallas 12, Pflugerville 8, Round Rock 6, Deer Park 4, Harris County 3, Carrollton 1 and Farmers Branch 1. The meetings run from November 12 to December 9, 2026 and hold 1,461 agenda items. No government reached the cap of 40.
+- **Stored as designed.** Each of the 70 is an extract, not the API's whole answer: who moved, seconded or voted is dropped, and the row records that the original was not kept, with its size and hash. All 70 are marked restricted. All have text.
+- **The hosted project holds** 97 documents, 97 hashes and 97 archive files, 27,641,672 bytes in all.
+- **Nothing else ran.** No processing, so no signal and no site. No email.
+
+**Not verified:** that a reviewer is refused restricted text on the hosted database: the policy tests have not run there. The archive files' bytes were not read back and hashed. The agenda collector for governments' own sites, processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The fifth real run: the state well reports
 
 **On the owner's word.** After the fourth run the owner was told what this collector does that the others do not, one large download and an extract with owner names, and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`, `3f3a7a3`.
