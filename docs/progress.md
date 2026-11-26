@@ -2,6 +2,19 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The second processing run read the Comptroller's list
+
+**On the owner's word.** After the list was stored the owner was asked whether to run processing again and said to run it. Committed earlier and not pushed: `db899f7`.
+
+- **The run ended `ok`:** 202 documents read again, 35 new signals, 4 records held back, no errors. Started by hand on GitHub at 22:31 UTC. https://github.com/th4449/radar/actions/runs/45905376752. No database address and no key is in its log.
+- **The rules have a new version,** `2026-11-25.1+786ac3165ef4`, because a copy of the list now exists. So every document was read again, as designed. Reading again added signals and removed none: 46 before, 81 after.
+- **All 35 new signals rest on the list.** 30 are well reports and 5 are pending air permits, each naming a company that is also on the Comptroller's list of registered data centers. The agenda sources gave nothing new.
+- **8 sites, 7 of them in the reviewers' queue.** Before: 5 and 4. The 3 new sites are all groups of well reports under one owner in one county. 53 signals sit on a site. 16 agenda signals sit on none, as designed. 12 air permits are unplaced, because the list gives no county and the step that fetches each application file was not run.
+- **The money cross-reference now matches 2 companies** on record to a payer in the study, both in the study's "Hyperscaler" class. A match is by whole name. It is not proof of the same company and says nothing about a site.
+- **The scores are still placeholders. Nothing is public:** `public_alerts` is empty and the approval gate is on. **The sites and companies are not named here:** they are unreviewed and this repository is public.
+
+**Not verified:** no signal, site or match was checked by hand against its source record. The same four well reports are held back as before. The monitor has not run since the list was stored.
+
 ## November 26, 2026 — The Comptroller's list is stored in the hosted project
 
 **The owner's own act.** The owner saved the page in a browser and ran `scripts/store_by_hand_hosted.py`. Pushed earlier, on the owner's word: `e1a96a9`, CI passed.
