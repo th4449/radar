@@ -2,6 +2,43 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The hosted database's rules are the local ones, definition for definition
+
+**On the owner's word.** The owner said to look into a safe way to run the policy tests on the hosted database. Nothing was written to it. Pushed earlier, on the owner's word: `6206657`, CI passed.
+
+**Compared, read-only.** One query was run on the hosted database and on the local one, where the policy tests pass. It digests every definition in the radar's two schemas. All 14 kinds agree in count and in digest:
+
+| Kind | Count |
+|---|---|
+| Policies | 30 |
+| Row security switches, one a table | 19 |
+| Table grants | 316 |
+| Column grants | 969 |
+| Triggers, with those on the accounts table | 16 |
+| Functions | 27 |
+| Function grants | 54 |
+| Views, with their options | 2 |
+| Roles: their powers | 5 |
+| Role memberships | 6 |
+| Schema grants | 2 |
+| Default grants | 6 |
+| Table columns | 186 |
+| Constraints | 89 |
+
+- **One difference:** the hosted server is Postgres 17.12 and the local one 17.6. Same major version.
+- **This is not the tests run on the hosted database.** It shows the same rules are installed. With the tests passing locally it is strong evidence, not proof of behavior there.
+
+**How the tests work, read from `tests/db/`.**
+
+- Each test runs in one transaction that is rolled back. No test commits, opens a second connection, runs a command or changes the schema. `RADAR_TEST_DB_URL` names the database.
+- **One way a row could be committed.** `refused()` wraps its statement in a block. Where a test has made no earlier statement, that block is a whole transaction and commits if the statement is not refused. One test starts that way, in `test_run_log.py`. On a database whose rules are right it is refused and nothing is kept. The fixture should open the transaction itself so this cannot happen.
+- **Some tests assume empty tables.** A dozen assertions count whole tables. Those on sites and documents as a reviewer sees them would fail on the hosted database for a reason that is no fault of a policy: it holds 8 sites and 222 documents.
+- **The hosted database would take them.** Read-only checks: its owner role can add an account row and act as each of the three API roles, as locally.
+- **It holds no account, no reviewer, no subscriber and no audit row today.** So a count before and after a run is an exact check that nothing was left.
+- **A rolled-back run still leaves one trace:** row numbers are used up, so later ids skip.
+
+**Not done, and waiting for the owner's word:** running the four policy test files on the hosted database. It needs the fixture change, the counting tests made independent of what is stored, and a workflow started by hand that counts rows before and after.
+
 ## November 26, 2026 — The monitor ran again: every source is ok
 
 **On the owner's word.** Pushed earlier, on the owner's word: `210d526`, CI passed.
