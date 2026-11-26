@@ -2,6 +2,20 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The seventh real run: agendas on 57 governments' own sites
+
+**On the owner's word.** After the sixth run the owner was told what this collector asks for and that its length was not known, and said to start it. Its limits were read first: one request for a page, at most four dated agenda files and two undated ones a page, 800 requests at most. Committed earlier and not pushed: `b4192b0` through `a0f3448`.
+
+- **The run ended `ok`:** 124 documents seen, 124 new, no errors, in 11 minutes 26 seconds. Started by hand on GitHub at 21:00 UTC. https://github.com/th4449/radar/actions/runs/45895014583. No database address and no key is in its log.
+- **No site refused.** The run's detail names no refusal and no closed site. It names 11 pages that listed no agenda link: the nine known on November 21, 2026 and two more, Millsap's home page and Carson County's public notices page.
+- **124 is 61 lists and 63 agenda files.** The lists are of agenda links, one for each page read: 57 governments, four of them with two pages. The 63 files are PDFs from 38 governments, 298 pages, 50,952,985 bytes, for meetings from November 5 to December 14, 2026.
+- **41 of the 63 PDFs were read by OCR on the runner.** Every one of the 63 has text. Two files have 7 pages between them that stayed unread, and one file has under 200 characters of text.
+- **All 124 are marked restricted,** as designed: an agenda can name staff, appointees and applicants.
+- **The hosted project holds** 221 documents, 221 hashes and 221 archive files, 79,498,477 bytes in all.
+- **Every collector has now run once on GitHub as a real run,** seven of seven, all `ok`. No processing has run, so there is no signal and no site. No email.
+
+**Not verified:** how well OCR read the 41 scans: no page was checked by eye. Why the two new pages list no agenda link. That a reviewer is refused restricted text on the hosted database: the policy tests have not run there. The archive files' bytes were not read back and hashed. Processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The sixth real run: Legistar agendas for nine Texas governments
 
 **On the owner's word.** After the fifth run the owner was told what this collector asks for and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`, `5597dd5`, `3f3a7a3`, `65dd213`.

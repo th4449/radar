@@ -320,6 +320,13 @@ On November 21, 2026:
   - A Piney Point Village file uses "light industrial" in a drainage table on page 91. It is not about a development. A reviewer would see that.
 - **A fault found and fixed.** The first pass read "Project Documentation" and "Project Per the schedule" in that 91-page file as code names. A code name now counts in a file only where the agenda speaks of economic development negotiations, and never across a line break.
 
+On November 26, 2026:
+
+- **The first real run,** started by hand on GitHub on the owner's word: 124 documents, no errors and no site refusing, in 11 minutes 26 seconds. Run: https://github.com/th4449/radar/actions/runs/45895014583.
+- 61 lists of agenda links from 57 governments, and 63 PDFs from 38 governments, 298 pages, for meetings from November 5 to December 14, 2026.
+- 41 of the 63 PDFs were read by OCR. All 63 have text. Two files have 7 pages between them that stayed unread.
+- **11 pages listed no agenda link:** the nine below and two more, `https://millsaptx.com/` and `https://www.co.carson.tx.us/page/carson.Public.Notices`. Why those two list none was not looked into.
+
 ## What was not verified
 
 - **Whether a government's site rules bind a visitor who never sees them,** and whether a site with no terms page has terms elsewhere. 45 sites show none.
