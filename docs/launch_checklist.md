@@ -9,7 +9,7 @@ Each line says who does it. **Owner** means a decision or an action that section
 Nothing below starts without a yes to its line.
 
 - [x] **Owner.** Create the hosted Supabase project. The owner said yes on November 25, 2026, to the price Supabase quoted that day: 10 dollars a month in the owner's organization, which is on the Pro plan. A session created it, named `radar`, in the us-east-1 region.
-- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3. `RADAR_ARCHIVE_KEY` was added on November 26, 2026. `RADAR_DATABASE_URL` is not: it holds the database's password, which only the owner can set or read.
+- [ ] **Owner.** Add the secrets as GitHub and Supabase secrets. None goes in the repository. See part 3. `RADAR_ARCHIVE_KEY` was added on November 26, 2026. `RADAR_DATABASE_URL` is not: it holds the database's password, which only the owner can set. A session tried on November 26, 2026, and Supabase refused: its guard lets no one change the owner role's password with SQL. The owner resets the password in the project's database settings in the dashboard, then runs `drafts/set_database_url.py`.
 - [ ] **Owner.** Turn on real email, and choose the provider's tier. The email job only does dry runs today.
 - [ ] **Owner.** Make the site public: host it and point a name at it. Buying a domain or changing DNS is the owner's. The owner said on November 26, 2026, that the site will be at `standuptocorruption.org/radar`. It is not there yet.
 - [ ] **Owner.** Create the first administrator by hand, outside the repository. There is no self-service path to that role.

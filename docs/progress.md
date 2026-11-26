@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The database's address is not set: Supabase refused the password change
+
+**On the owner's word.** The owner said to fix `RADAR_DATABASE_URL`. Committed earlier and not pushed: `411f45d`.
+
+- **Why it needs a password.** The jobs connect as the database's owner role. Nobody holds that role's password: Supabase made one when the project was created and showed it to no one. So the address cannot be written until the password is set again.
+- **What was tried.** One statement on the hosted database, through Supabase's own tool, to give the owner role a new password. It carried only the password's verifier, the form Postgres stores, because the hosted database logs every statement of that kind. The method was tried first on the local database with a throwaway role: the password connected and a wrong one was refused.
+- **Supabase refused it:** "permission denied to alter role. Only superusers can alter privileged roles." That is Supabase's guard on its own roles. **Nothing was changed** and no secret was set. Supabase's tool has no command that resets the password. No other way in was tried.
+- **What is left is the owner's:** reset the database password in the project's database settings in the dashboard. Then run `drafts/set_database_url.py`, which asks for the password without showing it, checks that the address connects through the session pooler and hands it to GitHub. It was tried against the local database with a right and a wrong password. The file is in `drafts/`, which git ignores.
+
+**Not verified:** the helper against the hosted database, and that the pooler's address answers GitHub's servers. Both wait for the password.
+
 ## November 26, 2026 — The live switch is on and the archive's key is set
 
 **On the owner's word.** The owner said: add `RADAR_ARCHIVE_KEY` and set `RADAR_LIVE` to true. The owner also said the radar will be at `standuptocorruption.org/radar`. Pushed earlier, on the owner's word: `e22c50e`, CI passed.
