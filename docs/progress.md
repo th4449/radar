@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The policy tests pass on the hosted database: 159 of 159
+
+**On the owner's word.** After the fix was pushed the owner was told what a second run would do and said to run it. Pushed earlier, on the owner's word: `7ae0dc2`, CI passed.
+
+- **The run.** Started by hand at 23:12 UTC with no other job running. https://github.com/th4449/radar/actions/runs/45909544081. **All 159 cases passed,** in 4 minutes 7 seconds: the main policy file, the processing, site and study policy files. The 16 study cases that stopped on their own data in the first run reached their checks and passed. No database address is in its log.
+- **Nothing was left.** The workflow counted 56 tables and 799 rows before and the same after. A count from outside agrees: no account, reviewer, subscriber, review, alert or audit row, and 222 documents, 81 signals, 8 sites, 61 payers and 2 matches as before. No test source and no test payer is there. The approval gate is on.
+- **So the proofs the checklist asks for now hold on the hosted database itself,** not only on a local copy of its schema: a pending reviewer cannot confirm, a user cannot approve themselves, the anonymous key reads only the public alerts view, and a reviewer does not read restricted text.
+- **The trace:** row numbers were used up twice. The sites counter stands at 175, so the next site is numbered 176.
+
+**Not verified:** the policies as the API serves them to a signed-in person in a browser. The tests act as each role inside the database, the way the API does, and no account exists yet to try the other way. A count shows no row was left or lost, not that none was changed: the rollback is the guard against that.
+
 ## November 26, 2026 — The policy tests ran on the hosted database: 143 passed, 16 did not get to their check
 
 **On the owner's word.** The owner said to start the workflow. Pushed earlier, on the owner's word: `b31c45d`, CI passed, with the policy tests run both ways on GitHub.
