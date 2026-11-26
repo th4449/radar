@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The third real run: the ERCOT planning group
+
+**On the owner's word.** After the second run the owner was asked whether to start the ERCOT planning group's collector and said to start it. Committed earlier and not pushed: `b4192b0`, `3aa2633`.
+
+- **The run ended `ok`:** 5 documents seen, 5 new, no errors, in 26 seconds. Started by hand on GitHub at 20:21 UTC. https://github.com/th4449/radar/actions/runs/45890421063. No database address and no key is in its log.
+- **Read back from the hosted project afterwards.** `collector_runs` has a third row: `ok`, runner `gha-45890421063`. The source has 5 documents: 2 pages and 3 PDFs, all with text and none waiting on a scan. The hosted project holds 24 documents, 24 hashes and 24 archive files, 25,284,544 bytes in all.
+- **Fewer than the dry run of November 19, 2026,** which read 13. The count follows the meetings in the collector's window on the day. It was not checked by hand against ERCOT's page today.
+- **Nothing else ran.** No processing, so no signal and no site. No email.
+
+**Not verified:** the archive files' bytes were not read back and hashed. The policy tests have not run on the hosted database. Four collectors, processing and the monitor have not run on GitHub.
+
 ## November 26, 2026 — The second real run: ERCOT's large load reports
 
 **On the owner's word.** After the first run the owner was asked whether to start the next smallest collector, ERCOT's large load reports, and said to start it. Committed earlier and not pushed: `b4192b0`.

@@ -36,6 +36,7 @@ It follows no other link. It keeps to one request every 5 seconds. If a page sto
 - Three pages saved through `collectors.capture`: the index and the meetings of November 3 and December 15, 2026.
 - One file fetched by hand and not committed, because of its size: `/files/docs/2026/11/02/3.-EIR-Status-Update-26RPG004-AEPSC-Laredo-Area-Upgrade-Project_NovRPG_Final.pdf`, retrieved 2026-11-20T02:50:46Z, 1,628,860 bytes, SHA-256 `3c5625c8b17198237d01147ef5304b05d44390f0c6090a5f350022f28da93656`. Text came out of all 49 pages without OCR.
 - One dry run of the whole collector on November 19, 2026. It read the index, the two meetings in its window and ten files, 13 documents in all, with no errors. A dry run keeps nothing.
+- **The first real run,** November 26, 2026, started by hand on GitHub on the owner's word: 5 documents seen, 5 new, no errors, in 26 seconds. Two pages and three PDFs, all with text, are in the hosted database and archive. Run: https://github.com/th4449/radar/actions/runs/45890421063.
 
 ## About the fixtures
 
