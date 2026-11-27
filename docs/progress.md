@@ -2,6 +2,29 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 27, 2026 — The radar's site is public at `standuptocorruption.org/radar`
+
+**On the owner's word.** The owner looked at the preview, said it looked right, was told what public would mean and said to make it public. This is a step on the build plan's stop list. Times are UTC, so the date has turned. Committed earlier and not pushed: `d58655b`, `7ee1a2e`, `4c3adbd`.
+
+- **Two steps, in order.** The two public values were set for production in the organization's site's Vercel project. Then the `radar-hosting` branch was merged into that site's main as a fast-forward, one commit, and pushed at 00:44. Vercel's production deploy finished within about two minutes. Its log: the radar's commit `b883b16` fetched, "127 pages built for /radar: every address stays inside".
+- **Asked from outside, with no sign-in.** Before the push the address answered 404. After it: the home page, Texas, a county, Michigan, the methodology, subscribe, the reviewer desk, the account page, an alert page and corrections all answer 200 with the radar's own titles. An address with a slash at the end takes one redirect. A page that does not exist gets the organization's 404. The address without `www` answers too.
+- **The organization's own pages still answer:** its home page and its research page, 200.
+- **The security policy on `/radar` allows the map's tile server. The home page's policy does not.** The other security headers are sent on `/radar` as on the rest of the site.
+- **In a browser:** the live home page read the hosted `public_alerts` view, answer 200, and shows "No confirmed alert has been published yet." No request failed and the console holds no error. No link on it leaves `/radar`. The Texas link opens Texas with its 30 counties.
+- **Every page still carries `noindex`,** and nothing on the organization's site links to `/radar`.
+
+**What does not work yet, as the owner was told before saying yes.**
+
+- **Signing in.** The hosted project's sign-in settings do not hold the public address or its return addresses. That is a setting in the Supabase dashboard and the owner's.
+- **Sign-in emails to anyone outside the project's team.** That waits for a mail provider of the project's own, which is the real email decision.
+- So a visitor can read. A visitor who tries to subscribe or to apply as a reviewer gets an error.
+
+**How the public pages change from now on:** only when the commit named in `radar.json` in the organization's site's repository is changed and that site deploys. A push to this repository changes nothing public.
+
+**To take it down:** revert the one commit on that site's main.
+
+**Not verified:** a sign-in. The map with an alert on it: no alert exists. The site on a phone.
+
 ## November 26, 2026 — The radar is built into the organization's site on a branch, behind a sign-in
 
 **On the owner's word.** The owner chose to serve the radar from inside the existing site and said to set it up, with a stop before the step that makes it public. **Nothing is public.** That site's main branch and its live site are untouched. Committed earlier and not pushed: `d58655b`, `7ee1a2e`.
