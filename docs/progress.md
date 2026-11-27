@@ -2,6 +2,36 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — The radar is built into the organization's site on a branch, behind a sign-in
+
+**On the owner's word.** The owner chose to serve the radar from inside the existing site and said to set it up, with a stop before the step that makes it public. **Nothing is public.** That site's main branch and its live site are untouched. Committed earlier and not pushed: `d58655b`, `7ee1a2e`.
+
+**What was built, in the other site's repository, on a branch named `radar-hosting`.**
+
+- **A step that builds the radar before that site builds.** It takes the one commit of this repository named in a small file there, downloads it from GitHub, builds the site for `/radar`, runs this repository's own check on the result and copies the pages into that site's public files. The pinned commit is `b883b16`. The radar's public pages change only when that pin is changed.
+- **The radar's packages are installed and built with a bare environment.** None of the other site's settings or secrets is handed to them.
+- **A rule** that sends a page's address to the page file in its folder. Scripts and styles are files and are served as they are.
+- **The security policy for `/radar`** also allows `tiles.openfreemap.org`, for the map. The rest of that site's policy is unchanged, and the rest of that site does not get the map's address.
+- **That site's own sign-in code leaves `/radar` alone.**
+- **Two public values** are set in that site's Vercel project, for this branch's previews only: the hosted database's address and its public key, the newer publishable kind. Production has neither yet, and a production build refuses to go on without them.
+
+**Proved on this machine first, with that site running locally.**
+
+- The home page, Texas, a county, the methodology, the reviewer desk and an alert page all serve under `/radar`. An address with a slash at the end is redirected to the one without and then served. A page that does not exist gets that site's own 404.
+- The home page read the hosted `public_alerts` view with the public key and showed "No confirmed alert has been published yet."
+- On a `/radar` page a request to the map's tile server is allowed and a request to another site is refused by the policy. A file outside `/radar` does not carry the map's address in its policy.
+- Read first, as that repository requires: the framework's own notes for its version on rewrites, the public folder and the slash at the end of an address.
+
+**On Vercel.**
+
+- The branch was pushed and Vercel built a preview. The step ran there: it fetched the commit and built 127 pages in seven seconds, "every address stays inside".
+- The first preview was built before the two values were set and said so in its log. It was built again with them, and that log has no such warning.
+- **The preview is behind Vercel's sign-in.** Asked with no sign-in, it sends the visitor to Vercel's sign-in page. Only the owner's Vercel account opens it.
+
+**Not verified:** the preview's pages as a browser shows them. Reading them from here would have meant making a share link or a bypass secret on the owner's project, and neither was made. The owner looks first. A sign-in link, which needs the hosted project's sign-in settings. The map with an alert on it: no alert exists.
+
+**Waiting for the owner's word, in this order:** look at the preview. Then the two values for production, and the merge of that branch into that site's main, which is the step that makes the radar public.
+
 ## November 26, 2026 — Hosting: two findings that change the plan, and nothing created
 
 **On the owner's word.** The owner said to set hosting up, in stages, with a stop before the step that makes the site public. The plan put to the owner was a second Vercel project and a rewrite. **Nothing was created and nothing was changed outside this repository.** Two things read first argue against that plan, so it goes back to the owner. Committed earlier and not pushed: `d58655b`.
