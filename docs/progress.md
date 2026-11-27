@@ -2,6 +2,17 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 27, 2026 — The schedules are on
+
+**On the owner's word.** The owner read the times and GitHub's rules and said to turn the schedules on. The commit from the `schedules` branch was brought onto main and pushed.
+
+- **From this push on, GitHub starts the jobs itself:** two collectors every day, three on Mondays, two on the 2nd of the month, processing every day and the monitor every day. The times are in `docs/runbook.md`. Each can still be started by hand.
+- **The first scheduled runs** are due the same day from 10:10 UTC: the two daily collectors, then processing at 13:20 and the monitor at 14:30. The weekly ones first run on Monday, November 30. The monthly ones on December 2.
+- **Still off any schedule:** the email job and the policy tests on the hosted database. The Comptroller's list is still saved by hand.
+- **GitHub emails the account that pushed the schedule lines** when a scheduled job fails. The monitor fails on purpose when a source needs a person.
+
+**Not verified:** a scheduled run. None has come due yet. That GitHub starts them on time.
+
 ## November 27, 2026 — Sign-in, the first administrator, real email and the schedules: prepared, none switched on
 
 **On the owner's word.** The owner asked for help setting up four things. **Nothing was switched on, no setting was changed and nothing was sent.** Each waits on a step of the owner's or the owner's word. Pushed earlier, on the owner's word: `24a5ecf`, CI passed.
