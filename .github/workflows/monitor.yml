@@ -6,12 +6,16 @@ name: Monitor
 # It reads the run log and sends nothing. When a source needs a person the job fails, and
 # GitHub emails the account that set the schedule. See docs/runbook.md.
 #
-# Started by hand only. A schedule is a launch decision and needs the owner's go-ahead. It
-# also needs the hosted database, which does not exist yet, and its address as the secret
-# RADAR_DATABASE_URL. Without that the job says it could not start.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand. It needs the hosted database's address as the secret RADAR_DATABASE_URL.
+# Without that the job says it could not start.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Every day at 14:30 UTC, after the collectors and processing.
+    # GitHub may start it some minutes late.
+    - cron: "30 14 * * *"
 
 permissions:
   contents: read

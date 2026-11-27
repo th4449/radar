@@ -1,6 +1,6 @@
 # Launch checklist
 
-BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar is not launched.** Nothing runs on a schedule and no email is sent. The site's pages are public since November 27, 2026, with no alert on them and no working sign-in. A hosted database exists since November 25, 2026. It holds 222 documents. Since November 26, 2026, the switch `RADAR_LIVE` is true and both secrets are set: the archive's key and the database's address. **Nothing now stands between a started workflow and a real run.** A collect workflow started on GitHub asks its source for records and keeps them. None has a schedule. **All seven have been started,** all on November 26, 2026, on the owner's word: the payers collector, which stored one page, ERCOT's large load reports, which stored 18 files, the ERCOT planning group, which stored 5, TCEQ's pending air permit lists, which stored 2, the state well reports, which stored one extract, Legistar agendas, which stored 70 records for nine governments, and agendas on 57 governments' own sites, which stored 61 lists and 63 files. **Processing ran twice** the same day, the second time after the Comptroller's list was stored: 81 signals and 8 sites, 7 of them in the reviewers' queue, nothing public. **The monitor ran twice** the same day. The second time, after the Comptroller's list was stored, every source was `ok`.
+BUILD_PLAN.md milestone M10. Written November 23, 2026. **The radar runs on a schedule since November 27, 2026.** No email is sent. The site's pages are public since November 27, 2026, with no alert on them and no working sign-in. A hosted database exists since November 25, 2026. It holds 222 documents. Since November 26, 2026, the switch `RADAR_LIVE` is true and both secrets are set: the archive's key and the database's address. **Nothing now stands between a started workflow and a real run.** A collect workflow started on GitHub asks its source for records and keeps them. None has a schedule. **All seven have been started,** all on November 26, 2026, on the owner's word: the payers collector, which stored one page, ERCOT's large load reports, which stored 18 files, the ERCOT planning group, which stored 5, TCEQ's pending air permit lists, which stored 2, the state well reports, which stored one extract, Legistar agendas, which stored 70 records for nine governments, and agendas on 57 governments' own sites, which stored 61 lists and 63 files. **Processing ran twice** the same day, the second time after the Comptroller's list was stored: 81 signals and 8 sites, 7 of them in the reviewers' queue, nothing public. **The monitor ran twice** the same day. The second time, after the Comptroller's list was stored, every source was `ok`.
 
 Each line says who does it. **Owner** means a decision or an action that section 11 of the build plan keeps for the owner. **Session** means work a build session can do once the owner has said yes to what it rests on.
 
@@ -14,7 +14,7 @@ Nothing below starts without a yes to its line.
 - [x] **Owner.** Make the site public: host it and point a name at it. Done on the owner's word, November 27, 2026 (UTC): the pages are public at `standuptocorruption.org/radar`. No domain was bought and no DNS was changed. Every page carries `noindex` and nothing links to it yet. **Signing in does not work yet:** the hosted project's sign-in settings need the public address, and sign-in emails reach only the project's team until real email is set up.
 - [ ] **Owner.** Create the first administrator by hand, outside the repository. There is no self-service path to that role.
 - [ ] **Owner.** Approve each reviewer. Never automated.
-- [ ] **Owner.** Put the collectors, processing and the monitor on a schedule.
+- [x] **Owner.** Put the collectors, processing and the monitor on a schedule. The owner gave the go-ahead on November 27, 2026.
 - [ ] **Owner.** Adopt the reviewer terms at `/review/terms/`. They are a draft.
 - [ ] **Owner.** Keep or change the review threshold of 3 and one confirmation for an alert. Both are working numbers. See [findings_tx.md](../backtest/findings_tx.md).
 
@@ -79,8 +79,8 @@ Read from `config/sources.yaml` and the notes in `docs/sources/` on November 23,
 ## 6. Launch day
 
 - [ ] **Owner.** Give the go-ahead for each of: the schedules, real email, the public site.
-- [ ] **Session.** Add the schedule lines to the workflows, at each source's cadence in `config/sources.yaml`. The account that adds them is the one GitHub emails when a scheduled run fails.
-- [ ] **Session.** Schedule the monitor once a day, after the collectors.
+- [x] **Session.** Add the schedule lines to the workflows, at each source's cadence in `config/sources.yaml`. The account that adds them is the one GitHub emails when a scheduled run fails. Done November 27, 2026: two daily, three weekly, two monthly. The times are in [runbook.md](runbook.md).
+- [x] **Session.** Schedule the monitor once a day, after the collectors. Done November 27, 2026: processing at 13:20 UTC and the monitor at 14:30, both after every collector has had its full time.
 - [ ] **Owner.** Send one real alert email to yourself first. Check the unsubscribe link and the postal address.
 - [ ] **Owner.** Open the public site signed out. It should show confirmed alerts and nothing else.
 

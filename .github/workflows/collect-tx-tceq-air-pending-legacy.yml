@@ -1,11 +1,16 @@
 name: Collect tx_tceq_air_pending_legacy
 
 # TCEQ's two lists of pending air permit applications on its older site.
-# Planned cadence: weekly. Started by hand only. The schedule is added at launch, with the
-# owner's go-ahead. See docs/sources/tx_tceq_air_pending_legacy.md.
+# Cadence: weekly.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand. See docs/sources/tx_tceq_air_pending_legacy.md.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Every Monday at 10:50 UTC.
+    # GitHub may start it some minutes late.
+    - cron: "50 10 * * 1"
 
 permissions:
   contents: read

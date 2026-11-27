@@ -1,11 +1,16 @@
 name: Collect tx_ercot_rpg
 
 # ERCOT Regional Planning Group meetings and the files posted for them.
-# Planned cadence: weekly. Started by hand only. The schedule is added at launch, with the
-# owner's go-ahead. See docs/sources/tx_ercot_rpg.md.
+# Cadence: weekly.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand. See docs/sources/tx_ercot_rpg.md.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Every Monday at 10:40 UTC.
+    # GitHub may start it some minutes late.
+    - cron: "40 10 * * 1"
 
 permissions:
   contents: read

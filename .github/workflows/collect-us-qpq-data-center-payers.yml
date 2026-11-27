@@ -1,11 +1,16 @@
 name: Collect us_qpq_data_center_payers
 
 # The QPQ Tracker's study of who paid for the data centers: its page, which holds the list of
-# payers. One request. Planned cadence: monthly. Started by hand only. The schedule is added at
-# launch, with the owner's go-ahead. See docs/sources/us_qpq_data_center_payers.md.
+# payers. One request. Cadence: monthly.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand. See docs/sources/us_qpq_data_center_payers.md.
 
 on:
   workflow_dispatch:
+  schedule:
+    # The 2nd of each month at 11:25 UTC.
+    # GitHub may start it some minutes late.
+    - cron: "25 11 2 * *"
 
 permissions:
   contents: read

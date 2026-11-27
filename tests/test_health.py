@@ -161,13 +161,14 @@ def test_the_report_puts_what_needs_a_person_first_and_names_no_address():
 # --- the workflow --------------------------------------------------------------------------------
 
 
-def test_the_monitor_workflow_is_started_by_hand_and_sends_nothing():
+def test_the_monitor_workflow_runs_each_day_and_sends_nothing():
     from pathlib import Path
 
     text = (Path(__file__).parents[1] / ".github" / "workflows" / "monitor.yml").read_text()
     assert "workflow_dispatch:" in text and "python -m pipeline.health" in text
-    # A schedule is a launch decision. It needs the owner's go-ahead.
-    assert "schedule:" not in text and "cron:" not in text
+    # Once a day, on the owner's go-ahead of November 27, 2026. tests/test_run_cli.py holds
+    # that it comes after the collectors and processing.
+    assert text.count("- cron:") == 1
     # The address of the database is a secret, never written into the file.
     assert "secrets.RADAR_DATABASE_URL" in text and "postgresql://" not in text
 

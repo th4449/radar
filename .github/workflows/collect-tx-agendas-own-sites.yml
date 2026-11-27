@@ -1,11 +1,16 @@
 name: Collect tx_agendas_own_sites
 
 # Agenda files that Texas governments post on their own websites, for the governments the agenda
-# inventory clears. Planned cadence: daily. Started by hand only. The schedule is added at
-# launch, with the owner's go-ahead. See docs/sources/tx_agendas_own_sites.md.
+# inventory clears. Cadence: daily.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand. See docs/sources/tx_agendas_own_sites.md.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Every day at 10:25 UTC, early morning in Texas.
+    # GitHub may start it some minutes late.
+    - cron: "25 10 * * *"
 
 permissions:
   contents: read

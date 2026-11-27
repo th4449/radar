@@ -123,7 +123,7 @@ def test_the_source_is_switched_on_and_its_job_is_started_by_hand():
     workflow = (
         root / ".github" / "workflows" / "collect-us-qpq-data-center-payers.yml"
     ).read_text()
-    assert "workflow_dispatch:" in workflow and "schedule:" not in workflow
+    assert "workflow_dispatch:" in workflow and workflow.count("- cron:") == 1
 
 
 def test_a_copy_marked_manual_is_still_refused():

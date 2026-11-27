@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import httpx
@@ -78,21 +79,79 @@ def test_command_line_exit_codes(capsys, monkeypatch):
     assert "not started" in capsys.readouterr().err
 
 
-def test_every_collector_has_a_workflow_file_that_is_not_scheduled():
-    workflows = Path(__file__).parents[1] / ".github" / "workflows"
+WORKFLOWS = Path(__file__).parents[1] / ".github" / "workflows"
+# What a schedule line looks like for each cadence: minute, hour, day of month, month, weekday.
+CRON_FOR = {
+    "daily": re.compile(r"^(\d{1,2}) (\d{1,2}) \* \* \*$"),
+    "weekly": re.compile(r"^(\d{1,2}) (\d{1,2}) \* \* [0-6]$"),
+    "monthly": re.compile(r"^(\d{1,2}) (\d{1,2}) ([1-9]|1\d|2[0-8]) \* \*$"),
+}
+
+
+def crons(name: str) -> list[str]:
+    """The schedule lines of a workflow file."""
+    return re.findall(r'^\s+- cron: "([^"]+)"$', (WORKFLOWS / name).read_text(), re.M)
+
+
+def minute_of_day(cron: str) -> int:
+    minute, hour = cron.split()[:2]
+    return int(hour) * 60 + int(minute)
+
+
+def collector_workflows() -> dict[str, str]:
+    """Each automated source and its workflow file."""
+    sources = load_sources()
+    return {
+        source_id: f"collect-{source_id.replace('_', '-')}.yml"
+        for source_id in runner.REGISTRY
+        if not sources.by_id(source_id).hand_saved
+    }
+
+
+def test_every_collector_has_a_workflow_file_scheduled_at_its_sources_cadence():
+    """The owner gave the go-ahead for schedules on November 27, 2026. Each collector runs at
+    the cadence its source has in config/sources.yaml, and can still be started by hand."""
     sources = load_sources()
     for source_id in runner.REGISTRY:
-        path = workflows / f"collect-{source_id.replace('_', '-')}.yml"
+        path = WORKFLOWS / f"collect-{source_id.replace('_', '-')}.yml"
         if sources.by_id(source_id).hand_saved:
             assert not path.exists()  # no job reads it, so no workflow offers to
             continue
         text = path.read_text()
         assert f"source_id: {source_id}" in text
         assert "workflow_dispatch:" in text
-        # A schedule is a launch decision. It needs the owner's go-ahead.
-        assert "schedule:" not in text and "cron" not in text
-    shared = (workflows / "collect.yml").read_text()
-    assert "--dry-run" in shared
+        (cron,) = crons(path.name)  # one schedule line, no more
+        cadence = sources.by_id(source_id).cadence
+        assert CRON_FOR[cadence].match(cron), f"{path.name}: {cron} is not {cadence}"
+        assert not cron.startswith("0 "), "the top of the hour is when GitHub is busiest"
+    shared = (WORKFLOWS / "collect.yml").read_text()
+    assert "--dry-run" in shared and "schedule:" not in shared
+
+
+def test_no_two_collectors_start_at_the_same_minute():
+    # Two collectors read the same site, ERCOT's. Each paces itself, not the other.
+    starts = [minute_of_day(crons(name)[0]) for name in collector_workflows().values()]
+    assert len(set(starts)) == len(starts)
+    assert min(abs(a - b) for a in starts for b in starts if a != b) >= 5
+
+
+def test_processing_runs_each_day_after_every_collector_and_the_monitor_after_that():
+    (process,) = crons("process.yml")
+    (monitor,) = crons("monitor.yml")
+    assert CRON_FOR["daily"].match(process) and CRON_FOR["daily"].match(monitor)
+    last_collector = max(minute_of_day(crons(n)[0]) for n in collector_workflows().values())
+    # The longest collector is stopped at 90 minutes. Processing waits that long and more.
+    assert minute_of_day(process) - last_collector >= 100
+    # Processing is stopped at 60 minutes.
+    assert minute_of_day(monitor) - minute_of_day(process) >= 60
+
+
+def test_what_is_never_scheduled():
+    """The policy tests write to the hosted database and roll back. They run on the owner's
+    word each time. The email job waits for the owner's decision on real email."""
+    for name in ("policy-tests.yml", "email.yml", "collect.yml"):
+        text = (WORKFLOWS / name).read_text()
+        assert "schedule:" not in text and "cron:" not in text, name
 
 
 def test_a_workflow_keeps_nothing_unless_the_owner_has_switched_real_runs_on():
@@ -110,7 +169,6 @@ def test_a_workflow_keeps_nothing_unless_the_owner_has_switched_real_runs_on():
     assert "--send" in live and "--send" not in dry
     for name in ("collect.yml", "process.yml", "monitor.yml", "email.yml"):
         text = (workflows / name).read_text()
-        assert "schedule:" not in text and "cron:" not in text, name
         # Addresses and keys come from the repository's settings, never from the file.
         assert "postgresql://" not in text and "supabase.co" not in text, name
         assert "secrets.RADAR_DATABASE_URL" in text, name

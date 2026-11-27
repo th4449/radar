@@ -10,10 +10,37 @@ BUILD_PLAN.md milestone M10. Written November 23, 2026, before launch. It says w
 
 ## Each weekday
 
-1. **Read the monitor.** See "The monitor" below. Once it is on a schedule, a failed run arrives as an email from GitHub to the account that set the schedule.
+1. **Read the monitor.** See "The monitor" below. It runs each day at 14:30 UTC. A failed run arrives as an email from GitHub to the account that set the schedule.
 2. **Open the queue** at `/review/queue/`. A site is there because its score reached the review bar or a reviewer opened it.
 3. **Read corrections** on the administrator's desk at `/review/admin/`. Anyone can send one, with no account.
 4. **During the first 30 days, approve alerts.** While the approval gate is on, only an administrator can publish.
+
+## The schedule
+
+On a schedule since November 27, 2026, on the owner's go-ahead. Times are UTC. In Texas that is between about 4 and 9:30 in the morning.
+
+| Job | When |
+|---|---|
+| Legistar agendas | Every day, 10:10 |
+| Agendas on governments' own sites | Every day, 10:25 |
+| ERCOT planning group | Mondays, 10:40 |
+| TCEQ pending air permits | Mondays, 10:50 |
+| State well reports | Mondays, 11:05 |
+| ERCOT large load reports | The 2nd of the month, 11:15 |
+| QPQ study page | The 2nd of the month, 11:25 |
+| Processing | Every day, 13:20 |
+| The monitor | Every day, 14:30 |
+
+- **Each job can still be started by hand** from the Actions tab.
+- **Not on a schedule:** the email job, until real email is decided, and the policy tests on the hosted database, which run on the owner's word each time.
+- **The Comptroller's list is still saved by hand** once a month. The monitor says when it is due.
+
+**Four rules of GitHub's that matter here,** from its page on events that trigger workflows, read November 27, 2026.
+
+- A scheduled job can start late when GitHub is busy, and it says a job can even be dropped. The monitor's `stale` state is the net for that.
+- **In a public repository, scheduled jobs are switched off when the repository has had no activity for 60 days.** A commit counts. If the radar goes quiet for two months, every schedule stops, the monitor's too, and nobody is told. Re-enable them on the Actions tab.
+- A scheduled job runs the newest commit on the main branch.
+- **GitHub emails the person who last changed a schedule line** when a scheduled job fails. Today that is the account that pushed them. The monitor fails on purpose when a source needs a person, so that email is how the radar asks for help.
 
 ## The monitor
 

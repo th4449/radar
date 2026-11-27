@@ -7,11 +7,16 @@ name: Process
 # read until the hosted database and archive exist. The owner sets that variable and the
 # secrets. No commit can switch it on.
 #
-# Started by hand only. A schedule is a launch decision and needs the owner's go-ahead.
+# Scheduled since November 27, 2026, on the owner's go-ahead. It can still be started by
+# hand.
 # The model triage step stays off: it needs its own switch and a spending cap.
 
 on:
   workflow_dispatch:
+  schedule:
+    # Every day at 13:20 UTC, after every collector has had its full time.
+    # GitHub may start it some minutes late.
+    - cron: "20 13 * * *"
 
 permissions:
   contents: read
