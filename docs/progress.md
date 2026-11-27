@@ -2,6 +2,36 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 27, 2026 — Sign-in, the first administrator, real email and the schedules: prepared, none switched on
+
+**On the owner's word.** The owner asked for help setting up four things. **Nothing was switched on, no setting was changed and nothing was sent.** Each waits on a step of the owner's or the owner's word. Pushed earlier, on the owner's word: `24a5ecf`, CI passed.
+
+**1. The sign-in setting.** The hosted project must be told the public address and its return addresses. The setting is in the Supabase dashboard, which asked for a sign-in when opened from here. It is the owner's to make, or the owner signs in there and a session makes it.
+
+**2. The first administrator.** The step is the one written in `web/README.md`: the person signs in and applies, and the owner's statement makes that reviewer row approved and an administrator. Tried on the local database, inside a transaction that was rolled back:
+
+- A person who has applied is pending and is no administrator, and cannot promote themselves: refused.
+- The owner's statement changes one row. The person is then an administrator. The approval carries no approver, which is how the record shows the owner acted by hand.
+- The audit log gets a row for the application and a row for the role change.
+- It depends on step 1: the person cannot sign in before it.
+
+**3. Real email.** Two separate things need it.
+
+- **Sign-in emails.** The hosted project sends them. Without a mail provider of its own they reach only the project's team, 2 an hour. Resend's page on Supabase, read November 27, 2026 (`resend.com/docs/send-with-supabase-smtp`): host `smtp.resend.com`, port 465, user `resend`, and an API key as the password, entered in the dashboard under Authentication, Email, SMTP Settings, with a sender address.
+- **Alert emails.** The radar's own job, behind three locks: the secret `RESEND_API_KEY`, the site's address and the from address in `config/email.yaml`, and the switch `RADAR_EMAIL_LIVE`. None is set.
+- **The organization's site already sends through Resend from an address at `standuptocorruption.org`,** read from its code. So that domain is very likely proved to Resend already, and no DNS change would be needed. Not confirmed in Resend itself.
+- **Limits, as read on November 20, 2026:** 100 emails a day and 3,000 a month on the free tier. Not read again today.
+- No subscriber and no alert exists, so the alert job has nothing to send yet.
+
+**4. The schedules.** Built on a branch named `schedules`, commit `b82134b`. **Not on main and not pushed, so nothing is scheduled.**
+
+- Two collectors daily, three weekly on Mondays and two monthly on the 2nd, each at its source's cadence. Processing each day after every collector has had its full 90 minutes, and the monitor after processing. All between 10:10 and 14:30 UTC.
+- Not scheduled, and a test holds it: the email job and the policy tests on the hosted database.
+- Tests were rewritten first and failed, then passed with the schedule lines: each workflow has one line of the right form for its cadence, no two collectors start within five minutes, and the order holds. 1,434 tests pass on that branch.
+- GitHub's rules that matter, from its page on workflow events, read November 27, 2026: a scheduled job can start late or be dropped under load, it runs the newest commit on the main branch, the person who last changed a schedule line is emailed when one fails, and **in a public repository scheduled jobs are switched off after 60 days with no activity.** The runbook on that branch says so.
+
+**Not verified:** a scheduled run. A sign-in. That the domain is proved in Resend.
+
 ## November 27, 2026 — The radar's site is public at `standuptocorruption.org/radar`
 
 **On the owner's word.** The owner looked at the preview, said it looked right, was told what public would mean and said to make it public. This is a step on the build plan's stop list. Times are UTC, so the date has turned. Committed earlier and not pushed: `d58655b`, `7ee1a2e`, `4c3adbd`.
