@@ -2,6 +2,20 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — Hosting: two findings that change the plan, and nothing created
+
+**On the owner's word.** The owner said to set hosting up, in stages, with a stop before the step that makes the site public. The plan put to the owner was a second Vercel project and a rewrite. **Nothing was created and nothing was changed outside this repository.** Two things read first argue against that plan, so it goes back to the owner. Committed earlier and not pushed: `d58655b`.
+
+- **A second project may cost money.** Vercel's own documentation speaks of "project-priced Pro teams". Whether the owner's team is one was not established. Creating a paid resource needs the owner's word.
+- **The owner's team protects every `vercel.app` address.** The existing site's project has Vercel Authentication set to all deployments except custom domains, read from the project's settings. A rewrite from the public site to a second project's `vercel.app` address would meet a sign-in wall. Getting round that means loosening the protection or adding a subdomain in DNS. Both are the owner's, and DNS is on the build plan's stop list.
+- **A simpler course:** serve the radar's files from inside the existing site. Its build would fetch this repository at a pinned commit, build it for `/radar` and serve the result as its own files, with a rule so that `/radar/tx/` finds its page. No second project, no new cost, no protection to change, one domain. The radar's public pages would change only when the pinned commit is changed there, which is a deliberate step.
+- **Checked from outside, with the hosted project's public key,** the newer publishable kind: the API gives `public_alerts`, 0 rows, and answers 401 "permission denied" for all ten other tables tried: sites, documents, signals, entities, study payers, reviewers, subscribers, the audit log, collector runs and settings. This is the key a public site would carry.
+- **The other site's checkout on this machine needs care.** iCloud holds back 455 files in its git folder and git reports a pack file as too short. It also holds the owner's own uncommitted files. It was read and not touched.
+
+**Not verified:** that Next.js 16 serves files under `public/` with such a rule the way earlier versions do, and what it does with the slash at the end of the radar's addresses. That is for a protected preview of the other site, before anything is public. Vercel's price for a second project on the owner's team.
+
+**Waiting for the owner's word:** which course.
+
 ## November 26, 2026 — What hosting at `standuptocorruption.org/radar` takes
 
 The owner opened `standuptocorruption.org/radar` and got that site's 404 page. That is the expected answer today: the radar is hosted nowhere. Nothing was changed. This is what was read, so the owner can decide.
