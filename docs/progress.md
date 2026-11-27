@@ -2,6 +2,21 @@
 
 Newest first. Each entry says what was built, what was verified live and what is still unverified.
 
+## November 26, 2026 — What hosting at `standuptocorruption.org/radar` takes
+
+The owner opened `standuptocorruption.org/radar` and got that site's 404 page. That is the expected answer today: the radar is hosted nowhere. Nothing was changed. This is what was read, so the owner can decide.
+
+- **That site is another repository,** a Next.js site on Vercel. It has no `/radar` route and no rewrites. Read on this machine, not changed.
+- **Hosting takes two things.** A home for the radar's built files, built with `RADAR_BASE_PATH=/radar` and the hosted project's public address and public key. And one rewrite in that site that passes `/radar` and everything under it to that home. Pushing the rewrite is the moment the radar is public.
+- **That site's content security policy covers every path, `/radar` too.** It allows the hosted database's address. It does not allow `tiles.openfreemap.org`, where the radar's map gets its tiles, so the map would be blocked until that address is added for `/radar`.
+- **The hosted project's sign-in settings** need the public address and the two return addresses, as noted above.
+- **Sign-in emails would reach almost no one yet.** Supabase's page on custom SMTP, read November 26, 2026 (`supabase.com/docs/guides/auth/auth-smtp`): without a mail provider of the project's own, the sign-in service "will refuse to deliver messages to addresses that are not part of the project's team", and it sends 2 messages an hour. So the owner could sign in. A reviewer or a subscriber outside the team could not, until real email is set up, which is its own decision.
+- **What a visitor would see today:** no alert, because none exists. The pages say what is read and what is not. Every page carries `noindex`.
+
+**Not verified:** what a second Vercel project costs on the owner's plan. Whether that site's headers reach a rewritten path exactly as its own pages: to be read from Vercel's documentation before anything is built.
+
+**Waiting for the owner's word,** under section 11 of the build plan: making the site public.
+
 ## November 26, 2026 — The site builds under `/radar`
 
 **On the owner's word.** The owner said to make the site build work under `/radar`, the address named earlier in the day. Site code only. Nothing is hosted and nothing is public. Pushed earlier, on the owner's word: `4b5f915`, CI passed.
